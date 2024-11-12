@@ -10,7 +10,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:8080/spo',
+  apiUrl: 'http://localhost:8080/invest',
   baseUrl: 'http://localhost:4200/',
   
 };
