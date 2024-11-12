@@ -1,0 +1,65 @@
+<spo-investimento-filtro></spo-investimento-filtro>
+<div id="valores">
+    <spo-valor-card 
+        cor="rgb(255, 55, 103)" 
+        titulo="Previsto" 
+        nomeIcone="upload" 
+        [valor]="totalPrevisto"
+    ></spo-valor-card>
+    <spo-valor-card 
+        cor="rgb(246, 192, 0)" 
+        titulo="Contrato" 
+        nomeIcone="file" 
+        [valor]="totalHomologado"
+    ></spo-valor-card>
+    <spo-valor-card 
+        cor="rgb(79, 129, 189)" 
+        titulo="Autorizado" 
+        nomeIcone="file-check" 
+        [valor]="totalAutorizado"
+    ></spo-valor-card>
+    <spo-valor-card 
+        cor="rgb(1, 191, 115)" 
+        titulo="Disponível" 
+        nomeIcone="check-done" 
+        [valor]="totalDisponivel"
+    ></spo-valor-card>
+</div>
+<div id="cabecalho">
+    <div id="title">
+        <p>Investimentos ({{qtInvestimento}})</p>
+        <div id="pesquisa">
+            <fa-icon [icon]="searchIcon"></fa-icon>
+            <input type="text" [formControl]="txtBusca" placeholder="Procurar" />
+        </div>
+    </div>
+    <div id="acoes">
+        <div id="objetos" class="botaoAcao"
+            routerLink="/home/inventario/objetos/avaliacao">
+            <img src="assets/img/hammer.svg" width="20px">
+            <div *ngIf="qtObjetos > 0">{{qtObjetos}}</div>
+        </div>
+        <div id="display-grade" class="botaoAcao">
+            <img src="assets/img/grid-layout.svg" width="20px">
+        </div>
+        <div id="display-lista" class="botaoAcao ativo">
+            <img src="assets/img/align-left-branco.svg" width="20px">
+        </div>
+    </div>
+</div>
+<div id="listaDados" class="displayLista">
+    <spo-tira-investimento *ngFor="let inv of data[paginaAtual-1]" [investimento]="inv"></spo-tira-investimento>
+</div>
+<div id="paginacao">
+    <div id="btnAcao" class="btnPagina {{paginaAtual === 1 ? 'btnPgInativo' : ''}}"
+        (click)="voltaUmaPagina()">
+        <p><</p>
+    </div>
+    <div class="btnPagina {{i + 1 === paginaAtual ? 'pgAtual' : ''}}" *ngFor="let x of data; index as i" (click)="paginaAtual = i + 1">
+        <p>{{i+1}}</p>
+    </div>
+    <div id="btnAcao" class="btnPagina {{paginaAtual === data.length ? 'btnPgInativo' : ''}}"
+        (click)="avancarUmaPagina()">
+        <p>></p>
+    </div>
+</div>

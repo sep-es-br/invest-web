@@ -1,0 +1,38 @@
+<div id="investimento" (click)="abrirFecharLista()">
+    <div id="toggle">
+        <fa-icon [icon]="aberto ? toggleSetaAtivo : toggleSeta"></fa-icon>
+    </div>
+    <div id="invNome">
+        <div id="label">Investimento</div>
+        <div id="value">{{investimento.nome | shortString : 50}}</div>
+    </div>
+    <div>
+        <div id="label">Código P.O</div>
+        <div id="value">{{investimento.codPO}}</div>
+    </div>
+    <div>
+        <div id="label">Previsto</div>
+        <div id="value">{{investimento.totalPrevisto | customCurrency }}</div>
+    </div>
+    <div>
+        <div id="label">Contrato</div>
+        <div id="value">{{investimento.totalHomologado | customCurrency }}</div>
+    </div>
+    <div>
+        <div id="label">Orçado</div>
+        <div id="value">{{investimento.totalOrcado | customCurrency }}</div>
+    </div>
+    <div>
+        <div id="label">Autorizado</div>
+        <div id="value">{{investimento.totalAutorizado | customCurrency }}</div>
+    </div>
+    <div>
+        <div id="label">Disponível</div>
+        <div id="value">{{investimento.totalDisponivel | customCurrency }}</div>
+    </div>
+    
+</div>
+<div id="objetoList" #objLista [ngClass]="aberto ? 'aberto' : ''">
+    <spo-tira-objeto *ngFor="let obj of investimento.objetos" [objeto]="obj"></spo-tira-objeto>
+</div>
+<!-- display : aberto ? 'flex' : 'none', -->

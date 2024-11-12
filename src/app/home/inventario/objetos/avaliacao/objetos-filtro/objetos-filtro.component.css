@@ -1,0 +1,14 @@
+:host {
+    display: flex;
+    justify-content: end;
+}
+
+:host select {
+    background-color: unset;
+    border: unset;
+    color: rgb(127, 127, 127);
+}
+
+:host select:focus {
+    outline: unset;
+}

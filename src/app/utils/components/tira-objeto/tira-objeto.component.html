@@ -1,0 +1,34 @@
+<div id="investimento">
+    <div id="invNome">
+        <div id="label">Objeto</div>
+        <div id="value">{{objeto.nome | shortString : 30}}</div>
+    </div>
+    <div>
+        <div id="label">Unidade</div>
+        <div id="value">{{objeto.unidadeResponsavel}}</div>
+    </div>
+    <div ngClass="colMenor">
+        <div id="label">Tipo</div>
+        <div id="value">{{objeto.tipo}}</div>
+    </div>
+    <div>
+        <div id="label">Previsto</div>
+        <div id="value">{{objeto.totalPrevisto | customCurrency }}</div>
+    </div>
+    <div>
+        <div id="label">Contrato</div>
+        <div id="value">{{objeto.totalHomologado | customCurrency }}</div>
+    </div>
+    <div>
+        <div id="label">Orçado</div>
+        <div id="value">{{objeto.totalOrcado | customCurrency }}</div>
+    </div>
+    <div>
+        <div id="label">Autorizado</div>
+        <div id="value">{{objeto.totalAutorizado | customCurrency }}</div>
+    </div>
+    <div>
+        <div id="label">Disponível</div>
+        <div id="value">{{objeto.totalDisponivel | customCurrency }}</div>
+    </div>
+</div>

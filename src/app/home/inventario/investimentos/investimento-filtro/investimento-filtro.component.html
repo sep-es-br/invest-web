@@ -1,0 +1,13 @@
+<form [formGroup]="form">
+    <select formControlName="unidadeOrcamentariaControl">
+        <option [ngValue]="null">Unidade Orçamentaria</option>
+        <option *ngFor="let unidade of unidades" [ngValue]="unidade.id">{{unidade.sigla}}</option>
+    </select>
+    <select formControlName="planoOrcamentarioControl">
+        <option  [ngValue]="null">Plano Orcamentario</option>
+        <option *ngFor="let plano of planos" [ngValue]="plano.id">{{plano.cod}}</option>
+    </select>
+    <select formControlName="exercicio">
+        <option *ngFor="let ano of anos" [ngValue]="ano">{{ano}}</option>
+    </select>
+</form>

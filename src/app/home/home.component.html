@@ -1,0 +1,9 @@
+<div #divMenu id="menu">
+    <spo-menu></spo-menu>
+</div>
+<main swipe [next]="ocultarMenu" [previous]="mostrarMenu">
+    <spo-header [user]="user" [home]="this"></spo-header>
+    <div id="conteudo">
+        <router-outlet></router-outlet>
+    </div>
+</main>

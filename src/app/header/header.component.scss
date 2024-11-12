@@ -1,0 +1,104 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+:host {
+    display: flex;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 1);
+    padding: 1rem;
+    padding-left: 0;
+    padding-right: 0;
+    width: 100%;
+
+    div#content {
+        display: flex;
+        justify-content: space-between;
+        width: 80%;
+
+        div#titleMain p {
+    
+            font-weight: bold;
+        }
+
+        p {
+            font-family: "Arial Negrito", "Arial Normal", Arial, sans-serif;
+
+            &#title {
+                color: var(--cor-primaria);
+            }
+        }
+
+        spo-breadcrumb {
+            color: rgb(85, 85, 85);
+        }
+    }
+
+    div#userInfo {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        position: relative;
+        cursor: pointer;
+        
+        div#userData {
+            text-align: right;
+            padding-left: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        div#userImg {
+            background-color: var(--cor-secundaria);
+            color: var(--cor-primaria);
+            font-family: 'Open Sans', sans-serif;
+            font-size: x-large;
+            font-weight: bolder;
+            border-radius: 50px;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+
+            img {
+                width: 50px;
+            }
+        
+        }
+        
+        .menuUser {
+            display: flex;
+            flex-direction: column;
+            height: 0;
+            transition: height 0.3s ease;
+            width: 100%;
+            background-color: white;
+            box-shadow: 0 0 0.5rem #0000005e;
+            border-radius: 0.3rem;
+            overflow: hidden;
+            position: absolute;
+            left: 0;
+            top: calc(100% + 1rem);
+            
+    
+            > div {
+                display: flex;
+                padding: 1rem;
+                width: 100%;
+            }
+            
+            > div:hover {
+                background-color: var(--cor-primaria);
+                color: white;
+            }
+    
+        }
+    
+        .menuUser.mostrar {
+            height: auto;
+        }
+    
+    }
+    
+}
+

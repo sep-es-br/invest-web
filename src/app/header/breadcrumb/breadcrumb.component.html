@@ -1,0 +1,4 @@
+<span *ngFor="let bread of breadcrumb_data; index as i" >
+    <span *ngIf="i > 0"> / </span>
+    <a href="#" [routerLink]="bread.pathLink()">{{ breadCrumNames[bread.pathName] ? breadCrumNames[bread.pathName] : bread.pathName}}</a>
+</span>

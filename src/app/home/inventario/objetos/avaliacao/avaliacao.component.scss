@@ -1,0 +1,90 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+
+    div {
+        &#cabecalho {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            color: rgb(85, 85, 85);
+            font-family: "Open Sans Bold", "Open Sans", sans-serif;
+    
+            p {
+                font-weight: bold;
+                font-size: large;
+            }
+    
+            div#title {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+    
+                div#pesquisa {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: center;
+                    margin-left: 0.5rem;
+                    background-color: white;
+                    padding: 0.3rem;
+                    border-radius: 0.3rem;
+    
+                    fa-icon {
+                        font-size: small;
+                        color: gray;
+                    }
+    
+                    input {
+                        margin-left: 0.5rem;
+                        border: unset;
+
+                        &:focus {
+                            outline: unset;
+                        }
+                    }
+                }
+            }
+        }
+
+        &#paginacao {
+            display: flex;
+            flex-direction: row;
+            justify-content: end;
+    
+            #btnAcao {
+                font-size: x-large;
+            }
+    
+            .btnPagina {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 2rem;
+                height: 2rem;
+                margin-right: 0.5rem;
+                border-radius: 0.5rem;
+                color: var(--cor-primaria);
+                font-weight: bolder;
+                cursor: pointer;
+            }
+    
+            .pgAtual {
+                background-color: var(--cor-primaria);
+                color: white;
+            }
+    
+            .btnPgInativo {
+                color: gray
+            }
+        }
+
+        &#listaDados {
+            overflow: auto;
+        }
+    }
+    
+} 

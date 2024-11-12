@@ -1,0 +1,20 @@
+<div id="pipLogo">
+    <img src="assets/img/pip_logo.png" />
+</div>
+<div #nav id="nav">
+    <div class="menuItem" *ngFor="let itemMenu of menuItems; index as i" (click)="toggleSub(i)">
+        <img src="assets/img/{{itemMenu.icon}}.svg" width="30px" />
+        <div id="sub{{i}}" class="subMenu" *ngIf="itemMenu.children">
+            <p>{{itemMenu.title}}</p>
+            <div *ngFor="let child of itemMenu.children" routerLink="{{child.link}}">
+                <ul>
+                    <li>{{child.title}}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+</div>
+<div id="esLogo">
+    <img src="assets/img/es_logo.png" />
+</div>

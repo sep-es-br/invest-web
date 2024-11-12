@@ -1,0 +1,185 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+:host {
+    display: flex;
+    flex-direction: column;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+
+    div#valores {
+        display: grid;
+        grid-template-columns: 20rem 20rem 20rem 20rem;
+        grid-gap: 1rem;
+        flex-direction: row;
+        justify-content: space-between;
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+
+        > * {
+            display: flex;
+            height: 3rem;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            box-shadow: rgba(170, 170, 170, 0.35) 1px 1px 5px 0px;
+            background-color: white;
+            color: rgb(85, 85, 85);
+            font-family: "Open Sans", sans-serif;
+            font-weight: 600;
+            font-size: 0.96rem;
+        }
+
+        #icone {
+            box-shadow: 1px 1px 5px rgba(170, 170, 170, 0.35);
+            border-radius: 5px;
+        }
+    }
+
+    @media screen and (max-width: 1745px) {
+        
+        div#valores {
+            grid-template-columns: 20rem 20rem;
+            justify-content: left;
+        }
+
+    }
+
+    @media screen and (max-width: 825px) {
+        
+        div#valores {
+            grid-template-columns: 20rem;
+            justify-content: left;
+        }
+
+    }
+
+    div#cabecalho {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+        color: rgb(85, 85, 85);
+        font-family: "Open Sans Bold", "Open Sans", sans-serif;
+
+        p {
+            font-weight: bold;
+            font-size: large;
+        }
+
+        div#title {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+
+            div#pesquisa {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                margin-left: 0.5rem;
+                background-color: white;
+                padding: 0.3rem;
+                border-radius: 0.3rem;
+
+                fa-icon {
+                    font-size: small;
+                    color: gray;
+                }
+
+                input {
+                    margin-left: 0.5rem;
+                    border: unset;
+                }
+
+                input:focus {
+                    outline: unset;
+                }
+            }
+        }
+
+        div#acoes {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+
+            div.botaoAcao {
+                border: 0.1rem solid #4d84bc;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 1rem;
+                height: 1rem;
+                padding: 8px;
+                border-radius: 5px;
+                margin-right: 0.5rem;
+                position:relative;
+                cursor: pointer;
+            }
+
+            div.botaoAcao:last-of-type {
+                margin-right: 0;
+            }
+
+            div.botaoAcao.ativo {
+                background-color: #4d84bc;
+            }
+
+            div#objetos div {
+                position: absolute;
+                z-index: 5;
+                top: 5%;
+                left: 90%;
+                transform: translate(-50%, -50%) scale(0.8);
+                color: white;
+                background-color: red;
+                font-size: smaller;
+                border-radius: 1.5rem;
+                width: 1.5rem;
+                height: 1.5rem;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+        }
+    }
+
+    div#paginacao {
+        display: flex;
+        flex-direction: row;
+        justify-content: end;
+
+        #btnAcao {
+            font-size: x-large;
+        }
+
+        .btnPagina {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 2rem;
+            height: 2rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            color: var(--cor-primaria);
+            font-weight: bolder;
+            cursor: pointer;
+        }
+
+        .pgAtual {
+            background-color: var(--cor-primaria);
+            color: white;
+        }
+
+        .btnPgInativo {
+            color: gray
+        }
+    }
+    
+    div#listaDados {
+        
+        overflow-x: auto;
+
+    }
+
+} 
+
+

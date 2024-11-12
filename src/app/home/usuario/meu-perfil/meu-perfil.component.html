@@ -1,0 +1,9 @@
+<form [formGroup]="form">
+    <div class="imgUser">
+        <img [src]="avatarUser != null ? avatarUser : avatarPlaceHolderUrl" />
+    </div>
+    <label for="inAvatar" >Avatar: </label> <input id="inAvatar" type="file" (change)="onImagePicked($event)" />
+    <label for="inNome">Nome: </label><input id="inNome" type="text" formControlName="inNome" />
+    <label for="inEmail">Email: </label><input id="inEmail" type="email" formControlName="inEmail" />
+    <input type="button" value="Salvar" (click)="salvar()">
+</form>
