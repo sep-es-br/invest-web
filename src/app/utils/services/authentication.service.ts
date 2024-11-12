@@ -15,6 +15,7 @@ export class AuthenticationService {
 
   public acessoCidadaoSignIn() {
     document.location.href = this._url;
+    debugger;
   }
 
 }
