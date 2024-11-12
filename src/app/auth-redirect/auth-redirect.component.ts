@@ -15,6 +15,7 @@ export class AuthRedirectComponent {
     private _router: Router,
     private _profileService: ProfileService
   ) {
+    debugger;
     const tokenQueryParamMap =
       this._router.getCurrentNavigation().initialUrl.queryParamMap;
 
