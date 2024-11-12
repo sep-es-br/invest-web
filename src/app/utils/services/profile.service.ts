@@ -5,7 +5,7 @@ import {BehaviorSubject, Observable, throwError} from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { IProfile } from '../interfaces/profile.interface';
 import { ErrorHandlerService } from './error-handler.service';
-import { catchError } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { IAvatar } from '../interfaces/avatar.interface';
 
 
@@ -25,7 +25,7 @@ export class ProfileService {
 
   public getUserInfo(): Observable<IProfile> {
     return this.http.get<IProfile>(`${this._urlSignin}/user-info`).pipe(
-      catchError(this.errorHandlerService.handleError)
+      catchError(this.errorHandlerService.handleError), tap(value => console.log(this._urlSignin) )
     );
   }
 
