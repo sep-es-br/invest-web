@@ -14,7 +14,6 @@ export class AuthenticationService {
   constructor(private _http: HttpClient, private router: Router) {}
 
   public acessoCidadaoSignIn() {
-    debugger;
     window.location.href = this._url;
   }
 
