@@ -8,7 +8,7 @@ import { MenuComponent } from './menu/menu.component';
   standalone: true,
   imports: [RouterOutlet],
   template: '<router-outlet></router-outlet>',
-  styles: ':host {width: 100vw; height: 100vh}'
+  styles: ':host {height: 100vh}'
 })
 export class AppComponent {
   title = 'SPO';

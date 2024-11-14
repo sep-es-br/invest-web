@@ -50,7 +50,7 @@
 <div id="listaDados" class="displayLista">
     <spo-tira-investimento *ngFor="let inv of data" [investimento]="inv"></spo-tira-investimento>
 </div>
-<div id="paginacao">
+<!-- <div id="paginacao">
     <div id="btnAcao" class="btnPagina {{paginaAtual === 1 ? 'btnPgInativo' : ''}}"
         (click)="vaiParaPrimeiraPagina()">
         <p><<</p>
@@ -70,4 +70,5 @@
         (click)="vaiParaUltimaPagina()">
         <p>>></p>
     </div>
-</div>
+</div> -->
+<spo-barra-paginacao [larguraPaginacao]="larguraPaginacao" [quantidade]="qtInvestimento" (onPageChange)="recarregarLista($event)"></spo-barra-paginacao>

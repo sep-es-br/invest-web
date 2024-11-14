@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
 
-import {BehaviorSubject, Observable, throwError} from 'rxjs';
+import {BehaviorSubject, Observable, Subject, throwError} from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { IProfile } from '../interfaces/profile.interface';
 import { ErrorHandlerService } from './error-handler.service';
@@ -15,8 +15,10 @@ import { IAvatar } from '../interfaces/avatar.interface';
 export class ProfileService {
   private _urlSignin = `${environment.apiUrl}/signin`;
   private _url = `${environment.apiUrl}/usuario`;
-  private _sessionProfileSubject = new BehaviorSubject<IProfile>({token:"", sub: "", name:"", imgPerfil: null, cpf: "", email:"", role:[]});
+  private _sessionProfileSubject = new BehaviorSubject<IProfile>({token:"", id: null, sub: "", name:"", imgPerfil: null, cpf: "", email:"", role:[]});
   public sessionProfile$ = this._sessionProfileSubject.asObservable();
+
+  public userListener = new Subject<IProfile>();
 
   constructor(
     private http: HttpClient,

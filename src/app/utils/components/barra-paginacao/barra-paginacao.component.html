@@ -1,0 +1,19 @@
+<div id="btnAcao" class="btnPagina {{paginaAtual === 1 ? 'btnPgInativo' : ''}}"
+    (click)="vaiParaPrimeiraPagina()">
+    <p><<</p>
+</div>
+<div id="btnAcao" class="btnPagina {{paginaAtual === 1 ? 'btnPgInativo' : ''}}"
+    (click)="voltaUmaPagina()">
+    <p><</p>
+</div>
+<div class="btnPagina {{n === paginaAtual ? 'pgAtual' : ''}}" *ngFor="let n of paginas" (click)="setPaginaAtual(n)">
+    <p>{{n}}</p>
+</div>
+<div id="btnAcao" class="btnPagina {{paginaAtual === maxPgNum ? 'btnPgInativo' : ''}}"
+    (click)="avancarUmaPagina()">
+    <p>></p>
+</div>
+<div id="btnAcao" class="btnPagina {{paginaAtual === maxPgNum ? 'btnPgInativo' : ''}}"
+    (click)="vaiParaUltimaPagina()">
+    <p>>></p>
+</div>

@@ -1,53 +1,10 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
+@import url('../../styles/tira-base.scss');
 
 :host {
-    
-    font-family: 'Open Sans', sans-serif;
-    font-size: small;
-    display: flex;
-    flex-direction: column;
-    min-width: 60rem;
 
-    div#investimento {
-        --border-width: 0.3rem;
-        --margin-y: 0.5rem;
-
-        background-color: white;
-        border-left-style: solid;
-        border-left-color: var(--cor-primaria);
-        border-left-width: var(--border-width);
-        border-top-left-radius: var(--border-width);
-        border-bottom-left-radius: var(--border-width);
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        margin-bottom: var(--margin-y);
-        margin-top: var(--margin-y);
+    div#tira {
         cursor: pointer;
-
-        > div {
-            padding: 0.5rem;
-            width: 9rem;
-            display: flex;
-            flex-direction: column;
-
-            div#label {
-                color: var(--cor-primaria);
-            }
-
-            div#value {
-                color: #6E7484;
-            }
-        }
-
-        > div#toggle {
-            width: 0.5rem;
-        }
-
-        > div#invNome {
-            flex-grow: 1;
-        }
-
     }
 
     > div#objetoList {
@@ -57,12 +14,13 @@
         height: 0;
         transition: height 0.5s ease-in-out;
         overflow: hidden;
+
+        &.aberto {
+            height: auto;
+        }
         
     }
 
-    > div#objetoList.aberto {
-        height: auto;
-    }
 
 }
 

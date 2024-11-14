@@ -41,6 +41,10 @@ export class HomeComponent implements OnInit{
     }
 
     ngOnInit(): void {
+
+        this.profile.userListener.subscribe(newUser => {
+            this.loadUser();
+        })
         this.loadUser();
     }
 
@@ -59,9 +63,12 @@ export class HomeComponent implements OnInit{
 
         } else {
             this.profile.getUserInfo().subscribe(value => {
-                this.user = value
+                sessionStorage.setItem("user-profile", JSON.stringify(value))
+                this.loadUser();
             });
         }
+
+        
 
     }
 }

@@ -13,6 +13,7 @@ import { ValorCardComponent } from "../../../utils/components/valor-card/valor-c
 import { DataUtilService } from "../../../utils/services/data-util.service";
 import { CustoService } from "../../../utils/services/custo.service";
 import { ObjetosService } from "../../../utils/services/objetos.service";
+import { BarraPaginacaoComponent } from "../../../utils/components/barra-paginacao/barra-paginacao.component";
 
 @Component({
     selector: 'spo-investimentos',
@@ -22,7 +23,7 @@ import { ObjetosService } from "../../../utils/services/objetos.service";
     imports: [
         CommonModule, TiraInvestimentoComponent, RouterLink,
         ReactiveFormsModule, InvestimentoFiltroComponent, 
-        FontAwesomeModule, ValorCardComponent
+        FontAwesomeModule, ValorCardComponent, BarraPaginacaoComponent
     ]
 })
 export class InvestimentosComponent implements AfterViewInit {
@@ -30,64 +31,56 @@ export class InvestimentosComponent implements AfterViewInit {
     searchIcon = faMagnifyingGlass;
 
     @ViewChild(InvestimentoFiltroComponent) filtroComponent! : InvestimentoFiltroComponent;
+    @ViewChild(BarraPaginacaoComponent) barraPaginacaoComponent : BarraPaginacaoComponent;
 
-    totalPrevisto : number;
-    totalHomologado : number;
-    totalAutorizado : number;
-    totalDisponivel : number;
+    totalPrevisto : number = 0;
+    totalHomologado : number = 0;
+    totalAutorizado : number = 0;
+    totalDisponivel : number = 0;
 
     filtro : InvestimentoFiltro = { qtPorPag: 15, numPag: 1 };
 
     txtBusca = new FormControl('');
 
     data : InvestimentoDTO[] = [];
-    paginas : number[] = [];
     qtObjetos = 0;
-    qtInvestimento = 0;
 
-    paginaAtual = 1;
-    maxPgNum : number;
+    qtInvestimento = 0;
     larguraPaginacao = 7;
+    qtPorPagina = 15;
 
     constructor( 
         private service: InvestimentosService,
         private custoService: CustoService,
-        private objetoService: ObjetosService,
-        private dataUtilService : DataUtilService
+        private objetoService: ObjetosService
     ) {
         
     }
 
     ngAfterViewInit(): void {
-        this.txtBusca.valueChanges.subscribe(value => this.updateFiltro() )
-        this.filtroComponent.form.valueChanges.subscribe(value => this.updateFiltro())
+        this.txtBusca.valueChanges.subscribe(value => this.updateFiltro(1) )
+        this.filtroComponent.form.valueChanges.subscribe(value => this.updateFiltro(1))
 
     }
 
-    updateFiltro(){
+    updateFiltro(novaPagina : number){
 
         this.filtro = {
             exercicio: this.filtroComponent.form.get("exercicio").value,
             codPO: this.filtroComponent.form.get("planoOrcamentarioControl").value,
             codUnidade: this.filtroComponent.form.get("unidadeOrcamentariaControl").value,
             nome: this.txtBusca.value,
-            numPag: this.paginaAtual,
+            numPag: novaPagina,
             qtPorPag: 15
         }
 
-        this.recarregarLista();
+        this.recarregarLista(novaPagina);
     }
 
-    recarregarLista() {
 
-        this.totalPrevisto = 0;
-        this.totalHomologado = 0;
-        this.totalAutorizado = 0;
-        this.totalDisponivel = 0;
+    recarregarLista(novaPagina : number) {
 
-        this.qtObjetos = 0;
-
-        this.qtInvestimento = 0;
+        this.filtro.numPag = novaPagina;
 
         this.custoService.getTotalPrevisto(this.filtro.exercicio).subscribe(totalPrevisto => {
             this.totalPrevisto = totalPrevisto;
@@ -99,36 +92,11 @@ export class InvestimentosComponent implements AfterViewInit {
 
         this.service.getListaInvestimentos(this.filtro).subscribe(invs => {
             this.data = invs;
-               
-
         });
 
-        this.filtro.numPag = null;
-        this.filtro.qtPorPag = null;
-        this.paginas = [];
         this.service.getQuantidadeItens(this.filtro).subscribe(quantidade => {
             this.qtInvestimento = quantidade
-            this.maxPgNum = Math.ceil(quantidade / 15);
-            this.setPaginaAtual(Math.min(this.paginaAtual, this.maxPgNum));
-
-            let metadeTam = Math.floor(this.larguraPaginacao / 2);
-            let meio = this.paginaAtual;
-
-            if(this.maxPgNum < this.larguraPaginacao) {
-                meio = Math.floor(this.maxPgNum / 2);
-            } else {
-                meio = Math.max(meio, 1 + metadeTam)
-                meio = Math.min(meio, this.maxPgNum-metadeTam)
-            }
-            
-            let numMin = Math.max(1, meio - metadeTam);
-            let numMax = Math.min(meio + metadeTam, this.maxPgNum)
-
-            for(let i = numMin; i < numMax+1; i++){
-                this.paginas.push(i)
-            }
-            
-            
+            this.barraPaginacaoComponent.updatePaginacao(quantidade);  
         })
         
 
@@ -136,38 +104,5 @@ export class InvestimentosComponent implements AfterViewInit {
             this.qtObjetos = quantidade;
         })
        
-    }
-
-    vaiParaPrimeiraPagina(){
-        if(this.paginaAtual != 1) {
-            this.setPaginaAtual(1);
-        }
-    }
-
-    vaiParaUltimaPagina(){
-        if(this.paginaAtual != this.maxPgNum) {
-            this.setPaginaAtual(this.maxPgNum);
-        }
-    }
-
-    setPaginaAtual(pag : number) {
-        if(this.paginaAtual === pag) return;
-            this.paginaAtual = pag;
-            this.updateFiltro();
-    }
-
-
-    voltaUmaPagina() {
-        if(this.paginaAtual > 1){
-            this.paginaAtual--;
-            this.updateFiltro();
-        }
-    }
-
-    avancarUmaPagina() {
-        if(this.paginaAtual < this.maxPgNum){
-            this.paginaAtual++;
-            this.updateFiltro();
-        }
     }
 }

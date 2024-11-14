@@ -22,6 +22,7 @@ export class MeuPerfilComponent implements AfterViewInit{
 
     user : IProfile = {
         imgPerfil: null,
+        id: null,
         sub: '',
         name: 'Fulano de Tal',
         email: 'fulano@email.com',
@@ -74,9 +75,10 @@ export class MeuPerfilComponent implements AfterViewInit{
         this.user.email = this.form.get("inEmail").value;
         
         this.profileService.salvarUsuario(this.user).subscribe(user => {
-            if(user)
+            if(user){
                 alert("usuario salvo com sucesso")
-            else
+                this.profileService.userListener.next(this.user)
+            } else
                 alert("erro ao salvar usuario")
         })
     }

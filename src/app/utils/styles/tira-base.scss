@@ -1,0 +1,57 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+:host {
+    
+    font-family: 'Open Sans', sans-serif;
+    font-size: small;
+    display: flex;
+    flex-direction: column;
+    min-width: 60rem;
+
+    div#tira {
+        --border-width: 0.3rem;
+        --margin-y: 0.5rem;
+
+        background-color: white;
+        border-left-style: solid;
+        border-left-color: var(--cor-primaria);
+        border-left-width: var(--border-width);
+        border-top-left-radius: var(--border-width);
+        border-bottom-left-radius: var(--border-width);
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin-bottom: var(--margin-y);
+        margin-top: var(--margin-y);
+
+        > div {
+            padding: 0.5rem;
+            width: 9rem;
+            display: flex;
+            flex-direction: column;
+            
+            &#toggle {
+                width: 0.5rem;
+            }
+
+            &#invNome {
+                flex-grow: 1;
+            }
+
+            div {
+                &#label {
+                    color: var(--cor-primaria);
+                }
+
+                &#value {
+                    color: #6E7484;
+                }
+            }
+
+        }
+
+
+    }
+
+}
+
