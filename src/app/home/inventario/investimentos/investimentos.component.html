@@ -48,18 +48,26 @@
     </div>
 </div>
 <div id="listaDados" class="displayLista">
-    <spo-tira-investimento *ngFor="let inv of data[paginaAtual-1]" [investimento]="inv"></spo-tira-investimento>
+    <spo-tira-investimento *ngFor="let inv of data" [investimento]="inv"></spo-tira-investimento>
 </div>
 <div id="paginacao">
+    <div id="btnAcao" class="btnPagina {{paginaAtual === 1 ? 'btnPgInativo' : ''}}"
+        (click)="vaiParaPrimeiraPagina()">
+        <p><<</p>
+    </div>
     <div id="btnAcao" class="btnPagina {{paginaAtual === 1 ? 'btnPgInativo' : ''}}"
         (click)="voltaUmaPagina()">
         <p><</p>
     </div>
-    <div class="btnPagina {{i + 1 === paginaAtual ? 'pgAtual' : ''}}" *ngFor="let x of data; index as i" (click)="paginaAtual = i + 1">
-        <p>{{i+1}}</p>
+    <div class="btnPagina {{n === paginaAtual ? 'pgAtual' : ''}}" *ngFor="let n of paginas" (click)="setPaginaAtual(n)">
+        <p>{{n}}</p>
     </div>
-    <div id="btnAcao" class="btnPagina {{paginaAtual === data.length ? 'btnPgInativo' : ''}}"
+    <div id="btnAcao" class="btnPagina {{paginaAtual === maxPgNum ? 'btnPgInativo' : ''}}"
         (click)="avancarUmaPagina()">
         <p>></p>
+    </div>
+    <div id="btnAcao" class="btnPagina {{paginaAtual === maxPgNum ? 'btnPgInativo' : ''}}"
+        (click)="vaiParaUltimaPagina()">
+        <p>>></p>
     </div>
 </div>

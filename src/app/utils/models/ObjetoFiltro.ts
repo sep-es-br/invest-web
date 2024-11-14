@@ -1,4 +1,4 @@
-export class ObjetoFiltroDTO {
+export class ObjetoFiltro {
     exercicio?: string;
     nome?: string;
     unidadeId? : string;

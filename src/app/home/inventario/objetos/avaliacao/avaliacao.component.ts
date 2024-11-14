@@ -5,7 +5,7 @@ import { ObjetosService } from "../../../../utils/services/objetos.service";
 import { ObjetoFiltroComponent } from "./objetos-filtro/objetos-filtro.component";
 import { ObjetoDTO } from "../../../../utils/models/ObjetoDTO";
 import { TiraObjetoComponent } from "../../../../utils/components/tira-objeto/tira-objeto.component";
-import { ObjetoFiltroDTO } from "../../../../utils/models/ObjetoFiltroDTO";
+import { ObjetoFiltro } from "../../../../utils/models/ObjetoFiltro";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { DataUtilService } from "../../../../utils/services/data-util.service";
@@ -29,7 +29,7 @@ export class AvaliacaoComponent implements AfterViewInit{
 
     data : ObjetoDTO[][] = [];
 
-    filtro : ObjetoFiltroDTO;
+    filtro : ObjetoFiltro;
 
     paginaAtual = 1;
 

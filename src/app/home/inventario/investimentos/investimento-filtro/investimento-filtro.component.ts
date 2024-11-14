@@ -35,7 +35,7 @@ export class InvestimentoFiltroComponent {
         this.infosService.getAllAnos().subscribe((anosList) => {
                 this.anos = anosList
 
-                this.form.get("exercicio")?.setValue(this.anos[0]);
+                this.form.get("exercicio").setValue(this.anos[0]);
 
             });
 
