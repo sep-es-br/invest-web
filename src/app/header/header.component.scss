@@ -11,8 +11,12 @@
 
     div#content {
         display: flex;
-        justify-content: space-between;
         width: 80%;
+        align-items: center;
+
+        // div#titleMain {
+        //     flex-grow: 1;
+        // }
 
         div#titleMain p {
     
@@ -29,6 +33,52 @@
 
         spo-breadcrumb {
             color: rgb(85, 85, 85);
+        }
+
+        div#acoes {
+            display: flex;
+            flex-direction: row;
+            margin-left: 2rem;
+            flex-grow: 1;
+
+            div.botaoAcao {
+                border: 0.1rem solid #4d84bc;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 1rem;
+                height: 1rem;
+                padding: 8px;
+                border-radius: 5px;
+                margin-right: 0.5rem;
+                position:relative;
+                cursor: pointer;
+            }
+
+            div.botaoAcao:last-of-type {
+                margin-right: 0;
+            }
+
+            div.botaoAcao.ativo {
+                background-color: #4d84bc;
+            }
+
+            div#objetos div {
+                position: absolute;
+                z-index: 5;
+                top: 5%;
+                left: 90%;
+                transform: translate(-50%, -50%) scale(0.8);
+                color: white;
+                background-color: red;
+                font-size: smaller;
+                border-radius: 1.5rem;
+                width: 1.5rem;
+                height: 1.5rem;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
         }
     }
 

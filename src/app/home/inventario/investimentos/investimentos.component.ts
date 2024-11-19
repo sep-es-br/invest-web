@@ -14,6 +14,7 @@ import { DataUtilService } from "../../../utils/services/data-util.service";
 import { CustoService } from "../../../utils/services/custo.service";
 import { ObjetosService } from "../../../utils/services/objetos.service";
 import { BarraPaginacaoComponent } from "../../../utils/components/barra-paginacao/barra-paginacao.component";
+import { ExecucaoOrcamentariaService } from "../../../utils/services/execucaoOrcamentaria.service";
 
 @Component({
     selector: 'spo-investimentos',
@@ -35,6 +36,7 @@ export class InvestimentosComponent implements AfterViewInit {
 
     totalPrevisto : number = 0;
     totalHomologado : number = 0;
+    totalOrcado : number = 0;
     totalAutorizado : number = 0;
     totalDisponivel : number = 0;
 
@@ -43,7 +45,6 @@ export class InvestimentosComponent implements AfterViewInit {
     txtBusca = new FormControl('');
 
     data : InvestimentoDTO[] = [];
-    qtObjetos = 0;
 
     qtInvestimento = 0;
     larguraPaginacao = 7;
@@ -52,7 +53,7 @@ export class InvestimentosComponent implements AfterViewInit {
     constructor( 
         private service: InvestimentosService,
         private custoService: CustoService,
-        private objetoService: ObjetosService
+        private execucaoService: ExecucaoOrcamentariaService
     ) {
         
     }
@@ -84,11 +85,13 @@ export class InvestimentosComponent implements AfterViewInit {
 
         this.custoService.getTotalPrevisto(this.filtro.exercicio).subscribe(totalPrevisto => {
             this.totalPrevisto = totalPrevisto;
-        })
+        });
 
         this.custoService.getTotalHomologado(this.filtro.exercicio).subscribe(totalContratado => {
             this.totalHomologado = totalContratado
-        })
+        });
+
+        this.execucaoService.getTotalOrcado(this.filtro.exercicio).subscribe(totalOrcado => this.totalOrcado = totalOrcado)
 
         this.service.getListaInvestimentos(this.filtro).subscribe(invs => {
             this.data = invs;
@@ -97,11 +100,6 @@ export class InvestimentosComponent implements AfterViewInit {
         this.service.getQuantidadeItens(this.filtro).subscribe(quantidade => {
             this.qtInvestimento = quantidade
             this.barraPaginacaoComponent.updatePaginacao(quantidade);  
-        })
-        
-
-        this.objetoService.getQuantidadeItens(this.filtro).subscribe(quantidade => {
-            this.qtObjetos = quantidade;
         })
        
     }

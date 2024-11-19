@@ -8,7 +8,7 @@ export interface IProfile {
     name: string;
     sub: string;
     email: string;
-    cpf: string;
+    telefone: string;
     role: IFuncao[];
 }
 

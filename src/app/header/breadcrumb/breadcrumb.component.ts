@@ -30,7 +30,7 @@ export class BreadCrumbComponent {
                 let fullPath = activeRouter.pathFromRoot
                 fullPath.shift();
 
-                let data =  fullPath.map((path) => {
+                let data =  fullPath.filter(path => path.url[0] != undefined).map((path) => {
                     return {
                         pathName: path.url[0].path,
                         pathLink: () => {

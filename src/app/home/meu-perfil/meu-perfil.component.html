@@ -1,0 +1,23 @@
+<div id="resumo">
+    <main>
+        <div id="imgControl">
+            <img [src]="avatarUser != null ? avatarUser : avatarPlaceHolderUrl" />
+            <label for="inAlterar"><div class="imgBtn btnEditar" *ngIf="editarImg"><fa-icon [icon]="faEditarImg"></fa-icon></div></label>
+            <div class="imgBtn btnRemover" *ngIf="editarImg" (click)="removerImg()"><fa-icon [icon]="faRemover"></fa-icon></div>
+            <input *ngIf="editarImg" type="file" id="inAlterar" (change)="alterarImg($event)" />
+        </div>
+        <div id="infos">
+            <h1>{{user.name.split(' ')[0]}}</h1>
+            <h2>{{user.name}}</h2>
+            <p>CGTI - Cordenação Geral de Tercnologia da Informação</p>
+            <p>SEP - Secretaria de Estado de Econômia e Planejamento</p>
+        </div>
+    </main>
+    <nav>
+        <div ngClass="opcMenu" routerLink="/home/meuperfil/detalhe" routerLinkActive="ativo">Perfil</div>
+        <div ngClass="opcMenu" routerLink="/home/meuperfil/grupos" routerLinkActive="ativo">Grupos</div>
+    </nav>
+</div>
+<div id="detalhes">
+    <router-outlet></router-outlet>
+</div>

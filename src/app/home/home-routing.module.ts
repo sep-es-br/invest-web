@@ -3,6 +3,7 @@ import { InventarioComponent } from "./inventario/inventario.component";
 import { NgModule } from "@angular/core";
 import { HomeComponent } from "./home.component";
 import { CarteiraComponent } from "./carteira/carteira.component";
+import { MeuPerfilComponent } from "./meu-perfil/meu-perfil.component";
 
 const routes : Route[] = [
      {
@@ -14,8 +15,12 @@ const routes : Route[] = [
         component: CarteiraComponent,
         loadChildren: () => import('./carteira/carteira-routing.module').then( m => m.CarteiraRoutingModule)
     },{
-        path: "usuario",
-        loadChildren: () => import('./usuario/usuario-routing.module').then( m => m.UsuarioRoutingModule)
+        path: "meuperfil",
+        component: MeuPerfilComponent,
+        loadChildren: () => import('./meu-perfil/meu-perfil-routing.module').then( m => m.UsuarioRoutingModule)
+    },{
+        path: "administracao",
+        loadChildren: () => import('./administracao/administracao-routing.module').then( m => m.AdministracaoRoutingModule)
     },{
         path: "", pathMatch: "full", redirectTo: 'inventario'
     }

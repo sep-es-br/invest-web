@@ -1,27 +1,38 @@
 <spo-investimento-filtro></spo-investimento-filtro>
 <div id="valores">
     <spo-valor-card 
-        cor="rgb(255, 55, 103)" 
         titulo="Previsto" 
-        nomeIcone="upload" 
+        nomeIcone="monitoring" 
         [valor]="totalPrevisto"
     ></spo-valor-card>
     <spo-valor-card 
-        cor="rgb(246, 192, 0)" 
-        titulo="Contrato" 
-        nomeIcone="file" 
+        titulo="Contratado" 
+        nomeIcone="handshake" 
         [valor]="totalHomologado"
     ></spo-valor-card>
     <spo-valor-card 
-        cor="rgb(79, 129, 189)" 
+        titulo="Orçado" 
+        nomeIcone="description" 
+        [valor]="totalOrcado"
+    ></spo-valor-card>
+    <spo-valor-card 
         titulo="Autorizado" 
-        nomeIcone="file-check" 
+        nomeIcone="check_circle" 
         [valor]="totalAutorizado"
     ></spo-valor-card>
     <spo-valor-card 
-        cor="rgb(1, 191, 115)" 
-        titulo="Disponível" 
-        nomeIcone="check-done" 
+        titulo="Empenhado" 
+        nomeIcone="gavel" 
+        [valor]="totalDisponivel"
+    ></spo-valor-card>
+    <spo-valor-card 
+        titulo="Liquidado" 
+        nomeIcone="checkbook" 
+        [valor]="totalDisponivel"
+    ></spo-valor-card>
+    <spo-valor-card 
+        titulo="Disp. S/ Reserva" 
+        nomeIcone="savings" 
         [valor]="totalDisponivel"
     ></spo-valor-card>
 </div>
@@ -34,11 +45,6 @@
         </div>
     </div>
     <div id="acoes">
-        <div id="objetos" class="botaoAcao"
-            routerLink="/home/inventario/objetos/avaliacao">
-            <img src="assets/img/hammer.svg" width="20px">
-            <div *ngIf="qtObjetos > 0">{{qtObjetos}}</div>
-        </div>
         <div id="display-grade" class="botaoAcao">
             <img src="assets/img/grid-layout.svg" width="20px">
         </div>
@@ -50,25 +56,4 @@
 <div id="listaDados" class="displayLista">
     <spo-tira-investimento *ngFor="let inv of data" [investimento]="inv"></spo-tira-investimento>
 </div>
-<!-- <div id="paginacao">
-    <div id="btnAcao" class="btnPagina {{paginaAtual === 1 ? 'btnPgInativo' : ''}}"
-        (click)="vaiParaPrimeiraPagina()">
-        <p><<</p>
-    </div>
-    <div id="btnAcao" class="btnPagina {{paginaAtual === 1 ? 'btnPgInativo' : ''}}"
-        (click)="voltaUmaPagina()">
-        <p><</p>
-    </div>
-    <div class="btnPagina {{n === paginaAtual ? 'pgAtual' : ''}}" *ngFor="let n of paginas" (click)="setPaginaAtual(n)">
-        <p>{{n}}</p>
-    </div>
-    <div id="btnAcao" class="btnPagina {{paginaAtual === maxPgNum ? 'btnPgInativo' : ''}}"
-        (click)="avancarUmaPagina()">
-        <p>></p>
-    </div>
-    <div id="btnAcao" class="btnPagina {{paginaAtual === maxPgNum ? 'btnPgInativo' : ''}}"
-        (click)="vaiParaUltimaPagina()">
-        <p>>></p>
-    </div>
-</div> -->
 <spo-barra-paginacao [larguraPaginacao]="larguraPaginacao" [quantidade]="qtInvestimento" (onPageChange)="recarregarLista($event)"></spo-barra-paginacao>

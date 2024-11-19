@@ -1,0 +1,116 @@
+:host {
+
+    display: flex;
+    flex-direction: column;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+
+    > div {
+        background-color: white;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border-radius: 0.5rem;
+        box-shadow: 1px 1px 3px rgba(170, 170, 170, 0.35);
+
+        &#resumo {    
+            padding-bottom: 0;
+            font-family: "Open Sans Semibold", "Open Sans", sans-serif;
+            main {
+                padding: 1rem;
+                display: flex;
+
+                #imgControl {
+                    position: relative;
+
+                    #inAlterar {
+                        display: none;
+                    }
+
+                    img {
+                        margin-right: 1rem;
+                        border-radius: 0.5rem;
+                        width: 150px;
+                        height: 150px;
+                    }
+
+                    .imgBtn {
+                        --btn-size : 2rem;
+
+                        background-color: white;
+                        color: var(--cor-primaria);
+                        width: var(--btn-size);
+                        height: var(--btn-size);
+                        border-radius: var(--btn-size);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        position: absolute;
+                        right: 0;
+                        border: 0.2rem solid #f2f2f2;
+                        cursor: pointer;
+                        
+                        &.btnEditar {
+                            top: 0;
+                            transform: scale(60%, 60%) translate(0, -90%);
+                        }
+                        
+                        &.btnRemover {
+                            bottom: 0;
+                            transform: scale(60%, 60%) translate(0, 50%);
+                        }
+                    }
+                    }
+
+                    
+
+                div#infos {
+
+
+                    font-size: small;
+
+                    * {
+                        margin-bottom: 0.5rem;
+                    }
+
+                    h1, h2 {
+                        color: var(--cor-primaria);
+                    }
+
+                    p {
+                        color: rgba(153, 161, 183, 0.99);
+                        
+                    }
+                }
+                
+            }
+            nav {
+                display: flex;
+                border-top: rgba(242, 242, 242, 0.99) solid 1px;
+                
+                div.opcMenu {
+                    font-size: small;
+                    padding-top: 1rem;
+                    padding-bottom: 0.3rem;
+                    padding-left: 0.3rem;
+                    padding-right: 0.3rem;
+                    margin-right: 0.7rem;
+                    font-weight: bold;
+                    color: rgba(153, 161, 183, 0.99);
+                    cursor: pointer;
+
+                    &.ativo {
+                        border-bottom: var(--cor-primaria) solid 0.2rem;
+                        color: var(--cor-primaria);
+                    }
+                }
+            }
+        }
+    
+        &#detalhes {
+            
+        }
+    }
+
+    
+    
+}

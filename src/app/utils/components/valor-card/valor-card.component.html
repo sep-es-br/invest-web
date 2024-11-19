@@ -1,11 +1,11 @@
-<div id="icone" [ngStyle]="{background: cor}">
+<div id="icone">
     <img [src]="'assets/img/' + nomeIcone + '.svg'" width="30px" />
 </div>
 <div id="infos">
+    <div id="value">
+        <p title="{{valor | customCurrency}}" >{{valor | numeroResumido}}</p>
+    </div>
     <div id="title">
         <p>{{titulo}}</p>
-    </div>
-    <div id="value">
-        <p title="{{valor | customCurrency}}" >R$ {{valor | numeroResumido}}</p>
     </div>
 </div>

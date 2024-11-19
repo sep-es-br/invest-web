@@ -8,8 +8,8 @@
 
     div#valores {
         display: grid;
-        grid-template-columns: 20rem 20rem 20rem 20rem;
-        grid-gap: 1rem;
+        grid-template-columns: repeat(7, 12rem);
+        grid-gap: 0.2rem;
         flex-direction: row;
         justify-content: space-between;
         padding-top: 2rem;
@@ -63,7 +63,6 @@
 
         p {
             font-weight: bold;
-            font-size: large;
         }
 
         div#title {

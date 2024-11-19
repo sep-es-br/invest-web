@@ -15,7 +15,7 @@ import { IAvatar } from '../interfaces/avatar.interface';
 export class ProfileService {
   private _urlSignin = `${environment.apiUrl}/signin`;
   private _url = `${environment.apiUrl}/usuario`;
-  private _sessionProfileSubject = new BehaviorSubject<IProfile>({token:"", id: null, sub: "", name:"", imgPerfil: null, cpf: "", email:"", role:[]});
+  private _sessionProfileSubject = new BehaviorSubject<IProfile>({token:"", id: null, sub: "", name:"", imgPerfil: null, telefone: "", email:"", role:[]});
   public sessionProfile$ = this._sessionProfileSubject.asObservable();
 
   public userListener = new Subject<IProfile>();
@@ -35,6 +35,17 @@ export class ProfileService {
     const profile = JSON.parse(sessionStorage.getItem("user-profile")) as IProfile;
 
     return this.http.get<IAvatar>(`${this._url}/avatar`, {params: {
+      sub: profile.sub
+    }}).pipe(
+      catchError(this.errorHandlerService.handleError)
+    )
+
+  }
+
+  public getUser(): Observable<IProfile> {
+    const profile = JSON.parse(sessionStorage.getItem("user-profile")) as IProfile;
+
+    return this.http.get<IProfile>(`${this._url}`, {params: {
       sub: profile.sub
     }}).pipe(
       catchError(this.errorHandlerService.handleError)

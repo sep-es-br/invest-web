@@ -1,0 +1,28 @@
+<div id="titulo">
+    <p>Perfil</p>
+    <button routerLink="/home/meuperfil/detalhe" ><fa-icon [icon]="faSalvarIcon"></fa-icon> Salvar</button>
+</div>
+<div id="infos">
+    <form [formGroup]="form">
+        <div class="label">Nome</div>
+        <input type="text" formControlName="inNome"/>
+
+        <div class="label">Nome Completo</div>
+        <input type="text" formControlName="inNomeCompleto">
+
+        <div class="label">E-mail Principal</div>
+        <input type="text" formControlName="inEmail">
+
+        <div class="label">Contato</div>
+        <input type="tel" formControlName="inTelefone">
+
+        <div class="label">Orgão</div>
+        <div class="campo">SEP - Secretaria de Estado de Econômia e Planejamento</div>
+
+        <div class="label">Setor</div>
+        <div class="campo">CGTI - Coordenação Geral de Tecnologia da Informação</div>
+
+        <div class="label">Papel</div>
+        <div class="campo">Desenvolvedor Terceirizado</div>
+    </form>
+</div>

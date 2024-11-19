@@ -3,6 +3,13 @@
         <p id="title">{{title}}</p>
         <p id="breadcrumb"><spo-breadcrumb></spo-breadcrumb></p>
     </div>
+    <div id="acoes">
+        <div id="objetos" class="botaoAcao"
+                routerLink="/home/inventario/objetos/avaliacao">
+                <img src="assets/img/hammer.svg" width="20px">
+                <div *ngIf="qtObjetos > 0">{{qtObjetos}}</div>
+            </div>
+        </div>
     <div id="userInfo" (click)="toggleMenuUser()">
         <div #userImg id="userImg">
             <img [src]="userImage" *ngIf="userImage; else iniciaisElem" />
@@ -12,7 +19,8 @@
             <p>{{user.name}}</p>
         </div>
         <div #menuUser [ngClass]="'menuUser ' + (showMenuUser ? 'mostrar' : '')">
-            <div (click)="redirectTo('home/usuario/meuperfil')">Meu Perfil</div>
+            <div (click)="redirectTo('home/meuperfil')">Meu Perfil</div>
+            <div (click)="redirectTo('home/administracao')">Administração</div>
             <div (click)="logout()">Sair</div>
         </div>
     </div>

@@ -8,6 +8,8 @@ import { IProfile } from "../utils/interfaces/profile.interface";
 import { ProfileService } from "../utils/services/profile.service";
 import { DataUtilService } from "../utils/services/data-util.service";
 import { SafeResourceUrl } from "@angular/platform-browser";
+import { ObjetosService } from "../utils/services/objetos.service";
+import { InvestimentoFiltro } from "../utils/models/InvestimentoFiltro";
 
 @Component({
     selector: 'spo-header',
@@ -26,23 +28,40 @@ export class HeaderComponent implements OnInit {
     iniciais : string | undefined = 'DG';
     userImage : SafeResourceUrl;
 
+    
+    qtObjetos = 0;
+
     showMenuUser : boolean = false;
 
     @Input() home : HomeComponent;
 
     @Input() user : IProfile;
 
-    constructor(private route : ActivatedRoute, private router : Router, private dataUtilService : DataUtilService) {
+    constructor(private route : ActivatedRoute, private router : Router, private dataUtilService : DataUtilService,
+        private objetoService: ObjetosService) {
         this.router.events.subscribe(event => {
             if (event instanceof NavigationEnd) {
                 let activeRouter = this.route.snapshot;
-                while (activeRouter.children.length > 0) {
+                while (activeRouter.children.length > 0 && activeRouter.firstChild.url[0] != undefined) {
                     activeRouter = activeRouter.firstChild ? activeRouter.firstChild : activeRouter;
                 }
                 
-                this.title = breadCrumbNames[String(activeRouter.url)] ? breadCrumbNames[String(activeRouter.url)] :
-                  String(activeRouter.url) ;
+                let pathName = activeRouter.url[activeRouter.url.length-1];
+
+                this.title = breadCrumbNames[String(pathName)] ? breadCrumbNames[String(pathName)] :
+                  String(pathName) ;
             }
+        })
+
+        let filtro : InvestimentoFiltro = {
+            exercicio: "2024",
+            nome: "",
+            numPag: 1,
+            qtPorPag: 15
+        }
+        
+        this.objetoService.getQuantidadeItens(filtro).subscribe(quantidade => {
+            this.qtObjetos = quantidade;
         })
 
     }

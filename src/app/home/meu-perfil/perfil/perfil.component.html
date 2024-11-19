@@ -1,0 +1,26 @@
+<div id="titulo">
+    <p>Perfil</p>
+    <button  routerLink="/home/meuperfil/detalhe/editar" ><fa-icon [icon]="faEditIcon"></fa-icon> Editar</button>
+</div>
+<div id="infos">
+    <div class="label">Nome</div>
+    <div class="campo">{{user.name.split(' ')[0]}}</div>
+
+    <div class="label">Nome Completo</div>
+    <div class="campo">{{user.name}}</div>
+
+    <div class="label">E-mail Principal</div>
+    <div class="campo">{{user.email}}</div>
+
+    <div class="label">Contato</div>
+    <div class="campo">(27) 9 9999-9999</div>
+
+    <div class="label">Orgão</div>
+    <div class="campo">SEP - Secretaria de Estado de Econômia e Planejamento</div>
+
+    <div class="label">Setor</div>
+    <div class="campo">CGTI - Coordenação Geral de Tecnologia da Informação</div>
+
+    <div class="label">Papel</div>
+    <div class="campo">Desenvolvedor Terceirizado</div>
+</div>
