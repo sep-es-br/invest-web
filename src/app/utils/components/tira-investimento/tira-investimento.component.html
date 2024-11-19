@@ -7,6 +7,10 @@
         <div id="value">{{investimento.nome | shortString : 50}}</div>
     </div>
     <div>
+        <div id="label">Unidade</div>
+        <div id="value">{{investimento.unidadeOrcamentaria}}</div>
+    </div>
+    <div>
         <div id="label">Código P.O</div>
         <div id="value">{{investimento.codPO}}</div>
     </div>
@@ -17,10 +21,6 @@
     <div>
         <div id="label">Contrato</div>
         <div id="value">{{investimento.totalHomologado | customCurrency }}</div>
-    </div>
-    <div>
-        <div id="label">Orçado</div>
-        <div id="value">{{investimento.totalOrcado | customCurrency }}</div>
     </div>
     <div>
         <div id="label">Autorizado</div>
