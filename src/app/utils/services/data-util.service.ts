@@ -22,7 +22,7 @@ export class DataUtilService {
     }
 
     imageFromBase64(base64 : string) : SafeResourceUrl {
-        return this.domSanitizer.bypassSecurityTrustResourceUrl('data:image/webp;base64,' + base64)
+        return this.domSanitizer.bypassSecurityTrustResourceUrl(base64)
     }
 
     fileToBinaryString(file : File) : string {

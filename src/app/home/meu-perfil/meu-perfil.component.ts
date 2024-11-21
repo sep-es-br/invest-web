@@ -87,7 +87,7 @@ export class MeuPerfilComponent implements AfterViewInit{
             this.avatarUser = this.dataUtilService.imageFromBase64(base64);
 
             if(this.user.imgPerfil) {
-                this.user.imgPerfil.blob = this.form.get("avatar").value
+                this.user.imgPerfil.blob = base64
             } else {
                 this.user.imgPerfil = {
                     id: null,
@@ -114,7 +114,7 @@ export class MeuPerfilComponent implements AfterViewInit{
         const result = new ReplaySubject<string>(1);
         const reader = new FileReader();
         reader.readAsDataURL(file);
-        reader.onload = (event) => result.next(event.target.result.toString().split(',')[1]);
+        reader.onload = (event) => result.next(event.target.result.toString());
         return result;
       }
 
