@@ -6,6 +6,7 @@ export interface IProfile {
     id: string | null;
     imgPerfil: IAvatar;
     name: string;
+    nomeCompleto: string;
     sub: string;
     email: string;
     telefone: string;

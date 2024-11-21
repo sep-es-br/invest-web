@@ -8,8 +8,8 @@
 
     div#valores {
         display: grid;
-        grid-template-columns: repeat(7, 12rem);
-        grid-gap: 0.2rem;
+        grid-template-columns: repeat(8, 10.5rem);
+        grid-gap: 10px;
         flex-direction: row;
         justify-content: space-between;
         padding-top: 2rem;
@@ -17,9 +17,10 @@
 
         > * {
             display: flex;
+            align-items: center;
             height: 3rem;
-            padding: 1rem;
-            border-radius: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 0.3rem;
             box-shadow: rgba(170, 170, 170, 0.35) 1px 1px 5px 0px;
             background-color: white;
             color: rgb(85, 85, 85);
@@ -29,8 +30,7 @@
         }
 
         #icone {
-            box-shadow: 1px 1px 5px rgba(170, 170, 170, 0.35);
-            border-radius: 5px;
+            border-radius: 3px;
         }
     }
 

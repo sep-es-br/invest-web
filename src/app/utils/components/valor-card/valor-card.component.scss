@@ -5,13 +5,17 @@
     div {
         &#icone {
             background-color: var(--cor-primaria);
-            padding: 10px;
+            padding: 5px;
             margin-right: 1rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 5px;
-            box-shadow: 0 0 3px;
+            border-radius: 4px;
+            height: 50%;
+
+            img {
+                width: 90%;
+            }
         }
 
         &#infos {
@@ -25,12 +29,12 @@
 
                 &#value {
                     color: var(--cor-primaria);
-                    font-size: larger;
+                    font-size: medium;
                 }
 
                 &#title {
                     color: #6e7484;
-                    font-size: small;
+                    font-size: smaller;
                     text-align: end;
                     text-wrap: nowrap;
                 }

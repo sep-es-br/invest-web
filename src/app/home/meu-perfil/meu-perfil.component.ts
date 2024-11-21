@@ -32,7 +32,8 @@ export class MeuPerfilComponent implements AfterViewInit{
         imgPerfil: null,
         id: null,
         sub: '',
-        name: 'Fulano de Tal',
+        name: 'Fulano',
+        nomeCompleto: 'Fulano de Tal',
         email: 'fulano@email.com',
         telefone: '(27) 9 9846-9229',
         role: [{id:"", nome: 'Diretor'}],
@@ -73,12 +74,7 @@ export class MeuPerfilComponent implements AfterViewInit{
         this.avatarUser = null;
         this.user.imgPerfil = null;
 
-        this.profileService.salvarUsuario(this.user).subscribe(user => {
-            if(user){
-                this.profileService.userListener.next(this.user)
-            } else
-                alert("erro ao salvar usuario")
-        })
+        this.salvarUser()
 
     }
 
@@ -99,14 +95,18 @@ export class MeuPerfilComponent implements AfterViewInit{
                 }
             }
 
-            this.profileService.salvarUsuario(this.user).subscribe(user => {
-                if(user){
-                    this.profileService.userListener.next(this.user)
-                } else
-                    alert("erro ao salvar usuario")
-            })
+            this.salvarUser();
 
          })
+    }
+
+    salvarUser() {
+        this.profileService.salvarUsuario(this.user).subscribe(user => {
+            if(user){
+                this.profileService.userListener.next(this.user)
+            } else
+                alert("erro ao salvar usuario")
+        })
     }
 
 

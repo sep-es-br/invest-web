@@ -43,18 +43,17 @@ export class HomeComponent implements OnInit{
     ngOnInit(): void {
 
         this.profile.userListener.subscribe(newUser => {
-            this.loadUser();
+            this.loadUserDetails(newUser);
         })
         this.loadUser();
     }
 
 
-    loadUser() : void {
+    loadUserDetails(user: IProfile) : void {
 
-        let userJson = sessionStorage.getItem('user-profile');
 
-        if(userJson) {
-            this.user = JSON.parse(userJson)
+        if(user) {
+            this.user = user;
             this.profile.getAvatarFromSub().subscribe(avatar => {
                 if(avatar === null || avatar.blob === "") return;
                 this.user.imgPerfil = avatar;
@@ -62,13 +61,26 @@ export class HomeComponent implements OnInit{
             });
 
         } else {
-            this.profile.getUserInfo().subscribe(value => {
-                sessionStorage.setItem("user-profile", JSON.stringify(value))
-                this.loadUser();
+            this.profile.getUser().subscribe(value => {
+                const userProfile = {
+                    sub: value.sub,
+                    name: value.name,
+                    nomeCompleto: value.nomeCompleto,
+                    email: value.email,
+                    role: value.role,
+                };
+
+                sessionStorage.setItem('user-profile', JSON.stringify(userProfile));
+                this.loadUserDetails(value);
             });
         }
 
-        
+    }
 
+
+    loadUser() : void {
+
+        let userJson = sessionStorage.getItem('user-profile');
+        this.loadUserDetails(JSON.parse(userJson));
     }
 }

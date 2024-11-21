@@ -15,10 +15,10 @@ import { IAvatar } from '../interfaces/avatar.interface';
 export class ProfileService {
   private _urlSignin = `${environment.apiUrl}/signin`;
   private _url = `${environment.apiUrl}/usuario`;
-  private _sessionProfileSubject = new BehaviorSubject<IProfile>({token:"", id: null, sub: "", name:"", imgPerfil: null, telefone: "", email:"", role:[]});
+  private _sessionProfileSubject = new BehaviorSubject<IProfile>({token:"", id: null, sub: "", name:"", nomeCompleto: "", imgPerfil: null, telefone: "", email:"", role:[]});
   public sessionProfile$ = this._sessionProfileSubject.asObservable();
 
-  public userListener = new Subject<IProfile>();
+  public userListener = new BehaviorSubject<IProfile>(null);
 
   constructor(
     private http: HttpClient,

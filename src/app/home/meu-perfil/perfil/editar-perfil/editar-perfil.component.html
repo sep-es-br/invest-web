@@ -1,6 +1,6 @@
 <div id="titulo">
     <p>Perfil</p>
-    <button routerLink="/home/meuperfil/detalhe" ><fa-icon [icon]="faSalvarIcon"></fa-icon> Salvar</button>
+    <button (click)="salvarUser()" ><fa-icon [icon]="faSalvarIcon"></fa-icon> Salvar</button>
 </div>
 <div id="infos">
     <form [formGroup]="form">

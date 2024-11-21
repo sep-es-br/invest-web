@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {Router} from '@angular/router';
 import {HttpErrorResponse} from '@angular/common/http';
 import { IHttpError } from '../interfaces/http-error.interface';
@@ -13,9 +13,9 @@ import { Observable, throwError } from 'rxjs';
   providedIn: 'root',
 })
 export class ErrorHandlerService {
-  constructor(private _router: Router) {
-  }
 
+
+  private router = inject(Router);
   /**
    * @public
    * Método público invocado dentro dos métodos apropriados dos serviços (ex: `getProjeto` dentro de `ProjetosService`).
@@ -36,11 +36,11 @@ export class ErrorHandlerService {
     switch (errorCode) {
       case 401:
         sessionStorage.removeItem('token');
-        this._router.navigateByUrl('login');
+        this.router.navigateByUrl('login');
         break;
       case 403:
         sessionStorage.removeItem('token');
-        this._router.navigateByUrl('login');
+        this.router.navigateByUrl('login');
         break;
       default:
         break;

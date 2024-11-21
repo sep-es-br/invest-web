@@ -4,7 +4,7 @@
     </div>
     <div id="invNome">
         <div id="label">Investimento</div>
-        <div id="value">{{investimento.nome | shortString : 50}}</div>
+        <div id="value"><span [title]="investimento.nome">{{investimento.nome | shortString : 50}}</span></div>
     </div>
     <div>
         <div id="label">Unidade</div>

@@ -91,14 +91,14 @@ export class HeaderComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.iniciais = this.user.name.split(' ').map(n => n[0]).slice(0,2).join('').toUpperCase();
+        this.iniciais = this.user.nomeCompleto.split(' ').map(n => n[0]).slice(0,2).join('').toUpperCase();
     }
 
     updateUserInfo(){
         if(this.user.imgPerfil){
             this.userImage = this.dataUtilService.imageFromBase64(this.user.imgPerfil.blob);
         } else {
-            this.iniciais = this.user.name.split(' ').map(n => n[0]).slice(0,2).join('').toUpperCase();
+            this.iniciais = this.user.nomeCompleto.split(' ').map(n => n[0]).slice(0,2).join('').toUpperCase();
         }
     }
 

@@ -31,6 +31,7 @@ export class AuthRedirectComponent {
         const userProfile = {
           sub: response.sub,
           name: response.name,
+          nomeCompleto: response.nomeCompleto,
           email: response.email,
           role: response.role,
         };
