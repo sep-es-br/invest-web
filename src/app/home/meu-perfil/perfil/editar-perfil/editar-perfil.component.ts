@@ -83,7 +83,6 @@ export class EditarPerfilComponent implements AfterViewInit{
             this.profileService.salvarUsuario(this.user).subscribe(novoUser => {
                 if(novoUser) {
                     this.profileService.userListener.next(novoUser);
-                    this
                     alert("Usuario salvo")
                     this.router.navigateByUrl("/home/meuperfil/detalhe");
                 } else {
