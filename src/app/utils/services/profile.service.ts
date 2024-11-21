@@ -27,7 +27,7 @@ export class ProfileService {
 
   public getUserInfo(): Observable<IProfile> {
     return this.http.get<IProfile>(`${this._urlSignin}/user-info`).pipe(
-      catchError(this.errorHandlerService.handleError), tap(value => console.log(this._urlSignin) )
+      catchError(this.errorHandlerService.handleError)
     );
   }
 
