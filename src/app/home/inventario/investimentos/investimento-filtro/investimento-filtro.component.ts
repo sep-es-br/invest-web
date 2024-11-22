@@ -51,6 +51,10 @@ export class InvestimentoFiltroComponent {
         
     }
 
-    
+    padStr(number : number, numDigits: number) : string{
+        return (number < 0 ? '-':'') 
+          + ((new Array(numDigits + 1).join("0"))
+          + Math.abs(number)).slice(-numDigits);
+      }
 
 }

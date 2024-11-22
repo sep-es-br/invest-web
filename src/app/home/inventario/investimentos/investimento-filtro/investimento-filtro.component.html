@@ -4,8 +4,8 @@
         <option *ngFor="let unidade of unidades" [ngValue]="unidade.id">{{unidade.sigla}}</option>
     </select>
     <select formControlName="planoOrcamentarioControl">
-        <option  [ngValue]="null">Plano Orcamentário</option>
-        <option *ngFor="let plano of planos" [ngValue]="plano.id">{{plano.cod}}</option>
+        <option  [ngValue]="null">Plano Orçamentário</option>
+        <option *ngFor="let plano of planos" [ngValue]="plano.id">{{padStr(plano.cod, 6)}}</option>
     </select>
     <select formControlName="exercicio">
         <option *ngFor="let ano of anos" [ngValue]="ano">{{ano}}</option>
