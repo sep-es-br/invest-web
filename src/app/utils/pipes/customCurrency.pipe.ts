@@ -13,7 +13,7 @@ export class CustomCurrencyPipe implements PipeTransform {
         if (isNaN(number)) return null; // will only work value is a number
         if (number === null) return null;
         
-        let treatedNumber = String(new CurrencyPipe('en-US').transform(number, 'BRL'));
+        let treatedNumber = String(new CurrencyPipe('en-US').transform(number, 'BRL')).replace("$", "$ ");
         while(treatedNumber.indexOf('.') > -1)
             treatedNumber = treatedNumber.replace('.', 'x');
         while(treatedNumber.indexOf(',') > -1)

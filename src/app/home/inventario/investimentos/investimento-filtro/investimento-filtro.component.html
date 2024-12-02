@@ -7,6 +7,10 @@
         <option  [ngValue]="null">Plano Orçamentário</option>
         <option *ngFor="let plano of planos" [ngValue]="plano.id">{{padStr(plano.cod, 6)}}</option>
     </select>
+    <select formControlName="fonteOrcamentariaControl">
+        <option  [ngValue]="null">Fonte Orçamentária</option>
+        <option *ngFor="let fonte of fontes" [ngValue]="fonte.id">{{fonte.nome}}</option>
+    </select>
     <select formControlName="exercicio">
         <option *ngFor="let ano of anos" [ngValue]="ano">{{ano}}</option>
     </select>

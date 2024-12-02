@@ -6,13 +6,14 @@ import { IProfile } from "../utils/interfaces/profile.interface";
 import { ProfileService } from "../utils/services/profile.service";
 import { MenuComponent } from "../menu/menu.component";
 import { SwipeDirective } from "../utils/directive/swipe.directive";
+import { HomeRoutingModule } from "./home-routing.module";
 
 @Component({
     selector: 'spo-home',
     templateUrl: 'home.component.html',
     styleUrl: 'home.component.scss',
     standalone: true,
-    imports: [CommonModule, HeaderComponent, RouterOutlet, RouterModule, MenuComponent, SwipeDirective],
+    imports: [CommonModule, HeaderComponent, RouterOutlet, MenuComponent, SwipeDirective, HomeRoutingModule],
     hostDirectives: [SwipeDirective]
 })
 export class HomeComponent implements OnInit{
@@ -54,7 +55,7 @@ export class HomeComponent implements OnInit{
 
         if(user) {
             this.user = user;
-            this.profile.getAvatarFromSub().subscribe(avatar => {
+            this.profile.getAvatarFromLoggedSub().subscribe(avatar => {
                 if(avatar === null || avatar.blob === "") return;
                 this.user.imgPerfil = avatar;
                 this.headerElem.updateUserInfo();

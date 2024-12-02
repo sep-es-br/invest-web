@@ -1,0 +1,73 @@
+:host {
+
+    display: flex;
+    flex-direction: column;
+    padding-top: 3rem;
+
+
+    .listaOpcoes {
+
+        display: grid;
+        grid-template-columns: repeat(5, 17rem);
+        gap: 1rem;
+        justify-content: space-between;
+        margin-top: 3rem;
+
+        .itemMenu {
+            display: flex;
+            border: var(--cor-primaria) solid 1px;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            align-items: center;
+            background-color: white;
+            cursor: pointer;
+    
+            .icone {
+                color: var(--cor-primaria);
+                border: var(--cor-primaria) solid 1px;
+                width: 48px;
+                height: 48px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border-radius: 5px;
+                margin-right: 1rem;
+                
+                span {
+                    font-size: 30px;
+                }
+            }
+    
+            p {
+                font-family: 'Open Sans', sans-serif;
+                font-weight: bold;
+                align-self: flex-start;
+                color: var(--cor-primaria);
+            }
+        }
+    }
+
+    div#pesquisa {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        background-color: white;
+        padding: 0.3rem;
+        border-radius: 0.3rem;
+        width: fit-content;
+
+        fa-icon {
+            font-size: small;
+            color: gray;
+        }
+
+        input {
+            margin-left: 0.5rem;
+            border: unset;
+        }
+
+        input:focus {
+            outline: unset;
+        }
+    }
+}

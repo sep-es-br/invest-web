@@ -1,0 +1,159 @@
+:host {
+
+    display: flex;
+    flex-direction: column;
+    padding-top: 2rem;
+
+
+    header {
+        display: flex;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+        justify-content: space-between;
+
+        div#pesquisa {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            background-color: white;
+            padding: 0.3rem;
+            border-radius: 0.3rem;
+            width: fit-content;
+    
+            fa-icon {
+                font-size: small;
+                color: gray;
+            }
+    
+            input {
+                margin-left: 0.5rem;
+                border: unset;
+            }
+    
+            input:focus {
+                outline: unset;
+            }
+        }
+
+        div.btn {
+            --tamanho: 35px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            color: var(--cor-primaria);
+            border: var(--cor-primaria) 1px solid;
+            height: var(--tamanho);
+            width: var(--tamanho);
+            align-self: flex-end;
+            cursor: pointer;
+
+            span {
+                font-size: 20px;
+            }
+        }
+    }
+
+    main {
+        display: grid;
+        grid-template-columns: repeat(4, auto);
+        grid-auto-rows: 15rem;
+        gap: 1.5rem;
+        justify-content: space-around;
+        font-family: var(--fonte-open-sans);
+        font-size: small;
+        
+        .grupoItem {
+            background-color: white;
+            border: rgba(215, 215, 215, 0.39) solid 0.1rem;
+            border-radius: 0.5rem;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 1px 1px 3px rgba(170, 170, 170, 0.35);
+            cursor: pointer;
+            position: relative;
+
+            &:hover {
+                border: var(--cor-primaria) solid 0.1rem;
+
+                .btnExcluir {
+                    color: red;
+                    border: red solid 1px;
+                    display: flex;
+                    width: 30px;
+                    height: 30px;
+                    justify-content: center;
+                    align-items: center;
+                    border-radius: 4px;
+                    position: absolute;
+                    right: 1rem;
+                    top: 1rem;
+                }
+            }
+
+            .cabecalho {
+                height: fit-content;
+                display: flex;
+                margin-bottom: 1rem;
+
+                .icone {
+                    --tamanho: 54px;
+
+                    width: var(--tamanho);
+                    height: var(--tamanho);
+                    border: var(--cor-primaria) solid 0.1rem;
+                    border-radius: 0.3rem;
+                    color: var(--cor-primaria);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-size: larger;
+                    margin-right: 1rem;
+                }
+
+                .infos {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    font-weight: bolder;
+
+                    .sigla {
+                        color: var(--cor-primaria);
+                        font-size: large;
+                    }
+
+                    .nome {
+                        color: #7f7f7f;
+                    }
+                }
+            }
+
+            .descricao {
+                flex-grow: 1;
+
+                .titulo {
+                    color: var(--cor-primaria);
+                    padding-bottom: 0.5rem;
+                }
+
+                .texto {
+                    color: #7f7f7f;
+                    text-align: justify;
+                }
+
+            }
+
+            
+            .btnExcluir {
+                display: none;
+            }
+            
+        }
+    }
+
+    .naoMostar {
+        display: none;
+    }
+}

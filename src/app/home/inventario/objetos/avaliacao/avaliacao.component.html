@@ -9,18 +9,6 @@
     </div>
 </div>
 <div id="listaDados">
-    <spo-tira-objeto *ngFor="let obj of data[paginaAtual-1]" [objeto]="obj"></spo-tira-objeto>
+    <spo-tira-objeto *ngFor="let obj of data" [objeto]="obj"></spo-tira-objeto>
 </div>
-<div id="paginacao">
-    <div id="btnAcao" class="btnPagina {{paginaAtual === 1 ? 'btnPgInativo' : ''}}"
-        (click)="voltaUmaPagina()">
-        <p><</p>
-    </div>
-    <div class="btnPagina {{i + 1 === paginaAtual ? 'pgAtual' : ''}}" *ngFor="let x of data; index as i" (click)="paginaAtual = i + 1">
-        <p>{{i+1}}</p>
-    </div>
-    <div id="btnAcao" class="btnPagina {{paginaAtual === data.length ? 'btnPgInativo' : ''}}"
-        (click)="avancarUmaPagina()">
-        <p>></p>
-    </div>
-</div>
+<spo-barra-paginacao [larguraPaginacao]="larguraPaginacao" [quantidade]="qtObjetos" (onPageChange)="recarregarLista($event)"></spo-barra-paginacao>

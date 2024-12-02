@@ -11,10 +11,4 @@ import { environment } from "../../environments/environment";
 export class EmConstrucaoComponent {
 
 
-    constructor(private http : HttpClient) {
-        // this.http.put<String>(`${environment.apiUrl}/controler/gerarDB`, null).subscribe({
-        //     next: (resp => console.log(resp)),
-        //     error: (err) => console.log(err)
-        // })
-    }
 }

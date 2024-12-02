@@ -1,13 +1,17 @@
 import { NgModule } from "@angular/core";
 import { Route, RouterModule } from "@angular/router";
 import { EmConstrucaoComponent } from "../../em-construcao/em-construcao.component";
+import { AdminMenuComponent } from "./menu/admin-menu.component";
 
 const routes : Route[] = [
     {
         path: '',
         pathMatch: 'full',
-        component: EmConstrucaoComponent
-    }, 
+        component: AdminMenuComponent
+    }, {
+        path: 'grupo',
+        loadChildren: () => import("./grupos/grupo-routing.module").then(m => m.GrupoRoutingModule)
+    }
 
 ]
 

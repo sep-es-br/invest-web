@@ -5,25 +5,28 @@ import { catchError, Observable, throwError } from "rxjs";
 import { InvestimentoDTO } from "../models/InvestimentoDTO";
 import { InvestimentoFiltro } from "../models/InvestimentoFiltro";
 import { ErrorHandlerService } from "./error-handler.service";
+import { Router } from "@angular/router";
 
 @Injectable({providedIn: "root"})
 export class InvestimentosService {
 
     private readonly investimentoUrl = `${environment.apiUrl}/investimento`;
    
-    constructor(private http : HttpClient, private errorHandlerService: ErrorHandlerService){
+    constructor(private http : HttpClient,
+         private errorHandlerService: ErrorHandlerService,
+        private router : Router){
     }
 
     public getListaInvestimentos( filtro : InvestimentoFiltro ) : Observable<InvestimentoDTO[]> {
         
         return this.http.get<InvestimentoDTO[]>(`${this.investimentoUrl}/all`, {params: this.filterToParams(filtro)}).pipe(
-                catchError(this.errorHandlerService.handleError)
+                catchError(err => this.errorHandlerService.handleError(err))
             );
     }
 
     public getQuantidadeItens( filtro : InvestimentoFiltro) : Observable<number> {
         return this.http.get<number>(`${this.investimentoUrl}/count`, {params: this.filterToParams(filtro)}).pipe(
-            catchError(this.errorHandlerService.handleError)
+            catchError(err => this.errorHandlerService.handleError(err))
         );
     }
 
@@ -38,6 +41,10 @@ export class InvestimentosService {
 
         if(filtro.codPO)
             params = params.set("codPO", filtro.codPO) 
+
+        if(filtro.idFonte)
+            params = params.set("idFonte", filtro.idFonte)
+        
 
 
         if(filtro.numPag)

@@ -4,6 +4,5 @@ export class FonteOrcamentariaDTO {
     id!: string;
     nome!: string;
     descricao!: string;
-    custosIndicados!: CustoDTO[]
 
 }

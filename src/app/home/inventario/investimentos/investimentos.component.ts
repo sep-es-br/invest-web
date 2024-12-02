@@ -15,6 +15,7 @@ import { CustoService } from "../../../utils/services/custo.service";
 import { ObjetosService } from "../../../utils/services/objetos.service";
 import { BarraPaginacaoComponent } from "../../../utils/components/barra-paginacao/barra-paginacao.component";
 import { ExecucaoOrcamentariaService } from "../../../utils/services/execucaoOrcamentaria.service";
+import { concat, merge, tap } from "rxjs";
 
 @Component({
     selector: 'spo-investimentos',
@@ -22,7 +23,7 @@ import { ExecucaoOrcamentariaService } from "../../../utils/services/execucaoOrc
     styleUrl: './investimentos.component.scss',
     standalone: true,
     imports: [
-        CommonModule, TiraInvestimentoComponent, RouterLink,
+        CommonModule, TiraInvestimentoComponent,
         ReactiveFormsModule, InvestimentoFiltroComponent, 
         FontAwesomeModule, ValorCardComponent, BarraPaginacaoComponent
     ]
@@ -70,6 +71,7 @@ export class InvestimentosComponent implements AfterViewInit {
             exercicio: this.filtroComponent.form.get("exercicio").value,
             codPO: this.filtroComponent.form.get("planoOrcamentarioControl").value,
             codUnidade: this.filtroComponent.form.get("unidadeOrcamentariaControl").value,
+            idFonte: this.filtroComponent.form.get("fonteOrcamentariaControl").value,
             nome: this.txtBusca.value,
             numPag: novaPagina,
             qtPorPag: 15
@@ -83,24 +85,31 @@ export class InvestimentosComponent implements AfterViewInit {
 
         this.filtro.numPag = novaPagina;
 
-        this.custoService.getTotalPrevisto(this.filtro.exercicio).subscribe(totalPrevisto => {
-            this.totalPrevisto = totalPrevisto;
-        });
+        merge(
 
-        this.custoService.getTotalHomologado(this.filtro.exercicio).subscribe(totalContratado => {
-            this.totalHomologado = totalContratado
-        });
+            this.custoService.getValoresTotaisCusto(this.filtro.exercicio)
+            .pipe(tap(totais => {
+                this.totalPrevisto = totais.previsto;
+                this.totalHomologado = totais.contratado; 
+            })),
 
-        this.execucaoService.getTotalOrcado(this.filtro.exercicio).subscribe(totalOrcado => this.totalOrcado = totalOrcado)
+            this.execucaoService.getTotalOrcado(this.filtro.exercicio)
+            .pipe(tap(totalOrcado => {
+                this.totalOrcado = totalOrcado
+            })),
 
-        this.service.getListaInvestimentos(this.filtro).subscribe(invs => {
-            this.data = invs;
-        });
+            this.service.getListaInvestimentos(this.filtro)
+            .pipe(tap(invs => {
+                this.data = invs;
+            })),
 
-        this.service.getQuantidadeItens(this.filtro).subscribe(quantidade => {
-            this.qtInvestimento = quantidade
-            this.barraPaginacaoComponent.updatePaginacao(quantidade);  
-        })
+            this.service.getQuantidadeItens(this.filtro)
+            .pipe(tap(quantidade => {
+                this.qtInvestimento = quantidade
+                this.barraPaginacaoComponent.updatePaginacao(quantidade);  
+            }))
+
+        ).subscribe()
        
     }
 }

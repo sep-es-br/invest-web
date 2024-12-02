@@ -1,43 +1,51 @@
 <spo-investimento-filtro></spo-investimento-filtro>
 <div id="valores">
     <spo-valor-card 
-        titulo="Previsto" 
+        titulo="Previsto"
+        cor="var(--cor-primaria)"
         nomeIcone="monitoring" 
         [valor]="totalPrevisto"
     ></spo-valor-card>
     <spo-valor-card 
         titulo="Contratado" 
+        cor="var(--cor-primaria)"
         nomeIcone="handshake" 
         [valor]="totalHomologado"
     ></spo-valor-card>
     <spo-valor-card 
         titulo="Orçado" 
+        cor="var(--cor-sigefes)"
         nomeIcone="description" 
         [valor]="totalOrcado"
     ></spo-valor-card>
     <spo-valor-card 
         titulo="Autorizado" 
+        cor="var(--cor-sigefes)"
         nomeIcone="check_circle" 
         [valor]="totalAutorizado"
     ></spo-valor-card>
     <spo-valor-card 
         titulo="Empenhado" 
+        cor="var(--cor-sigefes)"
         nomeIcone="gavel" 
         [valor]="totalDisponivel"
     ></spo-valor-card>
     <spo-valor-card 
         titulo="Liquidado" 
+        cor="var(--cor-sigefes)"
         nomeIcone="checkbook" 
         [valor]="totalDisponivel"
     ></spo-valor-card>
     <spo-valor-card 
         titulo="Disp. S/ Reserva" 
+        cor="var(--cor-sigefes)"
         nomeIcone="savings" 
         [valor]="totalDisponivel"
     ></spo-valor-card>
     <spo-valor-card 
-        titulo="À definir" 
-        nomeIcone="savings" 
+        titulo="Pago" 
+        cor="var(--cor-sigefes)"
+        nomeIcone="paid" 
         [valor]="totalDisponivel"
     ></spo-valor-card>
 </div>

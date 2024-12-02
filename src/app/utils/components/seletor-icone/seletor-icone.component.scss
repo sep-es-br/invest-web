@@ -1,0 +1,64 @@
+:host {
+    position: relative;
+    width: fit-content;
+
+    .icone {
+        --tamanho: 30px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: var(--tamanho);
+        height: var(--tamanho);
+        border: var(--cor-primaria) solid 1px;
+        border-radius: 5px;
+        cursor: pointer;
+
+    }
+
+    .iconesDisponiveis {
+        &.outer {
+            position: absolute;
+            left: calc(100% + 0.3rem);
+            top: -0.5rem;
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+            margin-top: 0.3rem;
+            width: fit-content;
+            border-radius: 10px;
+            overflow: hidden;
+            height: 0;
+            transition: height 0.3s;
+            box-sizing: content-box;
+
+            &.aberto {
+                border: var(--cor-primaria) solid 1px;
+                height: 11rem;
+            }
+
+            input {
+                border: 0;
+                border-bottom: var(--cor-primaria) solid 1px;
+                padding-top: 5px;
+
+                &:focus {
+                    outline: unset;
+                }
+            }
+        }
+        
+        &.inner {
+            flex-grow: 1;
+            display: grid;
+            width: fit-content;
+            max-height: 10rem;
+            overflow-y: scroll;
+            padding: 0.5rem;
+            grid-template-columns: repeat(10, auto);
+            gap: 0.2rem;
+        }
+
+    }
+
+}

@@ -1,0 +1,22 @@
+<div class="content" (click)="clickDentro($event)">
+    <header>
+        <p>Adicionar Grupo</p>
+    </header>
+    <main>
+        <form [formGroup]="form">
+            <label for="inIcone">Icone:</label>
+            <spo-seletor-icone id="inIcone" formControlName="icone" />
+            <label for="inNome">Nome:</label>
+            <input type="text" id="inNome" formControlName="nome" (blur)="gerarSigla($event)"/>
+            <label for="inSigla">Sigla:</label>
+            <input type="text" id="inSigla" formControlName="sigla" />
+            <label for="inDescricao">Descrição:</label>
+            <textarea rows="5" formControlName="descricao"></textarea>
+        </form>
+    </main>
+    <footer>
+        <button id="btnSalvar" (click)="salvar()">
+            <fa-icon [icon]="iconSalvar"></fa-icon>Salvar
+        </button>
+    </footer>
+</div>

@@ -1,0 +1,19 @@
+<header>
+    <h3>Membros ({{qtMembros}})</h3>
+    <div id="pesquisa">
+        <fa-icon [icon]="searchIcon"></fa-icon>
+        <input type="text" [formControl]="txtBusca" placeholder="Procurar" />
+    </div>
+    <div class="acoes">
+        <div class="acao" (click)="mostrarCadastro = true;">
+            <fa-icon [icon]="addMembroIcon"></fa-icon>
+        </div>
+    </div>
+</header>
+<main>
+    <h4>Membros</h4>
+    <h4>Unidade</h4>
+    <h4>Setor</h4>
+    <h4>Papel</h4>
+</main>
+<spo-grupo-membro-cadastro [ngClass]="mostrarCadastro ? '' : 'esconderModal'" (onClose)="esconderModal($event)" ></spo-grupo-membro-cadastro>

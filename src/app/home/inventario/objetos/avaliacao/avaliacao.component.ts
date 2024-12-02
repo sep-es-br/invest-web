@@ -9,6 +9,7 @@ import { ObjetoFiltro } from "../../../../utils/models/ObjetoFiltro";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { DataUtilService } from "../../../../utils/services/data-util.service";
+import { BarraPaginacaoComponent } from "../../../../utils/components/barra-paginacao/barra-paginacao.component";
 
 @Component({
     selector: "spo-avaliacao",
@@ -16,24 +17,27 @@ import { DataUtilService } from "../../../../utils/services/data-util.service";
     styleUrl: "./avaliacao.component.scss",
     standalone: true,
     imports: [
-        CommonModule, ReactiveFormsModule, ObjetoFiltroComponent,
-        TiraObjetoComponent, FontAwesomeModule
-    ]
+    CommonModule, ReactiveFormsModule, ObjetoFiltroComponent,
+    TiraObjetoComponent, FontAwesomeModule,
+    BarraPaginacaoComponent
+]
 })
 export class AvaliacaoComponent implements AfterViewInit{
 
     searchIcon = faMagnifyingGlass;
 
+    @ViewChild(BarraPaginacaoComponent) barraPaginacaoComponent : BarraPaginacaoComponent;
     @ViewChild(ObjetoFiltroComponent) private filtroComponent : ObjetoFiltroComponent;
     txtBusca = new FormControl('');
 
-    data : ObjetoDTO[][] = [];
+    data : ObjetoDTO[] = [];
 
     filtro : ObjetoFiltro;
 
     paginaAtual = 1;
 
     qtObjetos = 0;
+    larguraPaginacao = 7;
 
     constructor(private service: ObjetosService,
             private dataUtilService : DataUtilService
@@ -42,8 +46,8 @@ export class AvaliacaoComponent implements AfterViewInit{
     }
 
     ngAfterViewInit(): void {
-        this.txtBusca.valueChanges.subscribe(value => this.updateFiltro());
-        this.filtroComponent.form.valueChanges.subscribe(value => this.updateFiltro());
+        this.txtBusca.valueChanges.subscribe(value => this.recarregarLista(this.paginaAtual));
+        this.filtroComponent.form.valueChanges.subscribe(value => this.recarregarLista(this.paginaAtual));
         
     }
 
@@ -55,13 +59,23 @@ export class AvaliacaoComponent implements AfterViewInit{
             status: this.filtroComponent.form.get("statusControl").value,
             nome: this.txtBusca.value
         };
+    }
 
-        this.service.getListaObjetos(this.filtro).subscribe((objs) => {
-            this.data = this.dataUtilService.paginar(objs, 15);
+    recarregarLista(novaPagina : number) {
 
-            this.qtObjetos = objs.length;
+        this.updateFiltro()
 
+        this.paginaAtual = novaPagina;
+
+        this.service.getListaObjetos(this.filtro, novaPagina, 15).subscribe(invs => {
+            this.data = invs;
         });
+
+        this.service.getQuantidadeItens(this.filtro).subscribe(quantidade => {
+            this.qtObjetos = quantidade
+            this.barraPaginacaoComponent.updatePaginacao(quantidade);  
+        })
+       
     }
 
     voltaUmaPagina() {

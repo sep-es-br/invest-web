@@ -1,5 +1,6 @@
-<div id="icone">
-    <img [src]="'assets/img/' + nomeIcone + '.svg'" width="30px" />
+<div id="icone" [ngStyle]="{backgroundColor: cor}">
+    <span class="material-symbols-outlined">{{nomeIcone}}</span>
+    <!--<img [src]="'assets/img/' + nomeIcone + '.svg'" width="30px" />-->
 </div>
 <div id="infos">
     <div id="value">

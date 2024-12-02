@@ -11,7 +11,7 @@ export class AuthenticationService {
   private _url = `${environment.apiUrl}/oauth2/authorization/acessocidadao`;
 
 
-  constructor(private _http: HttpClient, private router: Router) {}
+  constructor() {}
 
   public acessoCidadaoSignIn() {
     window.location.href = this._url;

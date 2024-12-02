@@ -6,13 +6,14 @@ import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faAngleDown, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { CustomCurrencyPipe } from "../../pipes/customCurrency.pipe";
 import { TiraObjetoComponent } from "../tira-objeto/tira-objeto.component";
+import { NumeroResumidoPipe } from "../../pipes/numero-resumido.pipe";
 
 @Component({
     selector: 'spo-tira-investimento',
     templateUrl: './tira-investimento.component.html',
     styleUrl: './tira-investimento.component.scss',
     standalone: true,
-    imports: [CommonModule, ShortStringPipe, FontAwesomeModule, CustomCurrencyPipe, TiraObjetoComponent]
+    imports: [CommonModule, ShortStringPipe, FontAwesomeModule, CustomCurrencyPipe, TiraObjetoComponent, NumeroResumidoPipe]
 })
 export class TiraInvestimentoComponent implements AfterViewInit {
 

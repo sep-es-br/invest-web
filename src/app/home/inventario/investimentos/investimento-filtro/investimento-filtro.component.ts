@@ -8,6 +8,9 @@ import { PlanoOrcamentarioService } from "../../../../utils/services/planoOrcame
 import { PlanoOrcamentarioDTO } from "../../../../utils/models/PlanoOrcamentarioDTO";
 import { UnidadeOrcamentariaDTO } from "../../../../utils/models/UnidadeOrcamentariaDTO";
 import { UnidadeOrcamentariaService } from "../../../../utils/services/unidadeOrcamentaria.service";
+import { FonteOrcamentariaDTO } from "../../../../utils/models/FonteOrcamentariaDTO";
+import { FonteOrcamentariaService } from "../../../../utils/services/fonteOrcamentaria.service";
+import { merge, tap } from "rxjs";
 
 @Component({
     selector: 'spo-investimento-filtro',
@@ -21,35 +24,42 @@ export class InvestimentoFiltroComponent {
     anos : string[];
     planos : PlanoOrcamentarioDTO[];
     unidades : UnidadeOrcamentariaDTO[];
+    fontes : FonteOrcamentariaDTO[];
 
     form = new FormGroup({
         unidadeOrcamentariaControl: new FormControl(null),
         planoOrcamentarioControl: new FormControl(null),
+        fonteOrcamentariaControl: new FormControl(null),
         exercicio: new FormControl(null)
     });
 
     constructor(private infosService: InfosService,
                 private planoService: PlanoOrcamentarioService,
-                private unidadeService: UnidadeOrcamentariaService
+                private unidadeService: UnidadeOrcamentariaService,
+                private fonteService : FonteOrcamentariaService
     ) {
-        this.infosService.getAllAnos().subscribe((anosList) => {
+
+        merge(
+            this.infosService.getAllAnos()
+            .pipe(tap((anosList) => {
                 this.anos = anosList
 
                 this.form.get("exercicio").setValue(this.anos[0]);
 
-            });
+            })),
 
-        this.planoService.getAllPlanos().subscribe((planoList) => {
-                this.planos = planoList;
+            this.planoService.getAllPlanos()
+            .pipe(tap((planoList) => this.planos = planoList)),
 
-            });
+            this.unidadeService.getAllUnidadesOrcamentarias()
+            .pipe(tap((unidadeList) => this.unidades = unidadeList)),
 
-        this.unidadeService.getAllUnidadesOrcamentarias().subscribe((unidadeList) => {
-                this.unidades = unidadeList;
-
-            });
+            this.fonteService.findAll()
+            .pipe(tap((fonteList) => this.fontes = fonteList))
+        ).subscribe()
         
     }
+    
 
     padStr(number : number, numDigits: number) : string{
         return (number < 0 ? '-':'') 

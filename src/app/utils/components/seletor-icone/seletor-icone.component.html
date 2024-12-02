@@ -1,0 +1,13 @@
+<div class="icone" (click)="this.mostrarIcones = !this.mostrarIcones">
+    <span class="material-symbols-outlined">
+        {{value}}
+    </span>
+</div>
+<div #iconesDisponivel class="iconesDisponiveis outer" [ngClass]="mostrarIcones && iconesFiltrados.length > 0 ? 'aberto' : ''"  >
+    <input type="text" placeholder="Buscar Icone" [formControl]="inNomeIcone" />
+    <div class="iconesDisponiveis inner">
+        <div class="icone" *ngFor="let icone of iconesFiltrados" (click)="setIcone(icone)">
+            <span class="material-symbols-outlined">{{icone}}</span>
+        </div>
+    </div>
+</div>

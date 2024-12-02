@@ -29,39 +29,19 @@
       align-items: center;
 
       #mainLogo {
-        display: flex;
-        flex-direction: row;
-        max-width: 35rem;
-        margin-bottom: 2rem;
-
-        #imgLogo {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          padding: 1rem;
-          border-radius: 1rem;
-          background-color: var(--cor-primaria);
-          margin-right: 1rem;
-          
-          img {
-            width: 150px;
-          }
-
-        }
-
-        #logoInfo {
-          color: var(--cor-primaria);
-          flex-grow: 1;
-          font-size: larger;
-
-          h1 {
-            margin-bottom: 0.5rem;
-            font-size: 4rem;
-          }
-        }
-
         
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 1rem;
+        border-radius: 1rem;
+        margin-right: 1rem;
+        
+        img {
+          width: 600px;
+        }
       }
+        
 
       button {
         padding: 1rem;

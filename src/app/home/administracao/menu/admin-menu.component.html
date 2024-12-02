@@ -1,0 +1,12 @@
+<div id="pesquisa">
+    <fa-icon [icon]="searchIcon"></fa-icon>
+    <input type="text" [formControl]="txtBusca" placeholder="Procurar" />
+</div>
+<div class="listaOpcoes" >
+    <div class="itemMenu" *ngFor="let item of opcoesMenuAdmin" (click)="redirectTo(item.caminho)">
+        <div class="icone">
+            <span class="material-symbols-outlined">{{item.icone}}</span>
+        </div>
+        <p>{{item.titulo}}</p>
+    </div>
+</div>

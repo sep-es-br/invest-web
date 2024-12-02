@@ -2,6 +2,7 @@ import { CommonModule } from "@angular/common";
 import { Component } from "@angular/core";
 import { ActivatedRoute, ActivatedRouteSnapshot, NavigationEnd, Router, RouterLink, RouterModule } from "@angular/router";
 import { breadCrumbNames } from "./breadCrumb-data";
+import { DataUtilService } from "../../utils/services/data-util.service";
 
 @Component({
     selector: 'spo-breadcrumb',
@@ -19,7 +20,7 @@ export class BreadCrumbComponent {
     breadCrumNames  = breadCrumbNames;
 
 
-    constructor(private route : ActivatedRoute, private router : Router) {
+    constructor(private route : ActivatedRoute, private router : Router, private dataUtil : DataUtilService) {
         this.router.events.subscribe(event => {
             if (event instanceof NavigationEnd) {
                 let activeRouter = this.route.snapshot;
@@ -30,9 +31,12 @@ export class BreadCrumbComponent {
                 let fullPath = activeRouter.pathFromRoot
                 fullPath.shift();
 
+                
                 let data =  fullPath.filter(path => path.url[0] != undefined).map((path) => {
                     return {
-                        pathName: path.url[0].path,
+                        pathName: this.breadCrumNames[path.url[0].path] ? 
+                                    this.breadCrumNames[path.url[0].path] : 
+                                    "",
                         pathLink: () => {
                             let pathLinks = path.pathFromRoot.map(p => p.url)
                             pathLinks.shift();
@@ -41,10 +45,16 @@ export class BreadCrumbComponent {
                     }
                 });
                 this.breadcrumb_data = data
+
+                this.dataUtil.obsNomeTela.subscribe(nomeTela => {
+                    if(nomeTela)
+                        this.breadcrumb_data[this.breadcrumb_data.length-1].pathName = nomeTela
+                })
             }
         })
 
     }
+
 }
 
 

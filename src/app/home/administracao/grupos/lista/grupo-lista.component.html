@@ -1,0 +1,30 @@
+<header>
+    <div id="pesquisa">
+        <fa-icon [icon]="searchIcon"></fa-icon>
+        <input type="text" [formControl]="txtBusca" placeholder="Procurar" />
+    </div>
+    <div class="btn" (click)="mostrarModal()">
+        <span class="material-symbols-outlined">group</span>
+    </div>
+</header>
+<main>
+    <div class="grupoItem" *ngFor="let grupo of grupos" [routerLink]="grupo.id" [state]="{nome: grupo.sigla}">
+        <div class="cabecalho">
+            <div class="icone">
+                <span class="material-symbols-outlined">{{grupo.icone}}</span>
+            </div>
+            <div class="infos">
+                <p class="sigla">{{grupo.sigla}}</p>
+                <p class="nome">{{grupo.nome}}</p>
+            </div>
+        </div>
+        <div class="descricao">
+            <p class="titulo">Descrição</p>
+            <p class="texto">{{grupo.descricao}}</p>
+        </div>
+        <div class="btnExcluir" (click)="remover(grupo)">
+            <fa-icon [icon]="lixeira"></fa-icon>
+        </div>
+    </div> 
+</main>
+<spo-grupo-cadastro  [ngClass]="naoMostrar" (onClose)="esconderModal($event)" ></spo-grupo-cadastro>

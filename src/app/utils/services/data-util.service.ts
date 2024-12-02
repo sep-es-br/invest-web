@@ -1,12 +1,14 @@
 import { Injectable } from "@angular/core";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
-import { Subject } from "rxjs";
+import { BehaviorSubject, Subject } from "rxjs";
 
 @Injectable({providedIn: "root"})
 export class DataUtilService {
     constructor (private domSanitizer : DomSanitizer ) {}
 
     public editModeListener = new Subject<boolean>();
+    
+    public readonly obsNomeTela = new BehaviorSubject(null);
     
     paginar(arr : any[], maxTam : number) : any[][] {
         let retorno : any[][] = [];

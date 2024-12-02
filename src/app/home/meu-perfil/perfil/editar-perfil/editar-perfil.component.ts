@@ -67,7 +67,7 @@ export class EditarPerfilComponent implements AfterViewInit{
 
     salvarUser() {
 
-        this.profileService.getAvatarFromSub().subscribe(avatar => {
+        this.profileService.getAvatarFromLoggedSub().subscribe(avatar => {
             this.user = {
                 name: this.form.get("inNome").value,
                 nomeCompleto: this.form.get("inNomeCompleto").value,

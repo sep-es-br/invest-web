@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, Input } from "@angular/core";
+import { AfterViewInit, Component, ContentChild, ElementRef, Input, TemplateRef } from "@angular/core";
 import { CustomCurrencyPipe } from "../../pipes/customCurrency.pipe";
 import { NumeroResumidoPipe } from "../../pipes/numero-resumido.pipe";
 

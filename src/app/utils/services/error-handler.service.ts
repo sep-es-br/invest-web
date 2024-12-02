@@ -2,7 +2,7 @@ import {inject, Injectable} from '@angular/core';
 import {Router} from '@angular/router';
 import {HttpErrorResponse} from '@angular/common/http';
 import { IHttpError } from '../interfaces/http-error.interface';
-import { Observable, throwError } from 'rxjs';
+import { EMPTY, Observable, throwError } from 'rxjs';
 
 
 /**
@@ -14,8 +14,10 @@ import { Observable, throwError } from 'rxjs';
 })
 export class ErrorHandlerService {
 
+  constructor(private router:Router){}
 
-  private router = inject(Router);
+  mensagemDebounce = false;
+
   /**
    * @public
    * Método público invocado dentro dos métodos apropriados dos serviços (ex: `getProjeto` dentro de `ProjetosService`).
@@ -29,23 +31,24 @@ export class ErrorHandlerService {
    * @param {HttpErrorResponse} error - O erro fornecido pelo seletor do operador RxJS `catchError`.
    */
   public handleError(error: HttpErrorResponse): Observable<never> {
-    const backEndError: IHttpError = error.error;
+    
+      const backEndError: IHttpError = error.error;
 
-    const errorCode = backEndError.codigo;
+      const errorCode = backEndError.codigo;
 
-    switch (errorCode) {
-      case 401:
-        sessionStorage.removeItem('token');
-        this.router.navigateByUrl('login');
-        break;
-      case 403:
-        sessionStorage.removeItem('token');
-        this.router.navigateByUrl('login');
-        break;
-      default:
-        break;
-    }
+      switch (errorCode) {
+        case 401:
+        case 403:
+          alert(backEndError.mensagem)
+          sessionStorage.removeItem('token');
+          this.router.navigateByUrl('login');
+          break;
+        default:
+          alert("aconteceu um erro desconhecido, favor verificar a conexão com a internet ou falar com um Administrador");
+          break;
+      }
+    
 
-    return throwError(() => error)
+    return EMPTY;
   }
 }

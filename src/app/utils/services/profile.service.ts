@@ -7,6 +7,7 @@ import { IProfile } from '../interfaces/profile.interface';
 import { ErrorHandlerService } from './error-handler.service';
 import { catchError, tap } from 'rxjs/operators';
 import { IAvatar } from '../interfaces/avatar.interface';
+import { Router } from '@angular/router';
 
 
 @Injectable({
@@ -23,50 +24,41 @@ export class ProfileService {
   constructor(
     private http: HttpClient,
     private errorHandlerService: ErrorHandlerService,
+    private router : Router
   ) { }
 
   public getUserInfo(): Observable<IProfile> {
     return this.http.get<IProfile>(`${this._urlSignin}/user-info`).pipe(
-      catchError(this.errorHandlerService.handleError)
+      catchError(err => this.errorHandlerService.handleError(err))
     );
   }
 
-  public getAvatarFromSub(): Observable<IAvatar> {
-    const profile = JSON.parse(sessionStorage.getItem("user-profile")) as IProfile;
-
-    return this.http.get<IAvatar>(`${this._url}/avatar`, {params: {
-      sub: profile.sub
-    }}).pipe(
-      catchError(this.errorHandlerService.handleError)
+  public getAvatarFromLoggedSub(): Observable<IAvatar> {
+    return this.http.get<IAvatar>(`${this._url}/avatar`).pipe(
+      catchError(err => this.errorHandlerService.handleError(err))
     )
 
   }
 
   public getUser(): Observable<IProfile> {
-    const profile = JSON.parse(sessionStorage.getItem("user-profile")) as IProfile;
 
-    return this.http.get<IProfile>(`${this._url}`, {params: {
-      sub: profile.sub
-    }}).pipe(
-      catchError(this.errorHandlerService.handleError)
+    return this.http.get<IProfile>(`${this._url}`).pipe(
+      catchError(err => this.errorHandlerService.handleError(err))
     )
 
   }
 
   public getUserWithAvatar(): Observable<IProfile> {
-    const profile = JSON.parse(sessionStorage.getItem("user-profile")) as IProfile;
 
-    return this.http.get<IProfile>(`${this._url}/comAvatar`, {params: {
-      sub: profile.sub
-    }}).pipe(
-      catchError(this.errorHandlerService.handleError)
+    return this.http.get<IProfile>(`${this._url}/comAvatar`).pipe(
+      catchError(err => this.errorHandlerService.handleError(err))
     )
 
   }
 
   public salvarUsuario(usuario: IProfile) : Observable<IProfile> {
-    return this.http.put<IProfile>(this._url, usuario, {responseType: 'json'}).pipe(
-      catchError(this.errorHandlerService.handleError)
+    return this.http.put<IProfile>(this._url, usuario).pipe(
+      catchError(err => this.errorHandlerService.handleError(err))
     )
   }
 }

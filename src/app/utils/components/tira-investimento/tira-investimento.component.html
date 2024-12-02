@@ -16,19 +16,19 @@
     </div>
     <div>
         <div id="label">Previsto</div>
-        <div id="value">{{investimento.totalPrevisto | customCurrency }}</div>
+        <div id="value"><span [title]="investimento.totalPrevisto | customCurrency">R$ {{investimento.totalPrevisto | numeroResumido }}</span></div>
     </div>
     <div>
         <div id="label">Contratado</div>
-        <div id="value">{{investimento.totalHomologado | customCurrency }}</div>
+        <div id="value"><span [title]="investimento.totalHomologado | customCurrency">R$ {{investimento.totalHomologado | numeroResumido }}</span></div>
     </div>
     <div>
         <div id="label">Autorizado</div>
-        <div id="value">{{investimento.totalAutorizado | customCurrency }}</div>
+        <div id="value"><span [title]="investimento.totalAutorizado | customCurrency">R$ {{investimento.totalAutorizado | numeroResumido }}</span></div>
     </div>
     <div>
         <div id="label">Disponível</div>
-        <div id="value">{{investimento.totalDisponivel | customCurrency }}</div>
+        <div id="value"><span [title]="investimento.totalDisponivel | customCurrency">R$ {{investimento.totalDisponivel | numeroResumido }}</span></div>
     </div>
     
 </div>

@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from "@angular/core";
 import { BreadCrumbComponent } from "./breadcrumb/breadcrumb.component";
 import { ActivatedRoute, NavigationEnd, Router, RouterLink } from "@angular/router";
 import { breadCrumbNames } from "./breadcrumb/breadCrumb-data";
@@ -21,13 +21,13 @@ import { InvestimentoFiltro } from "../utils/models/InvestimentoFiltro";
 export class HeaderComponent implements OnInit {
 
     @ViewChild('menuUser') private menuUserElem? : ElementRef;
-    @ViewChild('userImg') private userImgElem : ElementRef;
 
     title = '';
     userName : string | undefined = 'Diego Gaede'
     iniciais : string | undefined = 'DG';
     userImage : SafeResourceUrl;
 
+    debounceMenu = false;
     
     qtObjetos = 0;
 
@@ -48,8 +48,12 @@ export class HeaderComponent implements OnInit {
                 
                 let pathName = activeRouter.url[activeRouter.url.length-1];
 
-                this.title = breadCrumbNames[String(pathName)] ? breadCrumbNames[String(pathName)] :
-                  String(pathName) ;
+                this.dataUtilService.obsNomeTela.subscribe(nomeTela => {
+                    if(nomeTela)
+                        this.title = nomeTela;
+                    else
+                        this.title = breadCrumbNames[String(pathName)] ? breadCrumbNames[String(pathName)] : String(pathName) ;
+                })
             }
         })
 
@@ -66,16 +70,30 @@ export class HeaderComponent implements OnInit {
 
     }
 
-    toggleMenuUser(){
-        let menuUser = this.menuUserElem.nativeElement as HTMLDivElement;
-        if(this.showMenuUser) {
-            menuUser.style.height = ''
-        } else {
-            menuUser.style.height = `${menuUser.scrollHeight}px`;
-            // menuUser.style.height = `calc(${menuUser.scrollHeight}px + ${window.getComputedStyle(menuUser.querySelector('div')).getPropertyValue('padding')})`;
+    @HostListener('document:click', ['$event'])
+    documentClick(event: MouseEvent) {
+        if(this.debounceMenu){ 
+            this.debounceMenu = false;
+            return
         }
 
-        this.showMenuUser = !this.showMenuUser
+        this.toggleMenuUser(false);
+
+        this.debounceMenu = false
+    }
+
+    toggleMenuUser(newState : boolean){
+        let menuUser = this.menuUserElem.nativeElement as HTMLDivElement;
+        
+        this.debounceMenu = true
+
+        if(newState) {
+            menuUser.style.height = `${menuUser.scrollHeight}px`;
+        } else {
+            menuUser.style.height = '0'
+        }
+
+        this.showMenuUser = newState
     }
 
     redirectTo(url : string){

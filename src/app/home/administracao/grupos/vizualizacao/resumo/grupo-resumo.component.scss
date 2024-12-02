@@ -1,0 +1,44 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    font-family: var(--fonte-open-sans);
+    color: var(--cor-primaria);
+
+    header {
+    
+        display: flex;
+        flex-direction: row;
+        margin-bottom: 1rem;
+
+        .icone {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 1rem;
+            border: var(--cor-primaria) solid 1px;
+            width: 100px;
+            height: 100px;
+            border-radius: 4px ;
+            transform-origin: top left;
+
+            span {
+                transform: scale(3, 3);
+            }
+            
+        }
+
+        .dados {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+
+            h2 {
+                font-size: medium;
+            }
+        }
+    }
+
+    p {
+        color: gray;
+    }
+}
