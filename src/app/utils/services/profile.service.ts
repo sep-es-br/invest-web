@@ -61,4 +61,14 @@ export class ProfileService {
       catchError(err => this.errorHandlerService.handleError(err))
     )
   }
+
+  public findByGrupo(grupoId : string): Observable<IProfile[]> {
+
+    return this.http.get<IProfile[]>(`${this._url}/byGrupo`, {params: {
+      grupoId: grupoId
+    }}).pipe(
+      catchError(err => this.errorHandlerService.handleError(err))
+    )
+
+  }
 }

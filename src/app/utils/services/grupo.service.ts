@@ -6,6 +6,8 @@ import { GrupoDTO } from "../models/GrupoDTO";
 import { ErrorHandlerService } from "./error-handler.service";
 import { IHttpError } from "../interfaces/http-error.interface";
 import { Router } from "@angular/router";
+import { ICadastroMembroForm } from "../../home/administracao/grupos/vizualizacao/membros/grupo-membro-cadastro/CadastroMembroForm";
+import { IProfile } from "../interfaces/profile.interface";
 
 @Injectable({providedIn: "root"})
 export class GrupoService {
@@ -53,6 +55,12 @@ export class GrupoService {
 
     public save(grupo : GrupoDTO): Observable<GrupoDTO> {
         return this.http.put<GrupoDTO>(`${this.grupoUrl}/save`, grupo).pipe(
+            catchError(err => this.errorHandler.handleError(err))
+        )
+    }
+
+    public addMembro(membroForm : ICadastroMembroForm) : Observable<never> {
+        return this.http.put<never>(`${this.grupoUrl}/addMembro`, membroForm).pipe(
             catchError(err => this.errorHandler.handleError(err))
         )
     }

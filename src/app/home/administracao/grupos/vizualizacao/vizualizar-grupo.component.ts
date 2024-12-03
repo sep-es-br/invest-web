@@ -6,11 +6,14 @@ import { GrupoService } from "../../../../utils/services/grupo.service";
 import { GrupoDTO } from "../../../../utils/models/GrupoDTO";
 import { ActivatedRoute } from "@angular/router";
 import { DataUtilService } from "../../../../utils/services/data-util.service";
+import { GrupoResumoComponent } from "./resumo/grupo-resumo.component";
+import { GrupoMembrosComponent } from "./membros/grupo-membros.component";
 
 @Component({
     standalone: true,
-    template: '<spo-tela-crud [telaConfig]="telaConfig" [data]="grupo"></spo-tela-crud>',
-    imports: [CommonModule, TelaCrudComponent]
+    templateUrl: './vizualizar-grupo.component.html',
+    styleUrl: "./vizualizar-grupo.component.scss",
+    imports: [CommonModule, GrupoResumoComponent, GrupoMembrosComponent]
 })
 export class VizualizarGrupoComponent implements OnInit, OnDestroy{
 

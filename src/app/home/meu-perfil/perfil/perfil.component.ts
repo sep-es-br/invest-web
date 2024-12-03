@@ -23,18 +23,7 @@ export class PerfilComponent implements AfterViewInit{
     avatarPlaceHolderUrl = 'assets/img/placeholderUserM.webp';
     avatarUser : any | null = null;
 
-    user : IProfile = {
-        imgPerfil: null,
-        id: null,
-        sub: '',
-        name: 'Fulano',
-        nomeCompleto: 'Fulano de Tal',
-        papel: '',
-        email: 'fulano@email.com',
-        telefone: '(27) 9 9846-2992',
-        role: [{id:"", nome: 'Diretor'}],
-        token: 'ddd'
-    }
+    user : IProfile ;
 
     constructor(private dataUtilService : DataUtilService,
             private profileService : ProfileService

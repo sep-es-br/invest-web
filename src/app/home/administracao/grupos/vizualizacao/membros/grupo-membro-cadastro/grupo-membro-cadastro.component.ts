@@ -4,6 +4,9 @@ import { IProfile } from "../../../../../../utils/interfaces/profile.interface";
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { UnidadeOrcamentariaDTO } from "../../../../../../utils/models/UnidadeOrcamentariaDTO";
 import { ISetorDTO } from "../../../../../../utils/models/SetorDTO";
+import { InfosService } from "../../../../../../utils/services/infos.service";
+import { IPapelDTO, papelTodos } from "../../../../../../utils/models/PapelDto";
+import { ICadastroMembroForm } from "./CadastroMembroForm";
 
 @Component({
     selector: "spo-grupo-membro-cadastro",
@@ -14,11 +17,19 @@ import { ISetorDTO } from "../../../../../../utils/models/SetorDTO";
 })
 export class GrupoMembroCadastroComponent {
 
-    @Output() onClose = new EventEmitter<IProfile>();
+    @Output() onClose = new EventEmitter<ICadastroMembroForm>();
 
     form : FormGroup;
 
-    constructor(private hostElementRef : ElementRef, private fb : FormBuilder) {
+    unidades : UnidadeOrcamentariaDTO[] = [];
+    setores : ISetorDTO[] = [];
+    papeis : IPapelDTO[] = [];
+
+    papelTodos = papelTodos
+
+    fora = true;
+
+    constructor(private infosService: InfosService, private fb : FormBuilder) {
 
         this.form = this.fb.group({
             unidade: [null],
@@ -26,33 +37,43 @@ export class GrupoMembroCadastroComponent {
             papel: [{value: null, disabled: true}]
         });
 
-        this.form.get("unidade").valueChanges.subscribe(novoValor => {
+        this.form.get("unidade").valueChanges.subscribe((novoValor : UnidadeOrcamentariaDTO) => {
             const selectSetor = this.form.get('setor');
 
             if(novoValor){
-                selectSetor?.enable();
+                this.infosService.getSetores(novoValor.guid).subscribe(setoresList => {
+                    this.setores = setoresList;
+                    selectSetor?.setValue(null);
+                    selectSetor?.enable();
+                });
+
             } else {
+                this.setores = [];
+                selectSetor?.setValue(null);
                 selectSetor?.disable();
             }
+            
         })
 
-        this.form.get("setor").valueChanges.subscribe(novoValor => {
+        this.form.get("setor").valueChanges.subscribe((novoValor : ISetorDTO) => {
             const selectPapel = this.form.get('papel');
 
             if(novoValor){
+                this.infosService.getPapeis(novoValor.guid).subscribe(papeisList => {
+                    this.papeis = papeisList
+                })
+
                 selectPapel?.enable();
             } else {
+                selectPapel?.setValue(null);
                 selectPapel?.disable();
             }
         })
+        
+        this.infosService.getUnidades().subscribe(unidadeList => {
+            this.unidades = unidadeList;
+        });
     }
-
-
-    unidades : UnidadeOrcamentariaDTO[] = [];
-    setores : ISetorDTO[] = [];
-    papeis : IProfile[] = [];
-
-    fora = true;
   
     @HostListener("click", ["event"])
     clickFora (event : MouseEvent) {
@@ -65,5 +86,15 @@ export class GrupoMembroCadastroComponent {
 
     clickDentro(event : MouseEvent){
         this.fora = false;
+    }
+
+    salvar() {
+        let cadastroMembroForm : ICadastroMembroForm = {
+            orgao: this.form.get("unidade").value,
+            setor: this.form.get("setor").value,
+            papel: this.form.get("papel").value
+        }
+
+        this.onClose.emit(cadastroMembroForm);
     }
 }

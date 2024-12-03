@@ -1,4 +1,6 @@
 export class UnidadeOrcamentariaDTO {
-    id?: string;
-    sigla?: string;
+    id: string;
+    guid: string;
+    nome: string;
+    sigla: string;
 }

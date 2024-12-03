@@ -11,9 +11,21 @@
     </div>
 </header>
 <main>
-    <h4>Membros</h4>
-    <h4>Unidade</h4>
-    <h4>Setor</h4>
-    <h4>Papel</h4>
+    <table>
+        <thead>
+            <tr>
+                <th colSpan="2">Membros</th>
+                <th>Unidade</th>
+                <th>Setor</th>
+                <th colspan="2">Papel</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let membro of membros">
+                <td><img [src]="membro.imgPerfil?.blob"></td>
+                <td><img [src]="membro.nomeCompleto"></td>
+            </tr>
+        </tbody>
+    </table>
 </main>
 <spo-grupo-membro-cadastro [ngClass]="mostrarCadastro ? '' : 'esconderModal'" (onClose)="esconderModal($event)" ></spo-grupo-membro-cadastro>

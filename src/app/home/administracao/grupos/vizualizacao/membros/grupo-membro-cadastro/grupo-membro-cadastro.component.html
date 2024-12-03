@@ -7,22 +7,23 @@
             <label for="inUnidade">Unidade Orçamentária <span class="obrigatorio">*</span></label>
             <select formControlName="unidade" id="inUnidade">
                 <option [ngValue]="null">Selecionar a Unidade Orçamentária</option>
-                <option [ngValue]="unidade" *ngFor="let unidade of unidades">{{unidade.sigla}}</option> 
+                <option [ngValue]="unidade" *ngFor="let unidade of unidades">({{unidade.sigla}}) {{unidade.nome}}</option> 
             </select>
             <label for="inSetor">Setor <span class="obrigatorio">*</span></label>
             <select formControlName="setor" id="inSetor">
                 <option [ngValue]="null">Selecionar o Setor</option>
-                <option [ngValue]="setor" *ngFor="let setor of setores">{{setor.nome}}</option> 
+                <option [ngValue]="setor" *ngFor="let setor of setores">({{setor.sigla}}) {{setor.nome}}</option> 
             </select>
             <label for="inPapel">Pessoa / Papel <span class="obrigatorio">*</span></label>
             <select formControlName="papel" id="inPapel" >
                 <option [ngValue]="null">Selecionar o papel</option>
-                <option [ngValue]="papel" *ngFor="let papel of papeis">{{papel.nomeCompleto}} / {{papel.papel}}</option> 
+                <option [ngValue]="papelTodos">{{papelTodos.nome}}</option>
+                <option [ngValue]="papel" *ngFor="let papel of papeis">{{papel.agenteNome}} ({{papel.nome}})</option> 
             </select>
         </form>
     </div>
     <footer>
-        <button [disabled]="form.get('papel').value == null">
+        <button [disabled]="form.get('papel').value == null" (click)="salvar()">
             Adicionar
         </button>
     </footer>

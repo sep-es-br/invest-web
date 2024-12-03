@@ -1,0 +1,13 @@
+<header>
+    <spo-grupo-resumo></spo-grupo-resumo>
+    <nav>
+        <div 
+            class="menuItem" 
+            *ngFor="let opcTela of telaConfig.subTelas" 
+            (click)="exibirTela(opcTela)"
+            [ngClass]="telaSelecionada === opcTela ? 'ativa' : ''">{{opcTela.nome}}</div>
+    </nav>
+</header>
+<main>
+    <div #containerPrincipal></div>
+</main>

@@ -20,18 +20,7 @@ export class EditarPerfilComponent implements AfterViewInit{
 
     faSalvarIcon = faFloppyDisk
 
-    user : IProfile = {
-        imgPerfil: null,
-        id: null,
-        sub: '',
-        name: 'Fulano',
-        nomeCompleto: 'Fulano de Tal',
-        papel: '',
-        email: 'fulano@email.com',
-        telefone: '(27) 9 9846-2992',
-        role: [{id:"", nome: 'Diretor'}],
-        token: 'ddd'
-    }
+    user : IProfile;
 
     form = new FormGroup({
         inNome: new FormControl(''),
@@ -79,7 +68,9 @@ export class EditarPerfilComponent implements AfterViewInit{
                 imgPerfil: avatar,
                 role: this.user.role,
                 sub: this.user.sub,
-                token: this.user.token
+                token: this.user.token,
+                grupos: this.user.grupos
+                
             }
     
             this.profileService.salvarUsuario(this.user).subscribe(novoUser => {

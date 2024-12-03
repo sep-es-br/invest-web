@@ -28,18 +28,7 @@ export class MeuPerfilComponent implements AfterViewInit{
     
     editarImg : boolean;
 
-    user : IProfile = {
-        imgPerfil: null,
-        id: null,
-        sub: '',
-        name: 'Fulano',
-        papel: '',
-        nomeCompleto: 'Fulano de Tal',
-        email: 'fulano@email.com',
-        telefone: '(27) 9 9846-9229',
-        role: [{id:"", nome: 'Diretor'}],
-        token: 'ddd'
-    }
+    user : IProfile;
 
     form = new FormGroup({
         avatar: new FormControl(null),
