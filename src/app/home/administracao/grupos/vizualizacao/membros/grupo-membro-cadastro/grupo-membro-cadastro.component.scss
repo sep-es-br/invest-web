@@ -9,12 +9,67 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    font-family: var(--fonte-open-sans);
 
     main {
         display: flex;
+        flex-direction: column;
         background-color: white;
         border-radius: 10px;
         min-width: 50rem;
         padding: 1rem;
+
+        header {
+            border-bottom: gray solid 1px;
+            padding-bottom: 0.5rem;
+        }
+
+        .conteudo {
+            padding-top: 0.5rem;
+            padding-bottom: 1rem;
+
+            form {
+                display: grid;
+                grid-template-columns: 15rem auto;
+                gap: 1rem;
+
+                label {
+                    color: var(--cor-primaria);
+
+                    .obrigatorio {
+                        color: red;
+                    }
+                }
+
+                select {
+                    border-color: var(--cor-primaria);
+                    border-radius: 4px;
+                    color: var(--cor-primaria);
+
+                    &:focus {
+                        outline: unset;
+                    }
+                }
+            }
+        }
+
+        footer {
+            display: flex;
+            justify-content: flex-end;
+
+            button {
+                background-color: #00cc6a;
+                color: white;
+                font-weight: bolder;
+                border: unset;
+                padding: 0.5rem;
+                border-radius: 4px;
+
+                &:disabled {
+                    background-color: gray;
+                }
+            }
+        }
+
     }
 }

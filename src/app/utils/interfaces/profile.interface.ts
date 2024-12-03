@@ -10,6 +10,7 @@ export interface IProfile {
     sub: string;
     email: string;
     telefone: string;
+    papel : string;
     role: IFuncao[];
 }
 

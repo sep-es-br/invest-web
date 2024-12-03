@@ -29,6 +29,7 @@ export class PerfilComponent implements AfterViewInit{
         sub: '',
         name: 'Fulano',
         nomeCompleto: 'Fulano de Tal',
+        papel: '',
         email: 'fulano@email.com',
         telefone: '(27) 9 9846-2992',
         role: [{id:"", nome: 'Diretor'}],

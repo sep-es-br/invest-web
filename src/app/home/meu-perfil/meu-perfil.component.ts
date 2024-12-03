@@ -33,6 +33,7 @@ export class MeuPerfilComponent implements AfterViewInit{
         id: null,
         sub: '',
         name: 'Fulano',
+        papel: '',
         nomeCompleto: 'Fulano de Tal',
         email: 'fulano@email.com',
         telefone: '(27) 9 9846-9229',

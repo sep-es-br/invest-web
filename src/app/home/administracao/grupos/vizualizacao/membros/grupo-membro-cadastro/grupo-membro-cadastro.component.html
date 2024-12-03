@@ -1,3 +1,29 @@
 <main (click)="clickDentro($event)">
-    <h1>CADASTRO</h1>
+    <header>
+        <h4>Adicionar Membro</h4>
+    </header>
+    <div class="conteudo">
+        <form [formGroup]="form">
+            <label for="inUnidade">Unidade Orçamentária <span class="obrigatorio">*</span></label>
+            <select formControlName="unidade" id="inUnidade">
+                <option [ngValue]="null">Selecionar a Unidade Orçamentária</option>
+                <option [ngValue]="unidade" *ngFor="let unidade of unidades">{{unidade.sigla}}</option> 
+            </select>
+            <label for="inSetor">Setor <span class="obrigatorio">*</span></label>
+            <select formControlName="setor" id="inSetor">
+                <option [ngValue]="null">Selecionar o Setor</option>
+                <option [ngValue]="setor" *ngFor="let setor of setores">{{setor.nome}}</option> 
+            </select>
+            <label for="inPapel">Pessoa / Papel <span class="obrigatorio">*</span></label>
+            <select formControlName="papel" id="inPapel" >
+                <option [ngValue]="null">Selecionar o papel</option>
+                <option [ngValue]="papel" *ngFor="let papel of papeis">{{papel.nomeCompleto}} / {{papel.papel}}</option> 
+            </select>
+        </form>
+    </div>
+    <footer>
+        <button [disabled]="form.get('papel').value == null">
+            Adicionar
+        </button>
+    </footer>
 </main>

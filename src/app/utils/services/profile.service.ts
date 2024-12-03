@@ -16,7 +16,7 @@ import { Router } from '@angular/router';
 export class ProfileService {
   private _urlSignin = `${environment.apiUrl}/signin`;
   private _url = `${environment.apiUrl}/usuario`;
-  private _sessionProfileSubject = new BehaviorSubject<IProfile>({token:"", id: null, sub: "", name:"", nomeCompleto: "", imgPerfil: null, telefone: "", email:"", role:[]});
+  private _sessionProfileSubject = new BehaviorSubject<IProfile>(null);
   public sessionProfile$ = this._sessionProfileSubject.asObservable();
 
   public userListener = new BehaviorSubject<IProfile>(null);
