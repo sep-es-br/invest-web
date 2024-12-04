@@ -21,38 +21,42 @@ export class BreadCrumbComponent {
 
 
     constructor(private route : ActivatedRoute, private router : Router, private dataUtil : DataUtilService) {
+        this.dataUtil.headerUpdate.subscribe(value => this.update());
+        
         this.router.events.subscribe(event => {
             if (event instanceof NavigationEnd) {
-                let activeRouter = this.route.snapshot;
-                while (activeRouter.children.length > 0) {
-                    activeRouter =  activeRouter.firstChild;
-                }
-
-                let fullPath = activeRouter.pathFromRoot
-                fullPath.shift();
-
                 
-                let data =  fullPath.filter(path => path.url[0] != undefined).map((path) => {
-                    return {
-                        pathName: this.breadCrumNames[path.url[0].path] ? 
-                                    this.breadCrumNames[path.url[0].path] : 
-                                    "",
-                        pathLink: () => {
-                            let pathLinks = path.pathFromRoot.map(p => p.url)
-                            pathLinks.shift();
-                            return "/" + pathLinks.map(p => p[0].path).join('/');
-                        }
-                    }
-                });
-                this.breadcrumb_data = data
-
-                this.dataUtil.obsNomeTela.subscribe(nomeTela => {
-                    if(nomeTela)
-                        this.breadcrumb_data[this.breadcrumb_data.length-1].pathName = nomeTela
-                })
+                this.update()
             }
         })
 
+    }
+
+    update() {
+        let activeRouter = this.route.snapshot;
+        while (activeRouter.children.length > 0) {
+            activeRouter =  activeRouter.firstChild;
+        }
+
+        let fullPath = activeRouter.pathFromRoot
+        fullPath.shift();
+
+        
+        let data =  fullPath.filter(path => path.url[0] != undefined).map((path) => {
+
+
+            return {
+                pathName: this.breadCrumNames[path.url[0].path] ? 
+                            this.breadCrumNames[path.url[0].path] : 
+                            path.routeConfig.path.startsWith(":") ? this.dataUtil.titleInfo[path.routeConfig.path.slice(1)]  : "",
+                pathLink: () => {
+                    let pathLinks = path.pathFromRoot.map(p => p.url)
+                    pathLinks.shift();
+                    return "/" + pathLinks.map(p => p[0].path).join('/');
+                }
+            }
+        });
+        this.breadcrumb_data = data
     }
 
 }

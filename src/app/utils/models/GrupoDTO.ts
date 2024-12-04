@@ -1,4 +1,5 @@
 import { IProfile } from "../interfaces/profile.interface";
+import { IPodeDTO } from "./PodeDto";
 
 export interface GrupoDTO {
     id : string;
@@ -6,7 +7,7 @@ export interface GrupoDTO {
     sigla : string;
     nome : string;
     descricao : string;
-    membros : IProfile[]
-
+    membros : IProfile[];
+    permissoes : IPodeDTO[];
 
 }

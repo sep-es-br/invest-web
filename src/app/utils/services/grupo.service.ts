@@ -7,7 +7,6 @@ import { ErrorHandlerService } from "./error-handler.service";
 import { IHttpError } from "../interfaces/http-error.interface";
 import { Router } from "@angular/router";
 import { ICadastroMembroForm } from "../../home/administracao/grupos/vizualizacao/membros/grupo-membro-cadastro/CadastroMembroForm";
-import { IProfile } from "../interfaces/profile.interface";
 
 @Injectable({providedIn: "root"})
 export class GrupoService {
@@ -60,7 +59,7 @@ export class GrupoService {
         )
     }
 
-    public addMembro(membroForm : ICadastroMembroForm) : Observable<never> {
+    public addMembro(membroForm : ICadastroMembroForm) : Observable<GrupoDTO> {
         return this.http.put<never>(`${this.grupoUrl}/addMembro`, membroForm).pipe(
             catchError(err => this.errorHandler.handleError(err))
         )
@@ -69,6 +68,18 @@ export class GrupoService {
     public remover(idGrupo : string) : Observable<GrupoDTO> {
         return this.http.delete<GrupoDTO>(`${this.grupoUrl}/`, {params: {
             idGrupo: idGrupo
+        }}).pipe(catchError(err => this.errorHandler.handleError(err)));
+    }
+
+    public quantidadeMembros(idGrupo : string) : Observable<number> {
+        return this.http.get<number>(`${this.grupoUrl}/quantidadeMembros`, {params: {
+            grupoId: idGrupo
+        }}).pipe(catchError(err => this.errorHandler.handleError(err)));
+    }
+
+    public removerMembro(idGrupo : string, idMembro : string) : Observable<GrupoDTO> {
+        return this.http.delete<GrupoDTO>(`${this.grupoUrl}/membro`, {params: {
+            idGrupo: idGrupo, idMembro: idMembro
         }}).pipe(catchError(err => this.errorHandler.handleError(err)));
     }
 

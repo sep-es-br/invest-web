@@ -1,7 +1,5 @@
 import { CommonModule } from "@angular/common";
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { TelaCrudComponent } from "../../../../utils/components/vizualizacao-template/telaCrud-template/telaCrud.component";
-import { vizualizarGrupoConfig } from "./TelaGrupo";
 import { GrupoService } from "../../../../utils/services/grupo.service";
 import { GrupoDTO } from "../../../../utils/models/GrupoDTO";
 import { ActivatedRoute, RouterLink, RouterLinkActive, RouterOutlet } from "@angular/router";
@@ -17,8 +15,6 @@ import { GrupoMembrosComponent } from "./membros/grupo-membros.component";
 })
 export class VizualizarGrupoComponent implements OnInit, OnDestroy{
 
-    telaConfig = vizualizarGrupoConfig;
-
     grupo : GrupoDTO
 
     constructor(private grupoService : GrupoService,
@@ -29,13 +25,23 @@ export class VizualizarGrupoComponent implements OnInit, OnDestroy{
         this.grupoService.findById(grupoId).subscribe(grupo => {
             this.grupo = grupo;
             this.grupoService.grupoSession.next(grupo);
-            this.dataUtil.obsNomeTela.next(grupo.sigla)
+            this.dataUtil.setTitleInfo('grupo', grupo.sigla)
+
+
+            this.dataUtil.obsNomeTela.next(grupo.sigla);
+
+            this.grupoService.grupoSession.subscribe(grupo => {
+                this.grupo = grupo;
+                this.dataUtil.obsNomeTela.next(grupo.sigla)
+            })
         })
+
+        
     }
 
     ngOnInit(): void {
         this.route.params.subscribe(params => {
-            this.carregarGrupo(params["id"])
+            this.carregarGrupo(params["grupo"])
         })
     }
 

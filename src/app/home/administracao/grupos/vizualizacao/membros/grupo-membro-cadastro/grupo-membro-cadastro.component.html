@@ -17,7 +17,6 @@
             <label for="inPapel">Pessoa / Papel <span class="obrigatorio">*</span></label>
             <select formControlName="papel" id="inPapel" >
                 <option [ngValue]="null">Selecionar o papel</option>
-                <option [ngValue]="papelTodos">{{papelTodos.nome}}</option>
                 <option [ngValue]="papel" *ngFor="let papel of papeis">{{papel.agenteNome}} ({{papel.nome}})</option> 
             </select>
         </form>

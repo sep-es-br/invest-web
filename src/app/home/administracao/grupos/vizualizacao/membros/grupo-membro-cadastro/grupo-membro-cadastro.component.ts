@@ -7,6 +7,7 @@ import { ISetorDTO } from "../../../../../../utils/models/SetorDTO";
 import { InfosService } from "../../../../../../utils/services/infos.service";
 import { IPapelDTO, papelTodos } from "../../../../../../utils/models/PapelDto";
 import { ICadastroMembroForm } from "./CadastroMembroForm";
+import { GrupoService } from "../../../../../../utils/services/grupo.service";
 
 @Component({
     selector: "spo-grupo-membro-cadastro",
@@ -25,11 +26,9 @@ export class GrupoMembroCadastroComponent {
     setores : ISetorDTO[] = [];
     papeis : IPapelDTO[] = [];
 
-    papelTodos = papelTodos
-
     fora = true;
 
-    constructor(private infosService: InfosService, private fb : FormBuilder) {
+    constructor(private infosService: InfosService, private fb : FormBuilder, private grupoService : GrupoService) {
 
         this.form = this.fb.group({
             unidade: [null],
@@ -60,7 +59,13 @@ export class GrupoMembroCadastroComponent {
 
             if(novoValor){
                 this.infosService.getPapeis(novoValor.guid).subscribe(papeisList => {
-                    this.papeis = papeisList
+                    
+                    this.grupoService.grupoSession.subscribe(grupo => {
+                        let subList = grupo.membros.map(user => user.sub);
+
+                        this.papeis = papeisList.filter(papel => subList.indexOf(papel.agenteSub) < 0)
+                    })
+
                 })
 
                 selectPapel?.enable();
@@ -81,6 +86,10 @@ export class GrupoMembroCadastroComponent {
             this.fora = true;
             return;
         }
+        
+        this.form.get("unidade").setValue(null),
+        this.form.get("setor").setValue(null),
+        this.form.get("papel").setValue(null)
         this.onClose.emit(null);
     }
 
@@ -94,6 +103,9 @@ export class GrupoMembroCadastroComponent {
             setor: this.form.get("setor").value,
             papel: this.form.get("papel").value
         }
+        this.form.get("unidade").setValue(null),
+        this.form.get("setor").setValue(null),
+        this.form.get("papel").setValue(null)
 
         this.onClose.emit(cadastroMembroForm);
     }

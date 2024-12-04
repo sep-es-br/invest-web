@@ -20,10 +20,19 @@
                 <th colspan="2">Papel</th>
             </tr>
         </thead>
-        <tbody>
-            <tr *ngFor="let membro of grupo?.membros">
+        <tbody #tabela>
+            <tr *ngFor="let membro of grupo?.membros; index as i">
                 <td><img class="avatar" [src]="getAvatar(membro)"></td>
                 <td>{{membro.nomeCompleto}}</td>
+                <td>{{membro.setor.orgao.sigla}} - {{membro.setor.orgao.nome}}</td>
+                <td>{{membro.setor.sigla}}</td>
+                <td>{{membro.papel}}</td>
+                <td (click)="mostrarSub(i)">
+                    <fa-icon [icon]="maisOpcs"></fa-icon>
+                    <ul class="menuOpcoes" [ngClass]="subAberto === i ? 'mostrar' : ''" >
+                        <li (click)="removerMembro(membro.id)">Remover</li>
+                    </ul>
+                </td>
             </tr>
         </tbody>
     </table>

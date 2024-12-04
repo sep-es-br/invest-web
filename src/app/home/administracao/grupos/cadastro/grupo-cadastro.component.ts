@@ -66,7 +66,8 @@ export class GrupoCadastroComponent {
             sigla: this.form.get("sigla").value,
             icone: this.form.get("icone").value,
             descricao: this.form.get("descricao").value,
-            membros: []
+            membros: [],
+            permissoes: []
         }
 
         this.onClose.emit(novoGrupo);

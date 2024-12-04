@@ -7,6 +7,8 @@ export class DataUtilService {
     constructor (private domSanitizer : DomSanitizer ) {}
 
     public editModeListener = new Subject<boolean>();
+    public titleInfo : {[index:string] : string} = {};
+    public headerUpdate = new Subject<any>();
     
     public readonly obsNomeTela = new BehaviorSubject(null);
     
@@ -41,6 +43,11 @@ export class DataUtilService {
         return null;
 
         
+    }
+
+    setTitleInfo(infoName : string, info : string) {
+        this.titleInfo[infoName] = info;
+        this.headerUpdate.next(null)
     }
     
 }

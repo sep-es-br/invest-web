@@ -39,21 +39,11 @@ export class HeaderComponent implements OnInit {
 
     constructor(private route : ActivatedRoute, private router : Router, private dataUtilService : DataUtilService,
         private objetoService: ObjetosService) {
+        this.dataUtilService.headerUpdate.subscribe(value => this.updateTitle())
+        
         this.router.events.subscribe(event => {
             if (event instanceof NavigationEnd) {
-                let activeRouter = this.route.snapshot;
-                while (activeRouter.children.length > 0 && activeRouter.firstChild.url[0] != undefined) {
-                    activeRouter = activeRouter.firstChild ? activeRouter.firstChild : activeRouter;
-                }
-                
-                let pathName = activeRouter.url[activeRouter.url.length-1];
-
-                this.dataUtilService.obsNomeTela.subscribe(nomeTela => {
-                    if(nomeTela)
-                        this.title = nomeTela;
-                    else
-                        this.title = breadCrumbNames[String(pathName)] ? breadCrumbNames[String(pathName)] : String(pathName) ;
-                })
+                this.updateTitle();
             }
         })
 
@@ -68,6 +58,37 @@ export class HeaderComponent implements OnInit {
             this.qtObjetos = quantidade;
         })
 
+    }
+
+    updateTitle() {
+        this.title = ''
+        let activeRouter = this.route.snapshot;
+        while (activeRouter.children.length > 0 && activeRouter.firstChild.url[0] != undefined) {
+            if(activeRouter.routeConfig.path.startsWith(":"))
+                this.title = this.dataUtilService.titleInfo[activeRouter.routeConfig.path.slice(1)]
+
+            activeRouter = activeRouter.firstChild ? activeRouter.firstChild : activeRouter;
+        }
+        
+        let pathName = activeRouter.url[activeRouter.url.length-1];
+        
+        if(breadCrumbNames[String(pathName)]) {
+            if(this.title !== '')
+                this.title += " - "
+            this.title += breadCrumbNames[String(pathName)]
+        } else {
+            while(activeRouter && !activeRouter.routeConfig.path.startsWith(":"))
+                activeRouter = activeRouter.parent;
+
+            this.title = this.dataUtilService.titleInfo[activeRouter.routeConfig.path.slice(1)]
+        }
+
+        // this.dataUtilService.obsNomeTela.subscribe(nomeTela => {
+        //     if(nomeTela)
+        //         this.title = nomeTela;
+        //     else
+        //         this.title = breadCrumbNames[String(pathName)] ?  : String(pathName) ;
+        // })
     }
 
     @HostListener('document:click', ['$event'])

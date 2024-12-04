@@ -9,7 +9,7 @@ const routes : Route[] = [
         pathMatch: "full",
         component: GrupoListaComponent
     },{
-        path:":id",
+        path:":grupo",
         component: VizualizarGrupoComponent,
         loadChildren: () => import("./vizualizacao/vizualizar-grupo.routing").then(m => m.VizualizarGrupoRoutingModule)
     }

@@ -5,12 +5,16 @@ import { NgModule } from "@angular/core";
 
 const routes : Route[] = [
     {
-        path: "",
+        path: "membros",
         pathMatch: "full",
         component: GrupoMembrosComponent
     } , {
         path: "permissoes",
         component: GrupoPermissoesComponent
+    } , {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'membros'
     }
 ]
 

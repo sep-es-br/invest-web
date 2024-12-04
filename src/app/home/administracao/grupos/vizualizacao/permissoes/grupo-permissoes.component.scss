@@ -1,0 +1,30 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    font-family: var(--fonte-open-sans);
+    header {
+        padding-bottom: 1rem;
+
+        p {
+            font-weight: bolder;
+        }
+    }
+
+    main {
+        background-color: white;
+        box-shadow: var(--sombra-padrao);
+        padding: 1rem;
+        border-radius: 6px;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+
+        p {
+            display: flex;
+            color: var(--cor-primaria);
+            border-bottom: rgba(215, 215, 215, 0.5) solid 1px;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+    }
+}

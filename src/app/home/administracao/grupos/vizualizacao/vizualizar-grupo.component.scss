@@ -11,7 +11,7 @@
         color: var(--cor-primaria);
 
         background-color: white;
-        box-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
+        box-shadow:  var(--sombra-padrao);
         padding: 1rem;
         padding-bottom: 0;
         border-radius: 6px;
@@ -68,14 +68,6 @@
                 }
             }
         }
-    }
-
-    > main {
-        background-color: white;
-        box-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
-        padding: 1rem;
-        border-radius: 6px;
-        flex-grow: 1;
     }
     
 
