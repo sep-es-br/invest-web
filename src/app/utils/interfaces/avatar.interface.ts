@@ -3,3 +3,5 @@ export interface IAvatar{
     blob: string
 
 }
+
+export const avatarPadrao = 'assets/img/placeholderUserM.webp';

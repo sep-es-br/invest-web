@@ -1,4 +1,5 @@
 import { IProfile } from "../interfaces/profile.interface";
+import { IOrgaoDTO } from "./OrgaoDTO";
 import { UnidadeOrcamentariaDTO } from "./UnidadeOrcamentariaDTO";
 
 export interface ISetorDTO {
@@ -6,6 +7,5 @@ export interface ISetorDTO {
     guid : string;
     nome : string;
     sigla : string;
-    unidade: UnidadeOrcamentariaDTO;
-    membros : IProfile[];
+    orgao: IOrgaoDTO;
 }

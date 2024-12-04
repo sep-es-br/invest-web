@@ -4,7 +4,5 @@ export interface IOrgaoDTO {
     id : string,
     guid : string,
     sigla : string,
-    nome : string,
-    setores : ISetorDTO[]
-
+    nome : string
 }

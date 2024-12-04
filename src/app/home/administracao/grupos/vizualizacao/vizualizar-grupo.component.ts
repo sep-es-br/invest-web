@@ -4,7 +4,7 @@ import { TelaCrudComponent } from "../../../../utils/components/vizualizacao-tem
 import { vizualizarGrupoConfig } from "./TelaGrupo";
 import { GrupoService } from "../../../../utils/services/grupo.service";
 import { GrupoDTO } from "../../../../utils/models/GrupoDTO";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, RouterLink, RouterLinkActive, RouterOutlet } from "@angular/router";
 import { DataUtilService } from "../../../../utils/services/data-util.service";
 import { GrupoResumoComponent } from "./resumo/grupo-resumo.component";
 import { GrupoMembrosComponent } from "./membros/grupo-membros.component";
@@ -13,7 +13,7 @@ import { GrupoMembrosComponent } from "./membros/grupo-membros.component";
     standalone: true,
     templateUrl: './vizualizar-grupo.component.html',
     styleUrl: "./vizualizar-grupo.component.scss",
-    imports: [CommonModule, GrupoResumoComponent, GrupoMembrosComponent]
+    imports: [CommonModule, RouterLink, RouterLinkActive, RouterOutlet]
 })
 export class VizualizarGrupoComponent implements OnInit, OnDestroy{
 
@@ -28,6 +28,7 @@ export class VizualizarGrupoComponent implements OnInit, OnDestroy{
     carregarGrupo(grupoId : string) {
         this.grupoService.findById(grupoId).subscribe(grupo => {
             this.grupo = grupo;
+            this.grupoService.grupoSession.next(grupo);
             this.dataUtil.obsNomeTela.next(grupo.sigla)
         })
     }

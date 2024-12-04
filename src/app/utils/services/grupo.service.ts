@@ -12,9 +12,10 @@ import { IProfile } from "../interfaces/profile.interface";
 @Injectable({providedIn: "root"})
 export class GrupoService {
 
+    public readonly grupoSession = new BehaviorSubject<GrupoDTO>(null);
+    
     private readonly grupoUrl = `${environment.apiUrl}/grupo`;
-
-
+    
     constructor(
         private http : HttpClient,
         private errorHandler : ErrorHandlerService,

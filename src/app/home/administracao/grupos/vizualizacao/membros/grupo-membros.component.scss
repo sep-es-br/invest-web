@@ -56,12 +56,13 @@
         display: grid;
         grid-template-columns: 5rem auto 10rem auto auto 5rem;
 
-        &:first-child {
-            grid-column: 1 / span 2;
-        }
-
-        &:nth-child(4) {
-            grid-column: 4 / span 2;
+        table {
+            tr {
+                img.avatar {
+                    width: 30px;
+                    border-radius: 30px;
+                }
+            }
         }
 
         

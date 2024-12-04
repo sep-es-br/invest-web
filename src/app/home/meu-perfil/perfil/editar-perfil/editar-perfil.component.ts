@@ -69,7 +69,7 @@ export class EditarPerfilComponent implements AfterViewInit{
                 role: this.user.role,
                 sub: this.user.sub,
                 token: this.user.token,
-                grupos: this.user.grupos
+                setor: this.user.setor
                 
             }
     

@@ -9,6 +9,7 @@ import { IProfile } from "../../../../../utils/interfaces/profile.interface";
 import { ICadastroMembroForm } from "./grupo-membro-cadastro/CadastroMembroForm";
 import { GrupoService } from "../../../../../utils/services/grupo.service";
 import { ProfileService } from "../../../../../utils/services/profile.service";
+import { avatarPadrao } from "../../../../../utils/interfaces/avatar.interface";
 
 @Component({
     selector: "spo-grupo-resumo",
@@ -18,9 +19,10 @@ import { ProfileService } from "../../../../../utils/services/profile.service";
     imports: [CommonModule,ReactiveFormsModule, FontAwesomeModule, GrupoMembroCadastroComponent]
 })
 export class GrupoMembrosComponent implements AfterViewInit {
-    @Input() data : GrupoDTO
 
     @ViewChild(GrupoMembroCadastroComponent, {read: ElementRef}) private cadastroMembro : ElementRef;
+
+    grupo : GrupoDTO;
 
     searchIcon = faMagnifyingGlass;
     addMembroIcon = faUserPlus;
@@ -34,20 +36,27 @@ export class GrupoMembrosComponent implements AfterViewInit {
     mostrarCadastro = false;
 
     constructor(private service : GrupoService, private usuarioService: ProfileService){
-        
+        this.service.grupoSession.subscribe(grupoSession => {
+            this.grupo = grupoSession;
+            console.log(grupoSession);
+        });
+    }
+
+    getAvatar(usuario : IProfile){
+        return usuario.imgPerfil == null ? avatarPadrao : usuario.imgPerfil.blob;
     }
 
     ngAfterViewInit(): void {
-        this.usuarioService.findByGrupo(this.data.id).subscribe(membros => {
-            this.membros = membros;
-        });
+        // this.usuarioService.findByGrupo(this.data.id).subscribe(membros => {
+        //     this.membros = membros;
+        // });
     }
 
     esconderModal(membroForm : ICadastroMembroForm) {
         this.mostrarCadastro = false;
 
         if(membroForm) {
-            membroForm.grupo = this.data;
+            membroForm.grupo = this.grupo;
 
             this.service.addMembro(membroForm).subscribe(value => {
                 alert("Membro Salvo");

@@ -1,13 +1,25 @@
 <header>
-    <spo-grupo-resumo></spo-grupo-resumo>
+    <header>
+        <div class="icone">
+            <span class="material-symbols-outlined">{{grupo?.icone}}</span>
+        </div>
+        <div class="dados">
+            <h1>{{grupo?.sigla}}</h1>
+            <h2>{{grupo?.nome}}</h2>
+        </div>
+    </header>
+    
+    <p>{{grupo?.descricao}}</p>
+
     <nav>
-        <div 
-            class="menuItem" 
-            *ngFor="let opcTela of telaConfig.subTelas" 
-            (click)="exibirTela(opcTela)"
-            [ngClass]="telaSelecionada === opcTela ? 'ativa' : ''">{{opcTela.nome}}</div>
+        <div class="menuItem" routerLink="" routerLinkActive="ativa">
+            Membros
+        </div>
+        <div class="menuItem" routerLink="permissoes" routerLinkActive="ativa">
+            Permissões
+        </div>
     </nav>
 </header>
 <main>
-    <div #containerPrincipal></div>
+    <router-outlet></router-outlet>
 </main>

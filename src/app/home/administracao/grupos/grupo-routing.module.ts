@@ -10,7 +10,8 @@ const routes : Route[] = [
         component: GrupoListaComponent
     },{
         path:":id",
-        component: VizualizarGrupoComponent
+        component: VizualizarGrupoComponent,
+        loadChildren: () => import("./vizualizacao/vizualizar-grupo.routing").then(m => m.VizualizarGrupoRoutingModule)
     }
 
 ]
