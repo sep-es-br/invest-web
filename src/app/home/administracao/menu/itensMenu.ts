@@ -6,7 +6,7 @@ export const opcoesMenuAdm : {
     {
         icone: "person",
         titulo: "Pessoas",
-        caminho: "/usuarios"
+        caminho: "/pessoas"
     },{
         icone: "groups",
         titulo: "Grupos de Usuários",
@@ -14,7 +14,7 @@ export const opcoesMenuAdm : {
     },{
         icone: "flowchart",
         titulo: "Processos Interno",
-        caminho: ""
+        caminho: "/processo"
     },{
         icone: "question_mark",
         titulo: "",

@@ -13,6 +13,8 @@ export const breadCrumbNames : { [index : string] : string } = {
     editar: "Editar",
     grupo: "Grupos de Usuários",
     membros: "Membros",
-    permissoes: "Permissões"
+    permissoes: "Permissões",
+    pessoas: "Pessoas",
+    processo: "Processos Interno"
 
 }

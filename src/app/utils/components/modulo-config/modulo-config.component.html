@@ -1,9 +1,0 @@
-<p>{{modulo.nome}}</p>
-<form [formGroup]="form">
-    <input type="checkbox" id="inListar" formControlName="" /><label for="inListar">Listar</label>
-    <input type="checkbox" id="inVisualizar" formControlName="" /><label for="inVisualizar">Visualizar</label>
-    <input type="checkbox" id="inCriar" formControlName="" /><label for="inCriar">Criar</label>
-    <input type="checkbox" id="inEditar" formControlName="" /><label for="inEditar">Editar</label>
-    <input type="checkbox" id="inExcluir" formControlName="" /><label for="inExcluir">Excluir</label>
-</form>
-<spo-modulo-config *ngFor="let filho of modulo.filhos" [grupo]="grupo" [modulo]="filho"></spo-modulo-config>

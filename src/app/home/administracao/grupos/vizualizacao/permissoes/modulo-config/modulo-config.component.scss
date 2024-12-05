@@ -1,0 +1,23 @@
+:host {
+    display: flex;
+    flex-direction: column;
+
+    p {
+        display: flex;
+        background-color: var(--cor-secundaria);
+        color: var(--cor-primaria);
+        padding-top: 0.25rem;
+        padding-bottom: 0.25rem;
+    }
+
+    form {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        display: flex;
+        justify-content: space-evenly;
+    }
+
+    spo-modulo-config {
+        margin-left: 1.5rem;
+    }
+}

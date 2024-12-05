@@ -11,6 +11,12 @@ const routes : Route[] = [
     }, {
         path: 'grupo',
         loadChildren: () => import("./grupos/grupo-routing.module").then(m => m.GrupoRoutingModule)
+    }, {
+        path: 'pessoas',
+        component: EmConstrucaoComponent
+    }, {
+        path: 'processo',
+        component: EmConstrucaoComponent
     }
 
 ]

@@ -10,6 +10,8 @@ import { DataUtilService } from "../utils/services/data-util.service";
 import { SafeResourceUrl } from "@angular/platform-browser";
 import { ObjetosService } from "../utils/services/objetos.service";
 import { InvestimentoFiltro } from "../utils/models/InvestimentoFiltro";
+import { PermissaoService } from "../utils/services/permissao.service";
+import { concat, tap } from "rxjs";
 
 @Component({
     selector: 'spo-header',
@@ -33,12 +35,14 @@ export class HeaderComponent implements OnInit {
 
     showMenuUser : boolean = false;
 
+    permissaoAdm = false;
+
     @Input() home : HomeComponent;
 
     @Input() user : IProfile;
 
     constructor(private route : ActivatedRoute, private router : Router, private dataUtilService : DataUtilService,
-        private objetoService: ObjetosService) {
+        private objetoService: ObjetosService, private permissaoService : PermissaoService) {
         this.dataUtilService.headerUpdate.subscribe(value => this.updateTitle())
         
         this.router.events.subscribe(event => {
@@ -54,9 +58,16 @@ export class HeaderComponent implements OnInit {
             qtPorPag: 15
         }
         
-        this.objetoService.getQuantidadeItens(filtro).subscribe(quantidade => {
-            this.qtObjetos = quantidade;
-        })
+        
+
+        concat(
+            this.objetoService.getQuantidadeItens(filtro).pipe(tap(quantidade => {
+                this.qtObjetos = quantidade;
+            })),
+            this.permissaoService.usuarioTemAcesso("administracao").pipe(tap(temAcesso => {
+                this.permissaoAdm = temAcesso
+            }))
+        ).subscribe();
 
     }
 

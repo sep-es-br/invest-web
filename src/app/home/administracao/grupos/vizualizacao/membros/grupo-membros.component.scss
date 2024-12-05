@@ -1,16 +1,20 @@
 :host {
 
+
     display: flex;
     flex-direction: column;
+    font-family: var(--fonte-open-sans);
+    margin-bottom: 2rem;
 
     header {
-
+        padding-bottom: 1rem;
         display: flex;
         flex-direction: row;
         justify-content: center;
-        border-bottom: gray solid 1px;
-        padding-bottom: 0.5rem;
 
+        h3 {
+            font-weight: bolder;
+        }
         div#pesquisa {
             display: flex;
             flex-direction: row;
@@ -53,8 +57,14 @@
     }
 
     main {
+        background-color: white;
+        box-shadow: var(--sombra-padrao);
+        padding: 1rem;
+        border-radius: 6px;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
 
-        padding-top: 1rem;
         table {
 
             width: 100%;
@@ -132,8 +142,9 @@
             
         }
 
-        
     }
+
+
 
     .esconderModal {
         display: none;

@@ -1,0 +1,19 @@
+<p>{{modulo.nome}}</p>
+<form [formGroup]="form">
+    <div>
+        <input type="checkbox" id="inListar" formControlName="inListar" /><label>Listar</label>
+    </div>
+    <div>
+        <input type="checkbox" id="inVisualizar" formControlName="inVisualizar" /><label>Visualizar</label>
+    </div>
+    <div>
+        <input type="checkbox" id="inCriar" formControlName="inCriar" /><label>Criar</label>
+    </div>
+    <div>
+        <input type="checkbox" id="inEditar" formControlName="inEditar" /><label>Editar</label>
+    </div>
+    <div>
+        <input type="checkbox" id="inExcluir" formControlName="inExcluir" /><label>Excluir</label>
+    </div>
+</form>
+<spo-modulo-config *ngFor="let filho of modulo.filhos" [grupo]="grupo" [modulo]="filho"></spo-modulo-config>

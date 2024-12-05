@@ -19,7 +19,7 @@
         </div>
         <div #menuUser [ngClass]="'menuUser ' + (showMenuUser ? 'mostrar' : '')">
             <div (click)="redirectTo('home/meuperfil')">Meu Perfil</div>
-            <div (click)="redirectTo('home/administracao')">Administração</div>
+            <div *ngIf="permissaoAdm" (click)="redirectTo('home/administracao')">Administração</div>
             <div (click)="logout()">Sair</div>
         </div>
     </div>
