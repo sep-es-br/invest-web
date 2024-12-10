@@ -1,6 +1,6 @@
 <header>
     <p>Permissões</p>
-    <button (click)="salvar()">
+    <button *ngIf="permissao?.editar" (click)="salvar()">
         <fa-icon [icon]="salvarIcon"></fa-icon> Salvar
     </button>
 </header>

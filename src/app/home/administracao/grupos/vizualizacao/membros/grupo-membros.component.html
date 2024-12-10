@@ -5,7 +5,7 @@
         <input type="text" [formControl]="txtBusca" placeholder="Procurar" />
     </div>
     <div class="acoes">
-        <div class="acao" (click)="mostrarCadastro = true;">
+        <div class="acao" *ngIf="permissao?.editar" (click)="mostrarCadastro = true;">
             <fa-icon [icon]="addMembroIcon"></fa-icon>
         </div>
     </div>
@@ -27,7 +27,7 @@
                 <td>{{membro.setor.orgao.sigla}} - {{membro.setor.orgao.nome}}</td>
                 <td>{{membro.setor.sigla}}</td>
                 <td>{{membro.papel}}</td>
-                <td (click)="mostrarSub(i)">
+                <td *ngIf="permissao?.editar" (click)="mostrarSub(i)">
                     <fa-icon [icon]="maisOpcs"></fa-icon>
                     <ul class="menuOpcoes" [ngClass]="subAberto === i ? 'mostrar' : ''" >
                         <li (click)="removerMembro(membro.id)">Remover</li>

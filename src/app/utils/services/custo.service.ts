@@ -5,7 +5,6 @@ import { Injectable } from "@angular/core";
 import { catchError, Observable } from "rxjs";
 import { CustoDTO } from "../models/CustoDTO";
 import { environment } from "../../../environments/environment";
-import { IValoresTotaisCusto } from "../interfaces/valores-totais-custo.interface";
 import { Router } from "@angular/router";
 
 @Injectable({providedIn: "root"})
@@ -26,10 +25,5 @@ export class CustoService {
             exercicio: exercicio
         }}).pipe(catchError(err => this.errorHandlerService.handleError(err)))
     }
-
-    public getValoresTotaisCusto(exercicio : string) : Observable<IValoresTotaisCusto> {
-        return this.http.get<IValoresTotaisCusto>(`${this.custoUrl}/totais`, {params: {
-            exercicio: exercicio
-        }}).pipe(catchError(err => this.errorHandlerService.handleError(err)))
-    }
+    
 }

@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { catchError, Observable, throwError } from "rxjs";
 import { environment } from "../../../environments/environment";
@@ -8,6 +8,7 @@ import { Router } from "@angular/router";
 import { UnidadeOrcamentariaDTO } from "../models/UnidadeOrcamentariaDTO";
 import { ISetorDTO } from "../models/SetorDTO";
 import { IPapelDTO } from "../models/PapelDto";
+import { ICardsTotaisDto } from "../interfaces/valores-totais-custo.interface";
 
 @Injectable({providedIn: "root"})
 export class InfosService {
@@ -51,6 +52,24 @@ export class InfosService {
         }}).pipe(
             catchError(err => this.errorHandlerService.handleError(err))
         )
+    }
+
+    public getCardTotais(idUo : string, idPo : string, idFonte : string, ano : number) : Observable<ICardsTotaisDto> {
+        let params = new HttpParams().set("ano",  ano);
+
+        if(idUo)
+            params = params.set("idUo", idUo)
+
+        if(idFonte)
+            params = params.set("idFonte", idFonte)
+
+        if(idPo)
+            params = params.set("idPo", idPo)
+
+        return this.http.get<ICardsTotaisDto>(`${this.infosUrl}/cardsTotais`, {params: params})
+            .pipe(catchError(err => this.errorHandlerService.handleError(err)))
+
+
     }
 
 }

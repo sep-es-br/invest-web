@@ -9,6 +9,7 @@ import { ModuloConfigComponent } from "./modulo-config/modulo-config.component";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
 import { IPodeDTO } from "../../../../../utils/models/PodeDto";
+import { PermissaoService } from "../../../../../utils/services/permissao.service";
 
 @Component({
     standalone: true,
@@ -25,8 +26,11 @@ export class GrupoPermissoesComponent implements OnInit {
     grupo : GrupoDTO;
     modulos : IModuloDTO[]
 
+    permissao : IPodeDTO
 
-    constructor(private moduloService : ModuloService, private grupoService : GrupoService) {
+    constructor(private moduloService : ModuloService, private grupoService : GrupoService,
+        private permissaoService : PermissaoService
+    ) {
         this.grupoService.grupoSession.pipe(tap( grupo => {
             this.grupo = grupo;
         })).subscribe()
@@ -34,9 +38,14 @@ export class GrupoPermissoesComponent implements OnInit {
 
     ngOnInit(): void {
         
-        this.moduloService.findAll().pipe(tap( moduloList => {
-            this.modulos = moduloList;
-        })).subscribe();
+        concat(
+            this.moduloService.findAll().pipe(tap( moduloList => {
+                this.modulos = moduloList;
+            })),
+            this.permissaoService.getPermissao('grupo').pipe(tap( 
+                permissao => this.permissao = permissao
+             ))
+        ).subscribe();
     }
 
     salvar() {

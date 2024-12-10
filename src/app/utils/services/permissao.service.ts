@@ -17,7 +17,7 @@ export class PermissaoService {
 
     public findByModuloGrupo(moduloId : string, grupoId : string) : Observable<IPodeDTO> {
         return this.http.get<IPodeDTO>(`${this.permissaoUrl}/byModuloGrupo`, {params: {
-            moduloId: moduloId, grupoId: grupoId
+            idModulo: moduloId, idGrupo: grupoId
         }}).pipe(catchError(err => this.errorHendler.handleError(err)))
     }
 
@@ -25,6 +25,12 @@ export class PermissaoService {
         return this.http.get<boolean>(`${this.permissaoUrl}/usuarioTemAcesso`, { params: {
             path : pathId
         } }).pipe(catchError(err => this.errorHendler.handleError(err)))
+    }
+
+    public getPermissao(pathId : string) : Observable<IPodeDTO> {
+        return this.http.get<IPodeDTO>(`${this.permissaoUrl}`, { params: {
+            path: pathId
+        }}).pipe(catchError(err => this.errorHendler.handleError(err)))
     }
 
 }

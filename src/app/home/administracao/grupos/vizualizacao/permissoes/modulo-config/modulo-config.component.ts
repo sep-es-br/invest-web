@@ -5,6 +5,7 @@ import { GrupoDTO } from "../../../../../../utils/models/GrupoDTO";
 import { IModuloDTO } from "../../../../../../utils/models/ModuloDto";
 import { IPodeDTO } from "../../../../../../utils/models/PodeDto";
 import { PermissaoService } from "../../../../../../utils/services/permissao.service";
+import { concat, merge, pipe, tap } from "rxjs";
 
 @Component({
     selector: "spo-modulo-config",
@@ -31,6 +32,8 @@ export class ModuloConfigComponent implements OnInit {
         inExcluir: new FormControl(false)
     });
 
+    permissaoGrupo : IPodeDTO;
+
     constructor(
         private permissaoService : PermissaoService
     ){}
@@ -43,19 +46,30 @@ export class ModuloConfigComponent implements OnInit {
         this.subscribePropagacao("inEditar");
         this.subscribePropagacao("inExcluir");
 
-        this.permissaoService.findByModuloGrupo(this.modulo.id, this.grupo.id)
-        .subscribe(permissao => {
-            if(!permissao) return;
+        merge(
+            this.permissaoService.findByModuloGrupo(this.modulo.id, this.grupo.id)
+            .pipe(tap(permissao => {
+                if(permissao){
 
-            this.permissaoId = permissao.id;
-            this.form.setValue({
-                inListar: permissao.listar,
-                inVisualizar: permissao.visualizar,
-                inCriar: permissao.criar,
-                inEditar: permissao.editar,
-                inExcluir: permissao.excluir
-            });
-        });
+                    this.permissaoId = permissao.id;
+                    this.form.setValue({
+                        inListar: permissao.listar,
+                        inVisualizar: permissao.visualizar,
+                        inCriar: permissao.criar,
+                        inEditar: permissao.editar,
+                        inExcluir: permissao.excluir
+                    });
+                }
+                this.permissaoService.getPermissao('grupo').pipe(tap(
+                    permissao => {
+                        if(!permissao?.editar)
+                            this.form.disable();
+                    }
+                )).subscribe()
+            })),
+            
+        )
+        .subscribe();
         
     }
 

@@ -11,6 +11,8 @@ import { GrupoService } from "../../../../../utils/services/grupo.service";
 import { ProfileService } from "../../../../../utils/services/profile.service";
 import { avatarPadrao } from "../../../../../utils/interfaces/avatar.interface";
 import { concat, merge, tap } from "rxjs";
+import { PermissaoService } from "../../../../../utils/services/permissao.service";
+import { IPodeDTO } from "../../../../../utils/models/PodeDto";
 
 @Component({
     selector: "spo-grupo-resumo",
@@ -40,6 +42,8 @@ export class GrupoMembrosComponent implements AfterViewInit {
 
     mostrarCadastro = false;
 
+    permissao : IPodeDTO
+
     @HostListener('document:click', ['$event'])
     clickout(event : MouseEvent) {
         if(this.debounce)
@@ -50,10 +54,9 @@ export class GrupoMembrosComponent implements AfterViewInit {
     }
     
 
-    constructor(private service : GrupoService, private usuarioService: ProfileService){
-        
+    constructor(private service : GrupoService, private permissaoService: PermissaoService){
         this.service.grupoSession.pipe(tap(grupoSession => {
-            
+                
             this.grupo = grupoSession;
             
             if(grupoSession){
@@ -62,7 +65,13 @@ export class GrupoMembrosComponent implements AfterViewInit {
                 })).subscribe()
             }
         })).subscribe()
-
+        
+        this.permissaoService.getPermissao('grupo').pipe(tap(
+            permissao => {
+                this.permissao = permissao;
+            }
+        )).subscribe();
+        
 
     }
 
@@ -71,9 +80,7 @@ export class GrupoMembrosComponent implements AfterViewInit {
     }
 
     ngAfterViewInit(): void {
-        // this.usuarioService.findByGrupo(this.data.id).subscribe(membros => {
-        //     this.membros = membros;
-        // });
+        
     }
 
     mostrarSub(subMenuIndex : number){

@@ -7,7 +7,10 @@ import { GrupoDTO } from "../../../../utils/models/GrupoDTO";
 import { GrupoService } from "../../../../utils/services/grupo.service";
 import { tap } from "rxjs/operators";
 import { GrupoCadastroComponent } from "../cadastro/grupo-cadastro.component";
-import { Router, RouterLink } from "@angular/router";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
+import { IPodeDTO } from "../../../../utils/models/PodeDto";
+import { concat, Observable } from "rxjs";
+import { PermissaoService } from "../../../../utils/services/permissao.service";
 
 @Component({
     standalone: true,
@@ -28,20 +31,27 @@ export class GrupoListaComponent implements AfterViewInit{
 
     grupos : GrupoDTO[] = [];
 
-    constructor(private service : GrupoService, private router : Router){}
+    permissao : IPodeDTO
+
+    constructor(private service : GrupoService, private router : Router,
+            private permissaoService : PermissaoService, private acivatedRoute : ActivatedRoute
+    ){}
 
     ngAfterViewInit(): void {
         this.txtBusca.valueChanges.subscribe(nome => {
-            this.atualizarLista(this.paginaAtual);
+            this.atualizarLista(this.paginaAtual).subscribe();
         })
-        
-        this.atualizarLista(this.paginaAtual);
+
+        concat(this.atualizarLista(this.paginaAtual),
+               this.permissaoService.getPermissao('grupo').pipe(
+                tap( permissao => this.permissao = permissao)
+               )).subscribe();
     }
 
-    atualizarLista(pagAtual : number) {
-        this.service.findByFilter(this.txtBusca.value, pagAtual, 15).pipe(tap(grupos => {
+    atualizarLista(pagAtual : number) : Observable<GrupoDTO[]> {
+        return this.service.findByFilter(this.txtBusca.value, pagAtual, 15).pipe(tap(grupos => {
             this.grupos = grupos;
-        })).subscribe()
+        }))
     }
 
     vizualizarGrupo(id : string) {
@@ -88,6 +98,12 @@ export class GrupoListaComponent implements AfterViewInit{
         let telaCadastroElem = this.telaCadastroRef.nativeElement as HTMLElement;
         
         telaCadastroElem.classList.remove(this.naoMostrar);
+    }
+
+    navegar(path : string){
+        if(!this.permissao?.visualizar) return;
+        
+        this.router.navigate([path], {relativeTo: this.acivatedRoute});
     }
 
 }

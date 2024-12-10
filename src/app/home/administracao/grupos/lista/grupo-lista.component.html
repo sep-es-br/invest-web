@@ -3,12 +3,12 @@
         <fa-icon [icon]="searchIcon"></fa-icon>
         <input type="text" [formControl]="txtBusca" placeholder="Procurar" />
     </div>
-    <div class="btn" (click)="mostrarModal()">
+    <div class="btn" *ngIf="permissao?.criar" (click)="mostrarModal()">
         <span class="material-symbols-outlined">group</span>
     </div>
 </header>
 <main>
-    <div class="grupoItem" *ngFor="let grupo of grupos" [routerLink]="grupo.id" [state]="{nome: grupo.sigla}">
+    <div class="grupoItem" *ngFor="let grupo of grupos" (click)="navegar(grupo.id)">
         <div class="cabecalho">
             <div class="icone">
                 <span class="material-symbols-outlined">{{grupo.icone}}</span>
@@ -22,7 +22,7 @@
             <p class="titulo">Descrição</p>
             <p class="texto">{{grupo.descricao}}</p>
         </div>
-        <div class="btnExcluir" (click)="remover(grupo)">
+        <div class="btnExcluir" *ngIf="permissao?.excluir" (click)="remover(grupo)">
             <fa-icon [icon]="lixeira"></fa-icon>
         </div>
     </div> 

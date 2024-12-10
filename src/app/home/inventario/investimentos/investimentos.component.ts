@@ -16,6 +16,7 @@ import { ObjetosService } from "../../../utils/services/objetos.service";
 import { BarraPaginacaoComponent } from "../../../utils/components/barra-paginacao/barra-paginacao.component";
 import { ExecucaoOrcamentariaService } from "../../../utils/services/execucaoOrcamentaria.service";
 import { concat, merge, tap } from "rxjs";
+import { InfosService } from "../../../utils/services/infos.service";
 
 @Component({
     selector: 'spo-investimentos',
@@ -39,7 +40,14 @@ export class InvestimentosComponent implements AfterViewInit {
     totalHomologado : number = 0;
     totalOrcado : number = 0;
     totalAutorizado : number = 0;
-    totalDisponivel : number = 0;
+    totalEmpenhado : number = 0;
+    totalLiquidado : number = 0;
+    totalDispSReserva : number = 0;
+    totalPago : number = 0;
+        
+
+
+
 
     filtro : InvestimentoFiltro = { qtPorPag: 15, numPag: 1 };
 
@@ -54,7 +62,8 @@ export class InvestimentosComponent implements AfterViewInit {
     constructor( 
         private service: InvestimentosService,
         private custoService: CustoService,
-        private execucaoService: ExecucaoOrcamentariaService
+        private execucaoService: ExecucaoOrcamentariaService,
+        private infoService : InfosService
     ) {
         
     }
@@ -87,15 +96,22 @@ export class InvestimentosComponent implements AfterViewInit {
 
         merge(
 
-            this.custoService.getValoresTotaisCusto(this.filtro.exercicio)
+            this.infoService.getCardTotais(
+                this.filtro.codUnidade,
+                this.filtro.codPO,
+                this.filtro.idFonte,
+                Number(this.filtro.exercicio)
+            )
             .pipe(tap(totais => {
+                            
                 this.totalPrevisto = totais.previsto;
-                this.totalHomologado = totais.contratado; 
-            })),
-
-            this.execucaoService.getTotalOrcado(this.filtro.exercicio)
-            .pipe(tap(totalOrcado => {
-                this.totalOrcado = totalOrcado
+                this.totalHomologado = totais.contratado;
+                this.totalOrcado = totais.orcado;
+                this.totalAutorizado = totais.autorizado;
+                this.totalEmpenhado = totais.empenhado;
+                this.totalLiquidado = totais.liquidado;
+                this.totalDispSReserva = totais.dispSemReserva;
+                this.totalPago = totais.pago;
             })),
 
             this.service.getListaInvestimentos(this.filtro)
