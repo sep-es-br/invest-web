@@ -44,7 +44,8 @@ export class InvestimentoFiltroComponent {
             .pipe(tap((anosList) => {
                 this.anos = anosList
 
-                this.form.get("exercicio").setValue(this.anos[0]);
+                const anoAtual = new Date().getFullYear().toString();
+                this.form.get("exercicio").setValue(anoAtual);
 
             })),
 
