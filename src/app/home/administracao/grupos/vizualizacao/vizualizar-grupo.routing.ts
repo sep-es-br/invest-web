@@ -6,7 +6,6 @@ import { NgModule } from "@angular/core";
 const routes : Route[] = [
     {
         path: "membros",
-        pathMatch: "full",
         component: GrupoMembrosComponent
     } , {
         path: "permissoes",
