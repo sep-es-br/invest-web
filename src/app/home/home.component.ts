@@ -7,6 +7,7 @@ import { ProfileService } from "../utils/services/profile.service";
 import { MenuComponent } from "../menu/menu.component";
 import { SwipeDirective } from "../utils/directive/swipe.directive";
 import { HomeRoutingModule } from "./home-routing.module";
+import { PermissaoService } from "../utils/services/permissao.service";
 
 @Component({
     selector: 'spo-home',
@@ -23,7 +24,9 @@ export class HomeComponent implements OnInit{
 
     user : IProfile;
 
-    constructor(private readonly profile: ProfileService ){
+    constructor(
+        private readonly profile: ProfileService, private readonly permissaoService : PermissaoService
+    ){
 
     }
 
@@ -59,7 +62,9 @@ export class HomeComponent implements OnInit{
                 if(avatar === null || avatar.blob === "") return;
                 this.user.imgPerfil = avatar;
                 this.headerElem.updateUserInfo();
+
             });
+            
 
         } else {
             this.profile.getUser().subscribe(value => {

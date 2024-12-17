@@ -1,22 +1,36 @@
-export const MenuLink = [{
-        title : 'Inventário',
-        icon: 'home',
-        children : [{
-            title: 'Investimentos',
-            link: '/home/inventario/investimentos'
-        }]
+import { IItemMenu } from "./IItemMenu";
+
+export const menuLinks : IItemMenu[] = [
+    {
+        titulo: "Inventário",
+        icone: "home",
+        link: "/inventario",
+        ativo: true,
+        subItens: [
+            {
+                titulo: "Investimentos",
+                link: "/investimentos",
+                ativo: true
+            }
+        ]
     }, {
-        title : 'Minha Carteira',
-        icon: 'archive',
-        children : [{
-            title: 'Investimentos',
-            link: '/home/carteira/investimentos'
-        },{
-            title: 'Objetos',
-            link: '/home/carteira/objetos'
-        }]
+        titulo : "Minha Carteira",
+        icone : "archive",
+        link: "/carteira",
+        ativo: true, 
+        subItens: [
+            {
+                titulo: "Investimentos",
+                link: "/investimentos",
+                ativo: true
+            }, {
+                titulo: "Objetos",
+                link: "/objetos",
+                ativo: true
+            }
+        ]
     }, {
-        title: 'Unknown',
-        icon: 'graph'
+        icone: "graph",
+        ativo: false
     }
 ]

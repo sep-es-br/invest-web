@@ -1,6 +1,7 @@
-import { ObjetoDTO } from "./ObjetoDTO";
+import { ObjetoTiraDTO } from "./ObjetoTiraDTO";
 
-export class InvestimentoDTO {
+
+export class InvestimentoTiraDTO {
     nome!: string;
     unidadeOrcamentaria!: string;
     codPO!: string;
@@ -8,5 +9,5 @@ export class InvestimentoDTO {
     totalHomologado!: number;
     totalAutorizado! : number;
     totalDisponivel! : number;
-    objetos!: ObjetoDTO[];
+    objetos!: ObjetoTiraDTO[];
 }

@@ -2,71 +2,27 @@
     display: flex;
     flex-direction: column;
     height: calc(100% - 2rem);
-    width: 4rem;
+    width: 3rem;
     align-items: center;
     background-color: var(--cor-primaria);
     padding: 1rem;
     box-shadow: rgba(0, 0, 0, 0.26) 2px 2px 5px 0px;
 
     #pipLogo img{
-        width: 50px;
+        width: 42px;
     }
 
     div#nav {
         padding-top: 5rem;
-        flex-grow: 1;
         color: white;
     }
 
-    .menuItem {
-        position: relative;
-        padding: 1rem;
-        cursor: pointer;
-
-        .subMenu {
-            padding-left: 0;
-            padding-right: 0;
-            display: block;
-            overflow: hidden;
-            width: 0rem;
-            background-color: white;
-            color: var(--cor-primaria);
-            font-family: "Open Sans Bold", "Open Sans", sans-serif;
-            position: absolute;
-            left: 3.5rem;
-            top: -0.5rem;
-            border-radius: 3px;
-            box-shadow: 1px 1px 3px rgba(170, 170, 170, 0.4);
-
-            transition: width 0.3s ease;
-            white-space: nowrap;
-        
-            > p {
-                font-weight: bold;
-                padding-left: 1.5rem;
-                margin-top: 1rem;
-                margin-bottom: 1rem;
-            }
-        
-            div {
-                padding-left: 1.5rem;
-                padding-top: 0.5rem;
-                padding-bottom: 0.5rem;
-
-                ul {
-                    margin-left: 1rem;
-                }
-            }
-
-            div:hover {
-                background-color: rgba(79, 129, 189, 1);
-                color: white;
-            }
-        }
+    nav {
+        flex-grow: 1;
+        color: var(--cor-primaria);
+        font-family: var(--fonte-open-sans);
+        margin-top: 5rem;
     }
-    
-    .showDiv {
-        width: 20rem !important;
-    }
+
 }
 

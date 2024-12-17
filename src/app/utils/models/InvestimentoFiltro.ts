@@ -3,7 +3,7 @@ export class InvestimentoFiltro {
     codUnidade? : string | null;
     codPO? : string | null;
     idFonte? : string | null; 
-    exercicio?: string | null;
+    exercicio?: number | null;
     numPag?: number | null;
     qtPorPag?: number | null;
 }

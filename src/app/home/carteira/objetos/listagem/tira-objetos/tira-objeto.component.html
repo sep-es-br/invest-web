@@ -1,0 +1,34 @@
+<div id="tira">
+    <div id="invNome">
+        <div id="label">Objeto</div>
+        <div id="value"><span [title]="objeto.nome">{{objeto.nome | shortString : 70}}</span></div>
+    </div>
+    <div ngClass="colMenor">
+        <div id="label">Tipo</div>
+        <div id="value">{{objeto.tipo}}</div>
+    </div>
+    <div>
+        <div id="label">Código P.O.</div>
+        <div id="value">{{objeto.codPlano}}</div>
+    </div>
+    <div>
+        <div id="label">Previsto</div>
+        <div id="value"><span [title]="objeto.totalPrevisto | customCurrency">R$ {{objeto.totalPrevisto | numeroResumido }}</span></div>
+    </div>
+    <div>
+        <div id="label">Contratado</div>
+        <div id="value"><span [title]="objeto.totalHomologado | customCurrency">R$ {{objeto.totalHomologado | numeroResumido }}</span></div>
+    </div>
+    <div>
+        <div id="label">Autorizado</div>
+        <div id="value"><span [title]="objeto.totalAutorizado | customCurrency">R$ {{objeto.totalAutorizado | numeroResumido }}</span></div>
+    </div>
+    <div>
+        <div id="label">Disp. S/ Reserva</div>
+        <div id="value"><span [title]="objeto.totalDisponivel | customCurrency">R$ {{objeto.totalDisponivel | numeroResumido }}</span></div>
+    </div>
+    <div>
+        <div id="label">Status</div>
+        <div id="value">{{objeto.status }}</div>
+    </div>
+</div>

@@ -1,4 +1,4 @@
-<spo-investimento-filtro></spo-investimento-filtro>
+<spo-investimento-filtro (filterChange)="atualizarFiltro($event, 1)" ></spo-investimento-filtro>
 <div id="valores">
     <spo-valor-card 
         titulo="Previsto"
@@ -58,9 +58,9 @@
         </div>
     </div>
     <div id="acoes">
-        <div id="display-grade" class="botaoAcao">
+        <!-- <div id="display-grade" class="botaoAcao">
             <img src="assets/img/grid-layout.svg" width="20px">
-        </div>
+        </div> -->
         <div id="display-lista" class="botaoAcao ativo">
             <img src="assets/img/align-left-branco.svg" width="20px">
         </div>

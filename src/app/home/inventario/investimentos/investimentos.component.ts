@@ -3,20 +3,18 @@ import { AfterViewInit, Component, ViewChild } from "@angular/core";
 import { InvestimentoFiltroComponent } from "./investimento-filtro/investimento-filtro.component";
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { InvestimentosService } from "../../../utils/services/investimentos.service";
-import { RouterLink } from "@angular/router";
-import { InvestimentoDTO } from "../../../utils/models/InvestimentoDTO";
 import { TiraInvestimentoComponent } from "../../../utils/components/tira-investimento/tira-investimento.component";
 import { InvestimentoFiltro } from "../../../utils/models/InvestimentoFiltro";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { ValorCardComponent } from "../../../utils/components/valor-card/valor-card.component";
-import { DataUtilService } from "../../../utils/services/data-util.service";
 import { CustoService } from "../../../utils/services/custo.service";
-import { ObjetosService } from "../../../utils/services/objetos.service";
 import { BarraPaginacaoComponent } from "../../../utils/components/barra-paginacao/barra-paginacao.component";
 import { ExecucaoOrcamentariaService } from "../../../utils/services/execucaoOrcamentaria.service";
-import { concat, merge, tap } from "rxjs";
+import { merge, tap } from "rxjs";
 import { InfosService } from "../../../utils/services/infos.service";
+import { IFiltroInvestimento } from "./investimento-filtro/IFiltroInvestimento";
+import { InvestimentoTiraDTO } from "../../../utils/models/InvestimentoTiraDTO";
 
 @Component({
     selector: 'spo-investimentos',
@@ -44,16 +42,12 @@ export class InvestimentosComponent implements AfterViewInit {
     totalLiquidado : number = 0;
     totalDispSReserva : number = 0;
     totalPago : number = 0;
-        
-
-
-
 
     filtro : InvestimentoFiltro = { qtPorPag: 15, numPag: 1 };
 
     txtBusca = new FormControl('');
 
-    data : InvestimentoDTO[] = [];
+    data : InvestimentoTiraDTO[] = [];
 
     qtInvestimento = 0;
     larguraPaginacao = 7;
@@ -69,23 +63,21 @@ export class InvestimentosComponent implements AfterViewInit {
     }
 
     ngAfterViewInit(): void {
-        this.txtBusca.valueChanges.subscribe(value => this.updateFiltro(1) )
-        this.filtroComponent.form.valueChanges.subscribe(value => this.updateFiltro(1))
-
+        this.txtBusca.valueChanges.subscribe(value => this.atualizarFiltro(this.filtroComponent.filtro, 1) )
     }
 
-    updateFiltro(novaPagina : number){
-
+    atualizarFiltro(filtro : IFiltroInvestimento, novaPagina : number) {
         this.filtro = {
-            exercicio: this.filtroComponent.form.get("exercicio").value,
-            codPO: this.filtroComponent.form.get("planoOrcamentarioControl").value,
-            codUnidade: this.filtroComponent.form.get("unidadeOrcamentariaControl").value,
-            idFonte: this.filtroComponent.form.get("fonteOrcamentariaControl").value,
+            exercicio: filtro.ano,
+            codPO: filtro.plano?.id,
+            codUnidade: filtro.unidade?.id,
+            idFonte: filtro.fonte?.id,
             nome: this.txtBusca.value,
             numPag: novaPagina,
             qtPorPag: 15
         }
 
+        
         this.recarregarLista(novaPagina);
     }
 
@@ -114,7 +106,7 @@ export class InvestimentosComponent implements AfterViewInit {
                 this.totalPago = totais.pago;
             })),
 
-            this.service.getListaInvestimentos(this.filtro)
+            this.service.getListaTiraInvestimentos(this.filtro)
             .pipe(tap(invs => {
                 this.data = invs;
             })),

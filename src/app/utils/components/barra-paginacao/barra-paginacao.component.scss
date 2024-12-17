@@ -2,12 +2,24 @@
     display: flex;
         flex-direction: row;
         justify-content: end;
+        align-items: center;
+
+        fa-icon {
+            font-size: small;
+        }
 
         #btnAcao {
             font-size: x-large;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: 0;
+            margin-right: 0;
+            width: 1.5rem;
         }
 
         .btnPagina {
+            font-family: var(--fonte-open-sans);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -17,6 +29,7 @@
             border-radius: 0.5rem;
             color: var(--cor-primaria);
             font-weight: bolder;
+            font-size: small;
             cursor: pointer;
         }
 

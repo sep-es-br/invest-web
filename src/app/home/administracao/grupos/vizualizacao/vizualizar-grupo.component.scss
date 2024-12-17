@@ -57,14 +57,16 @@
 
         nav {
             display: flex;
+            padding-top: 1rem;
 
             .menuItem {
-                padding: 1rem;
-                padding-bottom: 0.3rem;
+                margin-right: 1rem;
+                padding-bottom: 0.5rem;
                 cursor: pointer;
 
                 &.ativa {
-                    border-bottom: #4778ff solid 0.3rem;
+                    border-bottom: var(--cor-primaria) solid 0.2rem;
+                    margin-bottom: 0.5rem;
                 }
             }
         }

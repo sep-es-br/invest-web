@@ -1,0 +1,22 @@
+<spo-objetos-filtro (filterChange)="updateFiltro($event)"></spo-objetos-filtro>
+<header>
+    <h3>Objetos ({{qtObjetos}})</h3>
+    <div id="pesquisa">
+        <fa-icon [icon]="searchIcon"></fa-icon>
+        <input type="text" [formControl]="txtBusca" placeholder="Procurar" />
+    </div>
+    <div id="acoes">
+        <div id="novo-objeto" class="botaoAcao">
+            <fa-icon [icon]="novoObjIcon"></fa-icon>
+        </div>
+        <div id="display-lista" class="botaoAcao ativo">
+            <img src="assets/img/align-left-branco.svg" width="20px">
+        </div>
+    </div>
+</header>
+<main>
+    <spo-tira-listagem-objetos *ngFor="let objeto of objetos" [objeto]="objeto"></spo-tira-listagem-objetos>
+</main>
+<footer>
+    <spo-barra-paginacao [larguraPaginacao]="larguraPaginacao" [quantidade]="qtObjetos" (onPageChange)="recarregarLista($event)"></spo-barra-paginacao>
+</footer>

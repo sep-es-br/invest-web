@@ -1,5 +1,4 @@
 import { FonteOrcamentariaDTO } from "./FonteOrcamentariaDTO";
-import { ObjetoDTO } from "./ObjetoDTO";
 import { UnidadeOrcamentariaDTO } from "./UnidadeOrcamentariaDTO";
 
 export class CustoDTO {
@@ -8,7 +7,6 @@ export class CustoDTO {
     anoExercicio!: string;
     previsto!: number;
     contratado!: number;
-    objetoEstimado!: ObjetoDTO;
     fonteOrcamentariaIndicadora!: FonteOrcamentariaDTO;
     unidadeOrcamentariaInformadora!: UnidadeOrcamentariaDTO;
 

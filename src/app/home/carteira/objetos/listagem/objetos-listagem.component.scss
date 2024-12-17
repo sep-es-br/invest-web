@@ -1,0 +1,99 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    font-family: var(--fonte-open-sans);
+    font-size: small;
+    padding-top: 1rem;
+
+    spo-objetos-filtro{
+        width: fit-content;
+        align-self: flex-end;
+        color: #7f7f7f;
+    }
+
+    header {
+        display: flex;
+        align-items: center;
+        padding-bottom: 1rem;
+        padding-top: 2rem;
+
+        h3 {
+            margin-right: 0.5rem;
+        }
+
+        div#pesquisa {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            margin-left: 0.5rem;
+            background-color: white;
+            padding: 0.3rem;
+            border-radius: 0.3rem;
+
+            fa-icon {
+                font-size: small;
+                color: gray;
+            }
+
+            input {
+                margin-left: 0.5rem;
+                border: unset;
+            }
+
+            input:focus {
+                outline: unset;
+            }
+        }
+
+        div#acoes {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            margin-left: auto;
+            color: var(--cor-primaria);
+
+            div#novo-objeto {
+                font-size: medium;
+            }
+
+            div.botaoAcao {
+                border: 0.1rem solid #4d84bc;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 1rem;
+                height: 1rem;
+                padding: 8px;
+                border-radius: 5px;
+                margin-right: 0.5rem;
+                position:relative;
+                cursor: pointer;
+            }
+
+            div.botaoAcao:last-of-type {
+                margin-right: 0;
+            }
+
+            div.botaoAcao.ativo {
+                background-color: #4d84bc;
+            }
+
+            div#objetos div {
+                position: absolute;
+                z-index: 5;
+                top: 5%;
+                left: 90%;
+                transform: translate(-50%, -50%) scale(0.8);
+                color: white;
+                background-color: red;
+                font-size: smaller;
+                border-radius: 1.5rem;
+                width: 1.5rem;
+                height: 1.5rem;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+        }
+    }
+}

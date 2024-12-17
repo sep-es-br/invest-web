@@ -20,7 +20,7 @@ export class ObjetoFiltroComponent implements AfterViewInit {
         exercicio: new FormControl(null)
     })
 
-    anos : string[];
+    anos : number[];
     unidades : UnidadeOrcamentariaDTO[];
 
 

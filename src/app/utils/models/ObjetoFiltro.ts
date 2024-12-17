@@ -1,6 +1,7 @@
 export class ObjetoFiltro {
-    exercicio?: string;
+    exercicio?: number;
     nome?: string;
     unidadeId? : string;
+    planoId? : string;
     status?: string
 }

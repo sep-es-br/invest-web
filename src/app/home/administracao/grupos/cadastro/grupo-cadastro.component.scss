@@ -9,7 +9,7 @@
     height: 100vh;
     width: 100vw;
     background-color: rgba(0, 0, 0, 0.7);
-    font-family: var(----fonte-open-sans);
+    font-family: var(--fonte-open-sans);
 
     .content {
         background-color: white;
@@ -59,6 +59,10 @@
 
                 textarea {
                     resize: none;
+                }
+                
+                label {
+                    font-size: small;
                 }
 
                 label[for="inDescricao"] {

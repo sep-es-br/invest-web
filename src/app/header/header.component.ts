@@ -52,7 +52,7 @@ export class HeaderComponent implements OnInit {
         })
 
         let filtro : InvestimentoFiltro = {
-            exercicio: "2024",
+            exercicio: 2024,
             nome: "",
             numPag: 1,
             qtPorPag: 15
@@ -61,7 +61,7 @@ export class HeaderComponent implements OnInit {
         
 
         concat(
-            this.objetoService.getQuantidadeItens(filtro).pipe(tap(quantidade => {
+            this.objetoService.getQuantidadeInvFiltroItens(filtro).pipe(tap(quantidade => {
                 this.qtObjetos = quantidade;
             })),
             this.permissaoService.usuarioTemAcesso("administracao").pipe(tap(temAcesso => {

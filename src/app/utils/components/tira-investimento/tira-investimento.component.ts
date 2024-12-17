@@ -1,12 +1,12 @@
 import { CommonModule } from "@angular/common";
 import { AfterViewInit, Component, ElementRef, Input, ViewChild } from "@angular/core";
-import { InvestimentoDTO } from "../../models/InvestimentoDTO";
 import { ShortStringPipe } from "../../pipes/shortString.pipe";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faAngleDown, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { CustomCurrencyPipe } from "../../pipes/customCurrency.pipe";
 import { TiraObjetoComponent } from "../tira-objeto/tira-objeto.component";
 import { NumeroResumidoPipe } from "../../pipes/numero-resumido.pipe";
+import { InvestimentoTiraDTO } from "../../models/InvestimentoTiraDTO";
 
 @Component({
     selector: 'spo-tira-investimento',
@@ -24,7 +24,7 @@ export class TiraInvestimentoComponent implements AfterViewInit {
 
     @ViewChild('objLista') objListaElem : ElementRef;
 
-    @Input() investimento! : InvestimentoDTO;
+    @Input() investimento! : InvestimentoTiraDTO;
 
     ngAfterViewInit(): void {
         

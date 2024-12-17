@@ -1,17 +1,29 @@
-<form [formGroup]="form">
-    <select formControlName="unidadeOrcamentariaControl">
-        <option [ngValue]="null">Unidade Orçamentária</option>
-        <option *ngFor="let unidade of unidades" [ngValue]="unidade.id">{{unidade.sigla}}</option>
-    </select>
-    <select formControlName="planoOrcamentarioControl">
-        <option  [ngValue]="null">Plano Orçamentário</option>
-        <option *ngFor="let plano of planos" [ngValue]="plano.id">{{padStr(plano.cod, 6)}}</option>
-    </select>
-    <select formControlName="fonteOrcamentariaControl">
-        <option  [ngValue]="null">Fonte Orçamentária</option>
-        <option *ngFor="let fonte of fontes" [ngValue]="fonte.id">{{fonte.nome}}</option>
-    </select>
-    <select formControlName="exercicio">
-        <option *ngFor="let ano of anos" [ngValue]="ano">{{ano}}</option>
-    </select>
-</form>
+   
+<dropdown-filtro (valueChange)="update()">
+    <p display>{{filtro.unidade ? (filtro.unidade.codigo + " - " + filtro.unidade.sigla) : "Unidade Orçamentária"}}</p>
+
+    <p item (click)="filtro.unidade = null">Unidade Orçamentária</p>
+    <p item *ngFor="let unidade of unidades" (click)="filtro.unidade = unidade">{{unidade.codigo}} - {{unidade.sigla}}</p>
+</dropdown-filtro>
+
+<dropdown-filtro (valueChange)="update()">
+    <p display>{{filtro.plano ? ( filtro.plano.codigo + " - " + filtro.plano.nome) : "Plano Orçamentário"}}</p>
+
+    <p item (click)="filtro.plano = null">Plano Orçamentário</p>
+    <p item *ngFor="let plano of planos" (click)="filtro.plano = plano">{{plano.codigo}} - {{plano.nome}}</p>
+
+</dropdown-filtro>
+
+<dropdown-filtro (valueChange)="update()">
+    <p display>{{filtro.fonte ? (filtro.fonte.codigo + " - " + filtro.fonte.nome): "Fonte Orçamentária"}}</p>
+
+    <p item (click)="filtro.fonte = null">Fonte Orçamentária</p>
+    <p item *ngFor="let fonte of fontes" (click)="filtro.fonte = fonte">{{fonte.codigo}} - {{fonte.nome}}</p>
+</dropdown-filtro>
+
+<dropdown-filtro (valueChange)="update()">
+    <p display>{{filtro.ano ? filtro.ano : "Ano"}}</p>
+
+    <p item *ngFor="let ano of anos" (click)="filtro.ano = ano">{{ano}}</p>
+</dropdown-filtro>
+

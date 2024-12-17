@@ -1,13 +1,13 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { environment } from "../../../environments/environment";
-import { ObjetoDTO } from "../models/ObjetoDTO";
 import { Observable } from "rxjs/internal/Observable";
 import { ObjetoFiltro } from "../models/ObjetoFiltro";
 import { catchError } from "rxjs";
 import { ErrorHandlerService } from "./error-handler.service";
 import { InvestimentoFiltro } from "../models/InvestimentoFiltro";
 import { Router } from "@angular/router";
+import { ObjetoTiraDTO } from "../models/ObjetoTiraDTO";
 
 @Injectable({providedIn: "root"})
 export class ObjetosService {
@@ -21,22 +21,26 @@ export class ObjetosService {
     }
 
 
-    public getListaObjetos( filtro : ObjetoFiltro, pgAtual : number, tamPg : number ) : Observable<ObjetoDTO[]> {
+    public getListaTiraObjetos( filtro : ObjetoFiltro, pgAtual : number, tamPg : number ) : Observable<ObjetoTiraDTO[]> {
 
         let params = this.objetoFilterToParams(filtro)
                         .set("pgAtual", pgAtual)
                         .set("tamPag", tamPg);
         
 
-        return this.http.get<ObjetoDTO[]>(`${this.objetoUrl}/all`, { params: params }).pipe(
+        return this.http.get<ObjetoTiraDTO[]>(`${this.objetoUrl}/allTira`, { params: params }).pipe(
             catchError(err => this.errorHandlerService.handleError(err))
         );
     }
 
-    
+    public getQuantidadeItens( filtro : ObjetoFiltro) : Observable<number> {
+        return this.http.get<number>(`${this.objetoUrl}/count`, {params: this.objetoFilterToParams(filtro)}).pipe(
+            catchError(err => this.errorHandlerService.handleError(err))
+        );
+    }
 
-    public getQuantidadeItens( filtro : InvestimentoFiltro) : Observable<number> {
-        return this.http.get<number>(`${this.objetoUrl}/count`, {params: this.investimentoFilterToParams(filtro)}).pipe(
+    public getQuantidadeInvFiltroItens( filtro : InvestimentoFiltro) : Observable<number> {
+        return this.http.get<number>(`${this.objetoUrl}/countInvestimentoFiltro`, {params: this.investimentoFilterToParams(filtro)}).pipe(
             catchError(err => this.errorHandlerService.handleError(err))
         );
     }
@@ -49,6 +53,9 @@ export class ObjetosService {
 
         if(filtro.unidadeId)
             params = params.set("idUnidade", filtro.unidadeId)
+
+        if(filtro.unidadeId)
+            params = params.set("codPO", filtro.unidadeId)
 
         if(filtro.status)
             params = params.set("status", filtro.status)
@@ -75,8 +82,11 @@ export class ObjetosService {
         if(filtro.qtPorPag)
             params = params.set("qtPorPag", filtro.qtPorPag) 
 
+        if(filtro.exercicio)
+            params = params.set("exercicio", filtro.exercicio)
 
-        return params.set("exercicio", filtro.exercicio)
+
+        return params
     }
 
 }

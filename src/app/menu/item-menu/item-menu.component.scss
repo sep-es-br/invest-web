@@ -1,0 +1,40 @@
+:host {
+    position: relative;
+
+    #icone {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 1rem;
+        cursor: pointer;
+    }
+
+    .subMenu {
+        display: flex;
+        width: 0;
+        flex-direction: column;
+        position: absolute;
+        top: 0;
+        left: calc(100% + 0.5rem);
+        background-color: white;
+        border-radius: 4px;
+        box-shadow: var(--sombra-padrao);
+        transition: width 0.3s ease-in-out;
+        overflow: hidden;
+        text-wrap: nowrap;
+
+
+        h4 {
+            padding: 1rem;
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+            font-size: 15px;
+        }
+
+        &.aberto {
+            width: 10rem;
+        }
+    }
+
+    
+}

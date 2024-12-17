@@ -1,0 +1,12 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+@import url('../../../../../utils/styles/tira-base.scss');
+
+:host {
+
+    #tira {
+        > div {
+            width: 7rem !important;
+
+        }
+    } 
+}

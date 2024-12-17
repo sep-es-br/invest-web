@@ -1,7 +1,9 @@
 import { CommonModule } from "@angular/common";
-import { Component, ElementRef, HostListener, ViewChild } from "@angular/core";
-import { MenuLink } from "../utils/menuLinks";
-import { RouterLink } from "@angular/router";
+import { Component, ElementRef, HostListener, OnChanges, SimpleChanges, ViewChild } from "@angular/core";
+import { ItemMenuComponent } from "./item-menu/item-menu.component";
+import { PermissaoService } from "../utils/services/permissao.service";
+import { menuLinks } from "../utils/menuLinks";
+import { IItemMenu } from "../utils/IItemMenu";
 
 
 @Component({
@@ -9,46 +11,29 @@ import { RouterLink } from "@angular/router";
     templateUrl: 'menu.component.html',
     styleUrl: 'menu.component.scss',
     standalone: true,
-    imports: [CommonModule, RouterLink]
+    imports: [CommonModule, ItemMenuComponent]
 })
-export class MenuComponent {
-    menuItems = MenuLink;
+export class MenuComponent{
 
-    private readonly showDivClass = 'showDiv';
-    private debounce = false;
 
-    @ViewChild("nav")
-    navDiv!: ElementRef;
+    public itensMenu : IItemMenu[];
 
-    
-    @HostListener('document:click', ['$event'])
-    documentClick(event: MouseEvent) {
+
+    constructor(private permissaoService : PermissaoService){
         
-        if(this.debounce){
-            this.debounce = false;
-            return
-            
-        }
+        // this.itensMenu = menuLinks.filter(item => item.ativo);
 
-        let divSub = (this.navDiv.nativeElement as HTMLDivElement).querySelectorAll(`.${this.showDivClass}`);
+        this.permissaoService.updateMenuSignal.subscribe(
+            () => {
+                this.permissaoService.buildMenu().subscribe(
+                    menuList => {
+                        this.itensMenu = menuList.filter(item => item.ativo);
+                    }
+                )
+            }
+        )
 
-        if(divSub.length == 0) return
-
-        divSub.forEach(elem => {
-            elem.classList.remove(this.showDivClass);
-        })
-    }
-
-    toggleSub(index : number) : void {
-        this.debounce = true;
-        let divSub = (this.navDiv.nativeElement as HTMLDivElement).querySelector("#sub" + index);
-        if(!divSub) return
-
-        if(divSub.classList.contains(this.showDivClass)) {
-            divSub.classList.remove(this.showDivClass);
-        } else {
-            divSub.classList.add(this.showDivClass);
-        }
+        this.permissaoService.updateMenuSignal.next(null);
 
     }
 

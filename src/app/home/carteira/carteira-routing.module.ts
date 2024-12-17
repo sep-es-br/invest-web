@@ -1,6 +1,7 @@
 import { Route, RouterModule } from "@angular/router";
 import { EmConstrucaoComponent } from "../../em-construcao/em-construcao.component";
 import { NgModule } from "@angular/core";
+import { ObjetosListagemComponent } from "./objetos/listagem/objetos-listagem.component";
 
 const routes : Route[] = [
     {
@@ -8,7 +9,7 @@ const routes : Route[] = [
         component: EmConstrucaoComponent
     },{
         path: "objetos",
-        component: EmConstrucaoComponent
+        component: ObjetosListagemComponent
     },{
         path: "",
         pathMatch: "full",

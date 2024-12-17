@@ -2,8 +2,8 @@ import { CommonModule } from "@angular/common";
 import { Component, Input } from "@angular/core";
 import { ShortStringPipe } from "../../pipes/shortString.pipe";
 import { CustomCurrencyPipe } from "../../pipes/customCurrency.pipe";
-import { ObjetoDTO } from "../../models/ObjetoDTO";
 import { NumeroResumidoPipe } from "../../pipes/numero-resumido.pipe";
+import { ObjetoTiraDTO } from "../../models/ObjetoTiraDTO";
 
 @Component({
     selector: 'spo-tira-objeto',
@@ -15,7 +15,7 @@ import { NumeroResumidoPipe } from "../../pipes/numero-resumido.pipe";
 export class TiraObjetoComponent {
 
 
-    @Input() objeto! : ObjetoDTO;
+    @Input() objeto! : ObjetoTiraDTO;
 
     
 }

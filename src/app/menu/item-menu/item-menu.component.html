@@ -1,0 +1,7 @@
+<div #icone id="icone" (click)="aberto = !aberto">
+    <img src="assets/img/icones/{{item.icone}}.svg" width="25px" />
+</div>
+<div class="subMenu" [ngClass]="aberto ? 'aberto' : ''">
+    <h4>{{item.titulo}}</h4>
+    <spo-item-sub-menu *ngFor="let itemFilho of filhos" [item]="itemFilho" [parentPath]="'/home' + item.link" ></spo-item-sub-menu>
+</div>

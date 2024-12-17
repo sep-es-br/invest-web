@@ -3,13 +3,13 @@ import { AfterViewInit, Component, ViewChild } from "@angular/core";
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { ObjetosService } from "../../../../utils/services/objetos.service";
 import { ObjetoFiltroComponent } from "./objetos-filtro/objetos-filtro.component";
-import { ObjetoDTO } from "../../../../utils/models/ObjetoDTO";
 import { TiraObjetoComponent } from "../../../../utils/components/tira-objeto/tira-objeto.component";
 import { ObjetoFiltro } from "../../../../utils/models/ObjetoFiltro";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { DataUtilService } from "../../../../utils/services/data-util.service";
 import { BarraPaginacaoComponent } from "../../../../utils/components/barra-paginacao/barra-paginacao.component";
+import { ObjetoTiraDTO } from "../../../../utils/models/ObjetoTiraDTO";
 
 @Component({
     selector: "spo-avaliacao",
@@ -30,7 +30,7 @@ export class AvaliacaoComponent implements AfterViewInit{
     @ViewChild(ObjetoFiltroComponent) private filtroComponent : ObjetoFiltroComponent;
     txtBusca = new FormControl('');
 
-    data : ObjetoDTO[] = [];
+    data : ObjetoTiraDTO[] = [];
 
     filtro : ObjetoFiltro;
 
@@ -67,11 +67,11 @@ export class AvaliacaoComponent implements AfterViewInit{
 
         this.paginaAtual = novaPagina;
 
-        this.service.getListaObjetos(this.filtro, novaPagina, 15).subscribe(invs => {
+        this.service.getListaTiraObjetos(this.filtro, novaPagina, 15).subscribe(invs => {
             this.data = invs;
         });
 
-        this.service.getQuantidadeItens(this.filtro).subscribe(quantidade => {
+        this.service.getQuantidadeInvFiltroItens(this.filtro).subscribe(quantidade => {
             this.qtObjetos = quantidade
             this.barraPaginacaoComponent.updatePaginacao(quantidade);  
         })

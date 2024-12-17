@@ -13,7 +13,7 @@ export const opcoesMenuAdm : {
         caminho: "/grupo"
     },{
         icone: "flowchart",
-        titulo: "Processos Interno",
+        titulo: "Fluxos",
         caminho: "/processo"
     },{
         icone: "question_mark",

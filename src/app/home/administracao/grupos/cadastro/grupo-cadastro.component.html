@@ -4,7 +4,7 @@
     </header>
     <main>
         <form [formGroup]="form">
-            <label for="inIcone">Icone:</label>
+            <label for="inIcone">Ícone:</label>
             <spo-seletor-icone id="inIcone" formControlName="icone" />
             <label for="inNome">Nome:</label>
             <input type="text" id="inNome" formControlName="nome" (blur)="gerarSigla($event)"/>

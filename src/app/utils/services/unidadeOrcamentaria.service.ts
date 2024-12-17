@@ -11,6 +11,8 @@ import { Router } from "@angular/router";
 export class UnidadeOrcamentariaService {
 
 
+    private readonly unidadeUrl = `${environment.apiUrl}/unidade`;
+
     constructor(private http : HttpClient,
         private errorHandlerService: ErrorHandlerService,
         private router : Router
@@ -19,9 +21,11 @@ export class UnidadeOrcamentariaService {
 
 
     public getAllUnidadesOrcamentarias(  ) : Observable<UnidadeOrcamentariaDTO[]> {
-        return this.http.get<UnidadeOrcamentariaDTO[]>(`${environment.apiUrl}/unidade/all`).pipe(
+        return this.http.get<UnidadeOrcamentariaDTO[]>(`${this.unidadeUrl}/all`).pipe(
             catchError(err => this.errorHandlerService.handleError(err))
         );
     }
+
+    
 
 }

@@ -1,0 +1,21 @@
+:host {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    cursor: pointer;
+    font-size: 15px;
+
+    fa-icon {
+        font-size: 6px;
+        margin-right: 0.5rem;
+    }
+
+    &:hover {
+        background-color: var(--cor-primaria);
+        color: white;
+    }
+}

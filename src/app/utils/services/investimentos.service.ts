@@ -2,10 +2,10 @@ import { Injectable } from "@angular/core";
 import { HttpClient, HttpErrorResponse, HttpParams } from "@angular/common/http";
 import { environment } from "../../../environments/environment";
 import { catchError, Observable, throwError } from "rxjs";
-import { InvestimentoDTO } from "../models/InvestimentoDTO";
 import { InvestimentoFiltro } from "../models/InvestimentoFiltro";
 import { ErrorHandlerService } from "./error-handler.service";
 import { Router } from "@angular/router";
+import { InvestimentoTiraDTO } from "../models/InvestimentoTiraDTO";
 
 @Injectable({providedIn: "root"})
 export class InvestimentosService {
@@ -17,9 +17,16 @@ export class InvestimentosService {
         private router : Router){
     }
 
-    public getListaInvestimentos( filtro : InvestimentoFiltro ) : Observable<InvestimentoDTO[]> {
+    // public getListaInvestimentos( filtro : InvestimentoFiltro ) : Observable<InvestimentoDTO[]> {
         
-        return this.http.get<InvestimentoDTO[]>(`${this.investimentoUrl}/all`, {params: this.filterToParams(filtro)}).pipe(
+    //     return this.http.get<InvestimentoDTO[]>(`${this.investimentoUrl}/all`, {params: this.filterToParams(filtro)}).pipe(
+    //             catchError(err => this.errorHandlerService.handleError(err))
+    //         );
+    // }
+
+    public getListaTiraInvestimentos( filtro : InvestimentoFiltro ) : Observable<InvestimentoTiraDTO[]> {
+        
+        return this.http.get<InvestimentoTiraDTO[]>(`${this.investimentoUrl}/allTira`, {params: this.filterToParams(filtro)}).pipe(
                 catchError(err => this.errorHandlerService.handleError(err))
             );
     }

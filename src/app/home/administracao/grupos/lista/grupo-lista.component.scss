@@ -57,10 +57,10 @@
 
     main {
         display: grid;
-        grid-template-columns: repeat(4, auto);
+        grid-template-columns: repeat(4, 22rem);
         grid-auto-rows: 15rem;
         gap: 1.5rem;
-        justify-content: space-around;
+        justify-content: space-between;
         font-family: var(--fonte-open-sans);
         font-size: small;
         

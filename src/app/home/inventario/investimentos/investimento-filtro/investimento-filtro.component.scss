@@ -2,13 +2,9 @@
     display: flex;
     justify-content: end;
 
-    select {
-        background-color: unset;
-        border: unset;
+    dropdown-filtro {
         color: rgb(127, 127, 127);
-
-        &:focus {
-            outline: unset;
-        }
+        max-width: 20rem;
+        margin-left: 0.5rem;
     }
 }

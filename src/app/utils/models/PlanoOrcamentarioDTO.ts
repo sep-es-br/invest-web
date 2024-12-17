@@ -1,4 +1,5 @@
 export class PlanoOrcamentarioDTO {
     id?: string;
-    cod?: number;
+    codigo?: number;
+    nome: string;
 }

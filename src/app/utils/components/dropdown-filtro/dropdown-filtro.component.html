@@ -1,0 +1,11 @@
+<div id="display" #display (click)="altenarLista()">
+    <div id="displayValue">
+        <ng-content select="[display]"></ng-content>
+    </div>
+    <fa-icon [ngClass]="mostrarLista ? 'aberto' : ''" [icon]="statusIndicador"></fa-icon>
+</div>
+<div id="itemList" [ngClass]="mostrarLista ? 'aberto' : ''">
+    <div id="itemListInner">
+        <ng-content select="[item]"></ng-content>
+    </div>
+</div>

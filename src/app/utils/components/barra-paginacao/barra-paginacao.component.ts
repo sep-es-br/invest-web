@@ -1,15 +1,22 @@
 import { CommonModule } from "@angular/common";
 import { AfterViewInit, Component, EventEmitter, Input, Output } from "@angular/core";
+import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
+import { faAnglesLeft, faAnglesRight, faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 
 @Component({
     selector: 'spo-barra-paginacao',
     standalone: true,
     templateUrl: './barra-paginacao.component.html',
     styleUrl: './barra-paginacao.component.scss',
-    imports: [CommonModule]
+    imports: [CommonModule, FontAwesomeModule]
 })
 export class BarraPaginacaoComponent implements AfterViewInit {
     
+    inicioIcon = faAnglesLeft;
+    anteriorIcon = faChevronLeft;
+    proximoIcon = faChevronRight;
+    fimIcon = faAnglesRight;
+
     @Input() quantidade : number;
     @Input() larguraPaginacao = 7;
 
