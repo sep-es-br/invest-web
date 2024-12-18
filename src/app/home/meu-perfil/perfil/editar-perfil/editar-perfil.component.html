@@ -17,12 +17,12 @@
         <input type="tel" formControlName="inTelefone">
 
         <div class="label">Orgão</div>
-        <div class="campo">SEP - Secretaria de Estado de Econômia e Planejamento</div>
+        <div class="campo">{{user?.setor.orgao.sigla}} - {{user?.setor.orgao.nome}}</div>
 
         <div class="label">Setor</div>
-        <div class="campo">CGTI - Coordenação Geral de Tecnologia da Informação</div>
+        <div class="campo">{{user?.setor.sigla}} - {{user?.setor.nome}}</div>
 
         <div class="label">Papel</div>
-        <div class="campo">Desenvolvedor Terceirizado</div>
+        <div class="campo">{{user?.papel}}</div>
     </form>
 </div>

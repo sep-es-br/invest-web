@@ -53,6 +53,11 @@ export class GrupoService {
             }), catchError(err => this.errorHandler.handleError(err)))
     }
 
+    public findByUsuario(idUsuario : string) : Observable<GrupoDTO[]> {
+        return this.http.get<GrupoDTO[]>(`${this.grupoUrl}/byUsuario`, {params: {usuarioId: idUsuario}})
+            .pipe(catchError(err => this.errorHandler.handleError(err)))
+    }
+
     public save(grupo : GrupoDTO): Observable<GrupoDTO> {
         return this.http.put<GrupoDTO>(`${this.grupoUrl}/save`, grupo).pipe(
             catchError(err => this.errorHandler.handleError(err))

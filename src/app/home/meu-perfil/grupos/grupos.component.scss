@@ -1,0 +1,62 @@
+:host {
+    font-family: var(--fonte-open-sans);
+    font-size: 15px;
+    display: flex;
+    flex-direction: column;
+
+    header {
+
+        display: flex;
+        align-items: center;
+        height: 2.5rem;
+
+        h4 {
+            color: var(--cor-primaria);
+        }
+
+
+
+    }
+
+    main {
+        table {
+
+            width: 100%;
+            border-collapse: collapse;
+
+            tr {
+
+                td, th {
+                    border-bottom: rgba(215, 215, 215, 0.5) solid 1px;
+                    padding-left: 0.5rem;
+                    padding-top: 0.5rem;
+                    padding-bottom: 0.5rem;
+
+                }
+
+                th {
+                    color: var(--cinza-escuro);
+
+                    &:nth-of-type(2), &:nth-of-type(3) {
+                        text-align: start;
+                    }
+                }
+
+                td {
+
+
+                    &:nth-of-type(1) {
+                        text-align: center;
+                        width: 5rem;
+                    }
+                    
+                    &:nth-of-type(3) {
+                        text-align: justify;
+                        max-width: 20rem;
+                    }
+                }
+            }
+        }
+    }
+    
+}

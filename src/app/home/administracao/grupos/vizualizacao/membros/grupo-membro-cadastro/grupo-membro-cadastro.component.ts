@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, ElementRef, EventEmitter, HostListener, Output } from "@angular/core";
+import { Component, ElementRef, EventEmitter, HostListener, Output, ViewChild } from "@angular/core";
 import { IProfile } from "../../../../../../utils/interfaces/profile.interface";
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { UnidadeOrcamentariaDTO } from "../../../../../../utils/models/UnidadeOrcamentariaDTO";
@@ -8,27 +8,40 @@ import { InfosService } from "../../../../../../utils/services/infos.service";
 import { IPapelDTO, papelTodos } from "../../../../../../utils/models/PapelDto";
 import { ICadastroMembroForm } from "./CadastroMembroForm";
 import { GrupoService } from "../../../../../../utils/services/grupo.service";
+import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
 @Component({
     selector: "spo-grupo-membro-cadastro",
     standalone: true,
     templateUrl: "./grupo-membro-cadastro.component.html",
     styleUrl: "./grupo-membro-cadastro.component.scss",
-    imports: [CommonModule, ReactiveFormsModule]
+    imports: [CommonModule, ReactiveFormsModule, FontAwesomeModule]
 })
 export class GrupoMembroCadastroComponent {
 
     @Output() onClose = new EventEmitter<ICadastroMembroForm>();
 
+    @ViewChild("principal", {read: ElementRef}) principalRef : ElementRef;
+
     form : FormGroup;
+
+
+    iconFechar = faXmark;
 
     unidades : UnidadeOrcamentariaDTO[] = [];
     setores : ISetorDTO[] = [];
     papeis : IPapelDTO[] = [];
 
+    papelTodos = papelTodos;
+
     fora = true;
 
-    constructor(private infosService: InfosService, private fb : FormBuilder, private grupoService : GrupoService) {
+    constructor(
+        private infosService: InfosService,
+        private fb : FormBuilder,
+        private grupoService : GrupoService
+    ) {
 
         this.form = this.fb.group({
             unidade: [null],
@@ -80,32 +93,48 @@ export class GrupoMembroCadastroComponent {
         });
     }
   
-    @HostListener("click", ["event"])
+    @HostListener("click", ["$event"])
     clickFora (event : MouseEvent) {
-        if(!this.fora){
-            this.fora = true;
-            return;
-        }
-        
+        if(!this.principalRef.nativeElement.contains(event.target)){
+            this.fechar();
+        }        
+    }
+
+
+    fechar() {
         this.form.get("unidade").setValue(null),
         this.form.get("setor").setValue(null),
         this.form.get("papel").setValue(null)
         this.onClose.emit(null);
     }
 
-    clickDentro(event : MouseEvent){
-        this.fora = false;
-    }
-
     salvar() {
-        let cadastroMembroForm : ICadastroMembroForm = {
-            orgao: this.form.get("unidade").value,
-            setor: this.form.get("setor").value,
-            papel: this.form.get("papel").value
+
+        const papelSelecionado = this.form.get("papel").value as IPapelDTO;
+
+        let cadastroMembroForm : ICadastroMembroForm;
+
+        if(papelSelecionado.guid === papelTodos.guid) {
+            cadastroMembroForm = {
+                orgao: this.form.get("unidade").value,
+                setor: this.form.get("setor").value,
+                papeis: this.papeis
+            }
+        } else {
+            cadastroMembroForm = {
+                orgao: this.form.get("unidade").value,
+                setor: this.form.get("setor").value,
+                papeis: [papelSelecionado]
+            }
         }
-        this.form.get("unidade").setValue(null),
-        this.form.get("setor").setValue(null),
-        this.form.get("papel").setValue(null)
+ 
+        this.form.get("unidade").setValue(null);
+        this.form.get("setor").setValue(null);
+        this.form.get("papel").setValue(null);
+
+        
+        this.form.get("setor").disable({onlySelf: true});
+        this.form.get("papel").disable({onlySelf: true});
 
         this.onClose.emit(cadastroMembroForm);
     }

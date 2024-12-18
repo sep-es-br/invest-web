@@ -7,8 +7,8 @@
             <input *ngIf="editarImg" type="file" id="inAlterar" (change)="alterarImg($event)" />
         </div>
         <div id="infos">
-            <h1>{{user.name}}</h1>
-            <h2>{{user.nomeCompleto}}</h2>
+            <h1>{{user?.name}}</h1>
+            <h2>{{user?.nomeCompleto}}</h2>
             <p>CGTI - Cordenação Geral de Tercnologia da Informação</p>
             <p>SEP - Secretaria de Estado de Econômia e Planejamento</p>
         </div>

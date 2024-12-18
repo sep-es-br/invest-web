@@ -1,5 +1,6 @@
 import { IProfile } from "../interfaces/profile.interface";
 import { IPodeDTO } from "./PodeDto";
+import { ISetorDTO } from "./SetorDTO";
 
 export interface GrupoDTO {
     id : string;

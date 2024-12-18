@@ -17,10 +17,11 @@ export class GrupoCadastroComponent {
 
     @Output() onClose = new EventEmitter<GrupoDTO>();
 
+    @ViewChild("principal", {read: ElementRef}) principalRef : ElementRef
+
 
     iconSalvar = faFloppyDisk;
-
-    fora = true;
+    iconFechar = faXmark;
 
     form = new FormGroup({
         nome: new FormControl(""),
@@ -29,18 +30,15 @@ export class GrupoCadastroComponent {
         icone: new FormControl("question_mark")
     })
 
-    @HostListener("click", ["event"])
+    @HostListener("click", ["$event"])
     clickFora (event : MouseEvent) {
-        if(!this.fora){
-            this.fora = true;
-            return;
+        if(!this.principalRef.nativeElement.contains(event.target)){
+
+            this.fechar()
         }
-        this.onClose.emit(null);
+        
     }
 
-    clickDentro(event : MouseEvent){
-        this.fora = false;
-    }
 
     gerarSigla(event : FocusEvent) {
         if(this.form.get("sigla").touched) return;
@@ -57,6 +55,10 @@ export class GrupoCadastroComponent {
         })
 
         this.form.get("sigla").setValue(sigla);
+    }
+
+    fechar() {
+        this.onClose.emit(null);
     }
 
     salvar(){

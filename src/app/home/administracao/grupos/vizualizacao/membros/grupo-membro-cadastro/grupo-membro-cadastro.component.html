@@ -1,6 +1,10 @@
-<main (click)="clickDentro($event)">
+<main #principal>
     <header>
         <h4>Adicionar Membro</h4>
+        
+        <div class="botaoAcao" (click)="fechar()">
+            <fa-icon [icon]="iconFechar"></fa-icon>
+        </div>
     </header>
     <div class="conteudo">
         <form [formGroup]="form">
@@ -17,6 +21,7 @@
             <label for="inPapel">Pessoa / Papel <span class="obrigatorio">*</span></label>
             <select formControlName="papel" id="inPapel" >
                 <option [ngValue]="null">Selecionar o papel</option>
+                <option [ngValue]="papelTodos">Todos</option>
                 <option [ngValue]="papel" *ngFor="let papel of papeis">{{papel.agenteNome}} ({{papel.nome}})</option> 
             </select>
         </form>

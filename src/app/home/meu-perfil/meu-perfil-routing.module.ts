@@ -4,6 +4,7 @@ import { NgModule } from "@angular/core";
 import { PerfilComponent } from "./perfil/perfil.component";
 import { EmConstrucaoComponent } from "../../em-construcao/em-construcao.component";
 import { EditarPerfilComponent } from "./perfil/editar-perfil/editar-perfil.component";
+import { MeuPerfilGruposComponent } from "./grupos/grupos.component";
 
 const routers : Route[] = [
     {
@@ -14,7 +15,7 @@ const routers : Route[] = [
         component: EditarPerfilComponent
     },{
         path: 'grupos',
-        component: EmConstrucaoComponent
+        component: MeuPerfilGruposComponent
     },{
         path: '',
         pathMatch: 'full',

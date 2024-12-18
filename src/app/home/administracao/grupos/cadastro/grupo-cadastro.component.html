@@ -1,6 +1,9 @@
-<div class="content" (click)="clickDentro($event)">
+<div class="content" #principal>
     <header>
         <p>Adicionar Grupo</p>
+        <div class="botaoAcao" (click)="fechar()">
+            <fa-icon [icon]="iconFechar"></fa-icon>
+        </div>
     </header>
     <main>
         <form [formGroup]="form">

@@ -31,6 +31,18 @@
             p {
                 font-size: larger;
             }
+
+            .botaoAcao {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 20px;
+                height: 20px;
+                border: red solid 1px ;
+                color: red;
+                border-radius: 4px;
+                cursor: pointer;
+            }
             
         }
 

@@ -1,0 +1,14 @@
+<main>
+    <table>
+        <tr>
+            <th>Sigla</th>
+            <th>Nome</th>
+            <th>Descrição</th>
+        </tr>
+        <tr *ngFor="let grupo of grupos">
+            <td>{{grupo.sigla}}</td>
+            <td>{{grupo.nome}}</td>
+            <td>{{grupo.descricao}}</td>
+        </tr>   
+    </table>
+</main>

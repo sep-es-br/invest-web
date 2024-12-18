@@ -31,6 +31,8 @@ export class GrupoMembrosComponent implements AfterViewInit {
     addMembroIcon = faUserPlus;
     maisOpcs = faEllipsis;
 
+    avatarPadrao = avatarPadrao;
+
     txtBusca = new FormControl('');
 
     qtMembros = 0;
