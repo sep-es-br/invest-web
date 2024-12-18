@@ -11,6 +11,7 @@ import { merge, tap } from "rxjs";
 import { ObjetoFiltro } from "../../../../utils/models/ObjetoFiltro";
 import { TiraObjetoComponent } from "./tira-objetos/tira-objeto.component";
 import { BarraPaginacaoComponent } from "../../../../utils/components/barra-paginacao/barra-paginacao.component";
+import { IObjetoFiltro } from "../../../../utils/interfaces/objetoFiltro.interface";
 
 @Component({
     standalone: true,
@@ -27,7 +28,7 @@ export class ObjetosListagemComponent implements AfterViewInit{
 
     qtObjetos = 0;
 
-    filtro : ObjetoFiltro = {};
+    filtro : IObjetoFiltro = {};
 
     objetos : ObjetoTiraDTO[] = [];
 
@@ -47,7 +48,7 @@ export class ObjetosListagemComponent implements AfterViewInit{
 
     }
 
-    updateFiltro(novoFiltro : ObjetoFiltro) {
+    updateFiltro(novoFiltro : IObjetoFiltro) {
         this.filtro = novoFiltro;
         this.recarregarLista(this.paginaAtual);
     }

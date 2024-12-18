@@ -8,6 +8,7 @@ import { ErrorHandlerService } from "./error-handler.service";
 import { InvestimentoFiltro } from "../models/InvestimentoFiltro";
 import { Router } from "@angular/router";
 import { ObjetoTiraDTO } from "../models/ObjetoTiraDTO";
+import { IObjetoFiltro } from "../interfaces/objetoFiltro.interface";
 
 @Injectable({providedIn: "root"})
 export class ObjetosService {
@@ -21,7 +22,7 @@ export class ObjetosService {
     }
 
 
-    public getListaTiraObjetos( filtro : ObjetoFiltro, pgAtual : number, tamPg : number ) : Observable<ObjetoTiraDTO[]> {
+    public getListaTiraObjetos( filtro : IObjetoFiltro, pgAtual : number, tamPg : number ) : Observable<ObjetoTiraDTO[]> {
 
         let params = this.objetoFilterToParams(filtro)
                         .set("pgAtual", pgAtual)
@@ -33,7 +34,7 @@ export class ObjetosService {
         );
     }
 
-    public getQuantidadeItens( filtro : ObjetoFiltro) : Observable<number> {
+    public getQuantidadeItens( filtro : IObjetoFiltro) : Observable<number> {
         return this.http.get<number>(`${this.objetoUrl}/count`, {params: this.objetoFilterToParams(filtro)}).pipe(
             catchError(err => this.errorHandlerService.handleError(err))
         );
@@ -45,20 +46,18 @@ export class ObjetosService {
         );
     }
 
-    public objetoFilterToParams(filtro : ObjetoFiltro) : HttpParams {
+    public objetoFilterToParams(filtro : IObjetoFiltro) : HttpParams {
         let params : HttpParams = new HttpParams();
 
         if(filtro.nome) 
             params = params.set("nome", filtro.nome)
 
-        if(filtro.unidadeId)
-            params = params.set("idUnidade", filtro.unidadeId)
+        if(filtro.unidade)
+            params = params.set("idUnidade", filtro.unidade.id)
 
-        if(filtro.unidadeId)
-            params = params.set("codPO", filtro.unidadeId)
+        if(filtro.plano)
+            params = params.set("idPo", filtro.plano.id)
 
-        if(filtro.status)
-            params = params.set("status", filtro.status)
 
         return params.set("exercicio", filtro.exercicio);
     }
