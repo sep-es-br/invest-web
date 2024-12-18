@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { AfterViewInit, Component, ElementRef, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, QueryList, ViewChild, ViewChildren } from "@angular/core";
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faMagnifyingGlass, faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -26,6 +26,7 @@ export class GrupoListaComponent implements AfterViewInit{
     txtBusca = new FormControl(null);
 
     @ViewChild(GrupoCadastroComponent, {read: ElementRef}) private telaCadastroRef : ElementRef;
+    @ViewChildren("btnRemover") botaoRemoverList : QueryList<ElementRef>
 
     paginaAtual = 0;
 
@@ -54,11 +55,6 @@ export class GrupoListaComponent implements AfterViewInit{
         }))
     }
 
-    vizualizarGrupo(id : string) {
-
-        this.router.navigate([id]);
-    }
-
 
     esconderModal(novoGrupo : GrupoDTO) {
         let telaCadastroElem = this.telaCadastroRef.nativeElement as HTMLElement;
@@ -68,7 +64,7 @@ export class GrupoListaComponent implements AfterViewInit{
         if(novoGrupo) {
             this.service.save(novoGrupo).subscribe(grupoSalvo => {
                 if(grupoSalvo) {
-                    this.atualizarLista(this.paginaAtual);
+                    this.atualizarLista(this.paginaAtual).subscribe();
                     alert("Grupo salvo com sucesso!")
                 } else {
                     alert("algum erro ao salvar grupo")
@@ -79,18 +75,27 @@ export class GrupoListaComponent implements AfterViewInit{
             
     }
 
-    remover(grupo : GrupoDTO){
+    remover(grupo : GrupoDTO, evt : MouseEvent){
+        
+        let btnRemover = false;
 
-        if(confirm("Tem certeza que deseja remover o grupo " + grupo.sigla + "(" + grupo.nome + ")?")){
-            this.service.remover(grupo.id).subscribe(grupoRemovido => {
-                if(grupoRemovido) {
-                    alert("Grupo " + grupoRemovido.sigla + " removido com sucesso!")
-                    this.atualizarLista(this.paginaAtual)
-                } else {
-                    alert("não foi possivel remover o grupo " + grupo.sigla)
-                }
-            })
-        }
+        this.botaoRemoverList.forEach(botaoRef => {
+            if(botaoRef.nativeElement.contains(evt.target)){
+                btnRemover = true;
+            }
+        });
+
+        if(btnRemover)
+            if(confirm("Tem certeza que deseja remover o grupo " + grupo.sigla + "(" + grupo.nome + ")?")){
+                this.service.remover(grupo.id).subscribe(grupoRemovido => {
+                    if(grupoRemovido) {
+                        alert("Grupo " + grupoRemovido.sigla + " removido com sucesso!")
+                        this.atualizarLista(this.paginaAtual).subscribe()
+                    } else {
+                        alert("não foi possivel remover o grupo " + grupo.sigla)
+                    }
+                })
+            }
 
     }
 
@@ -100,9 +105,21 @@ export class GrupoListaComponent implements AfterViewInit{
         telaCadastroElem.classList.remove(this.naoMostrar);
     }
 
-    navegar(path : string){
-        if(!this.permissao?.visualizar) return;
+    navegar(path : string, evt : MouseEvent){
+
         
+
+        let btnRemover = false;
+
+        this.botaoRemoverList.forEach(botaoRef => {
+            if(botaoRef.nativeElement.contains(evt.target)){
+                btnRemover = true;
+            }
+        });
+
+        if(btnRemover) return;
+       if(!this.permissao?.visualizar) return;
+
         this.router.navigate([path], {relativeTo: this.acivatedRoute});
     }
 

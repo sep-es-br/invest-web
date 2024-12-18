@@ -8,7 +8,7 @@
     </div>
 </header>
 <main>
-    <div class="grupoItem" *ngFor="let grupo of grupos" (click)="navegar(grupo.id)">
+    <div class="grupoItem" *ngFor="let grupo of grupos" (click)="navegar(grupo.id, $event)">
         <div class="cabecalho">
             <div class="icone">
                 <span class="material-symbols-outlined">{{grupo.icone}}</span>
@@ -22,7 +22,7 @@
             <p class="titulo">Descrição</p>
             <p class="texto">{{grupo.descricao}}</p>
         </div>
-        <div class="btnExcluir" *ngIf="permissao?.excluir" (click)="remover(grupo)">
+        <div class="btnExcluir" #btnRemover *ngIf="permissao?.excluir" (click)="remover(grupo, $event)">
             <fa-icon [icon]="lixeira"></fa-icon>
         </div>
     </div> 
