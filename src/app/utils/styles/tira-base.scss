@@ -37,6 +37,12 @@
 
             &#invNome {
                 flex-grow: 1;
+                #value {
+                    width: 100%;
+                    overflow: hidden;
+                    text-overflow: ellipsis ;
+                    white-space: nowrap ;
+                }
             }
 
             div {

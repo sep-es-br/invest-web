@@ -44,8 +44,10 @@ export class ObjetosListagemComponent implements AfterViewInit{
     ){}
 
 
-    ngAfterViewInit(): void {
-
+    ngAfterViewInit(): void {   
+        this.txtBusca.valueChanges.pipe(tap(value => {
+            this.recarregarLista(this.paginaAtual)
+        })).subscribe();
     }
 
     updateFiltro(novoFiltro : IObjetoFiltro) {
