@@ -18,6 +18,8 @@ export class DropdownFiltroComponent{
 
     @Output() public valueChange = new EventEmitter<never>();
 
+    @Input() public disabled : boolean;
+
     statusIndicador = faChevronLeft
     
     mostrarLista = false;
@@ -37,14 +39,10 @@ export class DropdownFiltroComponent{
     }
 
     altenarLista() {
+        if(this.disabled) return;
+
         this.mostrarLista = !this.mostrarLista
     }
-
-    setDisabledState?(isDisabled: boolean): void {
-        
-    }
-
-
 
 }
 

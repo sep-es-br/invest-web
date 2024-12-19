@@ -40,5 +40,10 @@ export class PermissaoService {
         .pipe(catchError(err => this.errorHendler.handleError(err)))
     }
 
+    public podeVerUnidades() : Observable<boolean> {
+        return this.http.get<boolean>(`${this.permissaoUrl}/podeVerUnidades`)
+        .pipe(catchError(err => this.errorHendler.handleError(err)))
+    }
+
 
 }

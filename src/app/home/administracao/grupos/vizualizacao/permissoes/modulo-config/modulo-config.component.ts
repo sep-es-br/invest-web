@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, Input, OnInit, QueryList, ViewChildren } from "@angular/core";
+import { AfterViewInit, Component, Input, OnInit, QueryList, ViewChildren } from "@angular/core";
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { GrupoDTO } from "../../../../../../utils/models/GrupoDTO";
 import { IModuloDTO } from "../../../../../../utils/models/ModuloDto";
@@ -14,7 +14,7 @@ import { concat, merge, pipe, tap } from "rxjs";
     styleUrl: "./modulo-config.component.scss",
     imports: [CommonModule, ReactiveFormsModule]
 })
-export class ModuloConfigComponent implements OnInit {
+export class ModuloConfigComponent implements AfterViewInit {
 
     @ViewChildren(ModuloConfigComponent) modulosFilhosQuery : QueryList<ModuloConfigComponent>
 
@@ -38,7 +38,7 @@ export class ModuloConfigComponent implements OnInit {
         private permissaoService : PermissaoService
     ){}
 
-    ngOnInit(): void {
+    ngAfterViewInit(): void {
 
         this.subscribePropagacao("inListar");
         this.subscribePropagacao("inVisualizar");

@@ -6,5 +6,9 @@
 </header>
 <main>
     <p>Permissões</p>
+    <div>
+        <input id="chkVerTodasUnidades" type="checkbox" [formControl]="verTodasUnidadesFormControl" />
+        <label for="chkVerTodasUnidades">Pode ver todas as unidades</label> 
+    </div>
     <spo-modulo-config *ngFor="let modulo of modulos" [grupo]="grupo" [modulo]="modulo"></spo-modulo-config>
 </main>

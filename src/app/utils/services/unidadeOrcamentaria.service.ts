@@ -26,6 +26,14 @@ export class UnidadeOrcamentariaService {
         );
     }
 
+    public getUnidadeDoUsuario () : Observable<UnidadeOrcamentariaDTO> {
+        return this.http.get<UnidadeOrcamentariaDTO>(`${this.unidadeUrl}/doUsuario`)
+        .pipe(catchError(err => this.errorHandlerService.handleError(err)));
+    }
+
+
+    
+
     
 
 }

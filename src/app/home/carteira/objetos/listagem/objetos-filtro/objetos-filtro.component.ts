@@ -3,11 +3,12 @@ import { DropdownFiltroComponent } from "../../../../../utils/components/dropdow
 import { IObjetoFiltro } from "../../../../../utils/interfaces/objetoFiltro.interface";
 import { UnidadeOrcamentariaDTO } from "../../../../../utils/models/UnidadeOrcamentariaDTO";
 import { UnidadeOrcamentariaService } from "../../../../../utils/services/unidadeOrcamentaria.service";
-import { finalize, merge, tap } from "rxjs";
+import { finalize, merge, Observable, tap } from "rxjs";
 import { CommonModule } from "@angular/common";
 import { PlanoOrcamentarioDTO } from "../../../../../utils/models/PlanoOrcamentarioDTO";
 import { InfosService } from "../../../../../utils/services/infos.service";
 import { PlanoOrcamentarioService } from "../../../../../utils/services/planoOrcamentario.service";
+import { PermissaoService } from "../../../../../utils/services/permissao.service";
 
 @Component({
     selector: "spo-objetos-filtro",
@@ -27,10 +28,13 @@ export class ObjetosFiltroComponent implements AfterViewInit {
     anos : number[];
     planos : PlanoOrcamentarioDTO[];
 
+    podeVerUnidades = false;
+
     constructor(
         private infosService: InfosService,
         private planoService: PlanoOrcamentarioService,
-        private unidadeService: UnidadeOrcamentariaService
+        private unidadeService: UnidadeOrcamentariaService,
+        private permissaoService : PermissaoService
     ){}
 
     update() {
@@ -40,27 +44,51 @@ export class ObjetosFiltroComponent implements AfterViewInit {
 
     ngAfterViewInit(): void {
 
-         merge(
-            this.infosService.getAllAnos()
-            .pipe(tap((anosList) => {
-                this.anos = anosList;
+        this.permissaoService.podeVerUnidades().pipe(tap(
+            podeVer => {
 
-                this.filtro.exercicio = new Date().getFullYear();
+                this.podeVerUnidades = podeVer;
 
-            })),
+                let consulta : Observable<any>[] = [
+                    this.infosService.getAllAnos()
+                    .pipe(tap((anosList) => {
+                        this.anos = anosList;
+        
+                        this.filtro.exercicio = new Date().getFullYear();
+        
+                    })),
+                    this.planoService.getAllPlanos()
+                    .pipe(tap((planoList) => {
+                        this.planos = planoList;
+                    }))
+                ]
+        
+                if(this.podeVerUnidades) {
+                    consulta.push(this.unidadeService.getAllUnidadesOrcamentarias()
+                    .pipe(tap((unidadeList) => {
+                        
+                        this.unidades = unidadeList;
+                        
+                    })));
+                } else {
+                    consulta.push(this.unidadeService.getUnidadeDoUsuario()
+                    .pipe(tap((unidade) => {
+                        
+                        this.filtro.unidade = unidade;
+                        
+                    })));
+                }
+        
+                merge(
+                    
+                    ...consulta
+                    
+                ).pipe(finalize(() => this.update())).subscribe()
+            }
+        )).subscribe();
 
-            this.planoService.getAllPlanos()
-            .pipe(tap((planoList) => {
-                this.planos = planoList;
-            })),
 
-            this.unidadeService.getAllUnidadesOrcamentarias()
-            .pipe(tap((unidadeList) => {
-
-                this.unidades = unidadeList;
-                
-            }))
-        ).pipe(finalize(() => this.update())).subscribe()
+        
                 
     }
 

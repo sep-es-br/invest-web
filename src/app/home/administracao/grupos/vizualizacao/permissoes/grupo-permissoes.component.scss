@@ -40,6 +40,27 @@
             padding-bottom: 1rem;
         }
 
+        > div {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            font-family: var(--fonte-open-sans);
+            font-size: 15px;
+
+            input {
+                margin-right: 0.3rem;
+                appearance: none;
+                width: 0.7rem;
+                height: 0.7rem;
+                border-radius: 2px;
+                border: var(--cor-primaria) solid 1px;
+            }
+            
+            input:checked {
+                background-color: var(--cor-primaria);
+            }
+        }
+
         spo-modulo-config {
             padding-top: 1rem;
             border-top: rgba(215, 215, 215, 0.5) solid 1px;

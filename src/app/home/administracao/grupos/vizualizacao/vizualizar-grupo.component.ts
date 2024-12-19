@@ -25,6 +25,7 @@ export class VizualizarGrupoComponent implements OnInit, OnDestroy{
         this.grupoService.findById(grupoId).subscribe(grupo => {
             this.grupo = grupo;
             this.grupoService.grupoSession.next(grupo);
+            
             this.dataUtil.setTitleInfo('grupo', grupo.sigla)
 
 
@@ -43,6 +44,7 @@ export class VizualizarGrupoComponent implements OnInit, OnDestroy{
         this.route.params.subscribe(params => {
             this.carregarGrupo(params["grupo"])
         })
+        console.log("reload")
     }
 
     ngOnDestroy(): void {

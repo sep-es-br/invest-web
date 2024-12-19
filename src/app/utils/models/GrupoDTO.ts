@@ -10,5 +10,6 @@ export interface GrupoDTO {
     descricao : string;
     membros : IProfile[];
     permissoes : IPodeDTO[];
+    podeVerTodasUnidades : boolean;
 
 }

@@ -10,10 +10,11 @@ import { UnidadeOrcamentariaDTO } from "../../../../utils/models/UnidadeOrcament
 import { UnidadeOrcamentariaService } from "../../../../utils/services/unidadeOrcamentaria.service";
 import { FonteOrcamentariaDTO } from "../../../../utils/models/FonteOrcamentariaDTO";
 import { FonteOrcamentariaService } from "../../../../utils/services/fonteOrcamentaria.service";
-import { finalize, merge, tap } from "rxjs";
+import { finalize, merge, Observable, tap } from "rxjs";
 import { IDropdownFiltroItem, DropdownFiltroComponent } from "../../../../utils/components/dropdown-filtro/dropdown-filtro.component";
 import { IFiltroInvestimento } from "./IFiltroInvestimento";
 import { ShortStringPipe } from "../../../../utils/pipes/shortString.pipe";
+import { PermissaoService } from "../../../../utils/services/permissao.service";
 
 @Component({
     selector: 'spo-investimento-filtro',
@@ -35,41 +36,66 @@ export class InvestimentoFiltroComponent implements AfterViewInit{
 
     filtro : IFiltroInvestimento = {};
 
+    
+    podeVerUnidades = false;
+
     constructor(private infosService: InfosService,
                 private planoService: PlanoOrcamentarioService,
                 private unidadeService: UnidadeOrcamentariaService,
-                private fonteService : FonteOrcamentariaService
+                private fonteService : FonteOrcamentariaService,
+                private permissaoService : PermissaoService
     ) {}
 
     ngAfterViewInit(): void {
         // this.resetarCampos();
 
-        merge(
-            this.infosService.getAllAnos()
-            .pipe(tap((anosList) => {
-                this.anos = anosList;
+         this.permissaoService.podeVerUnidades().pipe(tap(
+                    podeVer => {
+        
+                        this.podeVerUnidades = podeVer;
+        
+                        let consulta : Observable<any>[] = [
+                            this.infosService.getAllAnos()
+                                .pipe(tap((anosList) => {
+                                    this.anos = anosList;
 
-                this.filtro.ano = new Date().getFullYear();
+                                    this.filtro.ano = new Date().getFullYear();
 
-            })),
-
-            this.planoService.getAllPlanos()
-            .pipe(tap((planoList) => {
-                this.planos = planoList;
-            })),
-
-            this.unidadeService.getAllUnidadesOrcamentarias()
-            .pipe(tap((unidadeList) => {
-
-                this.unidades = unidadeList;
+                                })),
+                                this.planoService.getAllPlanos()
+                                .pipe(tap((planoList) => {
+                                    this.planos = planoList;
+                                })),
+                                this.fonteService.findAll()
+                                .pipe(tap((fonteList) => {
+                                    this.fontes = fonteList
+                                }))
+                        ]
                 
-            })),
+                        if(this.podeVerUnidades) {
+                            this.unidadeService.getAllUnidadesOrcamentarias()
+                            .pipe(tap((unidadeList) => {
 
-            this.fonteService.findAll()
-            .pipe(tap((fonteList) => {
-                this.fontes = fonteList
-            }))
-        ).pipe(finalize(() => this.update())).subscribe()
+                                this.unidades = unidadeList;
+                                
+                            }))
+                        } else {
+                            consulta.push(this.unidadeService.getUnidadeDoUsuario()
+                            .pipe(tap((unidade) => {
+                                
+                                this.filtro.unidade = unidade;
+                                
+                            })));
+                        }
+                
+                        merge(
+                            
+                            ...consulta
+                            
+                        ).pipe(finalize(() => this.update())).subscribe()
+                    }
+                )).subscribe();
+
     }
 
     update() {

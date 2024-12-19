@@ -10,12 +10,13 @@ import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
 import { IPodeDTO } from "../../../../../utils/models/PodeDto";
 import { PermissaoService } from "../../../../../utils/services/permissao.service";
+import { FormControl, ReactiveFormsModule } from "@angular/forms";
 
 @Component({
     standalone: true,
     templateUrl: "./grupo-permissoes.component.html",
     styleUrl: "./grupo-permissoes.component.scss",
-    imports: [CommonModule, ModuloConfigComponent, FontAwesomeModule]
+    imports: [CommonModule, ModuloConfigComponent, FontAwesomeModule, ReactiveFormsModule]
 })
 export class GrupoPermissoesComponent implements OnInit {
     
@@ -26,26 +27,48 @@ export class GrupoPermissoesComponent implements OnInit {
     grupo : GrupoDTO;
     modulos : IModuloDTO[]
 
-    permissao : IPodeDTO
+    permissao : IPodeDTO;
+
+    verTodasUnidadesFormControl = new FormControl(false);
+
 
     constructor(private moduloService : ModuloService, private grupoService : GrupoService,
         private permissaoService : PermissaoService
     ) {
         this.grupoService.grupoSession.pipe(tap( grupo => {
             this.grupo = grupo;
+
+            if(!grupo) return
+
+            this.verTodasUnidadesFormControl.setValue(grupo.podeVerTodasUnidades);
+
+            concat(
+                this.moduloService.findAll().pipe(tap( moduloList => {
+                    this.modulos = moduloList;
+                })),
+                this.permissaoService.getPermissao('grupo').pipe(tap( 
+                    permissao => {
+                        this.permissao = permissao;
+                        if(permissao.editar) {
+                            this.verTodasUnidadesFormControl.enable({onlySelf: true});
+                        } else {
+                            this.verTodasUnidadesFormControl.disable({onlySelf: true});
+                        }
+                    }
+                 ))
+            ).subscribe();
+
         })).subscribe()
+    }
+
+    testar(event : any) {
+        console.log(typeof event)
     }
 
     ngOnInit(): void {
         
-        concat(
-            this.moduloService.findAll().pipe(tap( moduloList => {
-                this.modulos = moduloList;
-            })),
-            this.permissaoService.getPermissao('grupo').pipe(tap( 
-                permissao => this.permissao = permissao
-             ))
-        ).subscribe();
+        
+        
     }
 
     salvar() {
@@ -55,7 +78,10 @@ export class GrupoPermissoesComponent implements OnInit {
             permissoes.push(...moduloConfig.gerarPermissoes())
         })
 
+
         this.grupo.permissoes = permissoes;
+        this.grupo.podeVerTodasUnidades = this.verTodasUnidadesFormControl.value
+
 
         this.grupoService.save(this.grupo).subscribe(grupo => {
             this.grupoService.grupoSession.next(grupo);
