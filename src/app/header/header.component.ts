@@ -37,8 +37,6 @@ export class HeaderComponent implements OnInit {
 
     permissaoAdm = false;
 
-    temAcessoAvaliacao = false;
-
     @Input() home : HomeComponent;
 
     @Input() user : IProfile;
@@ -68,9 +66,6 @@ export class HeaderComponent implements OnInit {
             })),
             this.permissaoService.usuarioTemAcesso("administracao").pipe(tap(temAcesso => {
                 this.permissaoAdm = temAcesso
-            })),
-            this.permissaoService.usuarioTemAcesso("objetosavaliacao").pipe(tap(temAcesso => {
-                this.temAcessoAvaliacao = temAcesso
             }))
         ).subscribe();
 
