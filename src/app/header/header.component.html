@@ -4,7 +4,7 @@
         <p id="breadcrumb"><spo-breadcrumb></spo-breadcrumb></p>
     </div>
     <div id="acoes">
-        <div id="objetos" class="botaoAcao" (click)="redirectTo('home/inventario/objetos/avaliacao')"> 
+        <div id="objetos" *ngIf="temAcessoAvaliacao" class="botaoAcao" (click)="redirectTo('home/inventario/objetos/avaliacao')"> 
                 <img src="assets/img/hammer.svg" width="20px">
                 <div *ngIf="qtObjetos > 0">{{qtObjetos}}</div>
             </div>
