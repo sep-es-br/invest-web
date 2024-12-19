@@ -4,6 +4,7 @@ import { ItemMenuComponent } from "./item-menu/item-menu.component";
 import { PermissaoService } from "../utils/services/permissao.service";
 import { menuLinks } from "../utils/menuLinks";
 import { IItemMenu } from "../utils/IItemMenu";
+import { Router } from "@angular/router";
 
 
 @Component({
@@ -19,7 +20,10 @@ export class MenuComponent{
     public itensMenu : IItemMenu[];
 
 
-    constructor(private permissaoService : PermissaoService){
+    constructor(
+        private permissaoService : PermissaoService,
+        private router : Router
+    ){
         
         // this.itensMenu = menuLinks.filter(item => item.ativo);
 
@@ -35,6 +39,10 @@ export class MenuComponent{
 
         this.permissaoService.updateMenuSignal.next(null);
 
+    }
+
+    navegarPara(path : string) {
+        this.router.navigateByUrl(path)
     }
 
 }

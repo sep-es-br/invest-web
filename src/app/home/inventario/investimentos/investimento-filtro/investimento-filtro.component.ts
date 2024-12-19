@@ -73,12 +73,12 @@ export class InvestimentoFiltroComponent implements AfterViewInit{
                         ]
                 
                         if(this.podeVerUnidades) {
-                            this.unidadeService.getAllUnidadesOrcamentarias()
+                            consulta.push(this.unidadeService.getAllUnidadesOrcamentarias()
                             .pipe(tap((unidadeList) => {
 
                                 this.unidades = unidadeList;
                                 
-                            }))
+                            })))
                         } else {
                             consulta.push(this.unidadeService.getUnidadeDoUsuario()
                             .pipe(tap((unidade) => {
