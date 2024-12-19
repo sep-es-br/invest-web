@@ -4,6 +4,7 @@ import { NgModule } from "@angular/core";
 import { HomeComponent } from "./home.component";
 import { CarteiraComponent } from "./carteira/carteira.component";
 import { MeuPerfilComponent } from "./meu-perfil/meu-perfil.component";
+import { InicioComponent } from "./inicio/inicio.component";
 
 const routes : Route[] = [
      {
@@ -22,7 +23,9 @@ const routes : Route[] = [
         path: "administracao",
         loadChildren: () => import('./administracao/administracao-routing.module').then( m => m.AdministracaoRoutingModule)
     },{
-        path: "", pathMatch: "full", redirectTo: 'inventario'
+        path: "", 
+        pathMatch: "full", 
+        component: InicioComponent
     }
 ]
 

@@ -37,8 +37,11 @@ export class ErrorHandlerService {
       const errorCode = backEndError.codigo;
 
       switch (errorCode) {
-        case 401:
         case 403:
+          alert(backEndError.mensagem)
+          this.router.navigateByUrl('home');
+          break;
+        case 401:
           alert(backEndError.mensagem)
           sessionStorage.removeItem('token');
           this.router.navigateByUrl('login');
