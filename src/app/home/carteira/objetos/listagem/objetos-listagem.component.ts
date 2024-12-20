@@ -12,12 +12,17 @@ import { ObjetoFiltro } from "../../../../utils/models/ObjetoFiltro";
 import { TiraObjetoComponent } from "./tira-objetos/tira-objeto.component";
 import { BarraPaginacaoComponent } from "../../../../utils/components/barra-paginacao/barra-paginacao.component";
 import { IObjetoFiltro } from "../../../../utils/interfaces/objetoFiltro.interface";
+import { RouterModule } from "@angular/router";
 
 @Component({
     standalone: true,
     templateUrl: "./objetos-listagem.component.html",
     styleUrl: "./objetos-listagem.component.scss",
-    imports: [CommonModule, ObjetosFiltroComponent, FontAwesomeModule, ReactiveFormsModule, TiraObjetoComponent, BarraPaginacaoComponent]
+    imports: [
+        CommonModule, ObjetosFiltroComponent, FontAwesomeModule, 
+        ReactiveFormsModule, TiraObjetoComponent, BarraPaginacaoComponent,
+        RouterModule
+    ]
 })
 export class ObjetosListagemComponent implements AfterViewInit{
 

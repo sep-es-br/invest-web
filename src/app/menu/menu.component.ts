@@ -42,7 +42,7 @@ export class MenuComponent{
     }
 
     navegarPara(path : string) {
-        this.router.navigateByUrl(path)
+        this.router.navigateByUrl(path);
     }
 
 }

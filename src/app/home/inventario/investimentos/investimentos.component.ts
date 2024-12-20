@@ -89,6 +89,7 @@ export class InvestimentosComponent implements AfterViewInit {
         merge(
 
             this.infoService.getCardTotais(
+                this.txtBusca.value,
                 this.filtro.codUnidade,
                 this.filtro.codPO,
                 this.filtro.idFonte,

@@ -53,7 +53,7 @@ export class InfosService {
         )
     }
 
-    public getCardTotais(idUo : string, idPo : string, idFonte : string, ano : number) : Observable<ICardsTotaisDto> {
+    public getCardTotais(nome : string, idUo : string, idPo : string, idFonte : string, ano : number) : Observable<ICardsTotaisDto> {
         let params = new HttpParams().set("ano",  ano);
 
         if(idUo)
@@ -64,6 +64,9 @@ export class InfosService {
 
         if(idPo)
             params = params.set("idPo", idPo)
+
+        if(nome)
+            params = params.set("nome", nome)
 
         return this.http.get<ICardsTotaisDto>(`${this.infosUrl}/cardsTotais`, {params: params})
             .pipe(catchError(err => this.errorHandlerService.handleError(err)))

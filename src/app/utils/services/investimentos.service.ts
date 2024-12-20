@@ -26,13 +26,13 @@ export class InvestimentosService {
 
     public getListaTiraInvestimentos( filtro : InvestimentoFiltro ) : Observable<InvestimentoTiraDTO[]> {
         
-        return this.http.get<InvestimentoTiraDTO[]>(`${this.investimentoUrl}/allTira`, {params: this.filterToParams(filtro)}).pipe(
+        return this.http.get<InvestimentoTiraDTO[]>(`${this.investimentoUrl}/filtrarValores`, {params: this.filterToParams(filtro)}).pipe(
                 catchError(err => this.errorHandlerService.handleError(err))
             );
     }
 
     public getQuantidadeItens( filtro : InvestimentoFiltro) : Observable<number> {
-        return this.http.get<number>(`${this.investimentoUrl}/count`, {params: this.filterToParams(filtro)}).pipe(
+        return this.http.get<number>(`${this.investimentoUrl}/countValores`, {params: this.filterToParams(filtro)}).pipe(
             catchError(err => this.errorHandlerService.handleError(err))
         );
     }

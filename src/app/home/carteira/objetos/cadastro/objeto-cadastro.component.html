@@ -1,0 +1,18 @@
+<div id="content">
+    <header>
+        Solicitação
+    </header>
+    <main>
+        <form [formGroup]="objetoCadastro">
+            <label for="inTipo">Tipo de Objeto <span class="obrigatorio">*</span></label>
+            <select id="inTipo">
+                <option [ngValue]="null">Selecionar o tipo de objeto</option>
+                <option ngValue="Projeto">Projeto</option>
+                <option ngValue="Entrega">Entrega</option>
+            </select>
+            
+            <label for="inNome">Nome do Objeto <span class="obrigatorio">*</span></label>
+            <input type="text" id="inNome"/>
+        </form>
+    </main>
+</div>

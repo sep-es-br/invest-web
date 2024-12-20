@@ -9,7 +9,7 @@ const routes : Route[] = [
         component: EmConstrucaoComponent
     },{
         path: "objetos",
-        component: ObjetosListagemComponent
+        loadChildren: () => import("./objetos/objetos.routing").then(m => m.CarteiraObjetosRouting)
     },{
         path: "",
         pathMatch: "full",
