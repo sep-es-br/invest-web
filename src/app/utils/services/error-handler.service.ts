@@ -3,6 +3,7 @@ import {Router} from '@angular/router';
 import {HttpErrorResponse} from '@angular/common/http';
 import { IHttpError } from '../interfaces/http-error.interface';
 import { EMPTY, Observable, throwError } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 
 /**
@@ -14,7 +15,10 @@ import { EMPTY, Observable, throwError } from 'rxjs';
 })
 export class ErrorHandlerService {
 
-  constructor(private router:Router){}
+  constructor(
+    private router:Router, 
+    private toastr:ToastrService
+  ){}
 
   mensagemDebounce = false;
 
@@ -38,16 +42,15 @@ export class ErrorHandlerService {
 
       switch (errorCode) {
         case 403:
-          alert(backEndError.mensagem)
-          this.router.navigateByUrl('home');
+          this.toastr.error(backEndError.mensagem)
           break;
         case 401:
-          alert(backEndError.mensagem)
+          this.toastr.error(backEndError.erros[0], backEndError.mensagem)
           sessionStorage.removeItem('token');
           this.router.navigateByUrl('login');
           break;
         default:
-          alert("aconteceu um erro desconhecido, favor verificar a conexão com a internet ou falar com um Administrador");
+          this.toastr.error("aconteceu um erro desconhecido, favor verificar a conexão com a internet ou falar com um Administrador");
           break;
       }
     

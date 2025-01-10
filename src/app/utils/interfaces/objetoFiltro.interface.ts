@@ -5,5 +5,6 @@ export interface IObjetoFiltro {
     nome? : string;
     unidade? : UnidadeOrcamentariaDTO,
     plano? : PlanoOrcamentarioDTO,
-    exercicio? : number
+    exercicio? : number,
+    status? : string,
 }

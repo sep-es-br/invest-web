@@ -15,7 +15,7 @@
     </div>
 </header>
 <main>
-    <spo-tira-listagem-objetos *ngFor="let objeto of objetos" [objeto]="objeto"></spo-tira-listagem-objetos>
+    <spo-tira-listagem-objetos *ngFor="let objeto of objetos" [objeto]="objeto" (click)="redirectTo(objeto.id)"></spo-tira-listagem-objetos>
 </main>
 <footer>
     <spo-barra-paginacao [larguraPaginacao]="larguraPaginacao" [quantidade]="qtObjetos" (onPageChange)="recarregarLista($event)"></spo-barra-paginacao>

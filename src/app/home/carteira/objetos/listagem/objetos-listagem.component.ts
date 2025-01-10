@@ -12,7 +12,7 @@ import { ObjetoFiltro } from "../../../../utils/models/ObjetoFiltro";
 import { TiraObjetoComponent } from "./tira-objetos/tira-objeto.component";
 import { BarraPaginacaoComponent } from "../../../../utils/components/barra-paginacao/barra-paginacao.component";
 import { IObjetoFiltro } from "../../../../utils/interfaces/objetoFiltro.interface";
-import { RouterModule } from "@angular/router";
+import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 
 @Component({
     standalone: true,
@@ -45,7 +45,9 @@ export class ObjetosListagemComponent implements AfterViewInit{
     paginaAtual = 1;
 
     constructor(
-        private objService : ObjetosService
+        private objService : ObjetosService,
+        private router : Router,
+        private route : ActivatedRoute
     ){}
 
 
@@ -58,6 +60,10 @@ export class ObjetosListagemComponent implements AfterViewInit{
     updateFiltro(novoFiltro : IObjetoFiltro) {
         this.filtro = novoFiltro;
         this.recarregarLista(this.paginaAtual);
+    }
+
+    redirectTo(path : string) {
+        this.router.navigate([path], {relativeTo: this.route})
     }
 
     recarregarLista(novaPagina : number) {

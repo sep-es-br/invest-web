@@ -4,17 +4,94 @@
     </header>
     <main>
         <form [formGroup]="objetoCadastro">
+
+            <label for="inConta">Tipo da Despesa:<span class="obrigatorio">*</span></label>
+            <select id="inConta" formControlName="tipoConta" [(ngModel)]="objeto.tipoConta"
+                [ngClass]="(checado && objetoCadastro.controls.tipoConta.errors !== null) ? 'invalido' : ''">
+                <option [ngValue]="null" disabled>Selecionar o tipo da Despesa</option>
+                <option value="Investimento">Investimento</option>
+                <option value="Custeio">Custeio</option>
+            </select>
+
             <label for="inTipo">Tipo de Objeto <span class="obrigatorio">*</span></label>
-            <select id="inTipo">
+            <select id="inTipo" formControlName="tipo" [(ngModel)]="objeto.tipo"
+                [ngClass]="(checado && objetoCadastro.controls.tipo.errors !== null) ? 'invalido' : ''">
                 <option [ngValue]="null">Selecionar o tipo de objeto</option>
                 <option ngValue="Projeto">Projeto</option>
                 <option ngValue="Entrega">Entrega</option>
             </select>
             
             <label for="inNome">Nome <span class="obrigatorio">*</span></label>
-            <input type="text" id="inNome"/>
+            <input type="text" id="inNome" formControlName="nome" [(ngModel)]="objeto.nome"
+                [ngClass]="(checado && objetoCadastro.controls.nome.errors !== null) ? 'invalido' : ''"/>
 
-            <label for="inDescricao">Descrição</label>
+            <label for="inDescricao">Descrição <span class="obrigatorio">*</span></label>
+            <input type="text" id="inDescricao" formControlName="descricao" [(ngModel)]="objeto.descricao"
+                [ngClass]="(checado && objetoCadastro.controls.descricao.errors !== null) ? 'invalido' : ''">
+            
+            <label>Unidade Orçamentária <span class="obrigatorio">*</span></label>
+            <dropdown-com-filtro (onFilterChange)="filtrarUnidades($event)"
+                [ngClass]="(checado && objetoCadastro.controls.unidade.errors !== null) ? 'invalido' : ''">
+                <p display>
+                    {{(objetoCadastro.value && objetoCadastro.value.unidade)
+                       ? objetoCadastro.value.unidade.codigo + " - " + objetoCadastro.value.unidade.sigla 
+                       : "Selecionar unidade orçamentária" }}
+                </p>
+                <p item *ngFor="let unidade of unidadesFiltrados" (click)="objetoCadastro.controls.unidade.setValue(unidade)">
+                    {{unidade.codigo}} - {{unidade.sigla}}
+                </p>
+            </dropdown-com-filtro>
+            
+            <label>Plano Orçamentário</label>
+            <div>
+                <dropdown-com-filtro (onFilterChange)="filtrarPlanos($event)">
+                    <p display>
+                        {{(objetoCadastro.value && objetoCadastro.value.planoOrcamentario)
+                        ? objetoCadastro.value.planoOrcamentario.codigo + " - " + objetoCadastro.value?.planoOrcamentario.nome 
+                        : "Selecionar plano orçamentário" }}
+                    </p>
+                    <p item *ngFor="let plano of planosFiltrados" (click)="objetoCadastro.controls.planoOrcamentario.setValue(plano)">
+                        {{plano.codigo}} - {{plano.nome}}
+                    </p>
+                </dropdown-com-filtro>
+                <fa-icon [icon]="limparIcon" 
+                    *ngIf="objetoCadastro.value?.planoOrcamentario"
+                    (click)="objetoCadastro.controls.planoOrcamentario.setValue(null)"></fa-icon>
+            </div>
+            
+            <label for="inMicroregiao">Microregião Atendida <span class="obrigatorio">*</span></label>
+            <select id="inMicroregiao" formControlName="microregiaoAtendida" [(ngModel)]="objeto.microregiaoAtendida"
+                [ngClass]="(checado && objetoCadastro.controls.microregiaoAtendida.errors !== null) ? 'invalido' : ''">
+                <option [ngValue]="null">Selecionar microregião</option>
+                <option *ngFor="let microregiao of microregioes" [ngValue]="microregiao">{{microregiao.nome}}</option>
+            </select>
+
+            <label for="inInfoComplementar">Informações Complementares <span class="obrigatorio">*</span></label>
+            <input type="text" id="inInfoComplementar" formControlName="infoComplementares"
+                [(ngModel)]="objeto.infoComplementares"
+                [ngClass]="(checado && objetoCadastro.controls.infoComplementares.errors !== null) ? 'invalido' : ''">
+            
+            <label>Plano(s):</label>
+            <spo-multSelect-dropdown formControlName="planos" [(ngModel)]="objeto.planos">
+                <spo-multSelect-dropdown-item *ngFor="let item of tiposplano"
+                    [value]="item" >
+                    {{item.nome}} - {{item.sigla}}
+                </spo-multSelect-dropdown-item>
+            </spo-multSelect-dropdown>
         </form>
+        
+        <div class="recursos">
+            <header>
+                <h4>Recursos Financeiros</h4>
+                <fa-icon [icon]="addIcon" (click)="addExercicio()" ></fa-icon>
+            </header>
+            <spo-cadastro-exercicio 
+                [exercicio]="exercicio" 
+                *ngFor="let exercicio of objeto.recursosFinanceiros, index as i"
+                [lastElem]="i === objeto.recursosFinanceiros.length-1"
+                (onRemover)="removerExercicio($event)"></spo-cadastro-exercicio>
+        </div>
+
+        <button (click)="salvar()" >ENVIAR</button>
     </main>
 </div>

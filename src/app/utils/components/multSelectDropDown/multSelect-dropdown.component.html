@@ -1,0 +1,10 @@
+<div #selectedValues class="selectedValues" (click)="toggle()">
+    <div class="value" *ngFor="let valueItem of valoresSelecionados">
+        <span>{{valueItem.label}}</span>
+        <fa-icon [icon]="removerIcon"></fa-icon>
+    </div>
+    <fa-icon [ngClass]="fechado ? 'fechado' : ''" [icon]="abrirIcon"></fa-icon>
+</div>
+<div class="itemList" [ngClass]="fechado ? 'fechado' : ''">
+    <ng-content></ng-content>
+</div>

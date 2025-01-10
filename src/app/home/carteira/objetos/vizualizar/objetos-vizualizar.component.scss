@@ -1,0 +1,123 @@
+:host {
+    display: flex;
+    align-items: center;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    font-family: var(--fonte-open-sans);
+    font-size: 15px;
+    
+
+    div#content {
+        box-shadow: var(--sombra-padrao);
+        display: flex;
+        flex-direction: column;
+        padding: 2rem;
+        background-color: white;
+        width: 100%;
+        border-radius: 8px;
+
+        section {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 1rem;
+
+            header {
+                display: flex;
+                border-bottom: #d7d7d7 solid 1px;
+    
+                h2 {
+                    flex-grow: 1;
+                    color: var(--cinza-escuro);
+                    font-size: 15px;
+                }
+
+                button {
+                    padding: 0.3rem;
+                    color: white;
+                    background-color: var(--cor-primaria);
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                }
+            }
+            main.objInfo {
+                display: grid;
+                padding-top: 1rem;
+                grid-template-columns: 50% 50%;
+                gap: 1rem;
+    
+                
+    
+                .campo {
+                    .label {
+                        padding-top: 0.5rem;
+                        padding-bottom: 0.5rem;
+                        h3 {
+                            font-size: 15px;
+                            font-weight: normal;
+                            color: var(--cor-primaria);
+                        }
+                    }
+                    .value {
+                        padding-left: 1rem;
+                        p {
+                            font-size: 13px;
+                            color: var(--cinza-escuro);
+                            text-align: justify;
+                        }
+                    }
+                }
+            }
+
+            
+
+        }
+
+        table {
+            border-collapse: collapse;
+            thead {
+                tr th{
+                    border-bottom: #d7d7d7 solid 1px;
+                    text-align: start;
+                    color: var(--cinza-escuro);
+                }
+            }
+
+            tbody {
+                tr td{
+                    padding-top: 0.5rem;
+                }
+
+                tr.nivel0 td {
+                    padding-top: 2rem;
+                    color: var(--cor-primaria);
+                    font-weight: 300;
+
+                    span {
+                        font-weight: bolder;
+                    }
+                }
+
+                tr.nivel0 td:nth-of-type(1) {
+                    color: var(--cor-primaria);
+                    span {
+                        font-weight: bolder;
+                    }
+                }
+
+                tr.nivel1 td {
+                    color: #333;
+
+                }
+
+                tr.nivel1 td:nth-of-type(1) {
+                    padding-left: 1rem;
+                }
+            }
+        }
+
+        
+
+        
+    }
+}

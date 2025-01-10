@@ -13,11 +13,17 @@ export class FonteOrcamentariaService {
     
     constructor(private http : HttpClient,
         private errorHandlerService: ErrorHandlerService){
-   }
+    }
 
-   public findAll() : Observable<FonteOrcamentariaDTO[]> {
+    public findAll() : Observable<FonteOrcamentariaDTO[]> {
         return this.http.get<FonteOrcamentariaDTO[]>(this.fonteUrl).pipe(
             catchError(err => this.errorHandlerService.handleError(err))
         );
-   }
+    }
+    public getDoSigefes() : Observable<FonteOrcamentariaDTO[]> {
+        return this.http.get<FonteOrcamentariaDTO[]>(`${this.fonteUrl}/doSigefes`)
+            .pipe(catchError(err => this.errorHandlerService.handleError(err)))
+    }
+
+    
 }

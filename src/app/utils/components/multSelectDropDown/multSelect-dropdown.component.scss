@@ -1,0 +1,68 @@
+:host {
+    position: relative;
+    display: flex;
+    height: fit-content;
+
+    div.itemList {
+        position: absolute;
+        top: calc(100% + 4px);
+        left: 0;
+        display: flex;
+        flex-direction: column;
+        border: var(--cor-primaria) solid 1px;
+        border-radius: 4px;
+        width: 100%;
+        padding: 0.5rem;
+        background-color: white;
+        z-index: 99;
+        max-height: 6rem;
+        overflow-y: auto;
+
+        &.fechado {
+            display: none;
+        }
+    }
+    
+    div.selectedValues {
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+        border: var(--cor-primaria) solid 1px;
+        border-radius: 4px;
+        padding-block: 4px;
+        padding-inline: 1rem;
+        align-items: flex-end;
+    
+        div.value {
+            border: var(--cor-primaria) solid 1px;
+            padding-left: 1rem;
+            padding-right: 0.5rem;
+            padding-block: 4px;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            border-radius: 1rem;
+            text-wrap: nowrap;
+
+            span {
+                margin-right: 0.5rem;
+            }
+
+            fa-icon {
+                height: 1rem;
+                color: red;
+            }
+        }
+
+        > fa-icon {
+            margin-left: auto;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+            transition: transform 0.3s ease;
+
+            &.fechado {
+                transform: rotate(0);
+            }
+        }
+
+    }
+}

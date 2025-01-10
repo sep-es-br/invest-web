@@ -44,7 +44,6 @@ export class VizualizarGrupoComponent implements OnInit, OnDestroy{
         this.route.params.subscribe(params => {
             this.carregarGrupo(params["grupo"])
         })
-        console.log("reload")
     }
 
     ngOnDestroy(): void {

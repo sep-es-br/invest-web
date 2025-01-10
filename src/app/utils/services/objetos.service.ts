@@ -9,6 +9,7 @@ import { InvestimentoFiltro } from "../models/InvestimentoFiltro";
 import { Router } from "@angular/router";
 import { ObjetoTiraDTO } from "../models/ObjetoTiraDTO";
 import { IObjetoFiltro } from "../interfaces/objetoFiltro.interface";
+import { IObjeto } from "../interfaces/IObjeto";
 
 @Injectable({providedIn: "root"})
 export class ObjetosService {
@@ -46,11 +47,24 @@ export class ObjetosService {
         );
     }
 
+    public salvarObjeto(objeto : IObjeto) : Observable<any> {
+        return this.http.post(`${this.objetoUrl}`, objeto)
+            .pipe(catchError(err => this.errorHandlerService.handleError(err)));
+    }
+
+    public getById(id : string) : Observable<IObjeto> {
+        return this.http.get(`${this.objetoUrl}/byId`, { params: { id: id } })
+        .pipe(catchError(err => this.errorHandlerService.handleError(err)));
+    }
+
     public objetoFilterToParams(filtro : IObjetoFiltro) : HttpParams {
         let params : HttpParams = new HttpParams();
 
         if(filtro.nome) 
             params = params.set("nome", filtro.nome)
+
+        if(filtro.status) 
+            params = params.set("status", filtro.status)
 
         if(filtro.unidade)
             params = params.set("idUnidade", filtro.unidade.id)
@@ -86,6 +100,11 @@ export class ObjetosService {
 
 
         return params
+    }
+
+    public findStatusCadastrados() : Observable<string[]>{
+        return this.http.get<string[]>(`${this.objetoUrl}/statusCadastrado`)
+        .pipe(catchError(err => this.errorHandlerService.handleError(err)))
     }
 
 }

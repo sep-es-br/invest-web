@@ -1,3 +1,10 @@
+<dropdown-filtro (valueChange)="update()">
+    <p display>{{filtro.status ? filtro.status : "Status"}}</p>
+
+    <p item (click)="filtro.status = null">Status</p>
+    <p item *ngFor="let s of status" (click)="filtro.status = s">{{s}}</p>
+</dropdown-filtro>
+
 <dropdown-filtro (valueChange)="update()" [disabled]="!podeVerUnidades" >
     <p display>{{filtro.unidade ? (filtro.unidade.codigo + " - " + filtro.unidade.sigla) : "Unidade Orçamentária"}}</p>
 
@@ -9,6 +16,7 @@
     <p display>{{filtro.plano ? ( filtro.plano.codigo + " - " + filtro.plano.nome) : "Plano Orçamentário"}}</p>
 
     <p item (click)="filtro.plano = null">Plano Orçamentário</p>
+    <p item (click)="filtro.plano = planoSemPlano">Sem P.O.</p>
     <p item *ngFor="let plano of planos" (click)="filtro.plano = plano">{{plano.codigo}} - {{plano.nome}}</p>
 
 </dropdown-filtro>
