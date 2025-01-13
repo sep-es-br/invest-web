@@ -25,13 +25,15 @@
     
     div.selectedValues {
         display: flex;
+        position: relative;
         flex-wrap: wrap;
         width: 100%;
         border: var(--cor-primaria) solid 1px;
         border-radius: 4px;
-        padding-block: 4px;
+        padding-top: 4px;
         padding-inline: 1rem;
         align-items: flex-end;
+        min-height: calc(2rem + 4px);
     
         div.value {
             border: var(--cor-primaria) solid 1px;
@@ -39,7 +41,7 @@
             padding-right: 0.5rem;
             padding-block: 4px;
             margin-right: 0.5rem;
-            margin-bottom: 0.5rem;
+            margin-bottom: 4px;
             border-radius: 1rem;
             text-wrap: nowrap;
 
@@ -55,6 +57,9 @@
 
         > fa-icon {
             margin-left: auto;
+            position: absolute;
+            top: 4px;
+            right: 1rem;
             transform: rotate(-90deg);
             transform-origin: 50% 50%;
             transition: transform 0.3s ease;

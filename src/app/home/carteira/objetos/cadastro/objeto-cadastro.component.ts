@@ -135,7 +135,8 @@ export class ObjetoCadastroComponent implements OnInit {
 
                     this.objetoCadastro.controls.unidade.setValue(obj.unidade);
                     this.objetoCadastro.controls.planoOrcamentario.setValue(obj.planoOrcamentario);
-                    this.objetoCadastro.controls.planos.setValue(obj.planos.map(
+                    
+                    this.objetoCadastro.controls.planos.setValue(obj.planos?.map(
                         plano => {return {
                             display: `${plano.nome} - ${plano.sigla}`,
                             data: plano
@@ -179,12 +180,13 @@ export class ObjetoCadastroComponent implements OnInit {
 
     setTiposPlano(tipoPlanoList : ITipoPlano[]) {
         this.tiposplano = tipoPlanoList;
-
-        this.objetoCadastro.controls.planos.setValue([this.tiposplano[0], this.tiposplano[2], this.tiposplano[4]])
     }
 
     salvar() {
 
+        console.log(this.objetoCadastro.value.planos)
+
+        return;
         let exercValidos = true;
 
         this.cadastroExercicios.forEach(

@@ -39,8 +39,8 @@ export default class MultiSelectDropdownItemComponent implements ControlValueAcc
 
     }
 
-    mudarSelecao(event : any) {
-        console.log(event)
+    mudarSelecao(event : Event) {
+        this.onChange(this.value);
     }
 
     writeValue(obj: any): void {
