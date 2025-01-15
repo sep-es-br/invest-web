@@ -53,7 +53,7 @@ export class ObjetosService {
     }
 
     public getById(id : string) : Observable<IObjeto> {
-        return this.http.get(`${this.objetoUrl}/byId`, { params: { id: id } })
+        return this.http.get<IObjeto>(`${this.objetoUrl}/byId`, { params: { id: id } })
         .pipe(catchError(err => this.errorHandlerService.handleError(err)));
     }
 

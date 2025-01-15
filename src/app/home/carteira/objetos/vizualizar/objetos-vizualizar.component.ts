@@ -50,7 +50,7 @@ export class ObjetosVizualizarComponent {
                     tap(obj => {
                         this.objeto = obj
                         let shotNome = obj.nome.length > 10 ? `${obj.nome.slice(0, 10)}...` : obj.nome;
-                        let nome = `${obj.unidade.sigla} - ${obj.planoOrcamentario.codigo}: ${shotNome}`;
+                        let nome = `${obj.conta.unidadeOrcamentariaImplementadora.sigla} - ${obj.conta.planoOrcamentario.codigo}: ${shotNome}`;
 
                         this.dataUtil.setTitleInfo('objetoId', nome)
                         this.dataUtil.obsNomeTela.next(obj.nome);

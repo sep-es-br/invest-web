@@ -92,7 +92,8 @@ export class ObjetoCadastroComponent implements OnInit {
     @ViewChild('inNome') inNome: NgModel;
 
     objeto : IObjeto = {
-        recursosFinanceiros: []
+        recursosFinanceiros: [],
+        conta: {}
     }
 
     ngOnInit(): void {
@@ -129,12 +130,12 @@ export class ObjetoCadastroComponent implements OnInit {
 
                     this.objeto = obj;
 
-                    let nome = `${obj.unidade.sigla} - Objeto - ${obj.id.split(':')[2]}`;
+                    let nome = `${obj.conta.unidadeOrcamentariaImplementadora.sigla} - Objeto - ${obj.id.split(':')[2]}`;
 
                     this.dataUtil.setTitleInfo('objetoId', nome);
 
-                    this.objetoCadastro.controls.unidade.setValue(obj.unidade);
-                    this.objetoCadastro.controls.planoOrcamentario.setValue(obj.planoOrcamentario);
+                    this.objetoCadastro.controls.unidade.setValue(obj.conta.unidadeOrcamentariaImplementadora);
+                    this.objetoCadastro.controls.planoOrcamentario.setValue(obj.conta.planoOrcamentario);
                     
                     this.objetoCadastro.controls.planos.setValue(obj.planos?.map(
                         plano => {return {
@@ -201,6 +202,10 @@ export class ObjetoCadastroComponent implements OnInit {
         } else {
             let objetoFinal : IObjeto = {
                 ...this.objetoCadastro.value,
+                conta: {
+                    planoOrcamentario: this.objetoCadastro.value.planoOrcamentario,
+                    unidadeOrcamentariaImplementadora: this.objetoCadastro.value.unidade
+                },
                 recursosFinanceiros: this.exercicios
             };
 
