@@ -43,6 +43,7 @@
             main.objInfo {
                 display: grid;
                 padding-top: 1rem;
+                padding-bottom: 2rem;
                 grid-template-columns: 50% 50%;
                 gap: 1rem;
     
@@ -62,7 +63,7 @@
                         padding-left: 1rem;
                         p {
                             font-size: 13px;
-                            color: var(--cinza-escuro);
+                            color: #6E7484;
                             text-align: justify;
                         }
                     }
@@ -106,7 +107,7 @@
                 }
 
                 tr.nivel1 td {
-                    color: #333;
+                    color: #6E7484;
 
                 }
 

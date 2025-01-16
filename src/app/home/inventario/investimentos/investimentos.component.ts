@@ -15,6 +15,7 @@ import { merge, tap } from "rxjs";
 import { InfosService } from "../../../utils/services/infos.service";
 import { IFiltroInvestimento } from "./investimento-filtro/IFiltroInvestimento";
 import { InvestimentoTiraDTO } from "../../../utils/models/InvestimentoTiraDTO";
+import { ContaService } from "../../../utils/services/conta.service";
 
 @Component({
     selector: 'spo-investimentos',
@@ -55,6 +56,7 @@ export class InvestimentosComponent implements AfterViewInit {
 
     constructor( 
         private service: InvestimentosService,
+        private contaService : ContaService,
         private custoService: CustoService,
         private execucaoService: ExecucaoOrcamentariaService,
         private infoService : InfosService
@@ -63,7 +65,7 @@ export class InvestimentosComponent implements AfterViewInit {
     }
 
     ngAfterViewInit(): void {
-        this.txtBusca.valueChanges.subscribe(value => this.atualizarFiltro(this.filtroComponent.filtro, 1) )
+        this.txtBusca.valueChanges.subscribe(value => this.atualizarFiltro(this.filtroComponent.filtro, 1) );
     }
 
     atualizarFiltro(filtro : IFiltroInvestimento, novaPagina : number) {
@@ -78,12 +80,10 @@ export class InvestimentosComponent implements AfterViewInit {
 
         
         this.recarregarLista(novaPagina);
+        this.recarregarValores();
     }
 
-
-    recarregarLista(novaPagina : number) {
-
-        this.filtro.numPag = novaPagina;
+    recarregarValores() {
 
         merge(
 
@@ -104,14 +104,23 @@ export class InvestimentosComponent implements AfterViewInit {
                 this.totalLiquidado = totais.liquidado;
                 this.totalDispSReserva = totais.dispSemReserva;
                 this.totalPago = totais.pago;
-            })),
+            }))
 
-            this.service.getListaTiraInvestimentos(this.filtro)
+        ).subscribe()
+       
+    }
+
+    recarregarLista(novaPagina : number) {
+
+        this.filtro.numPag = novaPagina;
+
+        merge(
+            this.contaService.findAllTira(this.filtro)
             .pipe(tap(invs => {
                 this.data = invs;
             })),
 
-            this.service.getQuantidadeItens(this.filtro)
+            this.contaService.getCount(this.filtro)
             .pipe(tap(quantidade => {
                 this.qtInvestimento = quantidade
                 this.barraPaginacaoComponent.updatePaginacao(quantidade);  

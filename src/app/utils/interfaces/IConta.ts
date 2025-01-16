@@ -9,6 +9,5 @@ export interface IConta {
     nome? : string,
     planoOrcamentario? : PlanoOrcamentarioDTO,
     unidadeOrcamentariaImplementadora? : UnidadeOrcamentariaDTO,
-    objetos? : IObjeto[] ,
     execucoesOrcamentaria? : IExecucaoOrcamentaria[]
 }
