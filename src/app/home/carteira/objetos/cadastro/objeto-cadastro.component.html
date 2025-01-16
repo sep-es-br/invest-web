@@ -65,11 +65,21 @@
                 <option [ngValue]="null">Selecionar microregião</option>
                 <option *ngFor="let microregiao of microregioes" [ngValue]="microregiao">{{microregiao.nome}}</option>
             </select>
+            
+            <label for="inAreaTematica">Area Temática </label>
+            <select id="inAreaTematica" formControlName="areaTematica" [(ngModel)]="objeto.areaTematica">
+                <option [ngValue]="null">Selecionar a Area Temática</option>
+                <option *ngFor="let area of areasTematicas" [ngValue]="area">{{area.nome}}</option>
+            </select>
 
             <label for="inInfoComplementar">Informações Complementares <span class="obrigatorio">*</span></label>
             <input type="text" id="inInfoComplementar" formControlName="infoComplementares"
                 [(ngModel)]="objeto.infoComplementares"
                 [ngClass]="(checado && objetoCadastro.controls.infoComplementares.errors !== null) ? 'invalido' : ''">
+
+            <label for="inContrato">Contrato</label>
+            <input type="text" id="inContrato" formControlName="contrato"
+                [(ngModel)]="objeto.contrato">
             
             <label>Plano(s):</label>
             <spo-multSelect-dropdown formControlName="planos" [(ngModel)]="objeto.planos">

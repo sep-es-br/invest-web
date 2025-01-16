@@ -13,6 +13,7 @@ import { TiraObjetoComponent } from "./tira-objetos/tira-objeto.component";
 import { BarraPaginacaoComponent } from "../../../../utils/components/barra-paginacao/barra-paginacao.component";
 import { IObjetoFiltro } from "../../../../utils/interfaces/objetoFiltro.interface";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
+import { ToastrService } from "ngx-toastr";
 
 @Component({
     standalone: true,
@@ -47,7 +48,8 @@ export class ObjetosListagemComponent implements AfterViewInit{
     constructor(
         private objService : ObjetosService,
         private router : Router,
-        private route : ActivatedRoute
+        private route : ActivatedRoute,
+        private toastr : ToastrService
     ){}
 
 
@@ -64,6 +66,15 @@ export class ObjetosListagemComponent implements AfterViewInit{
 
     redirectTo(path : string) {
         this.router.navigate([path], {relativeTo: this.route})
+    }
+
+    removerObjeto(objeto : ObjetoTiraDTO) {
+        this.objService.removerObjeto(objeto.id).pipe(
+            tap(obj => {
+                this.toastr.success("Objeto Removido!");
+                this.recarregarLista(this.paginaAtual);
+            })
+        ).subscribe()
     }
 
     recarregarLista(novaPagina : number) {

@@ -49,11 +49,12 @@ export class ObjetosVizualizarComponent {
                 this.objetoService.getById(params['objetoId']).pipe(
                     tap(obj => {
                         this.objeto = obj
-                        let shotNome = obj.nome.length > 10 ? `${obj.nome.slice(0, 10)}...` : obj.nome;
-                        let nome = `${obj.conta.unidadeOrcamentariaImplementadora.sigla} - ${obj.conta.planoOrcamentario.codigo}: ${shotNome}`;
 
-                        this.dataUtil.setTitleInfo('objetoId', nome)
-                        this.dataUtil.obsNomeTela.next(obj.nome);
+
+                        let nome = `${obj.conta.unidadeOrcamentariaImplementadora.sigla} - Objeto - ${obj.id.split(':')[2]}`;
+
+                        this.dataUtil.setTitleInfo('objetoId', nome);
+
 
                         obj.recursosFinanceiros.sort(this.ordenarRecursosFinanceiro).forEach(custo => {
                             this.linhas.push({

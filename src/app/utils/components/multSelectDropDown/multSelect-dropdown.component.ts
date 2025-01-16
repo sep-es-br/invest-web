@@ -51,11 +51,11 @@ export class MultSelectDropDownComponent implements ControlValueAccessor, AfterC
 
     ngAfterContentInit(): void {
         this.itensDisponiveis.changes.pipe(tap( qList => {
-            this.setValoresSelecionados(qList?.filter((item:any) => this.value?.filter(inItem => inItem == item.value).length > 0))
+            this.carregarValores();
 
             qList.forEach((item : any) => {
                 item.registerOnChange( (value : any) => {
-                    this.setValoresSelecionados(this.itensDisponiveis.filter(item => item.selecionado));
+                    this.setValoresSelecionados(this.itensDisponiveis.filter(item => item.selecionado).map(item => item.value));
                 })
             })
                         
@@ -63,10 +63,9 @@ export class MultSelectDropDownComponent implements ControlValueAccessor, AfterC
         
     }
 
-    setValoresSelecionados(valores : MultiSelectDropdownItemComponent[]) {
-        this.valoresSelecionados = valores;
-        this.writeValue(this.valoresSelecionados?.map(valor => valor.value));
-        this.valoresSelecionados?.forEach(valor => valor.selecionado = true);
+    setValoresSelecionados(valores : any[]) {
+        this.value = valores;
+        this.carregarValores();
     }
 
     @HostListener('document:click', ['$event'])
@@ -89,7 +88,7 @@ export class MultSelectDropDownComponent implements ControlValueAccessor, AfterC
     }
 
     remover(item: MultiSelectDropdownItemComponent){
-        this.setValoresSelecionados(this.valoresSelecionados.filter(valor => valor != item));
+        this.setValoresSelecionados(this.valoresSelecionados.filter(valor => valor != item).map(item => item.value));
         item.selecionado = false;
     }
 
@@ -101,20 +100,26 @@ export class MultSelectDropDownComponent implements ControlValueAccessor, AfterC
 
     writeValue(obj: any): void {
         
+        this.value = obj;
+        this.carregarValores()
+
+        this.onTouched();
+        
+    }
+
+    carregarValores() {
+
         let valores : MultiSelectDropdownItemComponent[] = [];
 
         this.itensDisponiveis?.forEach(item => {
-            if(obj.includes(item.value))
+            if(this.value?.includes(item.value))
                 valores.push(item);
         })
 
-        this.valoresSelecionados = valores;
-        this.value = this.valoresSelecionados?.map(valor => valor.value);
+        this.valoresSelecionados = valores;        
         this.valoresSelecionados?.forEach(valor => valor.selecionado = true);
 
-        this.onChange(obj);
-        this.onTouched();
-        
+        this.onChange(this.value);
     }
 
     registerOnChange(fn: any): void {

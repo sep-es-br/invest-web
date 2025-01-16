@@ -24,6 +24,8 @@ import { IMultSelectValor, MultSelectDropDownComponent } from "../../../../utils
 import { ITipoPlano } from "../../../../utils/interfaces/ITipoPlano";
 import { TipoPlanoService } from "../../../../utils/services/tipoPlano.service";
 import MultiSelectDropdownItemComponent from "../../../../utils/components/multSelectDropDown/multSelect-dropdown-item/multSelect-dropdown-item.component";
+import { AreaTematicaService } from "../../../../utils/services/areaTematica.service";
+import { IAreaTematica } from "../../../../utils/interfaces/IAreaTematica";
 
 @Component({
     standalone: true,
@@ -48,13 +50,12 @@ export class ObjetoCadastroComponent implements OnInit {
     planosOrcamentario : PlanoOrcamentarioDTO[];
     microregioes : LocalidadeDTO[];
     tiposplano : ITipoPlano[];
+    areasTematicas : IAreaTematica[];
 
     unidadesFiltrados : UnidadeOrcamentariaDTO[]
     planosFiltrados : PlanoOrcamentarioDTO[];
 
     checado = false;
-
-    exercicios : ICusto[] = []
 
     constructor(
         private unidadeService : UnidadeOrcamentariaService,
@@ -65,7 +66,8 @@ export class ObjetoCadastroComponent implements OnInit {
         private router : Router,
         private route : ActivatedRoute,
         private dataUtil: DataUtilService,
-        private tipoPlanoService : TipoPlanoService
+        private tipoPlanoService : TipoPlanoService,
+        private areaTematicaService : AreaTematicaService
     ) {}
 
     objetoCadastro = new FormGroup({
@@ -97,7 +99,8 @@ export class ObjetoCadastroComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.exercicios = [
+
+        this.objeto.recursosFinanceiros = [
             {
                 anoExercicio: new Date().getFullYear(),
                 indicadaPor : [
@@ -109,6 +112,7 @@ export class ObjetoCadastroComponent implements OnInit {
                 ]
             }
         ]
+
 
         this.objetoCadastro.controls.unidade.valueChanges
         .subscribe(unidade => {
@@ -134,14 +138,16 @@ export class ObjetoCadastroComponent implements OnInit {
 
                     this.dataUtil.setTitleInfo('objetoId', nome);
 
+                    this.objetoCadastro.controls.microregiaoAtendida.setValue(
+                        this.microregioes.find(value => value.id == this.objeto.microregiaoAtendida.id)
+                    );
+
                     this.objetoCadastro.controls.unidade.setValue(obj.conta.unidadeOrcamentariaImplementadora);
                     this.objetoCadastro.controls.planoOrcamentario.setValue(obj.conta.planoOrcamentario);
                     
-                    this.objetoCadastro.controls.planos.setValue(obj.planos?.map(
-                        plano => {return {
-                            display: `${plano.nome} - ${plano.sigla}`,
-                            data: plano
-                        }}));
+                    this.objetoCadastro.controls.planos.setValue(
+                        this.tiposplano.filter(tipoItem => obj.planos.map( objTipoPlano => objTipoPlano.id).includes(tipoItem.id))
+                    );
 
                 }
             )).subscribe()
@@ -156,9 +162,16 @@ export class ObjetoCadastroComponent implements OnInit {
             ),
             this.tipoPlanoService.findAll().pipe(
                 tap(tipoPlanoList => this.setTiposPlano(tipoPlanoList))
+            ),
+            this.areaTematicaService.findAllAreaTematica().pipe(
+                tap(areasTematicas => this.setAreasTematicas(areasTematicas))
             )
         ).subscribe()
 
+    }
+
+    setAreasTematicas (areaList : IAreaTematica[]) {
+        this.areasTematicas = areaList;
     }
 
     setPlanos (planoList : PlanoOrcamentarioDTO[]) {
@@ -184,10 +197,6 @@ export class ObjetoCadastroComponent implements OnInit {
     }
 
     salvar() {
-
-        console.log(this.objetoCadastro.value.planos)
-
-        return;
         let exercValidos = true;
 
         this.cadastroExercicios.forEach(
@@ -201,12 +210,13 @@ export class ObjetoCadastroComponent implements OnInit {
             this.toastr.error("Favor preeencher os campos obrigatórios");
         } else {
             let objetoFinal : IObjeto = {
+                id: this.objeto.id,
                 ...this.objetoCadastro.value,
                 conta: {
                     planoOrcamentario: this.objetoCadastro.value.planoOrcamentario,
                     unidadeOrcamentariaImplementadora: this.objetoCadastro.value.unidade
                 },
-                recursosFinanceiros: this.exercicios
+                recursosFinanceiros: this.objeto.recursosFinanceiros
             };
 
             this.objetoService.salvarObjeto(objetoFinal).pipe(
