@@ -38,7 +38,8 @@ export class MultSelectDropDownComponent implements ControlValueAccessor, AfterC
 
     valoresSelecionados : MultiSelectDropdownItemComponent[]
 
-    @Input() valueList : IMultSelectValor[] = []
+    @Input() valueList : IMultSelectValor[] = [];
+    @Input() placeHolder : string = "Selecione as opções";
 
     disabled : boolean;
 

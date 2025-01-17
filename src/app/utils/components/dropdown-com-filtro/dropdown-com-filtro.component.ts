@@ -1,9 +1,10 @@
 import { CommonModule } from "@angular/common";
-import { Component, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnInit, Output, ViewChild } from "@angular/core";
+import { AfterContentInit, AfterViewInit, Component, ContentChildren, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnInit, Output, QueryList, ViewChild } from "@angular/core";
 import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR, ReactiveFormsModule } from "@angular/forms";
 import { ShortStringPipe } from "../../pipes/shortString.pipe";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import { OpcaoItemComponent } from "./opcao-item.component";
 
 @Component({
     selector: "dropdown-com-filtro",
@@ -19,26 +20,32 @@ import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
         }
     ]
 })
-export class DropdownFiltroComponent implements OnInit, ControlValueAccessor{
+export class DropdownFiltroComponent implements OnInit, AfterContentInit, ControlValueAccessor{
     
     @ViewChild("display", {read: ElementRef}) public displayElemRef : ElementRef;
     @ViewChild("inputFilter", {read: ElementRef}) public inputFilterRef : ElementRef;
+    @ContentChildren(OpcaoItemComponent, {read:OpcaoItemComponent}) public opcoesElem : QueryList<OpcaoItemComponent>
 
     @Output() public valueChange = new EventEmitter<never>();
     @Output() public onFilterChange = new EventEmitter<string>();
 
+    evtEmitterOnChange = new EventEmitter<any>();
+
     @Input() public disabled : boolean;
+    @Input() placeHolder : string
 
     onChange : (value: any) => void;
     onTouched : (value: any) => void;
 
-    statusIndicador = faChevronLeft
+    statusIndicador = faChevronLeft;
+
+    selectedOption : OpcaoItemComponent;
+    value : any;
     
     mostrarLista = false;
     
     filterControl = new FormControl("");
 
-    value : any
 
     constructor(
         private hostElementRef : ElementRef
@@ -74,6 +81,20 @@ export class DropdownFiltroComponent implements OnInit, ControlValueAccessor{
         this.filterControl.valueChanges.subscribe(
             value => this.onFilterChange.emit(value)
         );
+        
+    }
+
+    ngAfterContentInit(): void {
+        this.opcoesElem.changes.subscribe((qList : QueryList<OpcaoItemComponent>) => {
+            
+            this.selectedOption = qList.find(opcao => opcao.value == this.value)
+            qList.forEach(opcao => {
+                opcao.onSelect = (v : any) => {
+                    this.selectedOption = opcao;
+                    this.onChange(v);
+                }
+            })
+        })
     }
 
     altenarLista() {

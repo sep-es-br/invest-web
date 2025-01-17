@@ -73,6 +73,7 @@ export class InvestimentosComponent implements AfterViewInit {
             exercicio: filtro.ano,
             codPO: filtro.plano?.id,
             codUnidade: filtro.unidade?.id,
+            idFonte: filtro.fonte?.id,
             nome: this.txtBusca.value,
             numPag: novaPagina,
             qtPorPag: 15

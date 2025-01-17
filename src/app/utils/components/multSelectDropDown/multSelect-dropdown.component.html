@@ -1,4 +1,5 @@
 <div #selectedValues class="selectedValues" (click)="toggle($event)">
+    <span *ngIf="valoresSelecionados.length == 0" >{{placeHolder}}</span>
     <div class="value" *ngFor="let valueItem of valoresSelecionados">
         <span>{{valueItem.label}}</span>
         <fa-icon [icon]="removerIcon" #iconRemover (click)="remover(valueItem)"></fa-icon>

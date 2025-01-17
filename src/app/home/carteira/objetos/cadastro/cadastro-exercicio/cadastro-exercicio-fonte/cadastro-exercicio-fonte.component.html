@@ -12,7 +12,7 @@
                         <p display>
                         {{(fonteValores && fonteValores.fonteOrcamentaria)
                         ? fonteValores.fonteOrcamentaria.codigo + " - " + fonteValores.fonteOrcamentaria.nome 
-                        : "Selecionar plano orçamentário" }}
+                        : "Selecionar Fonte Orçamentária" }}
                         </p>
                         <p item *ngFor="let fonte of fontesFiltrados" (click)="setFonte(fonte)">
                         {{fonte.codigo}} - {{fonte.nome}}

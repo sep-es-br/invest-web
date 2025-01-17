@@ -26,6 +26,7 @@ import { TipoPlanoService } from "../../../../utils/services/tipoPlano.service";
 import MultiSelectDropdownItemComponent from "../../../../utils/components/multSelectDropDown/multSelect-dropdown-item/multSelect-dropdown-item.component";
 import { AreaTematicaService } from "../../../../utils/services/areaTematica.service";
 import { IAreaTematica } from "../../../../utils/interfaces/IAreaTematica";
+import { OpcaoItemComponent } from "../../../../utils/components/dropdown-com-filtro/opcao-item.component";
 
 @Component({
     standalone: true,
@@ -36,7 +37,8 @@ import { IAreaTematica } from "../../../../utils/interfaces/IAreaTematica";
     CadastroExercicioComponent, FontAwesomeModule,
     DropdownFiltroComponent, FormsModule,
     MultSelectDropDownComponent,
-    MultiSelectDropdownItemComponent
+    MultiSelectDropdownItemComponent,
+    OpcaoItemComponent
 ]
 })
 export class ObjetoCadastroComponent implements OnInit {
@@ -75,19 +77,14 @@ export class ObjetoCadastroComponent implements OnInit {
         tipo: new FormControl(null, Validators.required),
         nome: new FormControl(null, Validators.required),
         descricao: new FormControl(null, Validators.required),
-        unidade: new FormControl(null, Validators.required),
-        planoOrcamentario: new FormControl(null),
-        microregiaoAtendida: new FormControl(null, Validators.required),
+        unidade: new FormControl(undefined, Validators.required),
+        planoOrcamentario: new FormControl(undefined),
+        microregiaoAtendida: new FormControl(undefined, Validators.required),
         infoComplementares: new FormControl(null, Validators.required),
         objContratado: new FormControl(false),
         planos : new FormControl([]),
         contrato : new FormControl(null),
         areaTematica : new FormControl(null),
-        audienciaPublica: new FormControl(false),
-        estrategica: new FormControl(false),
-        cti: new FormControl(false),
-        climatica: new FormControl(false),
-        pip: new FormControl(false)
 
     });
 
@@ -113,17 +110,6 @@ export class ObjetoCadastroComponent implements OnInit {
             }
         ]
 
-
-        this.objetoCadastro.controls.unidade.valueChanges
-        .subscribe(unidade => {
-            if(unidade == null) 
-                this.setPlanos([])
-            else
-                this.planoService.getDoSigefes(unidade).pipe(
-                        tap(planoList => this.setPlanos(planoList))
-                ).subscribe()
-        });
-        
         this.route.params.pipe(tap(params => {
             let objetoId = params['objetoId'];
 
@@ -139,7 +125,9 @@ export class ObjetoCadastroComponent implements OnInit {
                     this.dataUtil.setTitleInfo('objetoId', nome);
 
                     this.objetoCadastro.controls.microregiaoAtendida.setValue(
+                        this.objeto.microregiaoAtendida ? 
                         this.microregioes.find(value => value.id == this.objeto.microregiaoAtendida.id)
+                        : null
                     );
 
                     this.objetoCadastro.controls.unidade.setValue(obj.conta.unidadeOrcamentariaImplementadora);
@@ -165,6 +153,9 @@ export class ObjetoCadastroComponent implements OnInit {
             ),
             this.areaTematicaService.findAllAreaTematica().pipe(
                 tap(areasTematicas => this.setAreasTematicas(areasTematicas))
+            ),
+            this.planoService.getDoSigefes(null).pipe(
+                tap(planoList => this.setPlanos(planoList))
             )
         ).subscribe()
 
@@ -197,6 +188,7 @@ export class ObjetoCadastroComponent implements OnInit {
     }
 
     salvar() {
+
         let exercValidos = true;
 
         this.cadastroExercicios.forEach(
