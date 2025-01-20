@@ -77,7 +77,7 @@
                 [(ngModel)]="objeto.contrato" placeholder="Insira o codigo ou numero do contrato">
             
             <label>Tipos de Plano(s):</label>
-            <spo-multSelect-dropdown formControlName="planos" [(ngModel)]="objeto.planos">
+            <spo-multSelect-dropdown formControlName="planos" [(ngModel)]="objeto.planos" placeHolder="Selecione os tipos de plano">
                 <spo-multSelect-dropdown-item *ngFor="let item of tiposplano"
                     [value]="item" >
                     {{item.nome}} - {{item.sigla}}

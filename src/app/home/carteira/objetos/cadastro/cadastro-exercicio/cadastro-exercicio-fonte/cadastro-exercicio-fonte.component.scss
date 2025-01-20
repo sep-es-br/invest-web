@@ -64,6 +64,10 @@
 
         input {
             width: 10rem;
+
+            &::placeholder {
+                color: var(--cor-primaria);
+            }
         }
 
         select, input {

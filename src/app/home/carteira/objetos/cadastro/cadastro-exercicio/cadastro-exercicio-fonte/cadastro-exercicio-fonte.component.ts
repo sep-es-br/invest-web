@@ -9,13 +9,14 @@ import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faMinusCircle, faPlusCircle, faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
 import { FonteOrcamentariaService } from "../../../../../../utils/services/fonteOrcamentaria.service";
 import { DropdownFiltroComponent } from "../../../../../../utils/components/dropdown-com-filtro/dropdown-com-filtro.component";
+import { OpcaoItemComponent } from "../../../../../../utils/components/dropdown-com-filtro/opcao-item.component";
 
 @Component({
     selector: "spo-cadastro-exercicio-fonte",
     standalone: true, 
     templateUrl: "./cadastro-exercicio-fonte.component.html",
     styleUrl: "./cadastro-exercicio-fonte.component.scss",
-    imports: [CommonModule, FormsModule, NgxMaskDirective, FontAwesomeModule, DropdownFiltroComponent],
+    imports: [CommonModule, FormsModule, NgxMaskDirective, FontAwesomeModule, DropdownFiltroComponent, OpcaoItemComponent],
     providers: [provideNgxMask()]
 })
 export class CadastroExercicioFonteComponent implements OnInit {

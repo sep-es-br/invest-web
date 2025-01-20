@@ -8,15 +8,12 @@
         </div>
         <div class="fonte">
                 <dropdown-com-filtro (onFilterChange)="filtrarFonte($event)"
+                        [(ngModel)]="fonteValores.fonteOrcamentaria"
                         [ngClass]="(checado && !valido) ? 'invalido' : ''">
-                        <p display>
-                        {{(fonteValores && fonteValores.fonteOrcamentaria)
-                        ? fonteValores.fonteOrcamentaria.codigo + " - " + fonteValores.fonteOrcamentaria.nome 
-                        : "Selecionar Fonte Orçamentária" }}
-                        </p>
-                        <p item *ngFor="let fonte of fontesFiltrados" (click)="setFonte(fonte)">
-                        {{fonte.codigo}} - {{fonte.nome}}
-                        </p>
+                        
+                        <spo-opcao-item text="Selecionar Fonte Orçamentária" [value]="undefined"></spo-opcao-item>
+                        <spo-opcao-item *ngFor="let fonte of fontesFiltrados" 
+                                [value]="fonte" [text]=" fonte.codigo + ' - ' + fonte.nome"></spo-opcao-item>
                 </dropdown-com-filtro>
                 <fa-icon [icon]="limparIcon" 
                         *ngIf="fonteValores.fonteOrcamentaria"

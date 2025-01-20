@@ -6,6 +6,7 @@
     text-wrap: nowrap;
     font-family: var(--fonte-open-sans);
     font-size: 13px;
+    max-width: 100%;
 
     #display {
         display: flex;
@@ -17,6 +18,8 @@
         #displayValue {
             flex-grow: 1;
             overflow: hidden;
+            overflow-wrap: break-word;
+            text-overflow: ellipsis;
 
             ::ng-deep *[display] {
                 overflow: hidden;
