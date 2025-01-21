@@ -8,7 +8,7 @@
             <label for="inConta">Tipo da Despesa:<span class="obrigatorio">*</span></label>
             <select id="inConta" formControlName="tipoConta" [(ngModel)]="objeto.tipoConta"
                 [ngClass]="(checado && objetoCadastro.controls.tipoConta.errors !== null) ? 'invalido' : ''">
-                <option [ngValue]="undefined" disabled>Selecionar o tipo da Despesa</option>
+                <option [ngValue]="undefined" disabled>Selecionar o tipo da despesa</option>
                 <option value="Investimento">Investimento</option>
                 <option value="Custeio">Outras Desp. Correntes</option>
             </select>
@@ -28,7 +28,7 @@
 
             <label for="inDescricao">Descrição <span class="obrigatorio">*</span></label>
             <input type="text" id="inDescricao" formControlName="descricao" [(ngModel)]="objeto.descricao"
-                placeholder="Insira uma Descrição"
+                placeholder="Insira uma descrição"
                 [ngClass]="(checado && objetoCadastro.controls.descricao.errors !== null) ? 'invalido' : ''">
             
             <label>Unidade Orçamentária <span class="obrigatorio">*</span></label>
@@ -57,13 +57,13 @@
             <label for="inMicroregiao">Microrregião Atendida <span class="obrigatorio">*</span></label>
             <select id="inMicroregiao" formControlName="microregiaoAtendida" [(ngModel)]="objeto.microregiaoAtendida"
                 [ngClass]="(checado && objetoCadastro.controls.microregiaoAtendida.errors !== null) ? 'invalido' : ''">
-                <option [ngValue]="undefined">Selecionar microregião</option>
+                <option [ngValue]="undefined">Selecionar microrregião</option>
                 <option *ngFor="let microregiao of microregioes" [ngValue]="microregiao">{{microregiao.nome}}</option>
             </select>
             
             <label for="inAreaTematica">Área Temática </label>
             <select id="inAreaTematica" formControlName="areaTematica" [(ngModel)]="objeto.areaTematica">
-                <option [ngValue]="undefined">Selecionar a Area Temática</option>
+                <option [ngValue]="undefined">Selecionar a área temática</option>
                 <option *ngFor="let area of areasTematicas" [ngValue]="area">{{area.nome}}</option>
             </select>
 
