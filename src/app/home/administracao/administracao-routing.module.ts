@@ -15,8 +15,8 @@ const routes : Route[] = [
         path: 'pessoas',
         component: EmConstrucaoComponent
     }, {
-        path: 'processo',
-        component: EmConstrucaoComponent
+        path: 'fluxos',
+        loadChildren: () => import("./fluxos/fluxos-routing.module").then(m => m.FluxosRoutingModule)
     }
 
 ]

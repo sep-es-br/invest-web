@@ -1,0 +1,51 @@
+<main>
+    <header>
+        <h1>Cadastro Fluxo</h1>
+    </header>
+    <main>
+        <form>
+            <label>Nome: </label>
+            <input type="text" placeholder="Insira o nome do fluxo" 
+                [(ngModel)]="fluxo.nome" [ngModelOptions]="standaloneNgModelOption" />
+        </form>
+
+        <section>
+            <header>
+                <h2>Etapas</h2>
+                <fa-icon class="addIcon" [icon]="addEtapaIcon" (click)="addEtapa()" ></fa-icon>
+            </header>
+            <main>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Ordem</th>
+                            <th>Nome</th>
+                            <th>Grupo Responsável</th>
+                            <th [colSpan]="2" >Ações Disponiveis</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let etapa of fluxo.etapas; index as i">
+                            <td>{{i+1}}ª</td>
+                            <td><input type="text" placeholder="Insira o nome da {{i+1}}ª etapa"
+                                    [(ngModel)]="etapa.nome" [ngModelOptions]="standaloneNgModelOption" /> </td>
+                            <td>
+                                <select [(ngModel)]="etapa.grupoResponsavel" [ngModelOptions]="standaloneNgModelOption" >
+                                    <option [ngValue]="undefined" >Selecione o grupo responsável pela {{i+1}}ª etapa</option>
+                                    <option [ngValue]="grupo"
+                                           *ngFor="let grupo of gruposList">{{grupo.nome}} - {{grupo.sigla}}</option>
+                                </select>
+                            </td>
+                            <td>
+                                <p *ngFor="let acao of etapa.acoes">{{acao.nome}}</p>
+                            </td>
+                            <td>
+                                <fa-icon class="removerIcon" [icon]="removerEtapaIcon"></fa-icon>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </main>
+        </section>
+    </main>
+</main>

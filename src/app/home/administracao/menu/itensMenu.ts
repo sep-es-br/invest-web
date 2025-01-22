@@ -14,7 +14,7 @@ export const opcoesMenuAdm : {
     },{
         icone: "flowchart",
         titulo: "Fluxos",
-        caminho: "/processo"
+        caminho: "/fluxos"
     },{
         icone: "question_mark",
         titulo: "",
