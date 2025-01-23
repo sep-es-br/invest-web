@@ -14,6 +14,8 @@ import { BarraPaginacaoComponent } from "../../../../utils/components/barra-pagi
 import { IObjetoFiltro } from "../../../../utils/interfaces/objetoFiltro.interface";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
+import { PermissaoService } from "../../../../utils/services/permissao.service";
+import { IPodeDTO } from "../../../../utils/models/PodeDto";
 
 @Component({
     standalone: true,
@@ -39,6 +41,8 @@ export class ObjetosListagemComponent implements AfterViewInit{
     objetos : ObjetoTiraDTO[] = [];
 
     txtBusca = new FormControl("");
+
+    pode : IPodeDTO
     
     larguraPaginacao = 7;
     qtPorPagina = 15;
@@ -49,7 +53,8 @@ export class ObjetosListagemComponent implements AfterViewInit{
         private objService : ObjetosService,
         private router : Router,
         private route : ActivatedRoute,
-        private toastr : ToastrService
+        private toastr : ToastrService,
+        private permissaoService : PermissaoService
     ){}
 
 
@@ -57,6 +62,8 @@ export class ObjetosListagemComponent implements AfterViewInit{
         this.txtBusca.valueChanges.pipe(tap(value => {
             this.recarregarLista(this.paginaAtual)
         })).subscribe();
+
+        this.permissaoService.getPermissao("carteiraobjetos").subscribe(pode => this.pode = pode);
     }
 
     updateFiltro(novoFiltro : IObjetoFiltro) {
@@ -65,6 +72,8 @@ export class ObjetosListagemComponent implements AfterViewInit{
     }
 
     redirectTo(path : string) {
+        if(!this.pode.visualizar) return;
+
         this.router.navigate([path], {relativeTo: this.route})
     }
 

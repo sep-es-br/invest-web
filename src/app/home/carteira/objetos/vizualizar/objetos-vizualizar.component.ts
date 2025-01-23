@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component } from "@angular/core";
+import { AfterViewInit, Component } from "@angular/core";
 import { IObjeto } from "../../../../utils/interfaces/IObjeto";
 import { ObjetosService } from "../../../../utils/services/objetos.service";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -12,6 +12,8 @@ import { CustomCurrencyPipe } from "../../../../utils/pipes/customCurrency.pipe"
 import { NumeroResumidoPipe } from "../../../../utils/pipes/numero-resumido.pipe";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faPencil } from "@fortawesome/free-solid-svg-icons";
+import { PermissaoService } from "../../../../utils/services/permissao.service";
+import { IPodeDTO } from "../../../../utils/models/PodeDto";
 
 @Component({
     standalone: true,
@@ -22,11 +24,13 @@ import { faPencil } from "@fortawesome/free-solid-svg-icons";
         FontAwesomeModule
     ]
 })
-export class ObjetosVizualizarComponent {
+export class ObjetosVizualizarComponent implements AfterViewInit {
 
     objeto : IObjeto;
 
     editIcon = faPencil;
+
+    permissao : IPodeDTO;
 
     linhas : {
         nivel : number,
@@ -40,7 +44,8 @@ export class ObjetosVizualizarComponent {
         private objetoService : ObjetosService,
         private route : ActivatedRoute,
         private router : Router,
-        private dataUtil: DataUtilService
+        private dataUtil: DataUtilService,
+        private permissaoService : PermissaoService
     ){
         
         this.route.params.subscribe(params => {
@@ -83,6 +88,10 @@ export class ObjetosVizualizarComponent {
             ).subscribe();
         })
 
+    }
+
+    ngAfterViewInit(): void {
+        this.permissaoService.getPermissao("carteiraobjetos").subscribe(permissao => this.permissao = permissao)
     }
 
     abrirEditar(){

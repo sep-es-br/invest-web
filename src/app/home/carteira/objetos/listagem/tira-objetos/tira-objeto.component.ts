@@ -7,6 +7,7 @@ import { ShortStringPipe } from "../../../../../utils/pipes/shortString.pipe";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faEllipsis, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { IObjeto } from "../../../../../utils/interfaces/IObjeto";
+import { IPodeDTO } from "../../../../../utils/models/PodeDto";
 
 @Component({
     selector: 'spo-tira-listagem-objetos',
@@ -26,6 +27,8 @@ export class TiraObjetoComponent {
     @ViewChild('iconAcao', {read: ElementRef}) opcoesBtn : ElementRef; 
     @ViewChild('iconBtn', {read: ElementRef}) opcoesIcon : ElementRef;
 
+
+    @Input() permissao : IPodeDTO;
     @Input() objeto : ObjetoTiraDTO;
 
     menuFechado = true;

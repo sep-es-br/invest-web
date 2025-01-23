@@ -6,7 +6,7 @@
         <input type="text" [formControl]="txtBusca" placeholder="Procurar" />
     </div>
     <div id="acoes">
-        <div id="novo-objeto" class="botaoAcao" routerLink="novo">
+        <div id="novo-objeto" class="botaoAcao" routerLink="novo" *ngIf="pode.criar">
             <fa-icon [icon]="novoObjIcon"></fa-icon>
         </div>
         <!-- <div id="display-lista" class="botaoAcao ativo">
@@ -16,7 +16,7 @@
 </header>
 <main>
     <spo-tira-listagem-objetos *ngFor="let objeto of objetos" [objeto]="objeto" 
-        (doClick)="redirectTo(objeto.id)" (doRemover)="removerObjeto($event)"></spo-tira-listagem-objetos>
+        (doClick)="redirectTo(objeto.id)" (doRemover)="removerObjeto($event)" [permissao]="pode"></spo-tira-listagem-objetos>
 </main>
 <footer>
     <spo-barra-paginacao [larguraPaginacao]="larguraPaginacao" [quantidade]="qtObjetos" (onPageChange)="recarregarLista($event)"></spo-barra-paginacao>
