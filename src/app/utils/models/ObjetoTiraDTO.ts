@@ -1,4 +1,5 @@
 export class ObjetoTiraDTO {
+    id? : string;
     unidadeResponsavel!: string;
     codPlano : string;
     nome!: string;

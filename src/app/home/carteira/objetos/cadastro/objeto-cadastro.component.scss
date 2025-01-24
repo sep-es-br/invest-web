@@ -3,6 +3,7 @@
     font-family: var(--fonte-open-sans);
     font-size: 15px;
     padding-top: 5rem;
+    padding-bottom: 5rem;
     width: 100%;
     color: var(--cor-primaria);
 
@@ -24,6 +25,7 @@
             padding-top: 1rem;
 
             form {
+                margin-bottom: 1.5rem;
                 display: grid;
                 grid-template-columns: max-content auto;
                 grid-template-rows: repeat(10, 2rem);
@@ -46,9 +48,72 @@
                     outline: none;
                     padding-left: 1rem;
 
+                    &::placeholder {
+                        color: var(--cor-primaria);
+                    }
+
+                }
+
+                div {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    dropdown-com-filtro {
+                        flex-grow: 1;
+                    }
+
+                    fa-icon {
+                        margin-left: 0.5rem;
+                        color: red;
+                    }
+                }
+
+                dropdown-com-filtro{
+                    border: var(--cor-primaria) solid 1px;
+                    border-radius: 4px;
+                    height: 100%;
+                    padding-left: 1rem;
+                    padding-right: 1rem;
+                    
+                }
+
+                .invalido {
+                    border-color: red;
+                    color: red;
+                }
+
+                spo-checkbox {
+                    align-self: center;
                 }
                 
             }
+
+            .recursos {
+                header {
+
+                    padding-bottom: 0.5rem;
+                    margin-bottom: 1rem;
+                    border-bottom: 1px #d7d7d7 solid;
+                    display: flex;
+
+                    h4 {
+                        color: var(--cinza-escuro);
+                        font-size: large;
+                        font-weight: unset;
+                        flex-grow: 1;
+                    }
+
+                    fa-icon {
+                        color: green;
+                    }
+                }
+                
+
+                spo-cadastro-exercicio {
+                    margin-left: 1rem;
+                }
+            }
+
         }
     }
 }

@@ -1,0 +1,32 @@
+:host {
+    display: flex;
+    padding-block: 3rem;
+
+    main {
+        display: flex;
+        width: 100%;
+        background-color: white;
+        box-shadow: var(--sombra-padrao);
+        padding: 1rem;
+        border-radius: 0.4rem;
+
+        header {
+            display: flex;
+            width: 100%;
+            border-bottom: #7D7D7D solid 1px;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            padding-inline: 1rem;
+
+            h1 {
+                flex-grow: 1;
+            }
+
+            fa-icon.addIcon {
+                color: green;
+                align-self: flex-end;
+                cursor: pointer;
+            }
+        }
+    }
+}

@@ -30,6 +30,8 @@ export class DropdownFiltroComponent{
 
     @HostListener("document:click", ["$event"])
     clickFora(event : MouseEvent) {
+        if(!this.displayElemRef) return;
+
         if(!this.displayElemRef.nativeElement.contains(event.target)) {
             this.mostrarLista = false;
             if(this.hostElementRef.nativeElement.contains(event.target))

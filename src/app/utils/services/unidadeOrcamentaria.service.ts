@@ -31,6 +31,11 @@ export class UnidadeOrcamentariaService {
         .pipe(catchError(err => this.errorHandlerService.handleError(err)));
     }
 
+    public getFromSigefes () : Observable<UnidadeOrcamentariaDTO[]> {
+        return this.http.get<UnidadeOrcamentariaDTO[]>(`${this.unidadeUrl}/doSigefes`)
+        .pipe(catchError(err => this.errorHandlerService.handleError(err)));
+    }
+
 
     
 

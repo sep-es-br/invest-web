@@ -1,0 +1,32 @@
+<form>
+        
+        <div>
+                <fa-icon *ngIf="lastElem" [icon]="addIcon" class="add" (click)="onAdd.emit()"></fa-icon>
+        </div>
+        <div>
+                <fa-icon [icon]="removerIcon" class="remover" (click)="onRemover.emit(fonteValores)"></fa-icon>
+        </div>
+        <div class="fonte">
+                <dropdown-com-filtro (onFilterChange)="filtrarFonte($event)"
+                        [(ngModel)]="fonteValores.fonteOrcamentaria"
+                        [ngClass]="(checado && !valido) ? 'invalido' : ''">
+                        
+                        <spo-opcao-item text="Selecionar Fonte Orçamentária" [value]="undefined"></spo-opcao-item>
+                        <spo-opcao-item *ngFor="let fonte of fontesFiltrados" 
+                                [value]="fonte" [text]=" fonte.codigo + ' - ' + fonte.nome"></spo-opcao-item>
+                </dropdown-com-filtro>
+                <fa-icon [icon]="limparIcon" 
+                        *ngIf="fonteValores.fonteOrcamentaria"
+                        (click)="setFonte(null)"></fa-icon>
+        </div>
+        <input type="text" [(ngModel)]="fonteValores.previsto"
+                [ngModelOptions]="{standalone: true}"
+                prefix="R$ " mask="separator.2" placeholder="R$ "/>
+        <fa-icon [icon]="limparIcon" class="apagar" (click)="fonteValores.previsto = null"></fa-icon>
+
+        <input type="text" [(ngModel)]="fonteValores.contratado"
+                [ngModelOptions]="{standalone: true}" 
+                prefix="R$ " mask="separator.2"  placeholder="R$ "/>
+        <fa-icon [icon]="limparIcon" class="apagar" (click)="fonteValores.contratado = null"></fa-icon>
+
+</form>

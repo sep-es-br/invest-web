@@ -14,5 +14,51 @@
             width: fit-content !important;
             padding-right: 2rem !important;
         }
+
+        > div.acoes {
+            width: fit-content !important;
+            padding-right: 1rem !important;
+            color: var(--cor-primaria);
+            position: relative;
+
+            nav {
+                position: absolute;
+                top: 100%;
+                right: 0;
+                display: flex;
+                flex-direction: column;
+                background-color: white;
+                width: fit-content;
+                border-radius: 0.3rem;
+                box-shadow: var(--sombra-padrao);
+                overflow: hidden;
+        
+                ul {
+                    list-style: none;
+
+                    li {
+                        padding: 0.5rem;
+                        text-wrap: nowrap;
+
+
+                        &.remover {
+                            color: red;
+
+
+                            &:hover {
+                                color: white;
+                                background-color: red;
+                            }
+                        }
+                    }
+                }
+        
+                &.fechado {
+                    display: none;
+                }
+            }
+        }
     } 
+
+    
 }

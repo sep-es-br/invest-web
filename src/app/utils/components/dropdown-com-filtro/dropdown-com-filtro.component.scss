@@ -1,0 +1,95 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    cursor: default;
+    text-wrap: nowrap;
+    font-family: var(--fonte-open-sans);
+    font-size: 13px;
+    max-width: 100%;
+
+    #display {
+        display: flex;
+        height: 100%;
+        min-height: 1rem;
+        width: 100%;
+        align-items: center;
+
+        #displayValue {
+            flex-grow: 1;
+            overflow: hidden;
+            overflow-wrap: break-word;
+            text-overflow: ellipsis;
+
+            ::ng-deep *[display] {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+        }
+
+        fa-icon {
+            transform: rotateX(0);
+            transition: transform 0.3s ease-in-out;
+            margin-left: 1rem;
+
+            &.aberto {
+                transform: rotateZ(-90deg);
+            }
+        }
+    }
+
+    ::ng-deep #itemList {
+        position: absolute;
+        display: none;
+        flex-direction: column;
+        top: calc(100%) ;
+        right: 0;
+        z-index: 50;
+        overflow: auto;
+        background-color: white;
+        width: 100%;
+        min-width: 10rem;
+        max-height: 15rem;
+        box-shadow: 0 0 6px #00000060;
+
+        input {
+            margin: 0.5rem;
+            border: var(--cor-primaria) solid 1px;
+            border-radius: 4px;
+            outline: none;
+            padding: 0.3rem;
+            padding-left: 0.5rem;
+            color: var(--cor-primaria);
+            font-family: var(--fonte-open-sans);
+            font-size: 15px;
+        }
+
+        #itemListInner {
+            flex-direction: column;
+            overflow-x: hidden;
+            min-width:  fit-content;
+            width: 100%;
+            min-height: fit-content;
+
+            spo-opcao-item {
+                padding: 0.2rem;
+                padding-left: 1rem;
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+    
+                &:hover {
+                    background-color: var(--cor-primaria);
+                    color: white;
+                }
+            }
+    
+            
+        }
+        &.aberto {
+            display: flex;
+        }
+        
+    }
+}

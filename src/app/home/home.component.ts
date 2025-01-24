@@ -47,6 +47,8 @@ export class HomeComponent implements OnInit{
     ngOnInit(): void {
 
         this.profile.userListener.subscribe(newUser => {
+
+
             this.loadUserDetails(newUser);
         })
         this.loadUser();

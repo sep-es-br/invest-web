@@ -1,0 +1,22 @@
+:host {
+    background-color: white;
+    border: var(--cor-primaria) solid 1px;
+    width: 2rem;
+    height: 1rem;
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+
+    div {
+        display: block;
+        border: var(--cor-primaria) solid 1px;
+        width: 0.9rem;
+        height: 0.9rem;
+        border-radius: 0.9rem;
+        background-color: white;
+
+        &.ativo {
+            margin-left: auto;
+        }
+    }
+}

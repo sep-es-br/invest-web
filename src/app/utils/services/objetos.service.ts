@@ -1,14 +1,16 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpParams } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse, HttpParams, HttpStatusCode } from "@angular/common/http";
 import { environment } from "../../../environments/environment";
 import { Observable } from "rxjs/internal/Observable";
 import { ObjetoFiltro } from "../models/ObjetoFiltro";
-import { catchError } from "rxjs";
+import { catchError, EMPTY, empty, EmptyError } from "rxjs";
 import { ErrorHandlerService } from "./error-handler.service";
 import { InvestimentoFiltro } from "../models/InvestimentoFiltro";
 import { Router } from "@angular/router";
 import { ObjetoTiraDTO } from "../models/ObjetoTiraDTO";
 import { IObjetoFiltro } from "../interfaces/objetoFiltro.interface";
+import { IObjeto } from "../interfaces/IObjeto";
+import { ToastrService } from "ngx-toastr";
 
 @Injectable({providedIn: "root"})
 export class ObjetosService {
@@ -17,7 +19,8 @@ export class ObjetosService {
 
     constructor(private http : HttpClient,
         private errorHandlerService: ErrorHandlerService,
-        private router:Router
+        private router:Router,
+        private toastr : ToastrService
     ){
     }
 
@@ -46,11 +49,24 @@ export class ObjetosService {
         );
     }
 
+    public salvarObjeto(objeto : IObjeto) : Observable<any> {
+        return this.http.post(`${this.objetoUrl}`, objeto)
+            .pipe(catchError(err => this.errorHandlerService.handleError(err)));
+    }
+
+    public getById(id : string) : Observable<IObjeto> {
+        return this.http.get<IObjeto>(`${this.objetoUrl}/byId`, { params: { id: id } })
+        .pipe(catchError(err => this.errorHandlerService.handleError(err)));
+    }
+
     public objetoFilterToParams(filtro : IObjetoFiltro) : HttpParams {
         let params : HttpParams = new HttpParams();
 
         if(filtro.nome) 
             params = params.set("nome", filtro.nome)
+
+        if(filtro.status) 
+            params = params.set("status", filtro.status)
 
         if(filtro.unidade)
             params = params.set("idUnidade", filtro.unidade.id)
@@ -86,6 +102,31 @@ export class ObjetosService {
 
 
         return params
+    }
+
+    public findStatusCadastrados() : Observable<string[]>{
+        return this.http.get<string[]>(`${this.objetoUrl}/statusCadastrado`)
+        .pipe(catchError(err => this.errorHandlerService.handleError(err)))
+    }
+
+    public removerObjeto(objetoId : string) : Observable<IObjeto> {
+        return this.http.delete<IObjeto>(`${this.objetoUrl}`, { params: {
+            objetoId: objetoId
+        }}).pipe(
+            catchError((err : HttpErrorResponse) => {
+                if(
+                    err.status == HttpStatusCode.NoContent ||
+                    err.status == HttpStatusCode.UnprocessableEntity
+                ) {
+                    this.toastr.error(err.error)
+                    return EMPTY;
+                }
+
+                throw EmptyError;
+                
+            }),
+            catchError(err => this.errorHandlerService.handleError(err))
+        );
     }
 
 }

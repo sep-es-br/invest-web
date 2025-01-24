@@ -11,7 +11,7 @@ import { SafeResourceUrl } from "@angular/platform-browser";
 import { ObjetosService } from "../utils/services/objetos.service";
 import { InvestimentoFiltro } from "../utils/models/InvestimentoFiltro";
 import { PermissaoService } from "../utils/services/permissao.service";
-import { concat, tap } from "rxjs";
+import { concat, Observable, tap } from "rxjs";
 
 @Component({
     selector: 'spo-header',
@@ -41,6 +41,8 @@ export class HeaderComponent implements OnInit {
 
     @Input() user : IProfile;
 
+    private concat$ : Observable<any>;
+
     constructor(private route : ActivatedRoute, private router : Router, private dataUtilService : DataUtilService,
         private objetoService: ObjetosService, private permissaoService : PermissaoService) {
         this.dataUtilService.headerUpdate.subscribe(value => this.updateTitle())
@@ -58,16 +60,14 @@ export class HeaderComponent implements OnInit {
             qtPorPag: 15
         }
         
-        
-
-        concat(
+        this.concat$ = concat(
             this.objetoService.getQuantidadeInvFiltroItens(filtro).pipe(tap(quantidade => {
                 this.qtObjetos = quantidade;
             })),
             this.permissaoService.usuarioTemAcesso("administracao").pipe(tap(temAcesso => {
                 this.permissaoAdm = temAcesso
             }))
-        ).subscribe();
+        );
 
     }
 
@@ -135,12 +135,15 @@ export class HeaderComponent implements OnInit {
     logout(){
         
         sessionStorage.removeItem('token');
+        sessionStorage.removeItem('user-profile');
 
         this.router.navigateByUrl('login');
         
     }
 
     ngOnInit(): void {
+        this.concat$.subscribe();
+
         this.iniciais = this.user.nomeCompleto.split(' ').map(n => n[0]).slice(0,2).join('').toUpperCase();
     }
 

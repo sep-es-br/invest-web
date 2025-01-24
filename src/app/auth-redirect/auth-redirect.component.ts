@@ -38,6 +38,9 @@ export class AuthRedirectComponent {
 
         sessionStorage.setItem('token', infoplanToken);
         sessionStorage.setItem('user-profile', JSON.stringify(userProfile));
+
+        this._profileService.userListener.next(response)
+
         this._router.navigate(['home']);
       });
   }

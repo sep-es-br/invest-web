@@ -1,6 +1,7 @@
 import { IFonteExercicio } from "./fonte-exercicio.interface";
 
-export interface IExercicioCadastro {
-    exercicio : number,
-    fontesValores : IFonteExercicio[]
+export interface ICusto {
+    id?: string;
+    anoExercicio : number;
+    indicadaPor : IFonteExercicio[];
 }

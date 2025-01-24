@@ -1,0 +1,126 @@
+<div id="content">
+    <section>
+        <header>
+            <h2>Objeto</h2>
+            <button (click)="abrirEditar()" *ngIf="permissao.editar" ><fa-icon [icon]="editIcon"></fa-icon></button>
+        </header>
+        <main class="objInfo">
+            <div class="campo">
+                <div class="label">
+                    <h3>Tipo de Despesa</h3>
+                </div>
+                <div class="value">
+                    <p>{{objeto?.tipoConta}}</p>
+                </div>
+            </div>
+            <div class="campo">
+                <div class="label">
+                    <h3>Tipo de Objeto</h3>
+                </div>
+                <div class="value">
+                    <p>{{objeto?.tipo}}</p>
+                </div>
+            </div>
+            <div class="campo">
+                <div class="label">
+                    <h3>Nome</h3>
+                </div>
+                <div class="value">
+                    <p>{{objeto?.nome}}</p>
+                </div>
+            </div>
+            <div class="campo">
+                <div class="label">
+                    <h3>Descrição</h3>
+                </div>
+                <div class="value">
+                    <p>{{objeto?.descricao}}</p>
+                </div>
+            </div>
+            <div class="campo">
+                <div class="label">
+                    <h3>Unidade Orçamentária</h3>
+                </div>
+                <div class="value">
+                    <p>{{objeto?.conta?.unidadeOrcamentariaImplementadora?.codigo}} - {{objeto?.conta?.unidadeOrcamentariaImplementadora?.sigla}}</p>
+                </div>
+            </div>
+            <div class="campo">
+                <div class="label">
+                    <h3>Responsável</h3>
+                </div>
+                <div class="value">
+                    <p>{{objeto?.responsavel?.nomeCompleto}}</p>
+                </div>
+            </div>
+            <div class="campo">
+                <div class="label">
+                    <h3>Microregião(s) Atendidas(s)</h3>
+                </div>
+                <div class="value">
+                    <p >{{objeto?.microregiaoAtendida?.nome}}</p>
+                </div>
+            </div>
+            <div class="campo">
+                <div class="label">
+                    <h3>Informações Complementares</h3>
+                </div>
+                <div class="value">
+                    <p>{{objeto?.infoComplementares}}</p>
+                </div>
+            </div>
+            <div class="campo">
+                <div class="label">
+                    <h3>Plano Orçamentário</h3>
+                </div>
+                <div class="value">
+                    <p>{{objeto?.conta.planoOrcamentario?.codigo}} - {{objeto?.conta.planoOrcamentario?.nome}}</p>
+                </div>
+            </div>
+            <div class="campo">
+                <div class="label">
+                    <h3>Área Temática</h3>
+                </div>
+                <div class="value">
+                    <p>{{objeto?.areaTematica?.nome}}</p>
+                </div>
+            </div>
+            <div class="campo">
+                <div class="label">
+                    <h3>Plano (s)</h3>
+                </div>
+                <div class="value">
+                    <p *ngIf="objeto?.planos.length === 0; else planosLista" >Não Definido - ND</p>
+                    <ng-template #planosLista>
+                        <p *ngFor="let plano of objeto?.planos">{{plano.nome}} - {{plano.sigla}}</p>
+                    </ng-template>
+                </div>
+            </div>
+            <div class="campo">
+                <div class="label">
+                    <h3>Contrato</h3>
+                </div>
+                <div class="value">
+                    <p>{{objeto?.contrato}}</p>
+                </div>
+            </div>
+        </main>
+    </section>
+    <table>
+        <thead>
+            <tr>
+                <th>Valores</th>
+                <th>Previsto</th>
+                <th>Contratado</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let linha of linhas"
+                [ngClass]="'nivel' + linha.nivel">
+                <td>{{linha.label}} <span>{{linha.nome}}</span></td>
+                <td><span title="{{linha.previsto | customCurrency}}">R$ {{linha.previsto | numeroResumido}}</span></td>
+                <td><span title="{{linha.contratado | customCurrency}}">R$ {{linha.contratado | numeroResumido}}</span></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
