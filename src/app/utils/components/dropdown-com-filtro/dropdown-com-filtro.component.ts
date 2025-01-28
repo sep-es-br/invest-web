@@ -53,6 +53,7 @@ export class DropdownFiltroComponent implements OnInit, AfterContentInit, Contro
 
     writeValue(obj: any): void {
         this.value = obj;
+        this.updateValue();
     }
     registerOnChange(fn: any): void {
         this.onChange = fn;
@@ -82,6 +83,10 @@ export class DropdownFiltroComponent implements OnInit, AfterContentInit, Contro
             value => this.onFilterChange.emit(value)
         );
         
+    }
+
+    updateValue(){
+        this.selectedOption = this.opcoesElem?.find(opcao => opcao.value == this.value)
     }
 
     ngAfterContentInit(): void {

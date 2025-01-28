@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, OnInit, QueryList, ViewChild, ViewChildren } from "@angular/core";
+import { AfterViewInit, Component, OnInit, QueryList, ViewChild, ViewChildren } from "@angular/core";
 import { FormControl, FormGroup, FormsModule, NgModel, ReactiveFormsModule, Validators } from "@angular/forms";
 import { UnidadeOrcamentariaDTO } from "../../../../utils/models/UnidadeOrcamentariaDTO";
 import { PlanoOrcamentarioDTO } from "../../../../utils/models/PlanoOrcamentarioDTO";
@@ -33,7 +33,7 @@ import { OpcaoItemComponent } from "../../../../utils/components/dropdown-com-fi
     templateUrl: "./objeto-cadastro.component.html",
     styleUrl: "./objeto-cadastro.component.scss",
     imports: [
-    CommonModule, ReactiveFormsModule, CheckBoxComponent,
+    CommonModule, ReactiveFormsModule,
     CadastroExercicioComponent, FontAwesomeModule,
     DropdownFiltroComponent, FormsModule,
     MultSelectDropDownComponent,
@@ -41,7 +41,7 @@ import { OpcaoItemComponent } from "../../../../utils/components/dropdown-com-fi
     OpcaoItemComponent
 ]
 })
-export class ObjetoCadastroComponent implements OnInit {
+export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
 
     @ViewChildren(CadastroExercicioComponent) cadastroExercicios : QueryList<CadastroExercicioComponent>;
 
@@ -91,6 +91,8 @@ export class ObjetoCadastroComponent implements OnInit {
     @ViewChild('inNome') inNome: NgModel;
 
     objeto : IObjeto = {
+        tipoConta: "Investimento",
+        tipo: "Projeto",
         recursosFinanceiros: [],
         conta: {}
     }
@@ -110,36 +112,8 @@ export class ObjetoCadastroComponent implements OnInit {
             }
         ]
 
-        this.route.params.pipe(tap(params => {
-            let objetoId = params['objetoId'];
-
-            if(!objetoId) return;
-
-            this.objetoService.getById(objetoId).pipe(tap(
-                obj => {
-
-                    this.objeto = obj;
-
-                    let nome = `${obj.conta.unidadeOrcamentariaImplementadora.sigla} - Objeto - ${obj.id.split(':')[2]}`;
-
-                    this.dataUtil.setTitleInfo('objetoId', nome);
-
-                    this.objetoCadastro.controls.microregiaoAtendida.setValue(
-                        this.objeto.microregiaoAtendida ? 
-                        this.microregioes.find(value => value.id == this.objeto.microregiaoAtendida.id)
-                        : null
-                    );
-
-                    this.objetoCadastro.controls.unidade.setValue(obj.conta.unidadeOrcamentariaImplementadora);
-                    this.objetoCadastro.controls.planoOrcamentario.setValue(obj.conta.planoOrcamentario);
-                    
-                    this.objetoCadastro.controls.planos.setValue(
-                        this.tiposplano.filter(tipoItem => obj.planos.map( objTipoPlano => objTipoPlano.id).includes(tipoItem.id))
-                    );
-
-                }
-            )).subscribe()
-        })).subscribe();
+        this.objetoCadastro.controls.tipoConta.disable({onlySelf: true});
+        this.objetoCadastro.controls.tipo.disable({onlySelf: true});
 
         merge(
             this.unidadeService.getFromSigefes().pipe(
@@ -159,6 +133,47 @@ export class ObjetoCadastroComponent implements OnInit {
             )
         ).subscribe()
 
+    }
+
+    ngAfterViewInit(): void {
+        this.route.params.pipe(tap(params => {
+            let objetoId = params['objetoId'];
+
+            if(!objetoId) return;
+            this.objetoService.getById(objetoId).pipe(tap(
+                obj => {
+
+                    this.objeto = obj;
+
+                    let nome = `${obj.conta.unidadeOrcamentariaImplementadora.sigla} - Objeto - ${obj.id.split(':')[2]}`;
+
+                    this.dataUtil.setTitleInfo('objetoId', nome);
+
+                    this.objetoCadastro.controls.microregiaoAtendida.setValue(
+                        this.objeto.microregiaoAtendida ? 
+                        this.microregioes.find(value => value.id == this.objeto.microregiaoAtendida.id)
+                        : null
+                    );
+        
+                    this.objetoCadastro.controls.unidade.setValue(
+                        this.unidades.find(uni => uni.codigo == obj.conta.unidadeOrcamentariaImplementadora.codigo)
+                    );
+
+                    this.objetoCadastro.controls.planoOrcamentario.setValue(
+                        this.planosOrcamentario.find(plano => plano.codigo == obj.conta.planoOrcamentario?.codigo)
+                    );
+                    
+                    this.objetoCadastro.controls.planos.setValue(
+                        this.tiposplano.filter(tipoItem => obj.planos.map( objTipoPlano => objTipoPlano.id).includes(tipoItem.id))
+                    );
+
+                    this.objetoCadastro.controls.areaTematica.setValue(
+                        this.areasTematicas.find(area => obj.areaTematica?.id == area.id)
+                    );
+
+                }
+            )).subscribe()
+        })).subscribe();
     }
 
     setAreasTematicas (areaList : IAreaTematica[]) {
@@ -203,7 +218,7 @@ export class ObjetoCadastroComponent implements OnInit {
         } else {
             let objetoFinal : IObjeto = {
                 id: this.objeto.id,
-                ...this.objetoCadastro.value,
+                ...this.objetoCadastro.getRawValue(),
                 conta: {
                     planoOrcamentario: this.objetoCadastro.value.planoOrcamentario,
                     unidadeOrcamentariaImplementadora: this.objetoCadastro.value.unidade
