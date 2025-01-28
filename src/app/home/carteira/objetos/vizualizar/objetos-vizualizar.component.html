@@ -2,7 +2,7 @@
     <section>
         <header>
             <h2>Objeto</h2>
-            <button (click)="abrirEditar()" *ngIf="permissao.editar" ><fa-icon [icon]="editIcon"></fa-icon></button>
+            <button (click)="abrirEditar()" *ngIf="permissao?.editar" ><fa-icon [icon]="editIcon"></fa-icon></button>
         </header>
         <main class="objInfo">
             <div class="campo">
