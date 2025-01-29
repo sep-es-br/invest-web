@@ -49,8 +49,12 @@ export class ErrorHandlerService {
           sessionStorage.removeItem('token');
           this.router.navigateByUrl('login');
           break;
+        
+        case 501:
+          this.toastr.warning(backEndError.mensagem);
+          break;
         default:
-          this.toastr.error("aconteceu um erro desconhecido, favor verificar a conexão com a internet ou falar com um Administrador");
+          this.toastr.error(backEndError.mensagem);
           break;
       }
     

@@ -3,7 +3,7 @@ import { IPodeDTO } from "./PodeDto";
 import { ISetorDTO } from "./SetorDTO";
 
 export interface GrupoDTO {
-    id : string;
+    id? : string;
     icone : string;
     sigla : string;
     nome : string;

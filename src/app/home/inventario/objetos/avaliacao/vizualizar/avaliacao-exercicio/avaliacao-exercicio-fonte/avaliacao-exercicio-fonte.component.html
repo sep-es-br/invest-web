@@ -18,7 +18,7 @@
                 </dropdown-com-filtro>
                 <fa-icon [icon]="limparIcon" 
                         *ngIf="fonteValores.fonteOrcamentaria"
-                        (click)="setFonte(null)"></fa-icon>
+                        (click)="setFonte(undefined)"></fa-icon>
         </div>
         <input type="text" [(ngModel)]="fonteValores.previsto"
                 [ngModelOptions]="{standalone: true}"

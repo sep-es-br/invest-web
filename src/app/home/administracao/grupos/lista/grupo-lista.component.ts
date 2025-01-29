@@ -11,6 +11,8 @@ import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { IPodeDTO } from "../../../../utils/models/PodeDto";
 import { concat, Observable } from "rxjs";
 import { PermissaoService } from "../../../../utils/services/permissao.service";
+import { ToastService } from "../../../../utils/services/toast.service";
+import { ToastrService } from "ngx-toastr";
 
 @Component({
     standalone: true,
@@ -34,8 +36,12 @@ export class GrupoListaComponent implements AfterViewInit{
 
     permissao : IPodeDTO
 
-    constructor(private service : GrupoService, private router : Router,
-            private permissaoService : PermissaoService, private acivatedRoute : ActivatedRoute
+    constructor(
+        private service : GrupoService, 
+        private router : Router,
+        private permissaoService : PermissaoService, 
+        private acivatedRoute : ActivatedRoute,
+        private toastr : ToastrService
     ){}
 
     ngAfterViewInit(): void {
@@ -65,9 +71,9 @@ export class GrupoListaComponent implements AfterViewInit{
             this.service.save(novoGrupo).subscribe(grupoSalvo => {
                 if(grupoSalvo) {
                     this.atualizarLista(this.paginaAtual).subscribe();
-                    alert("Grupo salvo com sucesso!")
+                    this.toastr.success("Grupo salvo com sucesso!")
                 } else {
-                    alert("algum erro ao salvar grupo")
+                    this.toastr.error("Algum erro ao salvar grupo")
                 }
             });
             

@@ -11,6 +11,7 @@ import { ObjetoTiraDTO } from "../models/ObjetoTiraDTO";
 import { IObjetoFiltro } from "../interfaces/objetoFiltro.interface";
 import { IObjeto } from "../interfaces/IObjeto";
 import { ToastrService } from "ngx-toastr";
+import { IStatus } from "../interfaces/status.interface";
 
 @Injectable({providedIn: "root"})
 export class ObjetosService {
@@ -37,8 +38,26 @@ export class ObjetosService {
         );
     }
 
+    public getListaTiraObjetosEmProcessamento( filtro : IObjetoFiltro, pgAtual : number, tamPg : number ) : Observable<ObjetoTiraDTO[]> {
+
+        let params = this.objetoFilterToParams(filtro)
+                        .set("pgAtual", pgAtual)
+                        .set("tamPag", tamPg);
+        
+
+        return this.http.get<ObjetoTiraDTO[]>(`${this.objetoUrl}/allTiraEmProcessamento`, { params: params }).pipe(
+            catchError(err => this.errorHandlerService.handleError(err))
+        );
+    }
+
     public getQuantidadeItens( filtro : IObjetoFiltro) : Observable<number> {
         return this.http.get<number>(`${this.objetoUrl}/count`, {params: this.objetoFilterToParams(filtro)}).pipe(
+            catchError(err => this.errorHandlerService.handleError(err))
+        );
+    }
+
+    public getQuantidadeItensEmProcessamento( filtro : IObjetoFiltro) : Observable<number> {
+        return this.http.get<number>(`${this.objetoUrl}/countEmProcessameto`, {params: this.objetoFilterToParams(filtro)}).pipe(
             catchError(err => this.errorHandlerService.handleError(err))
         );
     }
@@ -66,16 +85,16 @@ export class ObjetosService {
             params = params.set("nome", filtro.nome)
 
         if(filtro.status) 
-            params = params.set("status", filtro.status)
+            params = params.set("statusId", filtro.status.id)
 
         if(filtro.unidade)
-            params = params.set("idUnidade", filtro.unidade.id)
+            params = params.set("unidadeId", filtro.unidade.id)
 
         if(filtro.plano)
             params = params.set("idPo", filtro.plano.id)
 
 
-        return params.set("exercicio", filtro.exercicio);
+        return params.set("ano", filtro.exercicio);
     }
 
     public investimentoFilterToParams(filtro : InvestimentoFiltro) : HttpParams {
@@ -104,8 +123,8 @@ export class ObjetosService {
         return params
     }
 
-    public findStatusCadastrados() : Observable<string[]>{
-        return this.http.get<string[]>(`${this.objetoUrl}/statusCadastrado`)
+    public findStatusCadastrados() : Observable<IStatus[]>{
+        return this.http.get<IStatus[]>(`${this.objetoUrl}/statusCadastrado`)
         .pipe(catchError(err => this.errorHandlerService.handleError(err)))
     }
 
@@ -118,7 +137,7 @@ export class ObjetosService {
                     err.status == HttpStatusCode.NoContent ||
                     err.status == HttpStatusCode.UnprocessableEntity
                 ) {
-                    this.toastr.error(err.error)
+                    this.toastr.error(err.error.mensagem)
                     return EMPTY;
                 }
 

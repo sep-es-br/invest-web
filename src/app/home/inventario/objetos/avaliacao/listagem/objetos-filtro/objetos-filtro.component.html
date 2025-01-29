@@ -1,0 +1,19 @@
+<form>
+    <select [(ngModel)]="filtro.etapa" [ngModelOptions]="{standalone: true}" (change)="atualizar()">
+        <option [ngValue]="undefined">Etapa</option>
+        <option [ngValue]="etapa"
+            *ngFor="let etapa of etapas">{{etapa.nome}}</option>
+    </select>
+    <select [(ngModel)]="filtro.status" [ngModelOptions]="{standalone: true}" (change)="atualizar()">
+        <option [ngValue]="undefined">Status</option>
+        <option [ngValue]="statusUni"
+            *ngFor="let statusUni of status">{{statusUni.nome}}</option>
+    </select>
+    <select [(ngModel)]="filtro.unidade" [ngModelOptions]="{standalone: true}" (change)="atualizar()">
+        <option [ngValue]="undefined">Unidade Orçamentária</option>
+        <option *ngFor="let unidade of unidades" [ngValue]="unidade">{{unidade.sigla}}</option>
+    </select>
+    <select [(ngModel)]="filtro.ano" [ngModelOptions]="{standalone: true}" (change)="atualizar()">
+        <option *ngFor="let ano of anos" [ngValue]="ano">{{ano}}</option>
+    </select>
+</form>

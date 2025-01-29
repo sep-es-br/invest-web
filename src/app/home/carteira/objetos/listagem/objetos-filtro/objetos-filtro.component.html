@@ -1,8 +1,8 @@
 <dropdown-filtro (valueChange)="update()">
-    <p display>{{filtro.status ? filtro.status : "Status"}}</p>
+    <p display>{{filtro.status ? filtro.status.nome : "Status"}}</p>
 
     <p item (click)="filtro.status = null">Status</p>
-    <p item *ngFor="let s of status" (click)="filtro.status = s">{{s}}</p>
+    <p item *ngFor="let s of status" (click)="filtro.status = s">{{s.nome}}</p>
 </dropdown-filtro>
 
 <dropdown-filtro (valueChange)="update()" [disabled]="!podeVerUnidades" >

@@ -1,0 +1,20 @@
+<header>
+    <div>
+        <fa-icon [icon]="removerIcon" 
+            class="remover"
+            (click)="onRemover.emit(exercicio)"></fa-icon>
+    </div>
+    <h4>Exercício <span>{{exercicio.anoExercicio}}</span></h4>
+    <h4>Previsto</h4>
+    <h4>Contratado</h4>
+</header>
+<main>
+    <spo-avaliacao-exercicio-fonte 
+        *ngFor="let fonte of exercicio.indicadaPor, index as i"
+        [fonteValores]="fonte"
+        [lastElem]="i == exercicio.indicadaPor.length-1"
+        (alterado)="getAlterado($event)"
+        (onRemover)="removerFonte($event)"
+        (onAdd)="exercicio.indicadaPor.push({fonteOrcamentaria: null})"
+        ></spo-avaliacao-exercicio-fonte>
+</main>

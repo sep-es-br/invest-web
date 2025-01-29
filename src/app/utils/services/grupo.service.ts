@@ -37,8 +37,19 @@ export class GrupoService {
 
     }
 
+    public findAllBy(nome : string) : Observable<GrupoDTO[]> {
+
+        let params = new HttpParams;
+
+        if(nome)
+            params = params.set("nome", nome)
+
+        return this.http.get<GrupoDTO[]>(`${this.grupoUrl}`, { params: params })
+        .pipe(catchError(err => this.errorHandler.handleError(err)));
+    }
+
     public findById(idGrupo : string) {
-        return this.http.get<GrupoDTO>(`${this.grupoUrl}/`, {params: {grupoId: idGrupo}})
+        return this.http.get<GrupoDTO>(`${this.grupoUrl}`, {params: {grupoId: idGrupo}})
             .pipe(catchError(err => {
                 let backendError = err.error as IHttpError;
 

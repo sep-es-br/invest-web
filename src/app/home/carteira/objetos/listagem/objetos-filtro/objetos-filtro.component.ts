@@ -10,6 +10,8 @@ import { InfosService } from "../../../../../utils/services/infos.service";
 import { PlanoOrcamentarioService } from "../../../../../utils/services/planoOrcamentario.service";
 import { PermissaoService } from "../../../../../utils/services/permissao.service";
 import { ObjetosService } from "../../../../../utils/services/objetos.service";
+import { IStatus } from "../../../../../utils/interfaces/status.interface";
+import { StatusService } from "../../../../../utils/services/status.service";
 
 @Component({
     selector: "spo-objetos-filtro",
@@ -28,7 +30,7 @@ export class ObjetosFiltroComponent implements AfterViewInit {
     unidades : UnidadeOrcamentariaDTO[];
     anos : number[];
     planos : PlanoOrcamentarioDTO[];
-    status : string[];
+    status : IStatus[];
 
     planoSemPlano : PlanoOrcamentarioDTO = {
         nome: 'Sem P.O.',
@@ -43,7 +45,7 @@ export class ObjetosFiltroComponent implements AfterViewInit {
         private planoService: PlanoOrcamentarioService,
         private unidadeService: UnidadeOrcamentariaService,
         private permissaoService : PermissaoService,
-        private objetoService : ObjetosService
+        private statusService : StatusService
     ){}
 
     update() {
@@ -70,7 +72,7 @@ export class ObjetosFiltroComponent implements AfterViewInit {
                     .pipe(tap((planoList) => {
                         this.planos = planoList;
                     })),
-                    this.objetoService.findStatusCadastrados()
+                    this.statusService.findAll()
                     .pipe(tap(statusList => {
                         this.status = statusList;
                     }))

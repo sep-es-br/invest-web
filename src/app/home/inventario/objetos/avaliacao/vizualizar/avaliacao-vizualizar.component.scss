@@ -1,0 +1,226 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    padding-block: 3rem;
+    font-family: var(--fonte-open-sans);
+    color: var(--cor-primaria);
+
+    > header {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 3rem;
+
+        div.fluxo {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            > div {
+                flex-grow: 1;
+
+                div.label {
+                    font-weight: bolder;
+                }
+
+                div.valor {
+                    color: #6e7484;
+                }
+
+            }
+
+            fa-icon {
+                margin-inline: 1rem;
+                color: #aaaaaa;
+                font-size: larger;
+                font-weight: bolder;
+            }
+        }
+
+        svg.timeline {
+
+            g {
+    
+                circle.status0 {
+                    fill: green;
+                }
+    
+                circle.status1 {
+                    fill: orange;
+                }
+    
+                circle.status2 {
+                    fill: gray;
+                }
+
+                text {
+                    font-family: var(--fonte-open-sans);
+                    font-weight: 100;
+                    
+                    &.status0 {
+                        stroke: green;
+                    }
+                    
+                    &.status1 {
+                        stroke: orange;
+                    }
+
+                    &.status2 {
+                        stroke: gray;
+                    }
+
+                }
+
+            }
+            
+            line {
+                stroke-width: 4;
+
+                &.status0 {
+                    stroke: green;
+                }
+
+                &.status1 {
+                    stroke: orange;
+                }
+
+                &.status2 {
+                    stroke: gray;
+                }
+            }
+
+
+        }
+    }
+
+    > main {
+        background-color: white;
+        border-radius: 0.5rem;
+        box-shadow: var(--sombra-padrao);
+        width: 100%;
+        box-sizing: border-box;
+        padding: 4rem;
+
+        header {
+            padding-bottom: 0.5rem;
+            color: var(--cinza-escuro);
+            border-bottom: 1px #d7d7d7 solid;
+            font-size: large;
+        }
+
+        main {
+            padding-top: 1rem;
+
+            form {
+                margin-bottom: 1.5rem;
+                display: grid;
+                grid-template-columns: max-content auto;
+                grid-template-rows: repeat(10, 2rem);
+                gap: 1rem;
+
+                label {
+                    display: flex;
+                    align-items: center;
+
+                    span.obrigatorio {
+                        color: red;
+                        padding-left: 0.2rem;
+                    }
+                }
+
+                select, input {
+                    border: var(--cor-primaria) solid 1px;
+                    border-radius: 4px;
+                    color: var(--cor-primaria);
+                    outline: none;
+                    padding-left: 1rem;
+
+                    &::placeholder {
+                        color: var(--cor-primaria);
+                    }
+
+                }
+
+                div {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    dropdown-com-filtro {
+                        flex-grow: 1;
+                    }
+
+                    fa-icon {
+                        margin-left: 0.5rem;
+                        color: red;
+                    }
+                }
+
+                dropdown-com-filtro{
+                    border: var(--cor-primaria) solid 1px;
+                    border-radius: 4px;
+                    height: 100%;
+                    padding-left: 1rem;
+                    padding-right: 1rem;
+                    
+                }
+
+                .invalido {
+                    border-color: red;
+                    color: red;
+                }
+
+                spo-checkbox {
+                    align-self: center;
+                }
+                
+            }
+
+            .recursos {
+                header {
+
+                    padding-bottom: 0.5rem;
+                    margin-bottom: 1rem;
+                    border-bottom: 1px #d7d7d7 solid;
+                    display: flex;
+
+                    h4 {
+                        color: var(--cinza-escuro);
+                        font-size: large;
+                        font-weight: unset;
+                        flex-grow: 1;
+                    }
+
+                    fa-icon {
+                        color: green;
+                    }
+                }
+                
+
+                spo-cadastro-exercicio {
+                    margin-left: 1rem;
+                }
+            }
+
+            .acoes {
+                margin-top: 1rem;
+                display: flex;
+                justify-content: flex-end;
+                button.acao {
+                    padding: 8px;
+                    margin-left: 1rem;
+                    color: white;
+                    border: none;
+                    border-radius: 4px;
+
+                    &.positivo {
+                        background-color: green;
+                    }
+
+                    &.negativo {
+                        background-color: red;
+                    }
+                }
+            }
+
+        }
+    }
+}

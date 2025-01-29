@@ -1,0 +1,136 @@
+<header>
+    <div class="fluxo">
+        <div class="nome">
+            <div class="label">Fluxo</div>
+            <div class="valor">{{fluxo?.nome}}</div>
+        </div>
+        <fa-icon [icon]="setaDireita"></fa-icon>
+        <div class="grupo">
+            <div class="label">Grupo</div>
+            <div class="valor">{{objeto.emEtapa?.etapa.grupoResponsavel.nome}}-{{objeto.emEtapa?.etapa.grupoResponsavel.sigla}}</div>
+        </div>
+        <fa-icon [icon]="setaDireita"></fa-icon>
+        <div class="grupo">
+            <div class="label">Atividade</div>
+            <div class="valor">{{objeto.emEtapa?.atividade}}</div>
+        </div>
+    </div>
+    <svg class="timeline" viewBox="-50 0 1500 100" width="100%" >
+        <line *ngFor="let linha of linhas" [ngClass]="'status' + linha.status" [attr.x1]="linha.posInicial" [attr.x2]="linha.posFinal" y1="50%" y2="50%" ></line>
+        <circle r ="10" cy="50%" cx="-20" fill="green"></circle>
+        <g *ngFor="let status of etapasStatus">
+            <circle r="15" cy="50%" [attr.cx]="status.pos" [ngClass]="'status' + status.status"></circle>
+            <path [attr.d]="gerarPath(status.pos, status.status)" stroke="white" stroke-width="3" fill="none"></path>
+            <text [ngClass]="'status' + status.status" y="85%" [attr.x]="status.pos" text-anchor="middle">{{status.etapa.ordem}}. {{status.etapa.nome}}</text>
+        </g>
+        <circle r ="10" cy="50%" cx="1420" fill="gray"></circle>
+    </svg>
+</header>
+<main>
+    <header>
+        Solicitação
+    </header>
+    <main>
+        <form [formGroup]="objetoCadastro">
+
+            <label for="inConta">Tipo da Despesa:<span class="obrigatorio">*</span></label>
+            <select id="inConta" formControlName="tipoConta" [(ngModel)]="objeto.tipoConta"
+                [ngClass]="(checado && objetoCadastro.controls.tipoConta.errors !== null) ? 'invalido' : ''">
+                <option [ngValue]="undefined" disabled>Selecionar o tipo da despesa</option>
+                <option value="Investimento">Investimento</option>
+                <option value="Custeio">Outras Desp. Correntes</option>
+            </select>
+
+            <label for="inTipo">Tipo de Objeto <span class="obrigatorio">*</span></label>
+            <select id="inTipo" formControlName="tipo" [(ngModel)]="objeto.tipo"
+                [ngClass]="(checado && objetoCadastro.controls.tipo.errors !== null) ? 'invalido' : ''">
+                <option [ngValue]="undefined">Selecionar o tipo de objeto</option>
+                <option ngValue="Projeto">Projeto</option>
+                <option ngValue="Entrega">Entrega</option>
+            </select>
+            
+            <label for="inNome">Nome <span class="obrigatorio">*</span></label>
+            <input type="text" id="inNome" formControlName="nome" [(ngModel)]="objeto.nome"
+                placeholder="Insira um nome"
+                [ngClass]="(checado && objetoCadastro.controls.nome.errors !== null) ? 'invalido' : ''"/>
+
+            <label for="inDescricao">Descrição <span class="obrigatorio">*</span></label>
+            <input type="text" id="inDescricao" formControlName="descricao" [(ngModel)]="objeto.descricao"
+                placeholder="Insira uma descrição"
+                [ngClass]="(checado && objetoCadastro.controls.descricao.errors !== null) ? 'invalido' : ''">
+            
+            <label>Unidade Orçamentária <span class="obrigatorio">*</span></label>
+            <dropdown-com-filtro (onFilterChange)="filtrarUnidades($event)"
+                [ngClass]="(checado && objetoCadastro.controls.unidade.errors !== null) ? 'invalido' : ''"
+                formControlName="unidade" [(ngModel)]="objeto.conta.unidadeOrcamentariaImplementadora" >
+                <spo-opcao-item [value]="undefined" text="Selecionar unidade orçamentária"></spo-opcao-item>
+                <spo-opcao-item *ngFor="let unidade of unidadesFiltrados" [value]="unidade" [text]="unidade.codigo + '-' + unidade.sigla"></spo-opcao-item>
+            </dropdown-com-filtro>
+            
+            <label>Plano Orçamentário</label>
+            <div>
+                <dropdown-com-filtro (onFilterChange)="filtrarPlanos($event)"
+                    formControlName="planoOrcamentario" [(ngModel)]="objeto.conta.planoOrcamentario">
+
+                    <spo-opcao-item [value]="undefined" text="Selecionar plano orçamentário"></spo-opcao-item>
+                    <spo-opcao-item *ngFor="let plano of planosFiltrados" [value]="plano" [text]="plano.codigo + '-' + plano.nome"></spo-opcao-item>
+                    
+                    
+                </dropdown-com-filtro>
+                <fa-icon [icon]="limparIcon" 
+                    *ngIf="objetoCadastro.value?.planoOrcamentario"
+                    (click)="objetoCadastro.controls.planoOrcamentario.setValue(null)"></fa-icon>
+            </div>
+            
+            <label for="inMicroregiao">Microrregião Atendida <span class="obrigatorio">*</span></label>
+            <select id="inMicroregiao" formControlName="microregiaoAtendida" [(ngModel)]="objeto.microregiaoAtendida"
+                [ngClass]="(checado && objetoCadastro.controls.microregiaoAtendida.errors !== null) ? 'invalido' : ''">
+                <option [ngValue]="undefined">Selecionar microrregião</option>
+                <option *ngFor="let microregiao of microregioes" [ngValue]="microregiao">{{microregiao.nome}}</option>
+            </select>
+            
+            <label for="inAreaTematica">Área Temática </label>
+            <select id="inAreaTematica" formControlName="areaTematica" [(ngModel)]="objeto.areaTematica">
+                <option [ngValue]="undefined">Selecionar a área temática</option>
+                <option *ngFor="let area of areasTematicas" [ngValue]="area">{{area.nome}}</option>
+            </select>
+
+            <label for="inInfoComplementar">Informações Complementares <span class="obrigatorio">*</span></label>
+            <input type="text" id="inInfoComplementar" formControlName="infoComplementares"
+                [(ngModel)]="objeto.infoComplementares" placeholder="Insira as Informações Complementares"
+                [ngClass]="(checado && objetoCadastro.controls.infoComplementares.errors !== null) ? 'invalido' : ''">
+
+            <label for="inContrato">Contrato</label>
+            <input type="text" id="inContrato" formControlName="contrato"
+                [(ngModel)]="objeto.contrato" placeholder="Insira o codigo ou numero do contrato">
+            
+            <label>Tipos de Plano(s):</label>
+            <spo-multSelect-dropdown formControlName="planos" [(ngModel)]="objeto.planos" placeHolder="Selecione os tipos de plano">
+                <spo-multSelect-dropdown-item *ngFor="let item of tiposplano"
+                    [value]="item" >
+                    {{item.nome}} - {{item.sigla}}
+                </spo-multSelect-dropdown-item>
+            </spo-multSelect-dropdown>
+        </form>
+        
+        <div class="recursos">
+            <header>
+                <h4>Valores</h4>
+                <fa-icon [icon]="addIcon" (click)="addExercicio()" ></fa-icon>
+            </header>
+            <spo-avaliacao-exercicio 
+                [exercicio]="exercicio" 
+                *ngFor="let exercicio of objeto.recursosFinanceiros, index as i"
+                [lastElem]="i === objeto.recursosFinanceiros.length-1"
+                (onRemover)="removerExercicio($event)"></spo-avaliacao-exercicio>
+        </div>
+        <div class="acoes" *ngIf="executaAcao">
+            
+            <button *ngFor="let acao of objeto.emEtapa.etapa.acoes"
+                class="acao" [ngClass]="acao.positivo ? 'positivo' : 'negativo'" (click)="executarAcao(acao)">
+                <fa-icon [icon]="acao.positivo ? positivoIcon : negativoIcon"></fa-icon>
+                {{acao.nome}}
+            </button>
+        </div>
+    </main>
+</main>
