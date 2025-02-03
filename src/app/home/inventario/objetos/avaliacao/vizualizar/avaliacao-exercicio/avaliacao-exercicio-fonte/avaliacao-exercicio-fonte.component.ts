@@ -1,7 +1,7 @@
 import { CommonModule } from "@angular/common";
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { IFonteExercicio } from "../../fonte-exercicio.interface";
-import { FormsModule } from "@angular/forms";
+import { FormControl, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { NgxMaskDirective, provideNgxMask } from "ngx-mask";
 import { tap } from "rxjs";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
@@ -10,13 +10,17 @@ import { OpcaoItemComponent } from "../../../../../../../utils/components/dropdo
 import { FonteOrcamentariaDTO } from "../../../../../../../utils/models/FonteOrcamentariaDTO";
 import { FonteOrcamentariaService } from "../../../../../../../utils/services/fonteOrcamentaria.service";
 import { DropdownFiltroComponent } from "../../../../../../../utils/components/dropdown-com-filtro/dropdown-com-filtro.component";
+import { NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent } from "@ng-select/ng-select";
+import { ISelectOpcao } from "../../../../../../../utils/interfaces/selectOption.interface";
 
 @Component({
     selector: "spo-avaliacao-exercicio-fonte",
     standalone: true, 
     templateUrl: "./avaliacao-exercicio-fonte.component.html",
     styleUrl: "./avaliacao-exercicio-fonte.component.scss",
-    imports: [CommonModule, FormsModule, NgxMaskDirective, FontAwesomeModule, DropdownFiltroComponent, OpcaoItemComponent],
+    imports: [CommonModule, NgxMaskDirective, FontAwesomeModule, ReactiveFormsModule, DropdownFiltroComponent, OpcaoItemComponent,
+        FormsModule, NgSelectComponent, NgLabelTemplateDirective, NgOptionTemplateDirective
+    ],
     providers: [provideNgxMask()]
 })
 export class AvaliacaoExercicioFonteComponent implements OnInit {
@@ -32,8 +36,7 @@ export class AvaliacaoExercicioFonteComponent implements OnInit {
     @Output() onRemover = new EventEmitter<IFonteExercicio>();
     @Output() onAdd = new EventEmitter<never>();
 
-    fontes : FonteOrcamentariaDTO[] = [];
-    fontesFiltrados : FonteOrcamentariaDTO[] = [];
+    optionsFontes : ISelectOpcao<FonteOrcamentariaDTO>[];
 
     public valido = false;
     public checado = false;
@@ -42,21 +45,27 @@ export class AvaliacaoExercicioFonteComponent implements OnInit {
         private fonteService : FonteOrcamentariaService
     ) {}
 
-    filtrarFonte(filtro : string) {
-        this.fontesFiltrados = this.fontes.filter(fonte => fonte.codigo.includes(filtro) || fonte.nome.toUpperCase().includes(filtro.toUpperCase()))
-    }
 
     setFontes(fontList: FonteOrcamentariaDTO[]) {
-        this.fontes = fontList;
-        if(this.fonteValores.fonteOrcamentaria)
-            this.fonteValores.fonteOrcamentaria = this.fontes.find(f => f.codigo == this.fonteValores.fonteOrcamentaria.codigo);
-        this.filtrarFonte("");
+
+        this.optionsFontes = [];
+
+        this.optionsFontes.push(...fontList.map(fonte => {
+            return {
+                label: `${fonte.codigo} - ${fonte.nome}`,
+                value: fonte
+            }
+        }))
+
+        this.fonteValores.fonteOrcamentaria = this.optionsFontes.find(opt => this.selecionarFonte(opt, this.fonteValores.fonteOrcamentaria) ).value
     }
 
-    setFonte(fonte : FonteOrcamentariaDTO) {
-        this.fonteValores.fonteOrcamentaria = this.fontes.find(f => f.codigo == fonte.codigo);
-        if(this.checado)
-            this.validar()
+    selecionarFonte(option : ISelectOpcao<FonteOrcamentariaDTO>, model : FonteOrcamentariaDTO) : boolean {
+        return option.value?.codigo === model.codigo
+    }
+
+    filtrar(term : string, item : ISelectOpcao<any>) : boolean {
+        return item.label.toUpperCase().includes(term.toUpperCase());
     }
 
     ngOnInit(): void {

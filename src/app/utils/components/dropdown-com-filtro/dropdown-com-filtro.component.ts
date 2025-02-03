@@ -32,10 +32,11 @@ export class DropdownFiltroComponent implements OnInit, AfterContentInit, Contro
     evtEmitterOnChange = new EventEmitter<any>();
 
     @Input() public disabled : boolean;
-    @Input() placeHolder : string
+    @Input() placeHolder : string;
+    @Input() equals : (v1 : any, v2: any) => boolean = (v1, v2) => v1 == v2;
 
     onChange : (value: any) => void;
-    onTouched : (value: any) => void;
+    onTouched : () => void;
 
     statusIndicador = faChevronLeft;
 
@@ -86,16 +87,23 @@ export class DropdownFiltroComponent implements OnInit, AfterContentInit, Contro
     }
 
     updateValue(){
-        this.selectedOption = this.opcoesElem?.find(opcao => opcao.value == this.value)
+        this.updateValueWith(this.opcoesElem);
+    }
+
+    updateValueWith(list :  QueryList<OpcaoItemComponent>){
+        this.selectedOption = list?.find(opcao => this.equals(opcao.value, this.value));
+        if(this.onChange) this.onChange(this.value)
     }
 
     ngAfterContentInit(): void {
         this.opcoesElem.changes.subscribe((qList : QueryList<OpcaoItemComponent>) => {
             
-            this.selectedOption = qList.find(opcao => opcao.value == this.value)
+            this.value = qList.find(item => this.equals(item, this.value))?.value
+            this.updateValueWith(qList);
             qList.forEach(opcao => {
                 opcao.onSelect = (v : any) => {
                     this.selectedOption = opcao;
+                    this.value = v;
                     this.onChange(v);
                 }
             })

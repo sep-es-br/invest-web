@@ -20,31 +20,56 @@
             }
         }
 
-        div.fonte {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
+        ::ng-deep .ng-select {
+                
             flex-grow: 1;
-            padding-left: 1rem;
-            padding-right: 1rem;
+            .ng-select-container {
+                border-color: #0000 #0000 var(--cor-primaria) #0000;
+                color: var(--cor-primaria);
+
+                .ng-placeholder {
+                    color: var(--cor-primaria);
+                }
+
+                .ng-clear-wrapper {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 18px;
+                    height: 18px;
+                    border-radius: 18px;
+                    color: white;
+                    background-color: red;
+
+                }
+
+                .ng-arrow-wrapper .ng-arrow {
+                    border-color: var(--cor-primaria) rgba(0, 0, 0, 0) rgba(0, 0, 0, 0)
+                }
 
 
-            dropdown-com-filtro {
-                border-bottom: var(--cor-primaria) solid 1px;
-                padding-left: 0.5rem;
-                padding-right: 0.5rem;
-                height: 100%;
-                flex-grow: 1;
+            }
 
-                &.invalido {
-                    border-color: red;
-                    color: red;
+            ng-dropdown-panel {
+                .ng-option {
+                    color: var(--cor-primaria);
+
+                    &:hover {
+                        color: white;
+                        background-color: var(--cor-primaria);
+                    }
                 }
             }
 
-            fa-icon {
-                margin-left: 0.5rem;
-                color: red;
+            &.ng-select-opened{
+                > .ng-select-container {
+                        
+                    .ng-arrow-wrapper .ng-arrow {
+                        border-color:  rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) var(--cor-primaria);
+                    }
+
+
+                }
             }
         }
 
@@ -57,27 +82,22 @@
             }
             
         }
-        
-        select {
-            flex-grow: 1;
-        }
 
         input {
-            width: 10rem;
-
-            &::placeholder {
-                color: var(--cor-primaria);
-            }
-        }
-
-        select, input {
-            margin: 1rem;
-            margin-left: 0.5rem;
+            
+            box-sizing: border-box;
+            margin: 1rem 1rem 0 1rem;
+            border-radius: 4px;
             border: unset;
             border-bottom: var(--cor-primaria) solid 1px;
             color: var(--cor-primaria);
 
             outline: none;
+            width: 10rem;
+
+            &::placeholder {
+                color: var(--cor-primaria);
+            }
 
         }
     }

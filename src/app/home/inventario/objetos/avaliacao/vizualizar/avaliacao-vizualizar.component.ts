@@ -33,14 +33,17 @@ import { GrupoService } from "../../../../../utils/services/grupo.service";
 import { IAcao } from "../../../../../utils/interfaces/acao.interface";
 import { IExecutarAcao } from "../../../../../utils/interfaces/executar-acao.interface";
 import { AcaoService } from "../../../../../utils/services/acao.service";
+import { NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
+import { ISelectOpcao } from "../../../../../utils/interfaces/selectOption.interface";
 
 @Component({
     standalone: true,
     templateUrl: "./avaliacao-vizualizar.component.html",
     styleUrl: "./avaliacao-vizualizar.component.scss",
     imports: [CommonModule, FontAwesomeModule, AvaliacaoExercicioComponent,
-    MultSelectDropDownComponent, MultiSelectDropdownItemComponent,
-    ReactiveFormsModule, FormsModule, OpcaoItemComponent, DropdownFiltroComponent]
+    MultSelectDropDownComponent, MultiSelectDropdownItemComponent, NgSelectComponent,
+    ReactiveFormsModule, FormsModule, OpcaoItemComponent, DropdownFiltroComponent,
+    NgLabelTemplateDirective, NgOptionTemplateDirective]
 })
 export class AvaliacaoVizualizarComponent implements AfterViewInit {
 
@@ -67,7 +70,9 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
     executaAcao = false;
 
     unidades : UnidadeOrcamentariaDTO[];
+    opcoesUnidades : ISelectOpcao<UnidadeOrcamentariaDTO>[]
     planosOrcamentario : PlanoOrcamentarioDTO[];
+    opcoesPlanosOrcamentarios : ISelectOpcao<PlanoOrcamentarioDTO>[]
     microregioes : LocalidadeDTO[];
     tiposplano : ITipoPlano[];
     areasTematicas : IAreaTematica[];
@@ -193,27 +198,45 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
     }
 
     setPlanos (planoList : PlanoOrcamentarioDTO[]) {
-        this.planosOrcamentario = planoList;
-        this.objetoCadastro.controls.planoOrcamentario.setValue(
-            this.planosOrcamentario.find(plano => plano.codigo == this.objeto.conta.planoOrcamentario?.codigo)
-        );
-        this.filtrarPlanos("");
+        this.opcoesPlanosOrcamentarios = planoList.map(
+            plano => { return {
+                label: plano.codigo + ' - ' + plano.nome,
+                value: plano
+            }}
+        )   
+
+        // em teoria não seria nescessario essa linha, mas o select ta bugado, então...
+        this.objeto.conta.planoOrcamentario = this.opcoesPlanosOrcamentarios.find(opt => this.selecionarPlanoOrcamentario(opt, this.objeto.conta.planoOrcamentario) )?.value
+        
     }
 
     filtrarPlanos(filtro : string) {
         this.planosFiltrados = this.planosOrcamentario.filter(plano => plano.nome.toUpperCase().includes(filtro.toUpperCase()) || plano.codigo.includes(filtro)); 
     }
 
-    setUnidades(unidadeList : UnidadeOrcamentariaDTO[]){
-        this.unidades = unidadeList;
-        this.objetoCadastro.controls.unidade.setValue(
-            this.unidades.find(uni => uni.codigo == this.objeto.conta.unidadeOrcamentariaImplementadora?.codigo)
-        );
-        this.filtrarUnidades("");
+    selecionarUnidade(option : ISelectOpcao<UnidadeOrcamentariaDTO>, model : UnidadeOrcamentariaDTO) : boolean {
+        return option.value?.codigo === model?.codigo
     }
 
-    filtrarUnidades(filtro : string) {
-        this.unidadesFiltrados = this.unidades.filter(unidade => unidade.sigla.toUpperCase().includes(filtro.toUpperCase()) || unidade.codigo.includes(filtro)); 
+    selecionarPlanoOrcamentario(option : ISelectOpcao<PlanoOrcamentarioDTO>, model : PlanoOrcamentarioDTO) : boolean {
+        return option.value?.codigo === model?.codigo
+    }
+
+    setUnidades(unidadeList : UnidadeOrcamentariaDTO[]){
+        
+        this.opcoesUnidades = unidadeList.map(unidade => {
+            return {
+                label: unidade.codigo + ' - ' + unidade.sigla,
+                value: unidade
+            }
+        })
+
+        // em teoria não seria nescessario essa linha, mas o select ta bugado, então...
+        this.objeto.conta.unidadeOrcamentariaImplementadora = this.opcoesUnidades.find(opt => this.selecionarUnidade(opt, this.objeto.conta.unidadeOrcamentariaImplementadora) )?.value
+    }
+
+    filtrar(term : string, item : ISelectOpcao<any>) : boolean {
+        return item.label.toUpperCase().includes(term.toUpperCase());
     }
 
     setTiposPlano(tipoPlanoList : ITipoPlano[]) {
@@ -296,14 +319,6 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                                 this.microregioes.find(value => value.id == this.objeto.microregiaoAtendida.id)
                                 : null
                             );
-                
-                            this.objetoCadastro.controls.unidade.setValue(
-                                this.unidades.find(uni => uni.codigo == objeto.conta.unidadeOrcamentariaImplementadora.codigo)
-                            );
-        
-                            this.objetoCadastro.controls.planoOrcamentario.setValue(
-                                this.planosOrcamentario.find(plano => plano.codigo == objeto.conta.planoOrcamentario?.codigo)
-                            );
                             
                             this.objetoCadastro.controls.planos.setValue(
                                 this.tiposplano.filter(tipoItem => objeto.planos.map( objTipoPlano => objTipoPlano.id).includes(tipoItem.id))
@@ -323,7 +338,9 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
 
     }
 
+
     executarAcao(acao : IAcao){
+
         let exercValidos = true;
 
         this.cadastroExercicios.forEach(
@@ -346,16 +363,20 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                 recursosFinanceiros: this.objeto.recursosFinanceiros
             };
 
+
             let executarAcaoDto : IExecutarAcao = {
                 acao: acao,
                 apontamentos: [],
                 objeto: objetoFinal
             }
+            console.log(executarAcaoDto);
 
             this.acaoService.executarAcao(executarAcaoDto).pipe(
                 tap(() => {
                     this.toastr.success("Acão de " + acao.nome + " executada com sucesso");
-                    this.recarregarFluxo();
+                    this.fluxoService.findWithEtapa(this.objeto.emEtapa.etapa.id).subscribe(
+                        fluxo => this.setFluxo(fluxo)
+                    );
                 })
             ).subscribe()
             
@@ -378,3 +399,4 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
 
 
 }
+

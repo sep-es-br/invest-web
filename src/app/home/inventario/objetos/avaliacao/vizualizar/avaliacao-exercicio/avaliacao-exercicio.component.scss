@@ -29,7 +29,9 @@
         h4 {
             font-weight: unset;
             font-family: inherit;
-            width: 13rem;
+            box-sizing: border-box;
+            margin: 1rem 2rem 0 2rem;
+            width: 10rem;
             text-align: center;
             span {
                 font-weight: bolder;

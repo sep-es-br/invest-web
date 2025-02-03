@@ -34,7 +34,8 @@
             ],
             "styles": [
               "src/styles.scss",
-              "node_modules/ngx-toastr/toastr.css"
+              "node_modules/ngx-toastr/toastr.css",
+              "@ng-select/ng-select/themes/default.theme.css"
             ],
             "scripts": []
           },

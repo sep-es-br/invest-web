@@ -60,27 +60,27 @@
                 [ngClass]="(checado && objetoCadastro.controls.descricao.errors !== null) ? 'invalido' : ''">
             
             <label>Unidade Orçamentária <span class="obrigatorio">*</span></label>
-            <dropdown-com-filtro (onFilterChange)="filtrarUnidades($event)"
-                [ngClass]="(checado && objetoCadastro.controls.unidade.errors !== null) ? 'invalido' : ''"
-                formControlName="unidade" [(ngModel)]="objeto.conta.unidadeOrcamentariaImplementadora" >
-                <spo-opcao-item [value]="undefined" text="Selecionar unidade orçamentária"></spo-opcao-item>
-                <spo-opcao-item *ngFor="let unidade of unidadesFiltrados" [value]="unidade" [text]="unidade.codigo + '-' + unidade.sigla"></spo-opcao-item>
-            </dropdown-com-filtro>
-            
+            <ng-select [(ngModel)]="objeto.conta.unidadeOrcamentariaImplementadora"
+                [items]="opcoesUnidades"
+                placeholder="Selecionar a unidade orçamentária"
+                bindLabel="label"
+                bindValue="value"
+                [compareWith]="selecionarUnidade"
+                [searchFn]="filtrar"
+                formControlName="unidade"
+                ></ng-select>            
+           
             <label>Plano Orçamentário</label>
-            <div>
-                <dropdown-com-filtro (onFilterChange)="filtrarPlanos($event)"
-                    formControlName="planoOrcamentario" [(ngModel)]="objeto.conta.planoOrcamentario">
+            <ng-select [(ngModel)]="objeto.conta.planoOrcamentario"
+                [items]="opcoesPlanosOrcamentarios"
+                placeholder="Selecionar plano orçamentário"
+                bindLabel="label"
+                bindValue="value"
+                [compareWith]="selecionarPlanoOrcamentario"
+                [searchFn]="filtrar"
+                formControlName="planoOrcamentario"
+                ></ng-select>
 
-                    <spo-opcao-item [value]="undefined" text="Selecionar plano orçamentário"></spo-opcao-item>
-                    <spo-opcao-item *ngFor="let plano of planosFiltrados" [value]="plano" [text]="plano.codigo + '-' + plano.nome"></spo-opcao-item>
-                    
-                    
-                </dropdown-com-filtro>
-                <fa-icon [icon]="limparIcon" 
-                    *ngIf="objetoCadastro.value?.planoOrcamentario"
-                    (click)="objetoCadastro.controls.planoOrcamentario.setValue(null)"></fa-icon>
-            </div>
             
             <label for="inMicroregiao">Microrregião Atendida <span class="obrigatorio">*</span></label>
             <select id="inMicroregiao" formControlName="microregiaoAtendida" [(ngModel)]="objeto.microregiaoAtendida"

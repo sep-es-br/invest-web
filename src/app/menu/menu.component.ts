@@ -35,29 +35,6 @@ export class MenuComponent implements OnInit{
 
     ngOnInit(): void {
     
-        // this.permissaoService.updateMenuSignal
-        //     .subscribe(
-        //         {
-        //             next: (value) => {
-        //                 console.log('NEXT (A REQUISICAO PASSOU)')
-        //                 console.log(value)
-
-        //                 this.permissaoService.buildMenu().subscribe(
-        //                     menuList => {
-        //                         this.itensMenu = menuList.filter(item => item.ativo);
-        //                     }
-        //                 )
-        //             },
-        //             error: (err) => {
-        //                 console.log('ERROR (DEU RUIM)')
-        //                 console.log(err)
-        //             },
-        //             complete: () => {
-        //                 console.log('COMPLETE (TERMINOU; INDEPENDENTE DE SUCESSO OU ERRO)')
-        //             }
-        //         }
-
-        //     )
         if(sessionStorage.getItem("user-profile")){
             this.permissaoService.updateMenuSignal.subscribe(
                 () => { 
