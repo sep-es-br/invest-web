@@ -9,6 +9,7 @@
         <div class="fonte">
                 <dropdown-com-filtro (onFilterChange)="filtrarFonte($event)"
                         [(ngModel)]="fonteValores.fonteOrcamentaria"
+                        [getValue]="selecionarFonte"
                         [ngModelOptions]="{standalone: true}"
                         [ngClass]="(checado && !valido) ? 'invalido' : ''">
                         

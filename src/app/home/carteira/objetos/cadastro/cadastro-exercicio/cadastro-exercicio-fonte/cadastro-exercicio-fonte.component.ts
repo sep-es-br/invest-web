@@ -71,4 +71,8 @@ export class CadastroExercicioFonteComponent implements OnInit {
 
         return this.valido;
     }
+
+    selecionarFonte(value1 : FonteOrcamentariaDTO, value2 : FonteOrcamentariaDTO) : boolean {
+        return value1?.codigo == value2?.codigo
+    }
 }

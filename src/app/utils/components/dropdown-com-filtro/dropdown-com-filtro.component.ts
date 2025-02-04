@@ -28,6 +28,8 @@ export class DropdownFiltroComponent implements OnInit, AfterContentInit, Contro
 
     @Output() public valueChange = new EventEmitter<never>();
     @Output() public onFilterChange = new EventEmitter<string>();
+    
+    @Input() public getValue : (value1 : any, value2 : any) => boolean = (value1, value2) => value1 == value2;
 
     evtEmitterOnChange = new EventEmitter<any>();
 

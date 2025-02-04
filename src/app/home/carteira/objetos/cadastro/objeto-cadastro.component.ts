@@ -10,7 +10,7 @@ import { IObjeto } from "../../../../utils/interfaces/IObjeto";
 import { ICusto } from "./exercicio-cadastro.interface";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faMinusCircle, faPlusCircle, faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
-import { concat, merge, tap } from "rxjs";
+import { concat, finalize, merge, tap } from "rxjs";
 import { UnidadeOrcamentariaService } from "../../../../utils/services/unidadeOrcamentaria.service";
 import { PlanoOrcamentarioService } from "../../../../utils/services/planoOrcamentario.service";
 import { DropdownFiltroComponent } from "../../../../utils/components/dropdown-com-filtro/dropdown-com-filtro.component";
@@ -131,49 +131,54 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
             this.planoService.getDoSigefes(null).pipe(
                 tap(planoList => this.setPlanos(planoList))
             )
-        ).subscribe()
+        ).pipe(finalize(() => {
+            this.route.params.pipe(tap(params => {
+                let objetoId = params['objetoId'];
+    
+                if(!objetoId) return;
+                this.objetoService.getById(objetoId).pipe(tap(
+                    obj => {
+    
+                        this.objeto = obj;
+    
+                        console.log(obj)
+    
+                        let nome = `${obj.conta.unidadeOrcamentariaImplementadora.sigla} - Objeto - ${obj.id.split(':')[2]}`;
+    
+                        this.dataUtil.setTitleInfo('objetoId', nome);
+    
+                        this.objetoCadastro.controls.microregiaoAtendida.setValue(
+                            this.objeto.microregiaoAtendida ? 
+                            this.microregioes.find(value => value.id == this.objeto.microregiaoAtendida.id)
+                            : null
+                        );
+            
+    
+                        this.objetoCadastro.controls.planoOrcamentario.setValue(
+                            this.planosOrcamentario.find(plano => plano.codigo == obj.conta.planoOrcamentario?.codigo)
+                        );
+                        
+                        this.objetoCadastro.controls.planos.setValue(
+                            this.tiposplano.filter(tipoItem => obj.planos.map( objTipoPlano => objTipoPlano.id).includes(tipoItem.id))
+                        );
+    
+                        this.objetoCadastro.controls.areaTematica.setValue(
+                            this.areasTematicas.find(area => obj.areaTematica?.id == area.id)
+                        );
+    
+                    }
+                )).subscribe()
+            })).subscribe();
+        })).subscribe()
 
     }
 
     ngAfterViewInit(): void {
-        this.route.params.pipe(tap(params => {
-            let objetoId = params['objetoId'];
-
-            if(!objetoId) return;
-            this.objetoService.getById(objetoId).pipe(tap(
-                obj => {
-
-                    this.objeto = obj;
-
-                    let nome = `${obj.conta.unidadeOrcamentariaImplementadora.sigla} - Objeto - ${obj.id.split(':')[2]}`;
-
-                    this.dataUtil.setTitleInfo('objetoId', nome);
-
-                    this.objetoCadastro.controls.microregiaoAtendida.setValue(
-                        this.objeto.microregiaoAtendida ? 
-                        this.microregioes.find(value => value.id == this.objeto.microregiaoAtendida.id)
-                        : null
-                    );
         
-                    this.objetoCadastro.controls.unidade.setValue(
-                        this.unidades.find(uni => uni.codigo == obj.conta.unidadeOrcamentariaImplementadora.codigo)
-                    );
+    }
 
-                    this.objetoCadastro.controls.planoOrcamentario.setValue(
-                        this.planosOrcamentario.find(plano => plano.codigo == obj.conta.planoOrcamentario?.codigo)
-                    );
-                    
-                    this.objetoCadastro.controls.planos.setValue(
-                        this.tiposplano.filter(tipoItem => obj.planos.map( objTipoPlano => objTipoPlano.id).includes(tipoItem.id))
-                    );
-
-                    this.objetoCadastro.controls.areaTematica.setValue(
-                        this.areasTematicas.find(area => obj.areaTematica?.id == area.id)
-                    );
-
-                }
-            )).subscribe()
-        })).subscribe();
+    selecionarUnidadeOrcamentaria(value1 : UnidadeOrcamentariaDTO, value2 : UnidadeOrcamentariaDTO) : boolean {
+        return value1?.codigo == value2?.codigo
     }
 
     setAreasTematicas (areaList : IAreaTematica[]) {

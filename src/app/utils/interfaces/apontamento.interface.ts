@@ -5,10 +5,19 @@ import { IProfile } from "./profile.interface";
 
 export interface IApontamento {
     id? : string;
-    timestamp : string;
+    timestamp? : string;
     texto : string;
-    etapa : IEtapa;
+    etapa? : IEtapa;
     campo : ICampo;
-    usuario : IProfile;
-    grupo : GrupoDTO;
+    usuario? : IProfile;
+    grupo? : GrupoDTO;
 }
+
+export const apontamentoPadrao : IApontamento = {
+    campo: {
+        nome: undefined,
+        campoId: undefined
+    },
+    texto: undefined
+}
+

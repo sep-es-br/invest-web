@@ -33,6 +33,7 @@
             
             <label>Unidade Orçamentária <span class="obrigatorio">*</span></label>
             <dropdown-com-filtro (onFilterChange)="filtrarUnidades($event)"
+                [getValue]="selecionarUnidadeOrcamentaria"
                 [ngClass]="(checado && objetoCadastro.controls.unidade.errors !== null) ? 'invalido' : ''"
                 formControlName="unidade" [(ngModel)]="objeto.conta.unidadeOrcamentariaImplementadora" >
                 <spo-opcao-item [value]="undefined" text="Selecionar unidade orçamentária"></spo-opcao-item>

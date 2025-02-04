@@ -2,7 +2,7 @@ import { CommonModule } from "@angular/common";
 import { AfterViewInit, Component, QueryList, ViewChildren } from "@angular/core";
 import { IObjeto } from "../../../../../utils/interfaces/IObjeto";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
-import { concat, merge, tap } from "rxjs";
+import { concat, finalize, merge, tap } from "rxjs";
 import { ToastrService } from "ngx-toastr";
 import { ObjetosService } from "../../../../../utils/services/objetos.service";
 import { DataUtilService } from "../../../../../utils/services/data-util.service";
@@ -35,6 +35,8 @@ import { IExecutarAcao } from "../../../../../utils/interfaces/executar-acao.int
 import { AcaoService } from "../../../../../utils/services/acao.service";
 import { NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
 import { ISelectOpcao } from "../../../../../utils/interfaces/selectOption.interface";
+import { ApontamentoModalComponent } from "./apontamento-modal/apontamento-modal.component";
+import { IApontamento } from "../../../../../utils/interfaces/apontamento.interface";
 
 @Component({
     standalone: true,
@@ -43,7 +45,7 @@ import { ISelectOpcao } from "../../../../../utils/interfaces/selectOption.inter
     imports: [CommonModule, FontAwesomeModule, AvaliacaoExercicioComponent,
     MultSelectDropDownComponent, MultiSelectDropdownItemComponent, NgSelectComponent,
     ReactiveFormsModule, FormsModule, OpcaoItemComponent, DropdownFiltroComponent,
-    NgLabelTemplateDirective, NgOptionTemplateDirective]
+    NgLabelTemplateDirective, NgOptionTemplateDirective, ApontamentoModalComponent]
 })
 export class AvaliacaoVizualizarComponent implements AfterViewInit {
 
@@ -57,6 +59,13 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
     }
 
     setaDireita = faChevronRight;
+
+    apontamentos : IApontamento[] = [
+        {
+            campo: undefined,
+            texto: undefined
+        }
+    ]
     
     addIcon = faPlusCircle;
     limparIcon = faXmarkCircle;
@@ -68,6 +77,8 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
     checado = false;
 
     executaAcao = false;
+
+    exibirModal = false;
 
     unidades : UnidadeOrcamentariaDTO[];
     opcoesUnidades : ISelectOpcao<UnidadeOrcamentariaDTO>[]
@@ -106,7 +117,9 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
         status: number,
         posInicial: number,
         posFinal: number
-    }[] = []
+    }[] = [];
+
+    acaoDoModal : IAcao;
 
 
     constructor(
@@ -126,6 +139,15 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
         private acaoService : AcaoService
     ){
         
+    }
+
+    fecharModal(){
+        this.exibirModal = false;
+    }
+
+    salvarApontamento(){
+        console.log('salvar');
+        console.log(this.apontamentos);
     }
 
     setFluxo(fluxo: IFluxo) {
@@ -276,65 +298,69 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
             this.planoService.getDoSigefes(null).pipe(
                 tap(planoList => this.setPlanos(planoList))
             )
-        ).subscribe();
-
-        this.route.params.pipe(
-            tap(params => {
-                let objetoId = params["objetoId"];
-                
-                if(!objetoId) {
-                    this.toastr.error("Id do objeto inexistente");
-                    this.router.navigate([".."], {relativeTo: this.route});
-                }
-
-                concat(
+        ).pipe(finalize(() => {
+            this.route.params.pipe(
+                tap(params => {
+                    let objetoId = params["objetoId"];
                     
-                    this.objetoService.getById(objetoId).pipe(
-                        tap(objeto => {
-                            this.objeto = objeto;
+                    if(!objetoId) {
+                        this.toastr.error("Id do objeto inexistente");
+                        this.router.navigate([".."], {relativeTo: this.route});
+                    }
+    
+                    concat(
+                        
+                        this.objetoService.getById(objetoId).pipe(
+                            tap(objeto => {
+                                this.objeto = objeto;
+    
+                                this.usuarioService.getUser().pipe(
+                                    tap(user => {
+                                        this.grupoService.findByUsuario(user.id).pipe(
+                                            tap(grupos => {
+                                                this.executaAcao = grupos.map(g => g.id).includes(this.objeto.emEtapa.etapa.grupoResponsavel.id)
+                                                                   || Boolean(user.role.find(funcao => funcao.nome === "GESTOR_MASTER"));
+                                            })
+                                        ).subscribe()
+                                    })
+                                ).subscribe()
+    
+                                this.fluxoService.findWithEtapa(this.objeto.emEtapa.etapa.id).subscribe(
+                                    fluxo => this.setFluxo(fluxo)
+                                );
+    
+                                if(objeto.emEtapa.etapa.acoes.find(acao => acao.acaoId === "INCLUIR_PO"))
+                                    this.objetoCadastro.controls.planoOrcamentario.addValidators(Validators.required);
+                                    this.objetoCadastro.controls.planoOrcamentario.updateValueAndValidity();
+    
+                                this.dataUtil.setTitleInfo("objetoId", this.objeto.nome);
+    
+                                this.objetoCadastro.controls.microregiaoAtendida.setValue(
+                                    this.objeto.microregiaoAtendida ? 
+                                    this.microregioes.find(value => value.id == this.objeto.microregiaoAtendida.id)
+                                    : null
+                                );
+                                
+                                this.objetoCadastro.controls.planos.setValue(
+                                    this.tiposplano.filter(tipoItem => objeto.planos.map( objTipoPlano => objTipoPlano.id).includes(tipoItem.id))
+                                );
+            
+                                this.objetoCadastro.controls.areaTematica.setValue(
+                                    this.areasTematicas.find(area => objeto.areaTematica?.id == area.id)
+                                );
 
-                            this.usuarioService.getUser().pipe(
-                                tap(user => {
-                                    this.grupoService.findByUsuario(user.id).pipe(
-                                        tap(grupos => {
-                                            this.executaAcao = grupos.map(g => g.id).includes(this.objeto.emEtapa.etapa.grupoResponsavel.id)
-                                                            //    || Boolean(user.role.find(funcao => funcao.nome === "GESTOR_MASTER"));
-                                        })
-                                    ).subscribe()
-                                })
-                            ).subscribe()
+                                this.acaoDoModal = objeto.emEtapa.etapa.acoes.find(acao => acao.positivo !== undefined && !acao.positivo)
+                                
+                            })
+                        )
+                    ).subscribe()
+                    
+    
+                })
+            ).subscribe()
+        })).subscribe();
 
-                            this.fluxoService.findWithEtapa(this.objeto.emEtapa.etapa.id).subscribe(
-                                fluxo => this.setFluxo(fluxo)
-                            );
-
-                            if(objeto.emEtapa.etapa.acoes.find(acao => acao.acaoId === "INCLUIR_PO"))
-                                this.objetoCadastro.controls.planoOrcamentario.addValidators(Validators.required);
-                                this.objetoCadastro.controls.planoOrcamentario.updateValueAndValidity();
-
-                            this.dataUtil.setTitleInfo("objetoId", this.objeto.nome);
-
-                            this.objetoCadastro.controls.microregiaoAtendida.setValue(
-                                this.objeto.microregiaoAtendida ? 
-                                this.microregioes.find(value => value.id == this.objeto.microregiaoAtendida.id)
-                                : null
-                            );
-                            
-                            this.objetoCadastro.controls.planos.setValue(
-                                this.tiposplano.filter(tipoItem => objeto.planos.map( objTipoPlano => objTipoPlano.id).includes(tipoItem.id))
-                            );
         
-                            this.objetoCadastro.controls.areaTematica.setValue(
-                                this.areasTematicas.find(area => objeto.areaTematica?.id == area.id)
-                            );
-                            
-                        })
-                    )
-                ).subscribe()
-                
-
-            })
-        ).subscribe()
 
     }
 
@@ -369,16 +395,18 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                 apontamentos: [],
                 objeto: objetoFinal
             }
-            console.log(executarAcaoDto);
-
-            this.acaoService.executarAcao(executarAcaoDto).pipe(
-                tap(() => {
-                    this.toastr.success("Acão de " + acao.nome + " executada com sucesso");
-                    this.fluxoService.findWithEtapa(this.objeto.emEtapa.etapa.id).subscribe(
-                        fluxo => this.setFluxo(fluxo)
-                    );
-                })
-            ).subscribe()
+            
+            if(acao.positivo){
+                this.acaoService.executarAcao(executarAcaoDto).pipe(
+                    tap(objeto => {
+                        this.toastr.success("Acão de " + acao.nome + " executada com sucesso");
+                        this.objeto = objeto;
+                        this.recarregarFluxo();
+                    })
+                ).subscribe();
+            } else {
+                this.exibirModal = true;
+            }
             
         }
 
