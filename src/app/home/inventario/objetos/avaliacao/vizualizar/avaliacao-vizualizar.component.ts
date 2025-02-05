@@ -9,7 +9,7 @@ import { DataUtilService } from "../../../../../utils/services/data-util.service
 import { IFluxo } from "../../../../../utils/interfaces/fluxo.interface";
 import { IEtapa } from "../../../../../utils/interfaces/etapa.interface";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
-import { faChevronRight, faPlusCircle, faThumbsDown, faThumbsUp, faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
+import { faChevronRight, faHandPointDown, faPlusCircle, faThumbsDown, faThumbsUp, faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
 import { FluxosService } from "../../../../../utils/services/fluxos.service";
 import { MultSelectDropDownComponent } from "../../../../../utils/components/multSelectDropDown/multSelect-dropdown.component";
 import MultiSelectDropdownItemComponent from "../../../../../utils/components/multSelectDropDown/multSelect-dropdown-item/multSelect-dropdown-item.component";
@@ -36,7 +36,8 @@ import { AcaoService } from "../../../../../utils/services/acao.service";
 import { NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
 import { ISelectOpcao } from "../../../../../utils/interfaces/selectOption.interface";
 import { ApontamentoModalComponent } from "./apontamento-modal/apontamento-modal.component";
-import { IApontamento } from "../../../../../utils/interfaces/apontamento.interface";
+import { apontamentoPadrao, IApontamento } from "../../../../../utils/interfaces/apontamento.interface";
+import { VizualizarApontamentoModalComponent } from "./vizualizar-apontamentos-modal/vizualizar-apontamentos-modal.component";
 
 @Component({
     standalone: true,
@@ -45,7 +46,7 @@ import { IApontamento } from "../../../../../utils/interfaces/apontamento.interf
     imports: [CommonModule, FontAwesomeModule, AvaliacaoExercicioComponent,
     MultSelectDropDownComponent, MultiSelectDropdownItemComponent, NgSelectComponent,
     ReactiveFormsModule, FormsModule, OpcaoItemComponent, DropdownFiltroComponent,
-    NgLabelTemplateDirective, NgOptionTemplateDirective, ApontamentoModalComponent]
+    NgLabelTemplateDirective, NgOptionTemplateDirective, ApontamentoModalComponent, VizualizarApontamentoModalComponent]
 })
 export class AvaliacaoVizualizarComponent implements AfterViewInit {
 
@@ -62,8 +63,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
 
     apontamentos : IApontamento[] = [
         {
-            campo: undefined,
-            texto: undefined
+            ...apontamentoPadrao
         }
     ]
     
@@ -71,6 +71,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
     limparIcon = faXmarkCircle;
     positivoIcon = faThumbsUp;
     negativoIcon = faThumbsDown;
+    apontamentoIcon = faHandPointDown;
 
     fluxo : IFluxo;
     
@@ -146,8 +147,62 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
     }
 
     salvarApontamento(){
-        console.log('salvar');
-        console.log(this.apontamentos);
+        if(!this.validarApontamentos())
+            return;
+
+        let objetoFinal : IObjeto = {
+            id: this.objeto.id,
+            ...this.objetoCadastro.getRawValue(),
+            emEtapa: this.objeto.emEtapa,
+            emStatus: this.objeto.emStatus,
+            conta: {
+                planoOrcamentario: this.objetoCadastro.value.planoOrcamentario,
+                unidadeOrcamentariaImplementadora: this.objetoCadastro.value.unidade
+            },
+            recursosFinanceiros: this.objeto.recursosFinanceiros
+        };
+
+
+        let executarAcaoDto : IExecutarAcao = {
+            acao: this.acaoDoModal,
+            apontamentos: this.apontamentos,
+            objeto: objetoFinal
+        }
+        
+        this.acaoService.executarAcao(executarAcaoDto).pipe(
+            tap(objeto => {
+                this.toastr.success("Acão de " + this.acaoDoModal.nome + " executada com sucesso");
+                this.objeto = objeto;
+                this.acaoDoModal = objeto.emEtapa.etapa.acoes.find(acao => acao.positivo !== undefined && !acao.positivo);
+                this.apontamentos = [
+                    {
+                        ...apontamentoPadrao
+                    }
+                ]
+                console.log(objeto);
+                this.recarregarFluxo();
+            })
+        ).subscribe();
+        
+
+    }
+
+    validarApontamentos() : boolean {
+
+        let valido = true;
+
+        this.apontamentos.forEach(apontamento => {
+            let preenchido = apontamento.campo
+                          && apontamento.texto 
+                          && apontamento.texto !== '';
+
+            if(!preenchido) {
+                this.toastr.error("Favor preencher todos os apontamentos ou remover os que não for utilizar");
+                valido = false;
+            }
+        })
+
+        return valido;
     }
 
     setFluxo(fluxo: IFluxo) {
@@ -157,7 +212,17 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
         
     }
 
+    setObjeto(objeto : IObjeto) {
+        this.objeto = objeto;
+        this.acaoDoModal = objeto.emEtapa.etapa.acoes.find(acao => acao.positivo !== undefined && !acao.positivo)
+        this.recarregarFluxo();
+    }
+
     recarregarFluxo(){
+        if(!this.fluxo)
+            return;
+
+
         let status = 0;
         let posStep = 1300/(this.fluxo.etapas.length - 1);
 
@@ -178,15 +243,21 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                 posInicial = pos
                 status = 2
             } else {
+                
+                let acaoPositivo = this.objeto.emEtapa.etapa.acoes.find(acao => acao.positivo);
+
+                let statusFinal = (acaoPositivo.proxEtapaId === etapa.id)
+                                && this.objeto.emEtapa.devolvido ? -1 : status
+
                 this.etapasStatus.push({
                     etapa: etapa,
-                    status: status,
+                    status: statusFinal,
                     pos: pos
 
                 })
 
                 this.linhas.push({
-                    status: status,
+                    status: statusFinal,
                     posInicial: posInicial,
                     posFinal: pos
                 })
@@ -312,7 +383,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                         
                         this.objetoService.getById(objetoId).pipe(
                             tap(objeto => {
-                                this.objeto = objeto;
+                                this.setObjeto(objeto);
     
                                 this.usuarioService.getUser().pipe(
                                     tap(user => {
@@ -329,9 +400,10 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                                     fluxo => this.setFluxo(fluxo)
                                 );
     
-                                if(objeto.emEtapa.etapa.acoes.find(acao => acao.acaoId === "INCLUIR_PO"))
+                                if(objeto.emEtapa.etapa.acoes.find(acao => acao.acaoId === "INCLUIR_PO")){
                                     this.objetoCadastro.controls.planoOrcamentario.addValidators(Validators.required);
                                     this.objetoCadastro.controls.planoOrcamentario.updateValueAndValidity();
+                                }
     
                                 this.dataUtil.setTitleInfo("objetoId", this.objeto.nome);
     
@@ -349,7 +421,6 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                                     this.areasTematicas.find(area => objeto.areaTematica?.id == area.id)
                                 );
 
-                                this.acaoDoModal = objeto.emEtapa.etapa.acoes.find(acao => acao.positivo !== undefined && !acao.positivo)
                                 
                             })
                         )
@@ -401,6 +472,12 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                     tap(objeto => {
                         this.toastr.success("Acão de " + acao.nome + " executada com sucesso");
                         this.objeto = objeto;
+                        this.acaoDoModal = objeto.emEtapa.etapa.acoes.find(acao => acao.positivo !== undefined && !acao.positivo);
+                        this.apontamentos = [
+                            {
+                                ...apontamentoPadrao
+                            }
+                        ]
                         this.recarregarFluxo();
                     })
                 ).subscribe();

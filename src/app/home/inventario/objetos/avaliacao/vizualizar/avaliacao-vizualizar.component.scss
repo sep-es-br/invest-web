@@ -40,6 +40,10 @@
 
             g {
     
+                circle.status-1 {
+                    fill: red;
+                }
+    
                 circle.status0 {
                     fill: green;
                 }
@@ -55,6 +59,10 @@
                 text {
                     font-family: var(--fonte-open-sans);
                     font-weight: 100;
+                    
+                    &.status-1 {
+                        stroke: red;
+                    }
                     
                     &.status0 {
                         stroke: green;
@@ -74,6 +82,10 @@
             
             line {
                 stroke-width: 4;
+
+                &.status-1 {
+                    stroke: red;
+                }
 
                 &.status0 {
                     stroke: green;
@@ -256,6 +268,9 @@
                 margin-top: 1rem;
                 display: flex;
                 justify-content: flex-end;
+
+            
+
                 button.acao {
                     padding: 8px;
                     margin-left: 1rem;
@@ -269,6 +284,10 @@
 
                     &.negativo {
                         background-color: red;
+                    }
+
+                    &.btnApontamentos {
+                        background-color: darkgray;
                     }
                 }
             }

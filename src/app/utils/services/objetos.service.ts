@@ -6,12 +6,13 @@ import { ObjetoFiltro } from "../models/ObjetoFiltro";
 import { catchError, EMPTY, empty, EmptyError } from "rxjs";
 import { ErrorHandlerService } from "./error-handler.service";
 import { InvestimentoFiltro } from "../models/InvestimentoFiltro";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { ObjetoTiraDTO } from "../models/ObjetoTiraDTO";
 import { IObjetoFiltro } from "../interfaces/objetoFiltro.interface";
 import { IObjeto } from "../interfaces/IObjeto";
 import { ToastrService } from "ngx-toastr";
 import { IStatus } from "../interfaces/status.interface";
+import { IHttpError } from "../interfaces/http-error.interface";
 
 @Injectable({providedIn: "root"})
 export class ObjetosService {
@@ -20,8 +21,9 @@ export class ObjetosService {
 
     constructor(private http : HttpClient,
         private errorHandlerService: ErrorHandlerService,
-        private router:Router,
-        private toastr : ToastrService
+        private router : Router,
+        private toastr : ToastrService,
+        private route : ActivatedRoute
     ){
     }
 
@@ -75,7 +77,18 @@ export class ObjetosService {
 
     public getById(id : string) : Observable<IObjeto> {
         return this.http.get<IObjeto>(`${this.objetoUrl}/byId`, { params: { id: id } })
-        .pipe(catchError(err => this.errorHandlerService.handleError(err)));
+        .pipe(catchError((err) => {
+                let mensagemErro : IHttpError = err.error    
+
+                if(mensagemErro.codigo == 404){
+                    this.toastr.error(mensagemErro.mensagem)
+                    this.router.navigate([".."], {relativeTo: this.route})
+                    return EmptyError;
+                }
+
+                return err;
+            }),
+            catchError(err => this.errorHandlerService.handleError(err)));
     }
 
     public objetoFilterToParams(filtro : IObjetoFiltro) : HttpParams {

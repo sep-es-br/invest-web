@@ -14,10 +14,7 @@ export interface IApontamento {
 }
 
 export const apontamentoPadrao : IApontamento = {
-    campo: {
-        nome: undefined,
-        campoId: undefined
-    },
+    campo: undefined,
     texto: undefined
 }
 

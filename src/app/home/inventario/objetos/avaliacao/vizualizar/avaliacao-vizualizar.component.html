@@ -125,7 +125,8 @@
                 (onRemover)="removerExercicio($event)"></spo-avaliacao-exercicio>
         </div>
         <div class="acoes" *ngIf="executaAcao">
-            
+            <button *ngIf="objeto.emEtapa.devolvido"
+                class="acao btnApontamentos"><fa-icon [icon]="apontamentoIcon"></fa-icon> Vizualizar apontamentos</button>
             <button *ngFor="let acao of objeto.emEtapa.etapa.acoes"
                 class="acao" [ngClass]="acao.positivo ? 'positivo' : 'negativo'" (click)="executarAcao(acao)">
                 <fa-icon [icon]="acao.positivo ? positivoIcon : negativoIcon"></fa-icon>
@@ -134,5 +135,6 @@
         </div>
     </main>
 </main>
-<spo-modal-apontamento [ngClass]="exibirModal ? '' : 'esconder-modal'" [apontamentos]="apontamentos" [acao]="acaoDoModal" (onFechar)="fecharModal()"
-       (onSalvar)="salvarApontamento()" ></spo-modal-apontamento>
+<spo-modal-apontamento [ngClass]="exibirModal ? '' : 'esconder-modal'" [apontamentos]="apontamentos" [acao]="acaoDoModal" 
+    (onFechar)="fecharModal()" (onSalvar)="salvarApontamento()" ></spo-modal-apontamento>
+<spo-vizualizar-apontamento>
