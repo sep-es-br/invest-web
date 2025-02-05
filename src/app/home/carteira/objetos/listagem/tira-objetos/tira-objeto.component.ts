@@ -35,13 +35,13 @@ export class TiraObjetoComponent {
 
     @HostListener("document:click", ["$event"])
     clickHost(event : MouseEvent) {
-        if(!this.opcoesIcon.nativeElement.contains(event.target))
+        if(this.opcoesBtn && !this.opcoesIcon.nativeElement.contains(event.target))
             this.menuFechado = true;
     }
 
     @HostListener("click", ["$event"])
     makeDoClick(event : MouseEvent) {
-        if(this.opcoesBtn.nativeElement.contains(event.target))
+        if(this.opcoesBtn && this.opcoesBtn.nativeElement.contains(event.target))
             return;
 
         this.doClick.emit(event);
