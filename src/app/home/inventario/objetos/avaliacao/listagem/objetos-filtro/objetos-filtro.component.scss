@@ -1,0 +1,30 @@
+:host {
+    display: flex;
+    justify-content: end;
+
+    select {
+        background-color: unset;
+        border: unset;
+        color: rgb(127, 127, 127);
+
+        &:focus {
+            outline: unset;
+        }
+    }
+
+    ::ng-deep .ng-select {
+        .ng-select-container {
+            border: unset;
+            background-color: unset;
+
+            .ng-arrow-wrapper{
+                .ng-arrow {
+                    border: none;
+                    content: "<fa-icon [icon]=''></fa-icon>";
+                }
+            }
+        }
+
+    }
+}
+

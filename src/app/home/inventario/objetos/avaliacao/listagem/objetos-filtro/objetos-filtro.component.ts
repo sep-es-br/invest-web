@@ -9,13 +9,18 @@ import { StatusService } from "../../../../../../utils/services/status.service";
 import { IStatus } from "../../../../../../utils/interfaces/status.interface";
 import { IEtapa } from "../../../../../../utils/interfaces/etapa.interface";
 import { EtapaService } from "../../../../../../utils/services/etapa.service";
+import { ISelectOpcao } from "../../../../../../utils/interfaces/selectOption.interface";
+import { NgSelectModule } from "@ng-select/ng-select";
+import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 
 @Component({
     selector: 'spo-objeto-filtro',
     templateUrl: './objetos-filtro.component.html',
-    styleUrl: './objetos-filtro.component.css',
+    styleUrl: './objetos-filtro.component.scss',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, FormsModule]
+    imports: [
+        CommonModule, ReactiveFormsModule, FormsModule, NgSelectModule
+    ]
 })
 export class ObjetoFiltroComponent implements AfterViewInit {
     
@@ -26,12 +31,16 @@ export class ObjetoFiltroComponent implements AfterViewInit {
         ano: new Date().getFullYear()
     }
 
+    seta = faAngleDown
+
     @Output() onUpdate = new EventEmitter<IFiltro>()
 
     anos : number[];
     unidades : UnidadeOrcamentariaDTO[];
     status : IStatus[];
     etapas : IEtapa[];
+
+    opcoesUnidade : ISelectOpcao<UnidadeOrcamentariaDTO>[];
 
 
     constructor(
@@ -88,10 +97,26 @@ export class ObjetoFiltroComponent implements AfterViewInit {
 
     setUnidades(unidadeList : UnidadeOrcamentariaDTO[]) {
         this.unidades = unidadeList;
+
+        this.opcoesUnidade = unidadeList.map(unidade => {
+            return {
+                label: `${unidade.codigo} - ${unidade.sigla}`,
+                value: unidade
+            }
+        })
     }
 
     setStatus(statusList : IStatus[]) {
         this.status = statusList;
+    }
+
+    selecionarUnidade(option : ISelectOpcao<UnidadeOrcamentariaDTO>, model : UnidadeOrcamentariaDTO) : boolean {
+        return option.value?.codigo === model?.codigo
+    }
+
+    
+    filtrar(term : string, item : ISelectOpcao<any>) : boolean {
+        return item.label.toUpperCase().includes(term.toUpperCase());
     }
 }
 
