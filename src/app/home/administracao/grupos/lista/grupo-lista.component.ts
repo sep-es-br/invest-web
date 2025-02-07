@@ -95,10 +95,10 @@ export class GrupoListaComponent implements AfterViewInit{
             if(confirm("Tem certeza que deseja remover o grupo " + grupo.sigla + "(" + grupo.nome + ")?")){
                 this.service.remover(grupo.id).subscribe(grupoRemovido => {
                     if(grupoRemovido) {
-                        alert("Grupo " + grupoRemovido.sigla + " removido com sucesso!")
+                        this.toastr.success("Grupo " + grupoRemovido.sigla + " removido com sucesso!")
                         this.atualizarLista(this.paginaAtual).subscribe()
                     } else {
-                        alert("não foi possivel remover o grupo " + grupo.sigla)
+                        this.toastr.error("não foi possivel remover o grupo " + grupo.sigla)
                     }
                 })
             }

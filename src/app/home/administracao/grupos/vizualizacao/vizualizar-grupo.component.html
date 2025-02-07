@@ -7,6 +7,11 @@
             <h1>{{grupo?.sigla}}</h1>
             <h2>{{grupo?.nome}}</h2>
         </div>
+        <div class="acoes">
+            <button class="btn-wrapper" (click)="exibirModalEdicao = true">
+                <fa-icon [icon]="editarIcon" class="btn btn-editar" ></fa-icon>
+            </button>
+        </div>
     </header>
     
     <p>{{grupo?.descricao}}</p>
@@ -21,3 +26,4 @@
     </nav>
 </header>
 <router-outlet></router-outlet>
+<spo-grupo-cadastro [ngClass]="exibirModalEdicao ? '' : 'esconder-modal'"  [grupo]="grupo" (onClose)="fecharEdicao($event)"></spo-grupo-cadastro>

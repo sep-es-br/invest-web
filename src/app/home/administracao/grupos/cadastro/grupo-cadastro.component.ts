@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, HostListener, OnInit, Output, ViewChild } from "@angular/core";
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { GrupoDTO } from "../../../../utils/models/GrupoDTO";
 import { CommonModule } from "@angular/common";
@@ -13,12 +13,13 @@ import { SeletorIconeComponent } from "../../../../utils/components/seletor-icon
     styleUrl: "./grupo-cadastro.component.scss",
     imports: [CommonModule, ReactiveFormsModule, FontAwesomeModule, SeletorIconeComponent]
 })
-export class GrupoCadastroComponent {
+export class GrupoCadastroComponent implements OnChanges {
 
     @Output() onClose = new EventEmitter<GrupoDTO>();
 
     @ViewChild("principal", {read: ElementRef}) principalRef : ElementRef
 
+    @Input() grupo : GrupoDTO;
 
     iconSalvar = faFloppyDisk;
     iconFechar = faXmark;
@@ -37,6 +38,19 @@ export class GrupoCadastroComponent {
             this.fechar()
         }
         
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        let grupo = changes["grupo"].currentValue as GrupoDTO;
+
+        if(grupo) {
+            this.form.controls.nome.setValue(grupo.nome);
+            this.form.controls.sigla.setValue(grupo.sigla);
+            this.form.controls.descricao.setValue(grupo.descricao);
+            this.form.controls.icone.setValue(grupo.icone);
+
+            this.form.markAllAsTouched({emitEvent: false})
+        }
     }
 
 
@@ -63,7 +77,7 @@ export class GrupoCadastroComponent {
 
     salvar(){
         const novoGrupo : GrupoDTO = {
-            id: null,
+            id: this.grupo?.id,
             nome: this.form.get("nome").value,
             sigla: this.form.get("sigla").value,
             icone: this.form.get("icone").value,
