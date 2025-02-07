@@ -8,6 +8,7 @@ import { IEmStatus } from "./emStatus.interface";
 import { IAreaTematica } from "./IAreaTematica";
 import { IConta } from "./IConta";
 import { ITipoPlano } from "./ITipoPlano";
+import { IParecer } from "./parecer.interface";
 import { IProfile } from "./profile.interface";
 
 export interface IObjeto {
@@ -26,5 +27,6 @@ export interface IObjeto {
     recursosFinanceiros? : ICusto[];
     responsavel? : IProfile;
     conta? : IConta;
-    apontamentos? : IApontamento[]
+    apontamentos? : IApontamento[];
+    pareceres? : IParecer[];
 }

@@ -50,7 +50,7 @@ export class FluxoCadastroComponent implements AfterViewInit {
     addEtapa() {
         this.fluxo.etapas.push({
             nome: "",
-            status: "",
+            etapaId: undefined,
             grupoResponsavel: undefined,
             acoes: []
         });

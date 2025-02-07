@@ -27,6 +27,8 @@ import MultiSelectDropdownItemComponent from "../../../../utils/components/multS
 import { AreaTematicaService } from "../../../../utils/services/areaTematica.service";
 import { IAreaTematica } from "../../../../utils/interfaces/IAreaTematica";
 import { OpcaoItemComponent } from "../../../../utils/components/dropdown-com-filtro/opcao-item.component";
+import { ISelectOpcao } from "../../../../utils/interfaces/selectOption.interface";
+import { NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent } from "@ng-select/ng-select";
 
 @Component({
     standalone: true,
@@ -38,7 +40,7 @@ import { OpcaoItemComponent } from "../../../../utils/components/dropdown-com-fi
     DropdownFiltroComponent, FormsModule,
     MultSelectDropDownComponent,
     MultiSelectDropdownItemComponent,
-    OpcaoItemComponent
+    OpcaoItemComponent, NgSelectComponent, NgOptionTemplateDirective, NgLabelTemplateDirective
 ]
 })
 export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
@@ -47,6 +49,11 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
 
     addIcon = faPlusCircle;
     limparIcon = faXmarkCircle;
+
+
+    opcoesUnidades : ISelectOpcao<UnidadeOrcamentariaDTO>[];
+    opcoesPlanosOrcamentarios : ISelectOpcao<PlanoOrcamentarioDTO>[];
+    opcoesTipoPlano : ISelectOpcao<ITipoPlano>[];
 
     unidades : UnidadeOrcamentariaDTO[];
     planosOrcamentario : PlanoOrcamentarioDTO[];
@@ -140,9 +147,7 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
                     obj => {
     
                         this.objeto = obj;
-    
-                        console.log(obj)
-    
+        
                         let nome = `${obj.conta.unidadeOrcamentariaImplementadora.sigla} - Objeto - ${obj.id.split(':')[2]}`;
     
                         this.dataUtil.setTitleInfo('objetoId', nome);
@@ -185,18 +190,55 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
         this.areasTematicas = areaList;
     }
 
+    selecionarPlanoOrcamentario(option : ISelectOpcao<PlanoOrcamentarioDTO>, model : PlanoOrcamentarioDTO) : boolean {
+        return option.value?.codigo === model?.codigo
+    }
+
+    selecionarTiposPlanos(option : ISelectOpcao<ITipoPlano>, model : ITipoPlano) : boolean {
+        return option.value?.id === model?.id
+    }
+
     setPlanos (planoList : PlanoOrcamentarioDTO[]) {
         this.planosOrcamentario = planoList;
         this.filtrarPlanos("");
+
+        this.opcoesPlanosOrcamentarios = planoList.map(
+            plano => { return {
+                label: plano.codigo + ' - ' + plano.nome,
+                value: plano
+            }}
+        )   
+
+        // em teoria não seria nescessario essa linha, mas o select ta bugado, então...
+        this.objeto.conta.planoOrcamentario = this.opcoesPlanosOrcamentarios.find(opt => this.selecionarPlanoOrcamentario(opt, this.objeto.conta.planoOrcamentario) )?.value
+        
+    }
+
+    filtrar(term : string, item : ISelectOpcao<any>) : boolean {
+        return item.label.toUpperCase().includes(term.toUpperCase());
     }
 
     filtrarPlanos(filtro : string) {
         this.planosFiltrados = this.planosOrcamentario.filter(plano => plano.nome.toUpperCase().includes(filtro.toUpperCase()) || plano.codigo.includes(filtro)); 
     }
 
+    selecionarUnidade(option : ISelectOpcao<UnidadeOrcamentariaDTO>, model : UnidadeOrcamentariaDTO) : boolean {
+        return option.value?.codigo === model?.codigo
+    }
+
     setUnidades(unidadeList : UnidadeOrcamentariaDTO[]){
         this.unidades = unidadeList;
         this.filtrarUnidades("");
+
+        this.opcoesUnidades = unidadeList.map(unidade => {
+            return {
+                label: unidade.codigo + ' - ' + unidade.sigla,
+                value: unidade
+            }
+        })
+
+        // em teoria não seria nescessario essa linha, mas o select ta bugado, então...
+        this.objeto.conta.unidadeOrcamentariaImplementadora = this.opcoesUnidades.find(opt => this.selecionarUnidade(opt, this.objeto.conta.unidadeOrcamentariaImplementadora) )?.value
     }
 
     filtrarUnidades(filtro : string) {
@@ -205,6 +247,15 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
 
     setTiposPlano(tipoPlanoList : ITipoPlano[]) {
         this.tiposplano = tipoPlanoList;
+
+        this.opcoesTipoPlano = tipoPlanoList.map(
+            tpPlano => { return {
+                    label: `${tpPlano.nome} - ${tpPlano.sigla}`,
+                    value: tpPlano
+                }
+
+            }
+        )
     }
 
     salvar() {

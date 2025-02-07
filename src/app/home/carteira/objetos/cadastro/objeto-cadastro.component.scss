@@ -53,28 +53,97 @@
                     }
 
                 }
-
-                div {
-                    display: flex;
-                    flex-direction: row;
-                    align-items: center;
-                    dropdown-com-filtro {
-                        flex-grow: 1;
-                    }
-
-                    fa-icon {
-                        margin-left: 0.5rem;
-                        color: red;
-                    }
-                }
-
-                dropdown-com-filtro{
-                    border: var(--cor-primaria) solid 1px;
-                    border-radius: 4px;
-                    height: 100%;
-                    padding-left: 1rem;
-                    padding-right: 1rem;
+                ::ng-deep ng-select  {
                     
+                    &.ng-select-multiple {
+                        .ng-value-container {
+                            .ng-value {
+                                display: flex;
+                                flex-direction: row-reverse;
+                                padding: 4px;
+                                border-radius: 1.5rem;
+                                background-color: white;
+                                border: var(--cor-primaria) solid 1px;
+                                color: var(--cor-primaria);
+                                align-items: center;
+
+                                .ng-value-icon.left {
+                                    margin-left: 4px;
+                                    border: none;
+                                    color: white;
+                                    background-color: red;
+                                    box-sizing: border-box;
+                                    height: 1rem;
+                                    width: 1rem;
+                                    border-radius: 1rem;
+                                    display: flex;
+                                    justify-content: center;
+                                    align-items: center;
+                                }
+                            }
+                        }
+                    }
+
+                    .ng-select-container {
+                        border-color: var(--cor-primaria);
+                        color: var(--cor-primaria);
+
+                        .ng-placeholder {
+                            color: var(--cor-primaria);
+                        }
+
+                        .ng-clear-wrapper {
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            width: 1rem;
+                            height: 1rem;
+                            box-sizing: border-box;
+                            border-radius: 1rem;
+                            color: white;
+                            background-color: red;
+
+                            .ng-clear {
+                                display: flex;
+                                font-size: medium;
+                                line-height: unset;
+                                pointer-events: none;
+
+                                &:hover {
+                                    color: unset;
+                                }
+                            }
+
+                        }
+
+                        .ng-arrow-wrapper .ng-arrow {
+                            border-color: var(--cor-primaria) rgba(0, 0, 0, 0) rgba(0, 0, 0, 0)
+                        }
+
+
+                    }
+
+                    ng-dropdown-panel {
+                        .ng-option {
+                            color: var(--cor-primaria);
+
+                            &:hover {
+                                color: white;
+                                background-color: var(--cor-primaria);
+                            }
+                        }
+                    }
+
+                    &.ng-select-opened{
+                        > .ng-select-container {
+                                
+                            .ng-arrow-wrapper .ng-arrow {
+                                border-color:  rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) var(--cor-primaria);
+                            }
+    
+    
+                        }
+                    }
                 }
 
                 .invalido {
@@ -82,9 +151,6 @@
                     color: red;
                 }
 
-                spo-checkbox {
-                    align-self: center;
-                }
                 
             }
 

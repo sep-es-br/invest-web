@@ -24,6 +24,13 @@ export class FluxosService {
 
     }
 
+    public findById(id : string) : Observable<IFluxo> {
+
+        return this.http.get<IFluxo>(`${this.urlFluxo}`, {params: {id: id}})
+        .pipe(catchError(err => this.errorHandler.handleError(err)));
+
+    }
+
     public findWithEtapa(etapaId : string) : Observable<IFluxo> {
 
         return this.http.get<IFluxo>(`${this.urlFluxo}/withEtapa`, { params: {

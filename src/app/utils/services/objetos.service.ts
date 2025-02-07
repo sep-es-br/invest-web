@@ -106,6 +106,9 @@ export class ObjetosService {
         if(filtro.plano)
             params = params.set("idPo", filtro.plano.id)
 
+        if(filtro.etapa)
+            params = params.set("etapaId", filtro.etapa.id)
+
 
         return params.set("ano", filtro.exercicio);
     }

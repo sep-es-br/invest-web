@@ -44,10 +44,8 @@ export class ObjetoFiltroComponent implements AfterViewInit {
     }
 
     ngAfterViewInit(): void {
+        
         merge(
-            this.etapaService.findAll().pipe(
-                tap(etapasList => this.setEtapas(etapasList))
-            ),
             this.infoService.getAllAnos().pipe(
                 tap(anosList => this.setAnos(anosList))
             ),
@@ -59,7 +57,20 @@ export class ObjetoFiltroComponent implements AfterViewInit {
             )
         ).subscribe();
 
-        
+        this.etapaService.getDoUsuario().pipe(
+            tap(etapa => {
+                // if(etapa) {
+                //     this.etapas = [etapa];
+                //     this.filtro.etapa = etapa;
+                //     this.atualizar();
+                // } else {
+                    this.etapaService.findAll().pipe(
+                        tap(etapasList => this.setEtapas(etapasList))
+                    ).subscribe()
+                // }
+
+            })
+        ).subscribe()
 
     }
 
@@ -85,9 +96,9 @@ export class ObjetoFiltroComponent implements AfterViewInit {
 }
 
 export interface IFiltro {
-    status: IStatus,
-    unidade: UnidadeOrcamentariaDTO,
-    ano: number,
-    etapa: IEtapa,
+    status?: IStatus,
+    unidade?: UnidadeOrcamentariaDTO,
+    ano?: number,
+    etapa?: IEtapa,
     nome? : string
 }

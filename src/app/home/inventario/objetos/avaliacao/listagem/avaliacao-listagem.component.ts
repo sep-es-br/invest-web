@@ -63,6 +63,7 @@ export class AvaliacaoListagemComponent implements AfterViewInit{
             exercicio : this.filtroComponent.filtro.ano,
             status : this.filtroComponent.filtro.status,
             unidade : this.filtroComponent.filtro.unidade,
+            etapa: this.filtroComponent.filtro.etapa,
             nome: this.txtBusca.value
         };
     }

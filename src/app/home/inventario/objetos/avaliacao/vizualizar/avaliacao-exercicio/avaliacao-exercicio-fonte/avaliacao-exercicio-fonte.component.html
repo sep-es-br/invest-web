@@ -16,17 +16,6 @@
                 [ngClass]="(checado && !valido) ? 'invalido' : ''"
                 ></ng-select>  
 
-        <!-- <ng-select [(ngModel)]="fonteValores.fonteOrcamentaria"
-                [ngModelOptions]="{standalone: true}"
-                [items]="optionsFontes"
-                placeholder="Selecionar a fonte orçamentária"
-                bindLabel="label"
-                bindValue="value"
-                [compareWith]="selecionarFonte"
-                [searchFn]="filtrar"
-                [ngClass]="(checado && !valido) ? 'invalido' : ''"
-                ></ng-select>    -->
-       
 
         <input type="text" [(ngModel)]="fonteValores.previsto" [ngModelOptions]="{standalone: true}"
                 prefix="R$ " mask="separator.2" placeholder="R$ "/>

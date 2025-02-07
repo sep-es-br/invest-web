@@ -70,7 +70,7 @@
                 formControlName="unidade"
                 ></ng-select>            
            
-            <label>Plano Orçamentário</label>
+            <label>Plano Orçamentário <span *ngIf="checarEtapaEnum(EtapaEnum.CADASTRO_PO)" class="obrigatorio">*</span></label>
             <ng-select [(ngModel)]="objeto.conta.planoOrcamentario"
                 [items]="opcoesPlanosOrcamentarios"
                 placeholder="Selecionar plano orçamentário"
@@ -105,12 +105,16 @@
                 [(ngModel)]="objeto.contrato" placeholder="Insira o codigo ou numero do contrato">
             
             <label>Tipos de Plano(s):</label>
-            <spo-multSelect-dropdown formControlName="planos" [(ngModel)]="objeto.planos" placeHolder="Selecione os tipos de plano">
-                <spo-multSelect-dropdown-item *ngFor="let item of tiposplano"
-                    [value]="item" >
-                    {{item.nome}} - {{item.sigla}}
-                </spo-multSelect-dropdown-item>
-            </spo-multSelect-dropdown>
+            <ng-select [(ngModel)]="objeto.planos"
+                [items]="opcoesTipoPlano"
+                [multiple]="true"
+                placeholder="Selecione os tipos de plano"
+                bindValue="value"
+                [compareWith]="selecionarTiposPlanos"
+                [searchFn]="filtrar"
+                formControlName="planos"
+                class="multiple"
+                ></ng-select>
         </form>
         
         <div class="recursos">
@@ -125,8 +129,12 @@
                 (onRemover)="removerExercicio($event)"></spo-avaliacao-exercicio>
         </div>
         <div class="acoes" *ngIf="executaAcao">
-            <button *ngIf="objeto.emEtapa.devolvido"
-                class="acao btnApontamentos"><fa-icon [icon]="apontamentoIcon"></fa-icon> Vizualizar apontamentos</button>
+            <button *ngIf="objeto.emEtapa.devolvido" (click)="doExibirFeedBack()"
+                class="acao btnApontamentos">
+                <span *ngIf="checarEtapaEnum(EtapaEnum.ANALISE_TECNICA); else verParecer"><fa-icon [icon]="parecerIcon"></fa-icon> Vizualizar Parecer</span>
+                <ng-template #verParecer><fa-icon [icon]="apontamentoIcon"></fa-icon> Vizualizar apontamentos</ng-template>
+            </button>
+            
             <button *ngFor="let acao of objeto.emEtapa.etapa.acoes"
                 class="acao" [ngClass]="acao.positivo ? 'positivo' : 'negativo'" (click)="executarAcao(acao)">
                 <fa-icon [icon]="acao.positivo ? positivoIcon : negativoIcon"></fa-icon>
@@ -136,5 +144,14 @@
     </main>
 </main>
 <spo-modal-apontamento [ngClass]="exibirModal ? '' : 'esconder-modal'" [apontamentos]="apontamentos" [acao]="acaoDoModal" 
-    (onFechar)="fecharModal()" (onSalvar)="salvarApontamento()" ></spo-modal-apontamento>
-<spo-vizualizar-apontamento>
+    (onFechar)="fecharModal()" (onSalvar)="salvarFeedBack()" ></spo-modal-apontamento>
+<spo-fazer-parecer-modal [ngClass]="exibirFazerParecer ? '' : 'esconder-modal'" [parecer]="parecer" [acao]="acaoDoModal" 
+    (onClose)="fecharFazerParecer($event)"></spo-fazer-parecer-modal>
+
+<spo-visualizar-parecer *ngIf="checarEtapaEnum(EtapaEnum.ANALISE_TECNICA); else modalApontamento" [ngClass]="exibirVerParecer ? '' : 'esconder-modal'" [parecer]="feedbackAsParecer()" 
+    (onClose)="this.exibirVerParecer = false"></spo-visualizar-parecer>
+
+<ng-template #modalApontamento>
+    <spo-vizualizar-apontamento  [ngClass]="exibirFeedback ? '' : 'esconder-modal'" [apontamentos]="feedbackAsIApontamento()"
+        (onClose)="this.exibirFeedback = false"></spo-vizualizar-apontamento>
+</ng-template>

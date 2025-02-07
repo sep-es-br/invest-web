@@ -1,3 +1,14 @@
-<main>
-    Teste
+<main #principalRef>
+    <fa-icon [icon]="fecharIcon" class="iconFechar" (click)="onClose.emit($event)"></fa-icon>
+    <header>
+        <h1>Apontamentos</h1>
+    </header>
+    <main>
+        <div *ngFor="let apontamento of apontamentos" >
+            <p>Campo: {{apontamento.campo.nome}}</p>
+            <p>Quem Apontou: {{apontamento.usuario.nomeCompleto}} ({{apontamento.grupo.sigla}})</p>
+            <p>Apontamento:</p>
+            <p>{{apontamento.texto}}</p>
+        </div>
+    </main>
 </main>

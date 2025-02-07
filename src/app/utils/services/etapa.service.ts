@@ -25,5 +25,10 @@ export class EtapaService {
         .pipe(catchError(err => this.errorHandlerService.handleError(err)))
     }
 
+    public getDoUsuario() : Observable<IEtapa> {
+        return this.http.get<IEtapa>(`${this.etapaUrl}/doUsuario`)
+        .pipe(catchError(err => this.errorHandlerService.handleError(err)))
+    }
+
 
 }

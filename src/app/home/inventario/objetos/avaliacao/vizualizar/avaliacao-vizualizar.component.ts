@@ -9,7 +9,7 @@ import { DataUtilService } from "../../../../../utils/services/data-util.service
 import { IFluxo } from "../../../../../utils/interfaces/fluxo.interface";
 import { IEtapa } from "../../../../../utils/interfaces/etapa.interface";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
-import { faChevronRight, faHandPointDown, faPlusCircle, faThumbsDown, faThumbsUp, faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
+import { faChevronRight, faFileContract, faHandPointDown, faPlusCircle, faThumbsDown, faThumbsUp, faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
 import { FluxosService } from "../../../../../utils/services/fluxos.service";
 import { MultSelectDropDownComponent } from "../../../../../utils/components/multSelectDropDown/multSelect-dropdown.component";
 import MultiSelectDropdownItemComponent from "../../../../../utils/components/multSelectDropDown/multSelect-dropdown-item/multSelect-dropdown-item.component";
@@ -38,6 +38,10 @@ import { ISelectOpcao } from "../../../../../utils/interfaces/selectOption.inter
 import { ApontamentoModalComponent } from "./apontamento-modal/apontamento-modal.component";
 import { apontamentoPadrao, IApontamento } from "../../../../../utils/interfaces/apontamento.interface";
 import { VizualizarApontamentoModalComponent } from "./vizualizar-apontamentos-modal/vizualizar-apontamentos-modal.component";
+import { AcaoEvent, ParecerModalComponent } from "./parecer-modal/parecer-modal.component";
+import { IParecer, parecerPadrao } from "../../../../../utils/interfaces/parecer.interface";
+import { EtapaEnum } from "../../../../../utils/enum/etapa.enum";
+import { VisualizarParecerComponent } from "./visualizar-parecer/visualizar-parecer.component";
 
 @Component({
     standalone: true,
@@ -46,7 +50,7 @@ import { VizualizarApontamentoModalComponent } from "./vizualizar-apontamentos-m
     imports: [CommonModule, FontAwesomeModule, AvaliacaoExercicioComponent,
     MultSelectDropDownComponent, MultiSelectDropdownItemComponent, NgSelectComponent,
     ReactiveFormsModule, FormsModule, OpcaoItemComponent, DropdownFiltroComponent,
-    NgLabelTemplateDirective, NgOptionTemplateDirective, ApontamentoModalComponent, VizualizarApontamentoModalComponent]
+    NgLabelTemplateDirective, NgOptionTemplateDirective, ApontamentoModalComponent, VizualizarApontamentoModalComponent, ParecerModalComponent, VisualizarParecerComponent]
 })
 export class AvaliacaoVizualizarComponent implements AfterViewInit {
 
@@ -59,19 +63,36 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
         conta: {}
     }
 
+    EtapaEnum = EtapaEnum;
+
     setaDireita = faChevronRight;
+
+    parecer : IParecer = {
+        ...parecerPadrao
+    };
 
     apontamentos : IApontamento[] = [
         {
             ...apontamentoPadrao
         }
     ]
+
+    feedback : IApontamento[] | IParecer;
+
+    feedbackAsIApontamento() : IApontamento[] {
+        return this.feedback as IApontamento[];
+    }
+    
+    feedbackAsParecer() : IParecer {
+        return this.feedback as IParecer;
+    }
     
     addIcon = faPlusCircle;
     limparIcon = faXmarkCircle;
     positivoIcon = faThumbsUp;
     negativoIcon = faThumbsDown;
     apontamentoIcon = faHandPointDown;
+    parecerIcon = faFileContract;
 
     fluxo : IFluxo;
     
@@ -80,11 +101,15 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
     executaAcao = false;
 
     exibirModal = false;
+    exibirFeedback = false;
+    exibirFazerParecer = false;
+    exibirVerParecer = false;
 
     unidades : UnidadeOrcamentariaDTO[];
     opcoesUnidades : ISelectOpcao<UnidadeOrcamentariaDTO>[]
     planosOrcamentario : PlanoOrcamentarioDTO[];
-    opcoesPlanosOrcamentarios : ISelectOpcao<PlanoOrcamentarioDTO>[]
+    opcoesPlanosOrcamentarios : ISelectOpcao<PlanoOrcamentarioDTO>[];
+    opcoesTipoPlano : ISelectOpcao<ITipoPlano>[];
     microregioes : LocalidadeDTO[];
     tiposplano : ITipoPlano[];
     areasTematicas : IAreaTematica[];
@@ -142,45 +167,64 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
         
     }
 
+    fecharFazerParecer(acaoEvent : AcaoEvent) {
+
+        if(acaoEvent.acao) {
+            this.salvarFeedBack();
+        } else {
+            this.exibirFazerParecer = false;
+        }
+
+        
+
+    }
+
     fecharModal(){
         this.exibirModal = false;
     }
 
-    salvarApontamento(){
-        if(!this.validarApontamentos())
-            return;
-
-        let objetoFinal : IObjeto = {
-            id: this.objeto.id,
-            ...this.objetoCadastro.getRawValue(),
-            emEtapa: this.objeto.emEtapa,
-            emStatus: this.objeto.emStatus,
-            conta: {
-                planoOrcamentario: this.objetoCadastro.value.planoOrcamentario,
-                unidadeOrcamentariaImplementadora: this.objetoCadastro.value.unidade
-            },
-            recursosFinanceiros: this.objeto.recursosFinanceiros
-        };
-
-
-        let executarAcaoDto : IExecutarAcao = {
-            acao: this.acaoDoModal,
-            apontamentos: this.apontamentos,
-            objeto: objetoFinal
+    salvarFeedBack(){
+        if(!this.checarEtapaEnum(EtapaEnum.SOLICITACAO_CADASTRO)) {
+            if((this.checarEtapaEnum(EtapaEnum.APROVACAO_SUBEO) && !this.validarParecer())
+                ||(!this.checarEtapaEnum(EtapaEnum.APROVACAO_SUBEO) &&  !this.validarApontamentos()))
+                return;
         }
+
+        let objetoFinal : IObjeto = this.gerarObjetoFinal()
+        
+        let executarAcaoDto : IExecutarAcao;
+        if(this.checarEtapaEnum(EtapaEnum.APROVACAO_SUBEO)){
+            executarAcaoDto = {
+                acao: this.acaoDoModal,
+                parecer: this.parecer,
+                objeto: objetoFinal
+            }
+        } else {
+            executarAcaoDto = {
+                acao: this.acaoDoModal,
+                apontamentos: this.apontamentos,
+                objeto: objetoFinal
+            }
+        }
+        
         
         this.acaoService.executarAcao(executarAcaoDto).pipe(
             tap(objeto => {
                 this.toastr.success("Acão de " + this.acaoDoModal.nome + " executada com sucesso");
-                this.objeto = objeto;
-                this.acaoDoModal = objeto.emEtapa.etapa.acoes.find(acao => acao.positivo !== undefined && !acao.positivo);
+                
                 this.apontamentos = [
                     {
                         ...apontamentoPadrao
                     }
                 ]
-                console.log(objeto);
-                this.recarregarFluxo();
+                
+                this.parecer = { ...parecerPadrao}
+                this.setObjeto(objeto);
+                
+
+                this.exibirFazerParecer = false;
+                this.exibirModal = false;
+                
             })
         ).subscribe();
         
@@ -205,17 +249,79 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
         return valido;
     }
 
+    validarParecer() : boolean {
+        let valido = this.parecer && this.parecer.texto.trim() !== "";
+
+        if(!valido) {
+            this.toastr.error("Favor preencher o parecer antes de devolver")
+        }
+
+        return valido;
+    }
+
     setFluxo(fluxo: IFluxo) {
         this.fluxo = fluxo;
+    }
 
-        this.recarregarFluxo();
-        
+    checarEtapaEnum(etapaEnum : EtapaEnum){
+        return (<any>EtapaEnum)[this.objeto.emEtapa?.etapa.etapaId] === etapaEnum;
     }
 
     setObjeto(objeto : IObjeto) {
         this.objeto = objeto;
-        this.acaoDoModal = objeto.emEtapa.etapa.acoes.find(acao => acao.positivo !== undefined && !acao.positivo)
+
+        
+        this.dataUtil.setTitleInfo("objetoId", this.objeto.nome);
+    
+        this.objetoCadastro.controls.microregiaoAtendida.setValue(
+            this.objeto.microregiaoAtendida ? 
+            this.microregioes.find(value => value.id == this.objeto.microregiaoAtendida.id)
+            : null
+        );
+        
+        this.objetoCadastro.controls.planos.setValue(
+            this.tiposplano.filter(tipoItem => objeto.planos.map( objTipoPlano => objTipoPlano.id).includes(tipoItem.id))
+        );
+
+        this.objetoCadastro.controls.areaTematica.setValue(
+            this.areasTematicas.find(area => objeto.areaTematica?.id == area.id)
+        );
+
+        let etapaAnterior = this.getEtapaAnterior();
+        if(this.objeto.apontamentos && this.objeto.apontamentos.length > 0){
+            this.apontamentos = this.objeto.apontamentos.filter(a => a.etapa.id == etapaAnterior?.id);
+        }
+        this.acaoDoModal = objeto.emEtapa.etapa.acoes.find(acao => acao.positivo !== undefined && !acao.positivo);
         this.recarregarFluxo();
+        this.feedback = this.checarEtapaEnum(EtapaEnum.ANALISE_TECNICA) ?
+             this.objeto.pareceres?.sort((p1, p2) => {
+                let d1 = new Date(p1.timestamp);
+                let d2 = new Date(p2.timestamp);
+
+                return d2.getTime() - d1.getTime();
+             })[0] :
+        
+            this.objeto.apontamentos?.filter(apontamento => {
+                return apontamento.etapa.id === this.objeto.emEtapa.etapa.id;
+            })
+
+    }
+
+    getEtapaAnterior() : IEtapa {
+        let nOrdem = this.objeto.emEtapa.etapa.ordem;
+        
+        if (nOrdem === 0)
+            return undefined;
+
+        return this.fluxo.etapas.find(e => e.ordem === nOrdem - 1)
+    }
+
+    doExibirFeedBack(){
+        if(this.checarEtapaEnum(EtapaEnum.ANALISE_TECNICA)) {
+            this.exibirVerParecer = true;
+        } else {
+            this.exibirFeedback = true;
+        }
     }
 
     recarregarFluxo(){
@@ -315,6 +421,10 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
         return option.value?.codigo === model?.codigo
     }
 
+    selecionarTiposPlanos(option : ISelectOpcao<ITipoPlano>, model : ITipoPlano) : boolean {
+        return option.value?.id === model?.id
+    }
+
     setUnidades(unidadeList : UnidadeOrcamentariaDTO[]){
         
         this.opcoesUnidades = unidadeList.map(unidade => {
@@ -338,6 +448,16 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
         this.objetoCadastro.controls.planos.setValue(
             this.tiposplano.filter(tipoItem => this.objeto.planos?.map( objTipoPlano => objTipoPlano.id).includes(tipoItem.id))
         );
+
+        
+        this.opcoesTipoPlano = tipoPlanoList.map(
+            tpPlano => { return {
+                    label: `${tpPlano.nome} - ${tpPlano.sigla}`,
+                    value: tpPlano
+                }
+
+            }
+        )
     }
 
     setMicrorregioes(localidadeList : LocalidadeDTO[]){
@@ -383,45 +503,23 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                         
                         this.objetoService.getById(objetoId).pipe(
                             tap(objeto => {
-                                this.setObjeto(objeto);
-    
+                                
+                                this.fluxoService.findWithEtapa(objeto.emEtapa.etapa.id).pipe(
+                                    tap(fluxo => this.setFluxo(fluxo)),
+                                    finalize(() => this.setObjeto(objeto))
+                                ).subscribe()
+                                    
                                 this.usuarioService.getUser().pipe(
                                     tap(user => {
                                         this.grupoService.findByUsuario(user.id).pipe(
                                             tap(grupos => {
-                                                this.executaAcao = grupos.map(g => g.id).includes(this.objeto.emEtapa.etapa.grupoResponsavel.id)
+                                                this.executaAcao = grupos.map(g => g.id).includes(objeto.emEtapa.etapa.grupoResponsavel.id)
                                                                    || Boolean(user.role.find(funcao => funcao.nome === "GESTOR_MASTER"));
                                             })
                                         ).subscribe()
                                     })
                                 ).subscribe()
     
-                                this.fluxoService.findWithEtapa(this.objeto.emEtapa.etapa.id).subscribe(
-                                    fluxo => this.setFluxo(fluxo)
-                                );
-    
-                                if(objeto.emEtapa.etapa.acoes.find(acao => acao.acaoId === "INCLUIR_PO")){
-                                    this.objetoCadastro.controls.planoOrcamentario.addValidators(Validators.required);
-                                    this.objetoCadastro.controls.planoOrcamentario.updateValueAndValidity();
-                                }
-    
-                                this.dataUtil.setTitleInfo("objetoId", this.objeto.nome);
-    
-                                this.objetoCadastro.controls.microregiaoAtendida.setValue(
-                                    this.objeto.microregiaoAtendida ? 
-                                    this.microregioes.find(value => value.id == this.objeto.microregiaoAtendida.id)
-                                    : null
-                                );
-                                
-                                this.objetoCadastro.controls.planos.setValue(
-                                    this.tiposplano.filter(tipoItem => objeto.planos.map( objTipoPlano => objTipoPlano.id).includes(tipoItem.id))
-                                );
-            
-                                this.objetoCadastro.controls.areaTematica.setValue(
-                                    this.areasTematicas.find(area => objeto.areaTematica?.id == area.id)
-                                );
-
-                                
                             })
                         )
                     ).subscribe()
@@ -447,19 +545,10 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
             }
         )
 
-        if(acao.positivo && (!exercValidos || this.objetoCadastro.invalid)) {
+        if(acao.positivo && (!exercValidos || !this.validarForm())) {
             this.toastr.error("Favor preeencher os campos obrigatórios");
         } else {
-            let objetoFinal : IObjeto = {
-                id: this.objeto.id,
-                ...this.objetoCadastro.getRawValue(),
-                conta: {
-                    planoOrcamentario: this.objetoCadastro.value.planoOrcamentario,
-                    unidadeOrcamentariaImplementadora: this.objetoCadastro.value.unidade
-                },
-                recursosFinanceiros: this.objeto.recursosFinanceiros
-            };
-
+            let objetoFinal : IObjeto = this.gerarObjetoFinal()
 
             let executarAcaoDto : IExecutarAcao = {
                 acao: acao,
@@ -471,24 +560,58 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                 this.acaoService.executarAcao(executarAcaoDto).pipe(
                     tap(objeto => {
                         this.toastr.success("Acão de " + acao.nome + " executada com sucesso");
-                        this.objeto = objeto;
-                        this.acaoDoModal = objeto.emEtapa.etapa.acoes.find(acao => acao.positivo !== undefined && !acao.positivo);
-                        this.apontamentos = [
-                            {
-                                ...apontamentoPadrao
-                            }
-                        ]
-                        this.recarregarFluxo();
+                        this.setObjeto(objeto);
                     })
                 ).subscribe();
             } else {
-                this.exibirModal = true;
+                if(this.checarEtapaEnum(EtapaEnum.APROVACAO_SUBEO)){
+                    this.exibirFazerParecer = true;
+                } else {
+                    this.exibirModal = true;
+                }
+                
             }
             
         }
 
         this.checado = true;
         
+    }
+
+    validarForm() : boolean {
+
+        let valido = !!this.objeto.tipo
+                && !!this.objeto.tipoConta 
+                && !!this.objeto.nome 
+                && !!this.objeto.descricao 
+                && !!this.objeto.conta.unidadeOrcamentariaImplementadora
+                && !!this.objeto.microregiaoAtendida
+                && !!this.objeto.infoComplementares;
+
+        if(this.checarEtapaEnum(EtapaEnum.CADASTRO_PO)) {
+            valido = valido 
+                && !!this.objeto.conta.planoOrcamentario
+        }
+
+        return valido;
+    }
+
+    gerarObjetoFinal() : IObjeto {
+        // return {
+        //     id: this.objeto.id,
+        //     ...this.objetoCadastro.getRawValue(),
+        //     emEtapa: this.objeto.emEtapa,
+        //     emStatus: this.objeto.emStatus,
+        //     apontamentos: this.objeto.apontamentos,
+        //     pareceres: this.objeto.pareceres,
+        //     conta: {
+        //         planoOrcamentario: this.objetoCadastro.value.planoOrcamentario,
+        //         unidadeOrcamentariaImplementadora: this.objetoCadastro.value.unidade
+        //     },
+        //     recursosFinanceiros: this.objeto.recursosFinanceiros
+        // };
+
+        return this.objeto;
     }
     
     removerExercicio(exerc : ICusto) {

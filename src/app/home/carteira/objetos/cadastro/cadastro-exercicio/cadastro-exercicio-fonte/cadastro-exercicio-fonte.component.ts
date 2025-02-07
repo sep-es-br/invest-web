@@ -10,13 +10,17 @@ import { faMinusCircle, faPlusCircle, faXmarkCircle } from "@fortawesome/free-so
 import { FonteOrcamentariaService } from "../../../../../../utils/services/fonteOrcamentaria.service";
 import { DropdownFiltroComponent } from "../../../../../../utils/components/dropdown-com-filtro/dropdown-com-filtro.component";
 import { OpcaoItemComponent } from "../../../../../../utils/components/dropdown-com-filtro/opcao-item.component";
+import { ISelectOpcao } from "../../../../../../utils/interfaces/selectOption.interface";
+import { NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent } from "@ng-select/ng-select";
 
 @Component({
     selector: "spo-cadastro-exercicio-fonte",
     standalone: true, 
     templateUrl: "./cadastro-exercicio-fonte.component.html",
     styleUrl: "./cadastro-exercicio-fonte.component.scss",
-    imports: [CommonModule, FormsModule, NgxMaskDirective, FontAwesomeModule, DropdownFiltroComponent, OpcaoItemComponent],
+    imports: [CommonModule, FormsModule, NgxMaskDirective, FontAwesomeModule, DropdownFiltroComponent, OpcaoItemComponent,
+        NgSelectComponent, NgOptionTemplateDirective, NgLabelTemplateDirective
+    ],
     providers: [provideNgxMask()]
 })
 export class CadastroExercicioFonteComponent implements OnInit {
@@ -31,6 +35,8 @@ export class CadastroExercicioFonteComponent implements OnInit {
 
     @Output() onRemover = new EventEmitter<IFonteExercicio>();
     @Output() onAdd = new EventEmitter<never>();
+
+    optionsFontes : ISelectOpcao<FonteOrcamentariaDTO>[];
 
     fontes : FonteOrcamentariaDTO[] = [];
     fontesFiltrados : FonteOrcamentariaDTO[] = [];
@@ -51,6 +57,22 @@ export class CadastroExercicioFonteComponent implements OnInit {
         if(this.fonteValores.fonteOrcamentaria)
             this.fonteValores.fonteOrcamentaria = this.fontes.find(f => f.codigo == this.fonteValores.fonteOrcamentaria.codigo);
         this.filtrarFonte("");
+
+        
+        this.optionsFontes = [];
+
+        this.optionsFontes.push(...fontList.map(fonte => {
+            return {
+                label: `${fonte.codigo} - ${fonte.nome}`,
+                value: fonte
+            }
+        }))
+
+        this.fonteValores.fonteOrcamentaria = this.optionsFontes.find(opt => this.selecionarFonte(opt, this.fonteValores.fonteOrcamentaria) )?.value
+    }
+
+    filtrar(term : string, item : ISelectOpcao<any>) : boolean {
+        return item.label.toUpperCase().includes(term.toUpperCase());
     }
 
     setFonte(fonte : FonteOrcamentariaDTO) {
@@ -72,7 +94,7 @@ export class CadastroExercicioFonteComponent implements OnInit {
         return this.valido;
     }
 
-    selecionarFonte(value1 : FonteOrcamentariaDTO, value2 : FonteOrcamentariaDTO) : boolean {
-        return value1?.codigo == value2?.codigo
+    selecionarFonte(option : ISelectOpcao<FonteOrcamentariaDTO>, model : FonteOrcamentariaDTO) : boolean {
+        return option.value?.codigo === model?.codigo
     }
 }
