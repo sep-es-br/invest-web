@@ -114,8 +114,8 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
     tiposplano : ITipoPlano[];
     areasTematicas : IAreaTematica[];
 
-    unidadesFiltrados : UnidadeOrcamentariaDTO[]
-    planosFiltrados : PlanoOrcamentarioDTO[];
+    acoesPositivas : IAcao[] = [];
+    acoesNegativas : IAcao[] = [];
 
     objetoCadastro = new FormGroup({
         tipoConta: new FormControl(null, Validators.required),
@@ -304,6 +304,12 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
             this.objeto.apontamentos?.filter(apontamento => {
                 return apontamento.etapa.id === this.objeto.emEtapa.etapa.id;
             })
+        
+        this.acoesNegativas = this.objeto.emEtapa.etapa.acoes.filter(a => a.positivo !== undefined && !a.positivo);
+        this.acoesPositivas = this.objeto.emEtapa.etapa.acoes.filter(a => a.positivo !== undefined && a.positivo);
+
+        console.log(this.acoesNegativas);
+        console.log(this.acoesPositivas);
 
     }
 
@@ -407,10 +413,6 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
         // em teoria não seria nescessario essa linha, mas o select ta bugado, então...
         this.objeto.conta.planoOrcamentario = this.opcoesPlanosOrcamentarios.find(opt => this.selecionarPlanoOrcamentario(opt, this.objeto.conta.planoOrcamentario) )?.value
         
-    }
-
-    filtrarPlanos(filtro : string) {
-        this.planosFiltrados = this.planosOrcamentario.filter(plano => plano.nome.toUpperCase().includes(filtro.toUpperCase()) || plano.codigo.includes(filtro)); 
     }
 
     selecionarUnidade(option : ISelectOpcao<UnidadeOrcamentariaDTO>, model : UnidadeOrcamentariaDTO) : boolean {
@@ -560,6 +562,9 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                 this.acaoService.executarAcao(executarAcaoDto).pipe(
                     tap(objeto => {
                         this.toastr.success("Acão de " + acao.nome + " executada com sucesso");
+                        if(!objeto.emEtapa){
+                            this.router.navigate([".."], {relativeTo: this.route});
+                        }
                         this.setObjeto(objeto);
                     })
                 ).subscribe();

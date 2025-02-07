@@ -6,7 +6,7 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { authInterceptor } from './utils/interceptors/auth.interceptor';
 import { provideEnvironmentNgxMask } from "ngx-mask";
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { provideToastr } from 'ngx-toastr'
+import { provideToastr } from 'ngx-toastr';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -21,6 +21,6 @@ export const appConfig: ApplicationConfig = {
       positionClass: 'toast-top-center',
       preventDuplicates:true,
       resetTimeoutOnDuplicate: true
-    })
+    }),
   ]
 };
