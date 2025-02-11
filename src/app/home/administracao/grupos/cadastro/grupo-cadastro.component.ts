@@ -82,8 +82,8 @@ export class GrupoCadastroComponent implements OnChanges {
             sigla: this.form.get("sigla").value,
             icone: this.form.get("icone").value,
             descricao: this.form.get("descricao").value,
-            membros: [],
-            permissoes: [],
+            membros: this.grupo ? this.grupo.membros : [],
+            permissoes: this.grupo ? this.grupo.permissoes : [],
             podeVerTodasUnidades: false
         }
 

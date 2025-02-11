@@ -15,13 +15,13 @@
                 [searchFn]="filtrar"
                 [ngClass]="(checado && !valido) ? 'invalido' : ''"
                 ></ng-select>  
-        <input type="text" [(ngModel)]="fonteValores.previsto"
-                [ngModelOptions]="{standalone: true}"
+
+
+        <input type="text" [(ngModel)]="fonteValores.previsto" [ngModelOptions]="{standalone: true}"
                 prefix="R$ " mask="separator.2" placeholder="R$ "/>
         <fa-icon [icon]="limparIcon" class="apagar" (click)="fonteValores.previsto = null"></fa-icon>
 
-        <input type="text" [(ngModel)]="fonteValores.contratado"
-                [ngModelOptions]="{standalone: true}" 
+        <input type="text" [(ngModel)]="fonteValores.contratado" [ngModelOptions]="{standalone: true}"
                 prefix="R$ " mask="separator.2"  placeholder="R$ "/>
         <fa-icon [icon]="limparIcon" class="apagar" (click)="fonteValores.contratado = null"></fa-icon>
 

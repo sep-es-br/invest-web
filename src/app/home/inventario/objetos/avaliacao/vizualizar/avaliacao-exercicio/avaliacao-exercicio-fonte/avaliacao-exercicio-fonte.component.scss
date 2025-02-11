@@ -4,6 +4,9 @@
     flex-grow: 1;
 
     form {
+
+        @import "../../../../../../../utils/styles/ngSelectPadrao.scss";
+
         display: flex;
         flex-direction: row;
         flex-grow: 1;
@@ -16,7 +19,7 @@
             align-items: center;
 
             fa-icon.add {
-                color: green;
+                color: var(--verde-padrao);
             }
         }
 
@@ -39,7 +42,7 @@
                     height: 18px;
                     border-radius: 18px;
                     color: white;
-                    background-color: red;
+                    background-color: var(--vermelho-padrao);
 
                 }
 

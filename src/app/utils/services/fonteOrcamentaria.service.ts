@@ -20,6 +20,12 @@ export class FonteOrcamentariaService {
             catchError(err => this.errorHandlerService.handleError(err))
         );
     }
+
+    public extras() : Observable<FonteOrcamentariaDTO[]> {
+        return this.http.get<FonteOrcamentariaDTO[]>(`${this.fonteUrl}/extras`)
+        .pipe(catchError(err => this.errorHandlerService.handleError(err)))
+    }
+
     public getDoSigefes() : Observable<FonteOrcamentariaDTO[]> {
         return this.http.get<FonteOrcamentariaDTO[]>(`${this.fonteUrl}/doSigefes`)
             .pipe(catchError(err => this.errorHandlerService.handleError(err)))

@@ -291,6 +291,18 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
         if(this.objeto.apontamentos && this.objeto.apontamentos.length > 0){
             this.apontamentos = this.objeto.apontamentos.filter(a => a.etapa.id == etapaAnterior?.id);
         }
+
+        this.usuarioService.getUser().pipe(
+            tap(user => {
+                this.grupoService.findByUsuario(user.id).pipe(
+                    tap(grupos => {
+                        this.executaAcao = grupos.map(g => g.id).includes(objeto.emEtapa.etapa.grupoResponsavel.id)
+                                           || Boolean(user.role.find(funcao => funcao.nome === "GESTOR_MASTER"));
+                    })
+                ).subscribe()
+            })
+        ).subscribe()
+
         this.acaoDoModal = objeto.emEtapa.etapa.acoes.find(acao => acao.positivo !== undefined && !acao.positivo);
         this.recarregarFluxo();
         this.feedback = this.checarEtapaEnum(EtapaEnum.ANALISE_TECNICA) ?
@@ -308,8 +320,6 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
         this.acoesNegativas = this.objeto.emEtapa.etapa.acoes.filter(a => a.positivo !== undefined && !a.positivo);
         this.acoesPositivas = this.objeto.emEtapa.etapa.acoes.filter(a => a.positivo !== undefined && a.positivo);
 
-        console.log(this.acoesNegativas);
-        console.log(this.acoesPositivas);
 
     }
 
@@ -386,11 +396,15 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
     }
 
     gerarPath(pos: number, status : number) : string{
-        if(status == 0) {
-            return "M " + (pos - 6) + " 50 L " + (pos-1) + " 55 L " + (pos + 6) + " 45";
-        } else {
-            return "M " + (pos - 7) + " 57 L " + (pos + 7) + " 43 L " + (pos) + " 50 L " + (pos-7) + " 43 L " + (pos+7) + " 57";
+        switch(status) {
+            case 0: 
+                return "M " + (pos - 6) + " 50 L " + (pos-1) + " 55 L " + (pos + 6) + " 45";
+            
+            default: 
+                return "M " + (pos) + " 42 L " + (pos) + " 53 M " + (pos) + " 56 L " + (pos) + " 60";
+
         }
+        
     }
 
     

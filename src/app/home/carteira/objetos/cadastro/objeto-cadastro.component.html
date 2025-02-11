@@ -42,7 +42,7 @@
                 formControlName="unidade"
                 ></ng-select>            
            
-            <label>Plano Orçamentário</label>
+            <label>Plano Orçamentário  <span *ngIf="!objeto?.emEtapa" class="obrigatorio">*</span></label>
             <ng-select [(ngModel)]="objeto.conta.planoOrcamentario"
                 [items]="opcoesPlanosOrcamentarios"
                 placeholder="Selecionar plano orçamentário"
@@ -52,6 +52,7 @@
                 [searchFn]="filtrar"
                 formControlName="planoOrcamentario"
                 ></ng-select>
+
             
             <label for="inMicroregiao">Microrregião Atendida <span class="obrigatorio">*</span></label>
             <select id="inMicroregiao" formControlName="microregiaoAtendida" [(ngModel)]="objeto.microregiaoAtendida"
@@ -71,11 +72,11 @@
                 [(ngModel)]="objeto.infoComplementares" placeholder="Insira as Informações Complementares"
                 [ngClass]="(checado && objetoCadastro.controls.infoComplementares.errors !== null) ? 'invalido' : ''">
 
-            <label for="inContrato">Contrato</label>
+            <label for="inContrato">Contrato ou Convênio</label>
             <input type="text" id="inContrato" formControlName="contrato"
-                [(ngModel)]="objeto.contrato" placeholder="Insira o codigo ou numero do contrato">
-                        
-            <label>Tipos de Plano(s):</label>
+                [(ngModel)]="objeto.contrato" placeholder="Insira o codigo ou numero do contrato ou convênio">
+            
+            <label>Tipos de Plano(s): <span class="obrigatorio">*</span></label>
             <ng-select [(ngModel)]="objeto.planos"
                 [items]="opcoesTipoPlano"
                 [multiple]="true"

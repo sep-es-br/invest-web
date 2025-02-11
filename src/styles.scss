@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 @import url("https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined");
 @import 'ngx-toastr/toastr';
+@import './app/utils/styles/UI_Pattern.scss';
 
 /* You can add global styles to this file, and also import other style files */
 :root {
@@ -10,6 +11,10 @@
     --fonte-open-sans: 'Open Sans', sans-serif;
     --sombra-padrao: 0 0 3px rgba(170, 170, 170, 0.35);
     --cinza-escuro: rgb(85, 85, 85);
+    --cinza-claro: darkgray;
+    --verde-padrao: #17c653;
+    --vermelho-padrao: #f8285a;
+
 }
 
 * {
@@ -22,5 +27,6 @@ body, app-root {
     max-width: 100vw;
     min-height: 100vh;
     background-color: var(--cor-secundaria);
+    font-family: var(--fonte-open-sans);
 }
 

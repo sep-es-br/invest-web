@@ -28,10 +28,14 @@
         <div id="value"><span [title]="objeto.totalAutorizado | customCurrency">R$ {{objeto.totalAutorizado | numeroResumido }}</span></div>
     </div>
     <div>
+        <div id="label">Empenhado</div>
+        <div id="value"><span [title]="objeto.totalAutorizado | customCurrency">R$ {{objeto.totalAutorizado | numeroResumido }}</span></div>
+    </div>
+    <div>
         <div id="label">Disp. S/ Reserva</div>
         <div id="value"><span [title]="objeto.totalDisponivel | customCurrency">R$ {{objeto.totalDisponivel | numeroResumido }}</span></div>
     </div>
-    <div>
+    <div class="status">
         <div id="label">Status</div>
         <div id="value">{{objeto.status }}</div>
     </div>

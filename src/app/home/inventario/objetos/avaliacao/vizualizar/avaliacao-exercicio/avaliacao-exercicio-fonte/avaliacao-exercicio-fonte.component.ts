@@ -69,7 +69,7 @@ export class AvaliacaoExercicioFonteComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.fonteService.getDoSigefes().pipe(
+        this.fonteService.extras().pipe(
             tap(fonteList => this.setFontes(fonteList))
         ).subscribe();
     }

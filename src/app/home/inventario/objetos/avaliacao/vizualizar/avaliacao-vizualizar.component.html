@@ -17,13 +17,13 @@
     </div>
     <svg class="timeline" viewBox="-50 0 1500 100" width="100%" >
         <line *ngFor="let linha of linhas" [ngClass]="'status' + linha.status" [attr.x1]="linha.posInicial" [attr.x2]="linha.posFinal" y1="50%" y2="50%" ></line>
-        <circle r ="10" cy="50%" cx="-20" fill="green"></circle>
+        <circle r ="10" cy="50%" cx="-20" class="status0"></circle>
         <g *ngFor="let status of etapasStatus">
             <circle r="15" cy="50%" [attr.cx]="status.pos" [ngClass]="'status' + status.status"></circle>
             <path [attr.d]="gerarPath(status.pos, status.status)" stroke="white" stroke-width="3" fill="none"></path>
             <text [ngClass]="'status' + status.status" y="85%" [attr.x]="status.pos" text-anchor="middle">{{status.etapa.ordem}}. {{status.etapa.nome}}</text>
         </g>
-        <circle r ="10" cy="50%" cx="1420" fill="gray"></circle>
+        <circle r ="10" cy="50%" cx="1420" class="status2"></circle>
     </svg>
 </header>
 <main>
@@ -100,11 +100,11 @@
                 [(ngModel)]="objeto.infoComplementares" placeholder="Insira as Informações Complementares"
                 [ngClass]="(checado && objetoCadastro.controls.infoComplementares.errors !== null) ? 'invalido' : ''">
 
-            <label for="inContrato">Contrato</label>
+            <label for="inContrato">Contrato ou Convênio</label>
             <input type="text" id="inContrato" formControlName="contrato"
-                [(ngModel)]="objeto.contrato" placeholder="Insira o codigo ou numero do contrato">
+                [(ngModel)]="objeto.contrato" placeholder="Insira o codigo ou numero do contrato ou convênio">
             
-            <label>Tipos de Plano(s):</label>
+            <label>Tipos de Plano(s): <span class="obrigatorio">*</span></label>
             <ng-select [(ngModel)]="objeto.planos"
                 [items]="opcoesTipoPlano"
                 [multiple]="true"
@@ -130,34 +130,34 @@
         </div>
         <div class="acoes" *ngIf="executaAcao">
             <button *ngIf="objeto?.emEtapa?.devolvido" (click)="doExibirFeedBack()"
-                class="acao btnApontamentos">
+                class="btn neutro">
                 <span *ngIf="checarEtapaEnum(EtapaEnum.ANALISE_TECNICA); else verParecer"><fa-icon [icon]="parecerIcon"></fa-icon> Vizualizar Parecer</span>
                 <ng-template #verParecer><fa-icon [icon]="apontamentoIcon"></fa-icon> Vizualizar apontamentos</ng-template>
             </button>
             
             <button *ngFor="let acao of acoesNegativas"
-                class="acao negativo" (click)="executarAcao(acao)">
+                class="btn negativo" (click)="executarAcao(acao)">
                 <fa-icon [icon]="acao.positivo ? positivoIcon : negativoIcon"></fa-icon>
                 {{acao.nome}}
             </button>
             
             <button *ngFor="let acao of acoesPositivas"
-                class="acao positivo" (click)="executarAcao(acao)">
+                class="btn positivo" (click)="executarAcao(acao)">
                 <fa-icon [icon]="acao.positivo ? positivoIcon : negativoIcon"></fa-icon>
                 {{acao.nome}}
             </button>
         </div>
     </main>
 </main>
-<spo-modal-apontamento [ngClass]="exibirModal ? '' : 'esconder-modal'" [apontamentos]="apontamentos" [acao]="acaoDoModal" 
+<spo-modal-apontamento [ngClass]="exibirModal ? '' : 'esconder-elem'" [apontamentos]="apontamentos" [acao]="acaoDoModal" 
     (onFechar)="fecharModal()" (onSalvar)="salvarFeedBack()" ></spo-modal-apontamento>
-<spo-fazer-parecer-modal [ngClass]="exibirFazerParecer ? '' : 'esconder-modal'" [parecer]="parecer" [acao]="acaoDoModal" 
+<spo-fazer-parecer-modal [ngClass]="exibirFazerParecer ? '' : 'esconder-elem'" [parecer]="parecer" [acao]="acaoDoModal" 
     (onClose)="fecharFazerParecer($event)"></spo-fazer-parecer-modal>
 
-<spo-visualizar-parecer *ngIf="checarEtapaEnum(EtapaEnum.ANALISE_TECNICA); else modalApontamento" [ngClass]="exibirVerParecer ? '' : 'esconder-modal'" [parecer]="feedbackAsParecer()" 
+<spo-visualizar-parecer *ngIf="checarEtapaEnum(EtapaEnum.ANALISE_TECNICA); else modalApontamento" [ngClass]="exibirVerParecer ? '' : 'esconder-elem'" [parecer]="feedbackAsParecer()" 
     (onClose)="this.exibirVerParecer = false"></spo-visualizar-parecer>
 
 <ng-template #modalApontamento>
-    <spo-vizualizar-apontamento  [ngClass]="exibirFeedback ? '' : 'esconder-modal'" [apontamentos]="feedbackAsIApontamento()"
+    <spo-vizualizar-apontamento  [ngClass]="exibirFeedback ? '' : 'esconder-elem'" [apontamentos]="feedbackAsIApontamento()"
         (onClose)="this.exibirFeedback = false"></spo-vizualizar-apontamento>
 </ng-template>

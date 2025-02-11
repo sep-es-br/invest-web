@@ -38,9 +38,6 @@ export class CadastroExercicioFonteComponent implements OnInit {
 
     optionsFontes : ISelectOpcao<FonteOrcamentariaDTO>[];
 
-    fontes : FonteOrcamentariaDTO[] = [];
-    fontesFiltrados : FonteOrcamentariaDTO[] = [];
-
     public valido = false;
     public checado = false;
 
@@ -48,17 +45,9 @@ export class CadastroExercicioFonteComponent implements OnInit {
         private fonteService : FonteOrcamentariaService
     ) {}
 
-    filtrarFonte(filtro : string) {
-        this.fontesFiltrados = this.fontes.filter(fonte => fonte.codigo.includes(filtro) || fonte.nome.toUpperCase().includes(filtro.toUpperCase()))
-    }
 
     setFontes(fontList: FonteOrcamentariaDTO[]) {
-        this.fontes = fontList;
-        if(this.fonteValores.fonteOrcamentaria)
-            this.fonteValores.fonteOrcamentaria = this.fontes.find(f => f.codigo == this.fonteValores.fonteOrcamentaria.codigo);
-        this.filtrarFonte("");
 
-        
         this.optionsFontes = [];
 
         this.optionsFontes.push(...fontList.map(fonte => {
@@ -71,18 +60,16 @@ export class CadastroExercicioFonteComponent implements OnInit {
         this.fonteValores.fonteOrcamentaria = this.optionsFontes.find(opt => this.selecionarFonte(opt, this.fonteValores.fonteOrcamentaria) )?.value
     }
 
+    selecionarFonte(option : ISelectOpcao<FonteOrcamentariaDTO>, model : FonteOrcamentariaDTO) : boolean {
+        return option.value?.codigo === model?.codigo
+    }
+
     filtrar(term : string, item : ISelectOpcao<any>) : boolean {
         return item.label.toUpperCase().includes(term.toUpperCase());
     }
 
-    setFonte(fonte : FonteOrcamentariaDTO) {
-        this.fonteValores.fonteOrcamentaria = this.fontes.find(f => f.codigo == fonte.codigo);
-        if(this.checado)
-            this.validar()
-    }
-
     ngOnInit(): void {
-        this.fonteService.getDoSigefes().pipe(
+        this.fonteService.extras().pipe(
             tap(fonteList => this.setFontes(fonteList))
         ).subscribe();
     }
@@ -92,9 +79,5 @@ export class CadastroExercicioFonteComponent implements OnInit {
         this.checado = true;
 
         return this.valido;
-    }
-
-    selecionarFonte(option : ISelectOpcao<FonteOrcamentariaDTO>, model : FonteOrcamentariaDTO) : boolean {
-        return option.value?.codigo === model?.codigo
     }
 }

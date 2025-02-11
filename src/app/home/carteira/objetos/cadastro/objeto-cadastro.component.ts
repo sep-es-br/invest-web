@@ -127,7 +127,7 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
                 tap(unidadeList => this.setUnidades(unidadeList))
             ),
             this.localidadeService.findAll().pipe(
-                tap(localidadeList => this.microregioes = localidadeList)
+                tap(localidadeList => this.setMicrorregioes(localidadeList))
             ),
             this.tipoPlanoService.findAll().pipe(
                 tap(tipoPlanoList => this.setTiposPlano(tipoPlanoList))
@@ -146,36 +146,46 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
                 this.objetoService.getById(objetoId).pipe(tap(
                     obj => {
     
-                        this.objeto = obj;
-        
-                        let nome = `${obj.conta.unidadeOrcamentariaImplementadora.sigla} - Objeto - ${obj.id.split(':')[2]}`;
-    
-                        this.dataUtil.setTitleInfo('objetoId', nome);
-    
-                        this.objetoCadastro.controls.microregiaoAtendida.setValue(
-                            this.objeto.microregiaoAtendida ? 
-                            this.microregioes.find(value => value.id == this.objeto.microregiaoAtendida.id)
-                            : null
-                        );
-            
-    
-                        this.objetoCadastro.controls.planoOrcamentario.setValue(
-                            this.planosOrcamentario.find(plano => plano.codigo == obj.conta.planoOrcamentario?.codigo)
-                        );
-                        
-                        this.objetoCadastro.controls.planos.setValue(
-                            this.tiposplano.filter(tipoItem => obj.planos.map( objTipoPlano => objTipoPlano.id).includes(tipoItem.id))
-                        );
-    
-                        this.objetoCadastro.controls.areaTematica.setValue(
-                            this.areasTematicas.find(area => obj.areaTematica?.id == area.id)
-                        );
+                        this.setObjeto(obj)
     
                     }
                 )).subscribe()
             })).subscribe();
         })).subscribe()
 
+    }
+
+    setMicrorregioes(microrregiaoList : LocalidadeDTO[]) {
+        this.microregioes = microrregiaoList;
+    }
+
+    setObjeto(objeto : IObjeto) {
+        this.objeto = objeto;
+
+        console.log(objeto)
+        
+        let nome = `${objeto.conta.unidadeOrcamentariaImplementadora.sigla} - Objeto - ${objeto.id.split(':')[2]}`;
+
+        this.dataUtil.setTitleInfo('objetoId', nome);
+
+        
+        this.objetoCadastro.controls.microregiaoAtendida.setValue(
+            this.objeto.microregiaoAtendida ? 
+            this.microregioes.find(value => value.id == this.objeto.microregiaoAtendida.id)
+            : undefined
+        );
+
+        this.objetoCadastro.controls.planoOrcamentario.setValue(
+            this.planosOrcamentario.find(plano => plano.codigo == objeto.conta.planoOrcamentario?.codigo)
+        );
+        
+        this.objetoCadastro.controls.planos.setValue(
+            this.tiposplano.filter(tipoItem => objeto.planos.map( objTipoPlano => objTipoPlano.id).includes(tipoItem.id))
+        );
+
+        this.objetoCadastro.controls.areaTematica.setValue(
+            this.areasTematicas.find(area => objeto.areaTematica?.id == area.id)
+        );
     }
 
     ngAfterViewInit(): void {

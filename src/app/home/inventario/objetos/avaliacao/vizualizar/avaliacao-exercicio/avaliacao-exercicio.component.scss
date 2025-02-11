@@ -17,11 +17,11 @@
             
             fa-icon {
                 &.add {
-                    color: green;
+                    color: var(--verde-padrao);
                 }
 
                 &.remover {
-                    color: red;
+                    color: var(--vermelho-padrao);
                 }
             }
         }
