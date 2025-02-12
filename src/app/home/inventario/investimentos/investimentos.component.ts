@@ -11,11 +11,13 @@ import { ValorCardComponent } from "../../../utils/components/valor-card/valor-c
 import { CustoService } from "../../../utils/services/custo.service";
 import { BarraPaginacaoComponent } from "../../../utils/components/barra-paginacao/barra-paginacao.component";
 import { ExecucaoOrcamentariaService } from "../../../utils/services/execucaoOrcamentaria.service";
-import { merge, tap } from "rxjs";
+import { finalize, merge, tap } from "rxjs";
 import { InfosService } from "../../../utils/services/infos.service";
 import { IFiltroInvestimento } from "./investimento-filtro/IFiltroInvestimento";
 import { InvestimentoTiraDTO } from "../../../utils/models/InvestimentoTiraDTO";
 import { ContaService } from "../../../utils/services/conta.service";
+import { ProgressSpinnerModule } from "primeng/progressspinner";
+import { ProgressModalComponent } from "../../../utils/components/progress-modal/progress-modal.component";
 
 @Component({
     selector: 'spo-investimentos',
@@ -23,10 +25,11 @@ import { ContaService } from "../../../utils/services/conta.service";
     styleUrl: './investimentos.component.scss',
     standalone: true,
     imports: [
-        CommonModule, TiraInvestimentoComponent,
-        ReactiveFormsModule, InvestimentoFiltroComponent, 
-        FontAwesomeModule, ValorCardComponent, BarraPaginacaoComponent
-    ]
+    CommonModule, TiraInvestimentoComponent, ProgressSpinnerModule,
+    ReactiveFormsModule, InvestimentoFiltroComponent,
+    FontAwesomeModule, ValorCardComponent, BarraPaginacaoComponent,
+    ProgressModalComponent
+]
 })
 export class InvestimentosComponent implements AfterViewInit {
 
@@ -53,6 +56,8 @@ export class InvestimentosComponent implements AfterViewInit {
     qtInvestimento = 0;
     larguraPaginacao = 7;
     qtPorPagina = 15;
+
+    showProgress = false;
 
     constructor( 
         private service: InvestimentosService,
@@ -86,6 +91,8 @@ export class InvestimentosComponent implements AfterViewInit {
 
     recarregarValores() {
 
+        this.showProgress = true;
+
         merge(
 
             this.infoService.getCardTotais(
@@ -107,6 +114,8 @@ export class InvestimentosComponent implements AfterViewInit {
                 this.totalPago = totais.pago;
             }))
 
+        ).pipe(
+            finalize(() => this.showProgress = false)
         ).subscribe()
        
     }

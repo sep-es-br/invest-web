@@ -84,19 +84,19 @@ export class ObjetosFiltroComponent implements AfterViewInit {
         ]
 
         // if(this.podeVerUnidades) {
-            // consulta.push(this.unidadeService.getAllUnidadesOrcamentarias()
-            // .pipe(tap((unidadeList) => {
+            consulta.push(this.unidadeService.getAllUnidadesOrcamentarias()
+            .pipe(tap((unidadeList) => {
                 
-            //     this.unidades = unidadeList;
-                
-            // })));
-        // } else {
-            consulta.push(this.unidadeService.getUnidadeDoUsuario()
-            .pipe(tap((unidade) => {
-                
-                this.filtro.unidade = unidade;
+                this.unidades = unidadeList;
                 
             })));
+        // } else {
+            // consulta.push(this.unidadeService.getUnidadeDoUsuario()
+            // .pipe(tap((unidade) => {
+                
+            //     this.filtro.unidade = unidade;
+                
+            // })));
         // }
 
         merge(

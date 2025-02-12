@@ -12,6 +12,7 @@
         border-radius: 0.5rem;
         box-shadow: var(--sombra-padrao);
         width: 100%;
+        min-width: fit-content;
         padding: 4rem;
 
         header {
@@ -38,6 +39,7 @@
             }
 
             .recursos {
+                width: 100%;
                 header {
 
                     padding-bottom: 0.5rem;

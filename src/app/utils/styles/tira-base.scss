@@ -38,9 +38,16 @@
             &#invNome {
                 flex-grow: 1;
                 #value {
+                    display: -webkit-box;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
                     width: 100%;
-                    height: 2rem !important;
-                    box-sizing: content-box !important;
+                    min-height: 2rem;
+                    box-sizing: border-box ;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+
+
                 }
             }
 

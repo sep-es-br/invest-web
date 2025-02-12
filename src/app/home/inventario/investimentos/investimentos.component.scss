@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 
 :host {
+    position: relative;
     display: flex;
     flex-direction: column;
     padding-top: 2rem;
@@ -17,11 +18,10 @@
 
         > * {
             display: flex;
-            flex: 1 1 0px;
+            flex: 1 0 0px;
             align-items: center;
             height: 3rem;
-            max-width: 9rem;
-            min-width: 9rem;
+            width: auto;
             padding: 0.5rem;
             border-radius: 0.3rem;
             box-shadow: rgba(170, 170, 170, 0.35) 1px 1px 5px 0px;
@@ -38,14 +38,14 @@
         }
     }
 
-    @media screen and (max-width: 1845px) {
+    @media screen and (max-width: 1733px) {
         
         div#valores {
-            width: 45rem;
+            width: 40rem;
             align-self: center;
 
             > * {
-                max-width: 5rem;
+                width: auto;
             }
         }
 
@@ -193,6 +193,8 @@
         overflow-x: auto;
 
     }
+
+    
 
 } 
 

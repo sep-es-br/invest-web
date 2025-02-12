@@ -1,0 +1,29 @@
+:host {
+    main {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 10;
+        height: 100vh;
+        width: 100vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(0, 0, 0, 0.3);
+
+        img {
+            position: absolute;
+            top: calc(50% - 30px);
+            left: calc(50% - 25px);
+        }
+
+        ::ng-deep .p-progress-spinner-circle {
+            stroke: var(--cor-primaria) !important;
+            animation: p-progress-spinner-dash 1.5s ease-in-out infinite !important;
+        }
+
+        &.oculto {
+            display: none;
+        }
+    }
+}
