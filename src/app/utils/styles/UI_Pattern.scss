@@ -38,8 +38,12 @@ select, input {
     border: var(--cor-primaria) solid 1px;
     border-radius: 4px;
     color: var(--cor-primaria);
+    font-family: var(--fonte-open-sans);
+    font-size: small;
     outline: none;
     padding-left: 1rem;
+    height: 32px;
+    box-sizing: border-box;
 
     &::placeholder {
         color: var(--cor-primaria);

@@ -87,11 +87,11 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
         unidade: new FormControl(undefined, Validators.required),
         planoOrcamentario: new FormControl(undefined),
         microregiaoAtendida: new FormControl(undefined, Validators.required),
-        infoComplementares: new FormControl(null, Validators.required),
-        objContratado: new FormControl(false),
-        planos : new FormControl([]),
+        infoComplementares: new FormControl(null),
+        planos : new FormControl([], Validators.required),
         contrato : new FormControl(null),
         areaTematica : new FormControl(null),
+        inPossuiOrcamento : new FormControl(undefined, Validators.required)
 
     });
 
@@ -163,6 +163,11 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
 
     setObjeto(objeto : IObjeto) {
         this.objeto = objeto;
+
+        if(this.checarCadastrado()) {
+            this.objetoCadastro.controls.planoOrcamentario.addValidators(Validators.required);
+            this.objetoCadastro.controls.planoOrcamentario.updateValueAndValidity();
+        }
        
         let nome = `${objeto.conta.unidadeOrcamentariaImplementadora.sigla} - Objeto - ${objeto.id.split(':')[2]}`;
 
@@ -186,6 +191,10 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
         this.objetoCadastro.controls.areaTematica.setValue(
             this.areasTematicas.find(area => objeto.areaTematica?.id == area.id)
         );
+    }
+
+    checarCadastrado() {
+        return this.objeto.id && !this.objeto.emEtapa;
     }
 
     ngAfterViewInit(): void {

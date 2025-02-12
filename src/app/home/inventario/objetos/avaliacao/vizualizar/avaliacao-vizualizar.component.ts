@@ -128,12 +128,11 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
         unidade: new FormControl(undefined, Validators.required),
         planoOrcamentario: new FormControl(undefined),
         microregiaoAtendida: new FormControl(undefined, Validators.required),
-        infoComplementares: new FormControl(null, Validators.required),
-        objContratado: new FormControl(false),
-        planos : new FormControl([]),
+        infoComplementares: new FormControl(null),
+        planos : new FormControl([], Validators.required),
         contrato : new FormControl(null),
         areaTematica : new FormControl(null),
-        inPossuiOrcamento : new FormControl(undefined)
+        inPossuiOrcamento : new FormControl(undefined, Validators.required)
 
     });
 
