@@ -49,52 +49,54 @@ export class InvestimentoFiltroComponent implements AfterViewInit{
     ngAfterViewInit(): void {
         // this.resetarCampos();
 
-         this.permissaoService.podeVerUnidades().pipe(tap(
-                    podeVer => {
+        //  this.permissaoService.podeVerUnidades().pipe(tap(
+        //             podeVer => {
         
-                        this.podeVerUnidades = podeVer;
+        //                 this.podeVerUnidades = podeVer;
         
-                        let consulta : Observable<any>[] = [
-                            this.infosService.getAllAnos()
-                                .pipe(tap((anosList) => {
-                                    this.anos = anosList;
+                        
+        //             }
+        //         )).subscribe();
 
-                                    this.filtro.ano = new Date().getFullYear();
+        let consulta : Observable<any>[] = [
+            this.infosService.getAllAnos()
+                .pipe(tap((anosList) => {
+                    this.anos = anosList;
 
-                                })),
-                                this.planoService.getAllPlanos()
-                                .pipe(tap((planoList) => {
-                                    this.planos = planoList;
-                                })),
-                                this.fonteService.findAll()
-                                .pipe(tap((fonteList) => {
-                                    this.fontes = fonteList
-                                }))
-                        ]
+                    this.filtro.ano = new Date().getFullYear();
+
+                })),
+                this.planoService.getAllPlanos()
+                .pipe(tap((planoList) => {
+                    this.planos = planoList;
+                })),
+                this.fonteService.findAll()
+                .pipe(tap((fonteList) => {
+                    this.fontes = fonteList
+                }))
+        ]
+
+        // if(this.podeVerUnidades) {
+            consulta.push(this.unidadeService.getAllUnidadesOrcamentarias()
+            .pipe(tap((unidadeList) => {
+
+                this.unidades = unidadeList;
                 
-                        if(this.podeVerUnidades) {
-                            consulta.push(this.unidadeService.getAllUnidadesOrcamentarias()
-                            .pipe(tap((unidadeList) => {
-
-                                this.unidades = unidadeList;
-                                
-                            })))
-                        } else {
-                            consulta.push(this.unidadeService.getUnidadeDoUsuario()
-                            .pipe(tap((unidade) => {
-                                
-                                this.filtro.unidade = unidade;
-                                
-                            })));
-                        }
+            })))
+        // } else {
+        //     consulta.push(this.unidadeService.getUnidadeDoUsuario()
+        //     .pipe(tap((unidade) => {
                 
-                        merge(
-                            
-                            ...consulta
-                            
-                        ).pipe(finalize(() => this.update())).subscribe()
-                    }
-                )).subscribe();
+        //         this.filtro.unidade = unidade;
+                
+        //     })));
+        // }
+
+        merge(
+            
+            ...consulta
+            
+        ).pipe(finalize(() => this.update())).subscribe()
 
     }
 
