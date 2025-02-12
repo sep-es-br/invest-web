@@ -45,6 +45,12 @@ select, input {
         color: var(--cor-primaria);
     }
 
+    &:disabled {
+        border-color: var(--cor-primaria);
+        color: var(--cor-primaria);
+        
+    }
+
 }
 
 .invalido {

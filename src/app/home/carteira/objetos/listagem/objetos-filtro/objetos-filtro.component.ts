@@ -55,54 +55,55 @@ export class ObjetosFiltroComponent implements AfterViewInit {
 
     ngAfterViewInit(): void {
 
-        this.permissaoService.podeVerUnidades().pipe(tap(
-            podeVer => {
+        // this.permissaoService.podeVerUnidades().pipe(tap(
+        //     podeVer => {
 
-                this.podeVerUnidades = podeVer;
+        //         this.podeVerUnidades = podeVer;
 
-                let consulta : Observable<any>[] = [
-                    this.infosService.getAllAnos()
-                    .pipe(tap((anosList) => {
-                        this.anos = anosList;
-        
-                        this.filtro.exercicio = new Date().getFullYear();
-        
-                    })),
-                    this.planoService.getAllPlanos()
-                    .pipe(tap((planoList) => {
-                        this.planos = planoList;
-                    })),
-                    this.statusService.findAll()
-                    .pipe(tap(statusList => {
-                        this.status = statusList;
-                    }))
-                ]
-        
-                if(this.podeVerUnidades) {
-                    consulta.push(this.unidadeService.getAllUnidadesOrcamentarias()
-                    .pipe(tap((unidadeList) => {
-                        
-                        this.unidades = unidadeList;
-                        
-                    })));
-                } else {
-                    consulta.push(this.unidadeService.getUnidadeDoUsuario()
-                    .pipe(tap((unidade) => {
-                        
-                        this.filtro.unidade = unidade;
-                        
-                    })));
-                }
-        
-                merge(
-                    
-                    ...consulta
-                    
-                ).pipe(finalize(() => this.update())).subscribe()
-            }
-        )).subscribe();
+                
+        //     }
+        // )).subscribe();
 
 
+        let consulta : Observable<any>[] = [
+            this.infosService.getAllAnos()
+            .pipe(tap((anosList) => {
+                this.anos = anosList;
+
+                this.filtro.exercicio = new Date().getFullYear();
+
+            })),
+            this.planoService.getAllPlanos()
+            .pipe(tap((planoList) => {
+                this.planos = planoList;
+            })),
+            this.statusService.findAll()
+            .pipe(tap(statusList => {
+                this.status = statusList;
+            }))
+        ]
+
+        // if(this.podeVerUnidades) {
+            // consulta.push(this.unidadeService.getAllUnidadesOrcamentarias()
+            // .pipe(tap((unidadeList) => {
+                
+            //     this.unidades = unidadeList;
+                
+            // })));
+        // } else {
+            consulta.push(this.unidadeService.getUnidadeDoUsuario()
+            .pipe(tap((unidade) => {
+                
+                this.filtro.unidade = unidade;
+                
+            })));
+        // }
+
+        merge(
+            
+            ...consulta
+            
+        ).pipe(finalize(() => this.update())).subscribe()
         
                 
     }

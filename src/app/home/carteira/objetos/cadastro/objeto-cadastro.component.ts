@@ -139,6 +139,8 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
                 tap(planoList => this.setPlanos(planoList))
             )
         ).pipe(finalize(() => {
+            
+            console.log(this.objeto)
             this.route.params.pipe(tap(params => {
                 let objetoId = params['objetoId'];
     
@@ -161,9 +163,7 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
 
     setObjeto(objeto : IObjeto) {
         this.objeto = objeto;
-
-        console.log(objeto)
-        
+       
         let nome = `${objeto.conta.unidadeOrcamentariaImplementadora.sigla} - Objeto - ${objeto.id.split(':')[2]}`;
 
         this.dataUtil.setTitleInfo('objetoId', nome);

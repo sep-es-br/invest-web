@@ -89,20 +89,20 @@
                 <option *ngFor="let microregiao of microregioes" [ngValue]="microregiao">{{microregiao.nome}}</option>
             </select>
             
-            <label for="inAreaTematica">Área Temática </label>
+            <label for="inAreaTematica">Área Temática <span class="obrigatorio">*</span></label>
             <select id="inAreaTematica" formControlName="areaTematica" [(ngModel)]="objeto.areaTematica">
                 <option [ngValue]="undefined">Selecionar a área temática</option>
                 <option *ngFor="let area of areasTematicas" [ngValue]="area">{{area.nome}}</option>
             </select>
 
-            <label for="inInfoComplementar">Informações Complementares <span class="obrigatorio">*</span></label>
+            <label for="inInfoComplementar">Informações Complementares </label>
             <input type="text" id="inInfoComplementar" formControlName="infoComplementares"
                 [(ngModel)]="objeto.infoComplementares" placeholder="Insira as Informações Complementares"
                 [ngClass]="(checado && objetoCadastro.controls.infoComplementares.errors !== null) ? 'invalido' : ''">
 
             <label for="inContrato">Contrato ou Convênio</label>
             <input type="text" id="inContrato" formControlName="contrato"
-                [(ngModel)]="objeto.contrato" placeholder="Insira o codigo ou numero do contrato ou convênio">
+                [(ngModel)]="objeto.contrato" placeholder="Insira o código ou número do contrato ou convênio">
             
             <label>Tipos de Plano(s): <span class="obrigatorio">*</span></label>
             <ng-select [(ngModel)]="objeto.planos"
@@ -115,6 +115,14 @@
                 formControlName="planos"
                 class="multiple"
                 ></ng-select>
+            
+            <label for="inPossuiOrcamento">Orçamento <span class="obrigatorio">*</span></label>
+            <select id="inPossuiOrcamento" formControlName="inPossuiOrcamento" [(ngModel)]="objeto.possuiOrcamento" >
+                <option [ngValue]="undefined">Selecionar se dispõe de orçamento</option>
+                <option [ngValue]="">Já dispõe, totalmente</option>
+                <option [ngValue]="">Já dispõe, parcialmente (indicar no campo Informações Complementares)</option>
+                <option [ngValue]="">Ainda não dispõe</option>
+            </select>
         </form>
         
         <div class="recursos">
@@ -151,13 +159,13 @@
 </main>
 <spo-modal-apontamento [ngClass]="exibirModal ? '' : 'esconder-elem'" [apontamentos]="apontamentos" [acao]="acaoDoModal" 
     (onFechar)="fecharModal()" (onSalvar)="salvarFeedBack()" ></spo-modal-apontamento>
-<spo-fazer-parecer-modal [ngClass]="exibirFazerParecer ? '' : 'esconder-elem'" [parecer]="parecer" [acao]="acaoDoModal" 
-    (onClose)="fecharFazerParecer($event)"></spo-fazer-parecer-modal>
+<!-- <spo-fazer-parecer-modal [ngClass]="exibirFazerParecer ? '' : 'esconder-elem'" [parecer]="parecer" [acao]="acaoDoModal" 
+    (onClose)="fecharFazerParecer($event)"></spo-fazer-parecer-modal> -->
 
-<spo-visualizar-parecer *ngIf="checarEtapaEnum(EtapaEnum.ANALISE_TECNICA); else modalApontamento" [ngClass]="exibirVerParecer ? '' : 'esconder-elem'" [parecer]="feedbackAsParecer()" 
-    (onClose)="this.exibirVerParecer = false"></spo-visualizar-parecer>
+<!-- <spo-visualizar-parecer *ngIf="checarEtapaEnum(EtapaEnum.ANALISE_TECNICA); else modalApontamento" [ngClass]="exibirVerParecer ? '' : 'esconder-elem'" [parecer]="feedbackAsParecer()" 
+    (onClose)="this.exibirVerParecer = false"></spo-visualizar-parecer> -->
 
-<ng-template #modalApontamento>
+<!-- <ng-template #modalApontamento> -->
     <spo-vizualizar-apontamento  [ngClass]="exibirFeedback ? '' : 'esconder-elem'" [apontamentos]="feedbackAsIApontamento()"
         (onClose)="this.exibirFeedback = false"></spo-vizualizar-apontamento>
-</ng-template>
+<!-- </ng-template> -->

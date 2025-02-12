@@ -7,5 +7,6 @@ export interface IPodeDTO {
     visualizar : boolean,
     criar : boolean,
     editar : boolean, 
-    excluir : boolean
+    excluir : boolean,
+    verTodasUnidades : boolean
 }

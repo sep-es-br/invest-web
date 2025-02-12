@@ -42,6 +42,7 @@ import { AcaoEvent, ParecerModalComponent } from "./parecer-modal/parecer-modal.
 import { IParecer, parecerPadrao } from "../../../../../utils/interfaces/parecer.interface";
 import { EtapaEnum } from "../../../../../utils/enum/etapa.enum";
 import { VisualizarParecerComponent } from "./visualizar-parecer/visualizar-parecer.component";
+import { PermissaoService } from "../../../../../utils/services/permissao.service";
 
 @Component({
     standalone: true,
@@ -105,6 +106,8 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
     exibirFazerParecer = false;
     exibirVerParecer = false;
 
+    exibeTodasUnidades = false;
+
     unidades : UnidadeOrcamentariaDTO[];
     opcoesUnidades : ISelectOpcao<UnidadeOrcamentariaDTO>[]
     planosOrcamentario : PlanoOrcamentarioDTO[];
@@ -130,6 +133,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
         planos : new FormControl([]),
         contrato : new FormControl(null),
         areaTematica : new FormControl(null),
+        inPossuiOrcamento : new FormControl(undefined)
 
     });
 
@@ -162,7 +166,8 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
         private localidadeService : LocalidadeService,
         private tipoPlanoService : TipoPlanoService,
         private areaTematicaService : AreaTematicaService,
-        private acaoService : AcaoService
+        private acaoService : AcaoService,
+        private permissaoService : PermissaoService
     ){
         
     }
@@ -185,27 +190,27 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
 
     salvarFeedBack(){
         if(!this.checarEtapaEnum(EtapaEnum.SOLICITACAO_CADASTRO)) {
-            if((this.checarEtapaEnum(EtapaEnum.APROVACAO_SUBEO) && !this.validarParecer())
-                ||(!this.checarEtapaEnum(EtapaEnum.APROVACAO_SUBEO) &&  !this.validarApontamentos()))
+            // if((this.checarEtapaEnum(EtapaEnum.APROVACAO_SUBEO) && !this.validarParecer())
+               if((!this.checarEtapaEnum(EtapaEnum.APROVACAO_SUBEO) &&  !this.validarApontamentos()))
                 return;
         }
 
         let objetoFinal : IObjeto = this.gerarObjetoFinal()
         
         let executarAcaoDto : IExecutarAcao;
-        if(this.checarEtapaEnum(EtapaEnum.APROVACAO_SUBEO)){
-            executarAcaoDto = {
-                acao: this.acaoDoModal,
-                parecer: this.parecer,
-                objeto: objetoFinal
-            }
-        } else {
+        // if(this.checarEtapaEnum(EtapaEnum.APROVACAO_SUBEO)){
+        //     executarAcaoDto = {
+        //         acao: this.acaoDoModal,
+        //         parecer: this.parecer,
+        //         objeto: objetoFinal
+        //     }
+        // } else {
             executarAcaoDto = {
                 acao: this.acaoDoModal,
                 apontamentos: this.apontamentos,
                 objeto: objetoFinal
             }
-        }
+        // }
         
         
         this.acaoService.executarAcao(executarAcaoDto).pipe(
@@ -305,17 +310,18 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
 
         this.acaoDoModal = objeto.emEtapa.etapa.acoes.find(acao => acao.positivo !== undefined && !acao.positivo);
         this.recarregarFluxo();
-        this.feedback = this.checarEtapaEnum(EtapaEnum.ANALISE_TECNICA) ?
-             this.objeto.pareceres?.sort((p1, p2) => {
-                let d1 = new Date(p1.timestamp);
-                let d2 = new Date(p2.timestamp);
+        this.feedback = this.objeto.apontamentos
+        // this.feedback = this.checarEtapaEnum(EtapaEnum.ANALISE_TECNICA) ?
+        //      this.objeto.pareceres?.sort((p1, p2) => {
+        //         let d1 = new Date(p1.timestamp);
+        //         let d2 = new Date(p2.timestamp);
 
-                return d2.getTime() - d1.getTime();
-             })[0] :
+        //         return d2.getTime() - d1.getTime();
+        //      })[0] :
         
-            this.objeto.apontamentos?.filter(apontamento => {
-                return apontamento.etapa.id === this.objeto.emEtapa.etapa.id;
-            })
+        //     this.objeto.apontamentos?.filter(apontamento => {
+        //         return apontamento.etapa.id === this.objeto.emEtapa.etapa.id;
+        //     })
         
         this.acoesNegativas = this.objeto.emEtapa.etapa.acoes.filter(a => a.positivo !== undefined && !a.positivo);
         this.acoesPositivas = this.objeto.emEtapa.etapa.acoes.filter(a => a.positivo !== undefined && a.positivo);
@@ -333,11 +339,11 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
     }
 
     doExibirFeedBack(){
-        if(this.checarEtapaEnum(EtapaEnum.ANALISE_TECNICA)) {
-            this.exibirVerParecer = true;
-        } else {
+        // if(this.checarEtapaEnum(EtapaEnum.ANALISE_TECNICA)) {
+        //     this.exibirVerParecer = true;
+        // } else {
             this.exibirFeedback = true;
-        }
+        // }
     }
 
     recarregarFluxo(){
@@ -504,6 +510,11 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
             ),
             this.planoService.getDoSigefes(null).pipe(
                 tap(planoList => this.setPlanos(planoList))
+            ),
+            this.permissaoService.getPermissao('inventarioobjetos').pipe(
+                tap(permissao => {
+                    this.exibeTodasUnidades = !!permissao?.verTodasUnidades;
+                })
             )
         ).pipe(finalize(() => {
             this.route.params.pipe(
@@ -527,6 +538,10 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                                     
                                 this.usuarioService.getUser().pipe(
                                     tap(user => {
+                                        if(!this.exibeTodasUnidades){
+                                            this.objetoCadastro.controls.unidade.disable({onlySelf: true});
+                                        }
+
                                         this.grupoService.findByUsuario(user.id).pipe(
                                             tap(grupos => {
                                                 this.executaAcao = grupos.map(g => g.id).includes(objeto.emEtapa.etapa.grupoResponsavel.id)
@@ -583,11 +598,11 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                     })
                 ).subscribe();
             } else {
-                if(this.checarEtapaEnum(EtapaEnum.APROVACAO_SUBEO)){
-                    this.exibirFazerParecer = true;
-                } else {
+                // if(this.checarEtapaEnum(EtapaEnum.APROVACAO_SUBEO)){
+                    // this.exibirFazerParecer = true;
+                // } else {
                     this.exibirModal = true;
-                }
+                // }
                 
             }
             

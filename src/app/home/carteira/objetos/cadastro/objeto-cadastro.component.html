@@ -42,7 +42,7 @@
                 formControlName="unidade"
                 ></ng-select>            
            
-            <label>Plano Orçamentário  <span *ngIf="!objeto?.emEtapa" class="obrigatorio">*</span></label>
+            <label>Plano Orçamentário  <span *ngIf="objeto.id && !objeto.emEtapa" class="obrigatorio">*</span></label>
             <ng-select [(ngModel)]="objeto.conta.planoOrcamentario"
                 [items]="opcoesPlanosOrcamentarios"
                 placeholder="Selecionar plano orçamentário"
@@ -101,6 +101,6 @@
                 (onRemover)="removerExercicio($event)"></spo-cadastro-exercicio>
         </div>
 
-        <button (click)="salvar()" >ENVIAR</button>
+        <button (click)="salvar()" class="btn positivo" >ENVIAR</button>
     </main>
 </div>

@@ -1,7 +1,11 @@
 <div id="tira">
     <div id="invNome">
         <div id="label">Objeto</div>
-        <div id="value"><span [title]="objeto.nome">{{objeto.nome | shortString : 70}}</span></div>
+        <div id="value"><span [title]="objeto.nome">{{objeto.nome}}</span></div>
+    </div>
+    <div class="colUo">
+        <div id="label">Unidade Orçamentária</div>
+        <div id="value">{{objeto.unidadeResponsavel}}</div>
     </div>
     <div>
         <div id="label">Status</div>

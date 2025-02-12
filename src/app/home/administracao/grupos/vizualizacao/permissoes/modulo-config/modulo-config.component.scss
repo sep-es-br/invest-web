@@ -1,6 +1,8 @@
 :host {
     display: flex;
     flex-direction: column;
+    font-family: var(--fonte-open-sans);
+    font-size: small;
 
     p {
         display: flex;
@@ -15,6 +17,16 @@
         margin-bottom: 1rem;
         display: flex;
         justify-content: space-evenly;
+
+        div {
+            display: flex;
+            align-items: center;
+
+            input {
+                margin-right: 4px;
+            }
+        }
+
     }
 
     spo-modulo-config {

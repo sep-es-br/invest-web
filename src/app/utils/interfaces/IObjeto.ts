@@ -27,6 +27,7 @@ export interface IObjeto {
     recursosFinanceiros? : ICusto[];
     responsavel? : IProfile;
     conta? : IConta;
+    possuiOrcamento? : boolean;
     apontamentos? : IApontamento[];
     pareceres? : IParecer[];
 }

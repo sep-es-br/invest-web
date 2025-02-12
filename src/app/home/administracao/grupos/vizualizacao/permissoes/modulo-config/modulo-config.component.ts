@@ -29,7 +29,8 @@ export class ModuloConfigComponent implements AfterViewInit {
         inVisualizar: new FormControl(false),
         inCriar: new FormControl(false),
         inEditar: new FormControl(false),
-        inExcluir: new FormControl(false)
+        inExcluir: new FormControl(false),
+        inVerTodasUnidades: new FormControl(false)
     });
 
     permissaoGrupo : IPodeDTO;
@@ -45,6 +46,7 @@ export class ModuloConfigComponent implements AfterViewInit {
         this.subscribePropagacao("inCriar");
         this.subscribePropagacao("inEditar");
         this.subscribePropagacao("inExcluir");
+        this.subscribePropagacao("inVerTodasUnidades");
 
         merge(
             this.permissaoService.findByModuloGrupo(this.modulo.id, this.grupo.id)
@@ -57,7 +59,8 @@ export class ModuloConfigComponent implements AfterViewInit {
                         inVisualizar: permissao.visualizar,
                         inCriar: permissao.criar,
                         inEditar: permissao.editar,
-                        inExcluir: permissao.excluir
+                        inExcluir: permissao.excluir,
+                        inVerTodasUnidades: permissao.verTodasUnidades
                     });
                 }
                 this.permissaoService.getPermissao('grupo').pipe(tap(
@@ -100,7 +103,8 @@ export class ModuloConfigComponent implements AfterViewInit {
                 visualizar: formValue.inVisualizar,
                 criar: formValue.inCriar,
                 editar: formValue.inEditar,
-                excluir: formValue.inExcluir
+                excluir: formValue.inExcluir,
+                verTodasUnidades: formValue.inVerTodasUnidades
             });
         }
 

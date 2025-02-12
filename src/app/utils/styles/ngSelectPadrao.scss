@@ -32,6 +32,11 @@
     .ng-select-container {
         border-color: var(--cor-primaria);
         color: var(--cor-primaria);
+        padding-left: 1rem;
+
+        .ng-value-container {
+            padding-left: unset;
+        }
 
         .ng-placeholder {
             color: var(--cor-primaria);
@@ -82,5 +87,15 @@
 
 
         }
+    }
+
+    &.ng-select-disabled {
+
+        .ng-select-container {
+            opacity: 0.7;
+            background-color: unset;
+
+        }
+        
     }
 }

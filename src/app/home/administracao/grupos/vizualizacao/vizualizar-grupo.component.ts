@@ -40,7 +40,7 @@ export class VizualizarGrupoComponent implements OnInit, OnDestroy{
             // this.dataUtil.obsNomeTela.next(grupo.sigla);
             this.grupoService.grupoSession.subscribe(grupo => {
                 this.grupo = grupo;
-                this.dataUtil.setTitleInfo('grupo', grupo.sigla)
+                this.dataUtil.setTitleInfo('grupo', grupo?.sigla)
                 // this.dataUtil.obsNomeTela.next(grupo.sigla)
             })
             this.grupoService.grupoSession.next(grupo);
