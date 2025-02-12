@@ -292,7 +292,7 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
             this.toastr.error("Favor preeencher os campos obrigatórios");
         } else {
             let objetoFinal : IObjeto = {
-                id: this.objeto.id,
+                ...this.objeto,
                 ...this.objetoCadastro.getRawValue(),
                 conta: {
                     planoOrcamentario: this.objetoCadastro.value.planoOrcamentario,
