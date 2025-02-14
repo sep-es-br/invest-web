@@ -34,7 +34,7 @@ label {
     }
 }
 
-select, input {
+select, input:not(.pesquisa) {
     border: var(--cor-primaria) solid 1px;
     border-radius: 4px;
     color: var(--cor-primaria);

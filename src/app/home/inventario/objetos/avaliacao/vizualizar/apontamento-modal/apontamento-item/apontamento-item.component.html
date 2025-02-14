@@ -1,16 +1,16 @@
 <header (click)="clickHeader($event)" >
     <fa-icon [icon]="itemIcon" class="itemIcon"></fa-icon>
     <h2>{{apontamento.campo?.nome}}</h2>
-    <fa-icon [icon]="removerIcon" class="removerIcon" #removerIconRef (click)="onRemover.emit($event)"></fa-icon>
+    <fa-icon [icon]="removerIcon" *ngIf="editavel" class="removerIcon" #removerIconRef (click)="onRemover.emit($event)"></fa-icon>
 </header>
 <main [ngClass]="aberto ? 'aberto' : ''">
     <label>Campo:</label>
-    <select [ngModelOptions]="{standalone:true}" [(ngModel)]="apontamento.campo" >
+    <select [ngModelOptions]="{standalone:true}" [(ngModel)]="apontamento.campo" [disabled]="!editavel" >
         <option value="undefined">Selecionar o campo</option>
         <option *ngFor="let campo of campos"
             [ngValue]="campo">{{campo.nome}}</option>
     </select>
     <label>Justificativa:</label>
     <textarea rows="5" placeholder="Insira a justificativa"
-       [(ngModel)]="apontamento.texto" ></textarea>
+       [(ngModel)]="apontamento.texto" [disabled]="!editavel" ></textarea>
 </main>

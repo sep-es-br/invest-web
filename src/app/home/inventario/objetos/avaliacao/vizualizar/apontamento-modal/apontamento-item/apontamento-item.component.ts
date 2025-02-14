@@ -23,6 +23,7 @@ export class ApontamentoItemComponent implements AfterViewInit, OnChanges {
 
     @Input() apontamento : IApontamento = apontamentoPadrao;
     @Input() aberto : boolean = true;
+    @Input() editavel : boolean = false;
 
     @Output() onclick = new EventEmitter<MouseEvent>();
     @Output() onRemover = new EventEmitter<MouseEvent>();

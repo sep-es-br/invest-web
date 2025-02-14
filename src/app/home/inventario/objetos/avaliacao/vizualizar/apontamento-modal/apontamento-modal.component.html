@@ -9,6 +9,7 @@
         <div class="apontamentos">
             <spo-item-apontamento *ngFor="let apontamento of apontamentos, index as i" 
                 [apontamento]="apontamento" [aberto]="i === apontamentoAberto" 
+                [editavel]="!apontamento.usuario || apontamento.usuario.id === userId"
                 (onclick)="mudarApontamento(i)" (onRemover)="removerApontamento(i)"></spo-item-apontamento>
         </div>
         <div class="acoes">

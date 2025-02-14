@@ -3,10 +3,6 @@
         <div id="label">Objeto</div>
         <div id="value"><span [title]="objeto.nome">{{objeto.nome}}</span></div>
     </div>
-    <div class="colUo">
-        <div id="label">Unidade Orçamentária</div>
-        <div id="value">{{objeto.unidadeResponsavel}}</div>
-    </div>
     <div>
         <div id="label">Status</div>
         <div id="value">{{objeto.status}}</div>
@@ -25,6 +21,10 @@
     </div>
     <div>
         <div id="label">Autorizado</div>
+        <div id="value"><span [title]="objeto.totalAutorizado | customCurrency">R$ {{objeto.totalAutorizado | numeroResumido }}</span></div>
+    </div>
+    <div>
+        <div id="label">Empenhado</div>
         <div id="value"><span [title]="objeto.totalAutorizado | customCurrency">R$ {{objeto.totalAutorizado | numeroResumido }}</span></div>
     </div>
     <div>

@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, ElementRef, EventEmitter, Host, HostListener, Input, Output, ViewChild } from "@angular/core";
+import { Component, ElementRef, EventEmitter, Host, HostListener, Input, OnChanges, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faPlusCircle, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { apontamentoPadrao, IApontamento } from "../../../../../../utils/interfaces/apontamento.interface";
@@ -17,7 +17,7 @@ import { ToastrService } from "ngx-toastr";
     ApontamentoItemComponent
 ]
 })
-export class ApontamentoModalComponent {
+export class ApontamentoModalComponent implements OnChanges {
     
     closeBtnIcon = faXmark;
 
@@ -26,16 +26,27 @@ export class ApontamentoModalComponent {
     @ViewChild('principalRef', {read: ElementRef}) principalRef : ElementRef;
 
     @Output() onFechar = new EventEmitter<MouseEvent>();
-    @Output() onSalvar = new EventEmitter<MouseEvent>();
+    @Output() onSalvar = new EventEmitter<IApontamento[]>();
+    @Output() onRemover = new EventEmitter<IApontamento>();
 
     @Input() apontamentos : IApontamento[] = [];
     @Input() acao : IAcao;
+    @Input() userId : string;
 
     apontamentoAberto : number = 0;
 
     constructor(
         private toastr : ToastrService
     ){}
+
+    ngOnChanges(changes: SimpleChanges): void {
+        let novoApontamentos = changes["apontamentos"]?.currentValue as IApontamento[];
+        if(novoApontamentos){
+            novoApontamentos = novoApontamentos.filter(a => a.active);
+            this.apontamentos = novoApontamentos;
+            this.apontamentoAberto = novoApontamentos.length - 1;
+        }
+    }
 
     @HostListener('click', ['$event'])
     clickFecha(evt : MouseEvent){
@@ -46,7 +57,7 @@ export class ApontamentoModalComponent {
 
     fechar(evt : MouseEvent, success : boolean = false){
         if(success){
-            this.onSalvar.emit(evt);
+            this.onSalvar.emit(this.apontamentos);
         } else {
             this.onFechar.emit(evt);
         }

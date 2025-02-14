@@ -11,10 +11,12 @@ export interface IApontamento {
     campo : ICampo;
     usuario? : IProfile;
     grupo? : GrupoDTO;
+    active : boolean;
 }
 
 export const apontamentoPadrao : IApontamento = {
     campo: undefined,
-    texto: undefined
+    texto: undefined,
+    active: true
 }
 

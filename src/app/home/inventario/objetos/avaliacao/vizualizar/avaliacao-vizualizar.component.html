@@ -139,8 +139,10 @@
         <div class="acoes" *ngIf="executaAcao">
             <button *ngIf="objeto?.emEtapa?.devolvido" (click)="doExibirFeedBack()"
                 class="btn neutro">
-                <span *ngIf="checarEtapaEnum(EtapaEnum.ANALISE_TECNICA); else verParecer"><fa-icon [icon]="parecerIcon"></fa-icon> Vizualizar Parecer</span>
-                <ng-template #verParecer><fa-icon [icon]="apontamentoIcon"></fa-icon> Vizualizar apontamentos</ng-template>
+                <!-- <span *ngIf="checarEtapaEnum(EtapaEnum.ANALISE_TECNICA); else verParecer"><fa-icon [icon]="parecerIcon"></fa-icon> Vizualizar Parecer</span>
+                <ng-template #verParecer><fa-icon [icon]="apontamentoIcon"></fa-icon> Vizualizar apontamentos</ng-template> -->
+                
+                <fa-icon [icon]="apontamentoIcon"></fa-icon> Vizualizar apontamentos
             </button>
             
             <button *ngFor="let acao of acoesNegativas"
@@ -157,8 +159,8 @@
         </div>
     </main>
 </main>
-<spo-modal-apontamento [ngClass]="exibirModal ? '' : 'esconder-elem'" [apontamentos]="apontamentos" [acao]="acaoDoModal" 
-    (onFechar)="fecharModal()" (onSalvar)="salvarFeedBack()" ></spo-modal-apontamento>
+<spo-modal-apontamento [ngClass]="exibirModal ? '' : 'esconder-elem'" [apontamentos]="objeto.apontamentos" [acao]="acaoDoModal" 
+    (onFechar)="fecharModal()" (onSalvar)="salvarFeedBack($event)" [userId]="userId" ></spo-modal-apontamento>
 <!-- <spo-fazer-parecer-modal [ngClass]="exibirFazerParecer ? '' : 'esconder-elem'" [parecer]="parecer" [acao]="acaoDoModal" 
     (onClose)="fecharFazerParecer($event)"></spo-fazer-parecer-modal> -->
 

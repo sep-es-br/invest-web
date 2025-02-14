@@ -7,6 +7,7 @@ export class ObjetoTiraDTO {
     totalPrevisto!: number;
     totalHomologado!: number;
     totalAutorizado! : number;
+    totalEmpenhado: number
     totalDisponivel! : number;
     status : string;
 }

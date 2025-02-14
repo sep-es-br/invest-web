@@ -19,24 +19,7 @@ export class VizualizarApontamentoModalComponent {
 
     fecharIcon = faXmark;
 
-    @Input() apontamentos : IApontamento[] = [
-        { 
-            campo : {
-                campoId: "",
-                nome: "Campo 1"
-            },
-            texto: "texto qualquer",
-            grupo: {
-                sigla: "TST",
-                nome: "Teste",
-                descricao: undefined,
-                icone: undefined,
-                membros: undefined,
-                permissoes: undefined,
-                podeVerTodasUnidades: undefined
-            }
-        }
-    ]
+    @Input() apontamentos : IApontamento[];
 
     @HostListener('click', ['$event'])
     clickFora(evt : MouseEvent) {

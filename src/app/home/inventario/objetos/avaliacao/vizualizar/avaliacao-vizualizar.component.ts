@@ -64,6 +64,8 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
         conta: {}
     }
 
+    userId : string;
+
     EtapaEnum = EtapaEnum;
 
     setaDireita = faChevronRight;
@@ -71,12 +73,6 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
     parecer : IParecer = {
         ...parecerPadrao
     };
-
-    apontamentos : IApontamento[] = [
-        {
-            ...apontamentoPadrao
-        }
-    ]
 
     feedback : IApontamento[] | IParecer;
 
@@ -174,7 +170,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
     fecharFazerParecer(acaoEvent : AcaoEvent) {
 
         if(acaoEvent.acao) {
-            this.salvarFeedBack();
+            this.salvarFeedBack(null);
         } else {
             this.exibirFazerParecer = false;
         }
@@ -187,7 +183,11 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
         this.exibirModal = false;
     }
 
-    salvarFeedBack(){
+    removerApontamento(apontamentoRemovido: IApontamento) {
+        this.objeto.apontamentos = this.objeto.apontamentos.filter(a => a !== apontamentoRemovido);
+    }
+
+    salvarFeedBack(novosApontamentos : IApontamento[]){
         if(!this.checarEtapaEnum(EtapaEnum.SOLICITACAO_CADASTRO)) {
             // if((this.checarEtapaEnum(EtapaEnum.APROVACAO_SUBEO) && !this.validarParecer())
                if((!this.checarEtapaEnum(EtapaEnum.APROVACAO_SUBEO) &&  !this.validarApontamentos()))
@@ -206,7 +206,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
         // } else {
             executarAcaoDto = {
                 acao: this.acaoDoModal,
-                apontamentos: this.apontamentos,
+                apontamentos: novosApontamentos,
                 objeto: objetoFinal
             }
         // }
@@ -215,13 +215,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
         this.acaoService.executarAcao(executarAcaoDto).pipe(
             tap(objeto => {
                 this.toastr.success("Acão de " + this.acaoDoModal.nome + " executada com sucesso");
-                
-                this.apontamentos = [
-                    {
-                        ...apontamentoPadrao
-                    }
-                ]
-                
+                                
                 this.parecer = { ...parecerPadrao}
                 this.setObjeto(objeto);
                 
@@ -239,7 +233,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
 
         let valido = true;
 
-        this.apontamentos.forEach(apontamento => {
+        this.objeto.apontamentos.forEach(apontamento => {
             let preenchido = apontamento.campo
                           && apontamento.texto 
                           && apontamento.texto !== '';
@@ -291,13 +285,17 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
             this.areasTematicas.find(area => objeto.areaTematica?.id == area.id)
         );
 
-        let etapaAnterior = this.getEtapaAnterior();
-        if(this.objeto.apontamentos && this.objeto.apontamentos.length > 0){
-            this.apontamentos = this.objeto.apontamentos.filter(a => a.etapa.id == etapaAnterior?.id);
+        if(!this.objeto.apontamentos || this.objeto.apontamentos.filter(a => a.active).length == 0){
+            this.objeto.apontamentos = [
+                {
+                    ...apontamentoPadrao
+                }
+            ]
         }
 
         this.usuarioService.getUser().pipe(
             tap(user => {
+                this.userId = user.id;
                 this.grupoService.findByUsuario(user.id).pipe(
                     tap(grupos => {
                         this.executaAcao = grupos.map(g => g.id).includes(objeto.emEtapa.etapa.grupoResponsavel.id)
