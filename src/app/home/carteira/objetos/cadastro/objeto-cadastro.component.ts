@@ -140,7 +140,6 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
             )
         ).pipe(finalize(() => {
             
-            console.log(this.objeto)
             this.route.params.pipe(tap(params => {
                 let objetoId = params['objetoId'];
     
@@ -153,6 +152,8 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
                     }
                 )).subscribe()
             })).subscribe();
+
+
         })).subscribe()
 
     }
@@ -226,7 +227,9 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
                 label: plano.codigo + ' - ' + plano.nome,
                 value: plano
             }}
-        )   
+        )
+        
+
 
         // em teoria não seria nescessario essa linha, mas o select ta bugado, então...
         this.objeto.conta.planoOrcamentario = this.opcoesPlanosOrcamentarios.find(opt => this.selecionarPlanoOrcamentario(opt, this.objeto.conta.planoOrcamentario) )?.value
@@ -275,6 +278,12 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
 
             }
         )
+
+        this.tipoPlanoService.findBy(undefined, 'PIP').pipe(
+            tap( tipo => {
+                this.objeto.planos = [tipo];
+            })
+        ).subscribe()
     }
 
     salvar() {

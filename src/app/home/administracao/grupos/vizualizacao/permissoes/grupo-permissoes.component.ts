@@ -11,6 +11,7 @@ import { faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
 import { IPodeDTO } from "../../../../../utils/models/PodeDto";
 import { PermissaoService } from "../../../../../utils/services/permissao.service";
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
+import { ToastrService } from "ngx-toastr";
 
 @Component({
     standalone: true,
@@ -32,8 +33,11 @@ export class GrupoPermissoesComponent implements OnInit {
     verTodasUnidadesFormControl = new FormControl(false);
 
 
-    constructor(private moduloService : ModuloService, private grupoService : GrupoService,
-        private permissaoService : PermissaoService
+    constructor(
+        private moduloService : ModuloService, 
+        private grupoService : GrupoService,
+        private permissaoService : PermissaoService,
+        private toastr : ToastrService
     ) {
         this.grupoService.grupoSession.pipe(tap( grupo => {
             this.grupo = grupo;
@@ -86,7 +90,7 @@ export class GrupoPermissoesComponent implements OnInit {
         this.grupoService.save(this.grupo).subscribe(grupo => {
             this.grupoService.grupoSession.next(grupo);
             this.permissaoService.updateMenuSignal.next(null);
-            alert("Grupo Salvo!!");
+            this.toastr.success("Grupo Salvo!!");
         })
 
     }

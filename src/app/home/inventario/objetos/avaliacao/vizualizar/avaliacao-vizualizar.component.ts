@@ -285,14 +285,6 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
             this.areasTematicas.find(area => objeto.areaTematica?.id == area.id)
         );
 
-        if(!this.objeto.apontamentos || this.objeto.apontamentos.filter(a => a.active).length == 0){
-            this.objeto.apontamentos = [
-                {
-                    ...apontamentoPadrao
-                }
-            ]
-        }
-
         this.usuarioService.getUser().pipe(
             tap(user => {
                 this.userId = user.id;
@@ -543,6 +535,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                                             tap(grupos => {
                                                 this.executaAcao = grupos.map(g => g.id).includes(objeto.emEtapa.etapa.grupoResponsavel.id)
                                                                    || Boolean(user.role.find(funcao => funcao.nome === "GESTOR_MASTER"));
+                                                this.objetoCadastro.disable;
                                             })
                                         ).subscribe()
                                     })

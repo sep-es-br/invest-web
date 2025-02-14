@@ -44,7 +44,14 @@ export class ApontamentoModalComponent implements OnChanges {
         if(novoApontamentos){
             novoApontamentos = novoApontamentos.filter(a => a.active);
             this.apontamentos = novoApontamentos;
-            this.apontamentoAberto = novoApontamentos.length - 1;
+            if(this.apontamentos.length == 0) {
+                this.apontamentos = [
+                    {
+                        ...apontamentoPadrao
+                    }
+                ]
+            }
+            this.apontamentoAberto = this.apontamentos.length - 1;
         }
     }
 

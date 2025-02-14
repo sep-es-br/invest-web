@@ -9,7 +9,8 @@
     </div>
 </div>
 <div id="listaDados">
-    <spo-tira-objeto [routerLink]="obj.id"
-    *ngFor="let obj of data" [objeto]="obj"></spo-tira-objeto>
+    <spo-tira-listagem-objetos *ngFor="let objeto of data" [objeto]="objeto" 
+        (doClick)="redirectTo(objeto.id)" [permissao]="pode"></spo-tira-listagem-objetos>
+    
 </div>
 <spo-barra-paginacao [larguraPaginacao]="larguraPaginacao" [quantidade]="qtObjetos" (onPageChange)="recarregarLista($event)"></spo-barra-paginacao>

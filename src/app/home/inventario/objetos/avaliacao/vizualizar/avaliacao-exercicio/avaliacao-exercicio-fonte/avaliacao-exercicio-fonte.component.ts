@@ -57,7 +57,7 @@ export class AvaliacaoExercicioFonteComponent implements OnInit {
             }
         }))
 
-        this.fonteValores.fonteOrcamentaria = this.optionsFontes.find(opt => this.selecionarFonte(opt, this.fonteValores.fonteOrcamentaria) ).value
+        this.fonteValores.fonteOrcamentaria = this.optionsFontes.find(opt => this.selecionarFonte(opt, this.fonteValores.fonteOrcamentaria) )?.value
     }
 
     selecionarFonte(option : ISelectOpcao<FonteOrcamentariaDTO>, model : FonteOrcamentariaDTO) : boolean {

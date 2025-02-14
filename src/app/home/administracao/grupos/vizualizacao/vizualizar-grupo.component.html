@@ -1,3 +1,8 @@
+<div class="acoes">
+    <button class="btn-acao" (click)="exibirModalEdicao = true">
+        <fa-icon [icon]="editarIcon" ></fa-icon>
+    </button>
+</div>
 <header>
     <header>
         <div class="icone">
@@ -6,11 +11,6 @@
         <div class="dados">
             <h1>{{grupo?.sigla}}</h1>
             <h2>{{grupo?.nome}}</h2>
-        </div>
-        <div class="acoes">
-            <button class="btn-wrapper" (click)="exibirModalEdicao = true">
-                <fa-icon [icon]="editarIcon" class="btn btn-editar" ></fa-icon>
-            </button>
         </div>
     </header>
     

@@ -39,7 +39,7 @@
         <div id="label">Status</div>
         <div id="value">{{objeto.status }}</div>
     </div>
-    <div class="acoes" #iconAcao *ngIf="permissao.excluir">
+    <div class="acoes" #iconAcao *ngIf="permissao?.excluir">
         <fa-icon [icon]="acoesIcon" #iconBtn (click)="toggleMenu()"></fa-icon>
         <nav [ngClass]="menuFechado ? 'fechado' : ''">
             <ul>

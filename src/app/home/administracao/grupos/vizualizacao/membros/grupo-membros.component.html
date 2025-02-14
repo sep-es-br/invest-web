@@ -2,10 +2,10 @@
     <p>Membros ({{qtMembros}})</p>
     <div id="pesquisa">
         <fa-icon [icon]="searchIcon"></fa-icon>
-        <input type="text" [formControl]="txtBusca" placeholder="Procurar" />
+        <input type="text" [formControl]="txtBusca" placeholder="Procurar" class="pesquisa" />
     </div>
     <div class="acoes">
-        <div class="acao" *ngIf="permissao?.editar" (click)="mostrarCadastro = true;">
+        <div class="btn-acao" *ngIf="permissao?.editar" (click)="mostrarCadastro = true;">
             <fa-icon [icon]="addMembroIcon"></fa-icon>
         </div>
     </div>

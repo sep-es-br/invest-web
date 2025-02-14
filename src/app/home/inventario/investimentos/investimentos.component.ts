@@ -11,7 +11,7 @@ import { ValorCardComponent } from "../../../utils/components/valor-card/valor-c
 import { CustoService } from "../../../utils/services/custo.service";
 import { BarraPaginacaoComponent } from "../../../utils/components/barra-paginacao/barra-paginacao.component";
 import { ExecucaoOrcamentariaService } from "../../../utils/services/execucaoOrcamentaria.service";
-import { finalize, merge, tap } from "rxjs";
+import { concat, finalize, merge, Observable, tap } from "rxjs";
 import { InfosService } from "../../../utils/services/infos.service";
 import { IFiltroInvestimento } from "./investimento-filtro/IFiltroInvestimento";
 import { InvestimentoTiraDTO } from "../../../utils/models/InvestimentoTiraDTO";
@@ -84,16 +84,24 @@ export class InvestimentosComponent implements AfterViewInit {
             qtPorPag: 15
         }
 
+        this.executar(
+            concat(
+                this.recarregarValores(),
+                this.recarregarLista(novaPagina)
+            )
+        );
         
-        this.recarregarLista(novaPagina);
-        this.recarregarValores();
+    }
+
+    executar(acao : Observable<any>) {
+        this.showProgress = true;
+
+        acao.pipe(finalize(() => this.showProgress = false)).subscribe()
     }
 
     recarregarValores() {
 
-        this.showProgress = true;
-
-        merge(
+        return merge(
 
             this.infoService.getCardTotais(
                 this.txtBusca.value,
@@ -114,9 +122,7 @@ export class InvestimentosComponent implements AfterViewInit {
                 this.totalPago = totais.pago;
             }))
 
-        ).pipe(
-            finalize(() => this.showProgress = false)
-        ).subscribe()
+        )
        
     }
 
@@ -124,7 +130,7 @@ export class InvestimentosComponent implements AfterViewInit {
 
         this.filtro.numPag = novaPagina;
 
-        merge(
+         return merge(
             this.contaService.findAllTira(this.filtro)
             .pipe(tap(invs => {
                 this.data = invs;
@@ -136,7 +142,7 @@ export class InvestimentosComponent implements AfterViewInit {
                 this.barraPaginacaoComponent.updatePaginacao(quantidade);  
             }))
 
-        ).subscribe()
+        )
        
     }
 }

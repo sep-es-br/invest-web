@@ -8,6 +8,7 @@ import { ProfileService } from "../../../../utils/services/profile.service";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faFloppyDisk, faWrench } from "@fortawesome/free-solid-svg-icons";
 import { Router, RouterModule } from "@angular/router";
+import { ToastrService } from "ngx-toastr";
 
 @Component({
     selector: 'spo-meuperfil-perfil-editar',
@@ -31,7 +32,8 @@ export class EditarPerfilComponent implements AfterViewInit{
 
     constructor(private dataUtilService : DataUtilService,
             private profileService : ProfileService,
-            private router: Router
+            private router: Router,
+            private toastr : ToastrService
     ){}
 
     ngAfterViewInit(): void {
@@ -76,10 +78,10 @@ export class EditarPerfilComponent implements AfterViewInit{
             this.profileService.salvarUsuario(this.user).subscribe(novoUser => {
                 if(novoUser) {
                     this.profileService.userListener.next(novoUser);
-                    alert("Usuario salvo")
+                    this.toastr.success("Usuario salvo")
                     this.router.navigateByUrl("/home/meuperfil/detalhe");
                 } else {
-                    alert("Erro ao salvar usuario")
+                    this.toastr.error("Erro ao salvar usuario");
                 }
             });
     })
