@@ -5,8 +5,8 @@
     </header>
     <main>
         <div *ngFor="let apontamento of apontamentos" >
-            <p>Campo: {{apontamento.campo.nome}}</p>
-            <p>Quem Apontou: {{apontamento.usuario.nomeCompleto}} ({{apontamento.grupo.sigla}})</p>
+            <p>Campo: {{apontamento.campo?.nome}}</p>
+            <p>Quem Apontou: {{apontamento.usuario?.nomeCompleto}} ({{apontamento.grupo?.sigla}})</p>
             <p>Apontamento:</p>
             <p>{{apontamento.texto}}</p>
         </div>

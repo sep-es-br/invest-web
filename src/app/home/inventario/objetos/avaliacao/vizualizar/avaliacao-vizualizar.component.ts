@@ -598,8 +598,24 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                 // if(this.checarEtapaEnum(EtapaEnum.APROVACAO_SUBEO)){
                     // this.exibirFazerParecer = true;
                 // } else {
-                    this.exibirModal = true;
+                    
                 // }
+                if(acao.proxEtapaId){
+                    this.exibirModal = true;
+                } else {
+                    let resp = confirm("Se você remover o objeto ele será excluido definitivamente.\n Tem certeza que deseja excluir?");
+                    if(resp){
+                        this.acaoService.executarAcao(executarAcaoDto).pipe(
+                            tap(objeto => {
+                                this.toastr.success("Objeto excluido com sucesso");
+                                this.router.navigate([".."], {relativeTo: this.route});
+                                
+                            })
+                        ).subscribe();
+                    }
+                }
+
+                
                 
             }
             
