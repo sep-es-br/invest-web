@@ -131,17 +131,12 @@ export class InvestimentosComponent implements AfterViewInit {
         this.filtro.numPag = novaPagina;
 
          return merge(
-            this.contaService.findAllTira(this.filtro)
+            this.service.getListaTiraInvestimentos(this.filtro)
             .pipe(tap(invs => {
-                this.data = invs;
-            })),
-
-            this.contaService.getCount(this.filtro)
-            .pipe(tap(quantidade => {
-                this.qtInvestimento = quantidade
-                this.barraPaginacaoComponent.updatePaginacao(quantidade);  
+                this.data = invs.data;
+                this.qtInvestimento = invs.ammount;
+                this.barraPaginacaoComponent.updatePaginacao(invs.ammount);
             }))
-
         )
        
     }

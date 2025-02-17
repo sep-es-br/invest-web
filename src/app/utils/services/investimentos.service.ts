@@ -6,6 +6,7 @@ import { InvestimentoFiltro } from "../models/InvestimentoFiltro";
 import { ErrorHandlerService } from "./error-handler.service";
 import { Router } from "@angular/router";
 import { InvestimentoTiraDTO } from "../models/InvestimentoTiraDTO";
+import { IDataList } from "../interfaces/dataList.interface";
 
 @Injectable({providedIn: "root"})
 export class InvestimentosService {
@@ -24,9 +25,9 @@ export class InvestimentosService {
     //         );
     // }
 
-    public getListaTiraInvestimentos( filtro : InvestimentoFiltro ) : Observable<InvestimentoTiraDTO[]> {
+    public getListaTiraInvestimentos( filtro : InvestimentoFiltro ) : Observable<IDataList<InvestimentoTiraDTO>> {
         
-        return this.http.get<InvestimentoTiraDTO[]>(`${this.investimentoUrl}/filtrarValores`, {params: this.filterToParams(filtro)}).pipe(
+        return this.http.get<IDataList<InvestimentoTiraDTO>>(`${this.investimentoUrl}/filtrarValores`, {params: this.filterToParams(filtro)}).pipe(
                 catchError(err => this.errorHandlerService.handleError(err))
             );
     }
@@ -37,6 +38,7 @@ export class InvestimentosService {
         );
     }
 
+    
     public filterToParams(filtro : InvestimentoFiltro) : HttpParams {
         let params : HttpParams = new HttpParams();
 

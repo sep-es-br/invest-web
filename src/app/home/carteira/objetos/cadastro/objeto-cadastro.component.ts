@@ -9,7 +9,7 @@ import { CadastroExercicioComponent } from "./cadastro-exercicio/cadastro-exerci
 import { IObjeto } from "../../../../utils/interfaces/IObjeto";
 import { ICusto } from "./exercicio-cadastro.interface";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
-import { faMinusCircle, faPlusCircle, faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
+import { faFloppyDisk, faMinusCircle, faPaperPlane, faPlusCircle, faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
 import { concat, finalize, merge, tap } from "rxjs";
 import { UnidadeOrcamentariaService } from "../../../../utils/services/unidadeOrcamentaria.service";
 import { PlanoOrcamentarioService } from "../../../../utils/services/planoOrcamentario.service";
@@ -49,6 +49,8 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
 
     addIcon = faPlusCircle;
     limparIcon = faXmarkCircle;
+    salvarIcon = faFloppyDisk;
+    enviarIcon = faPaperPlane;
 
 
     opcoesUnidades : ISelectOpcao<UnidadeOrcamentariaDTO>[];
