@@ -4,7 +4,7 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from "@angul
 import { InfosService } from "../../../../../../utils/services/infos.service";
 import { UnidadeOrcamentariaService } from "../../../../../../utils/services/unidadeOrcamentaria.service";
 import { UnidadeOrcamentariaDTO } from "../../../../../../utils/models/UnidadeOrcamentariaDTO";
-import { merge, tap } from "rxjs";
+import { finalize, merge, tap } from "rxjs";
 import { StatusService } from "../../../../../../utils/services/status.service";
 import { IStatus } from "../../../../../../utils/interfaces/status.interface";
 import { IEtapa } from "../../../../../../utils/interfaces/etapa.interface";
@@ -12,6 +12,7 @@ import { EtapaService } from "../../../../../../utils/services/etapa.service";
 import { ISelectOpcao } from "../../../../../../utils/interfaces/selectOption.interface";
 import { NgSelectModule } from "@ng-select/ng-select";
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
+import { PermissaoService } from "../../../../../../utils/services/permissao.service";
 
 @Component({
     selector: 'spo-objeto-filtro',
@@ -42,44 +43,68 @@ export class ObjetoFiltroComponent implements AfterViewInit {
 
     opcoesUnidade : ISelectOpcao<UnidadeOrcamentariaDTO>[];
 
+    podeVerUnidades = false;
+
 
     constructor(
         private infoService : InfosService,
         private unidadeService : UnidadeOrcamentariaService,
         private statusService : StatusService,
-        private etapaService : EtapaService
+        private etapaService : EtapaService,
+        private permissaoService : PermissaoService
     ){
 
     }
 
     ngAfterViewInit(): void {
         
+        let etapa : IEtapa;
+        let unidade : UnidadeOrcamentariaDTO;
+
+
         merge(
             this.infoService.getAllAnos().pipe(
                 tap(anosList => this.setAnos(anosList))
             ),
-            this.unidadeService.getAllUnidadesOrcamentarias().pipe(
-                tap(unidadeList => this.setUnidades(unidadeList))
-            ),
             this.statusService.findAll().pipe(
                 tap(statusList => this.setStatus(statusList))
+            ),
+            this.etapaService.findAll().pipe(
+                tap(etapasList => this.setEtapas(etapasList))
+            ),
+            this.etapaService.getDoUsuario().pipe(
+                tap(_etapa => {
+                    etapa = _etapa
+                })
+            ),
+            this.permissaoService.getPermissao('inventarioobjetos').pipe(
+                tap(_permissao => this.podeVerUnidades = _permissao.verTodasUnidades)
             )
+        ).pipe(
+            finalize(() => {
+
+                this.filtro.etapa = this.etapas.find(e => e.id === etapa?.id);
+
+                if(this.podeVerUnidades) {
+                    this.unidadeService.getAllUnidadesOrcamentarias().pipe(
+                        tap(unidadeList => this.setUnidades(unidadeList))
+                    ).subscribe()
+                } else {
+                    this.unidadeService.getUnidadeDoUsuario().pipe(
+                        tap(_unidade => {
+                            this.unidades = [_unidade]
+                            this.filtro.unidade = _unidade
+                        }),
+                        finalize(() => {
+                            this.atualizar();
+                        })
+                    ).subscribe()
+                }
+                
+            })
         ).subscribe();
 
-        this.etapaService.getDoUsuario().pipe(
-            tap(etapa => {
-                // if(etapa) {
-                //     this.etapas = [etapa];
-                //     this.filtro.etapa = etapa;
-                //     this.atualizar();
-                // } else {
-                    this.etapaService.findAll().pipe(
-                        tap(etapasList => this.setEtapas(etapasList))
-                    ).subscribe()
-                // }
-
-            })
-        ).subscribe()
+        
 
     }
 

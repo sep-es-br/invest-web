@@ -58,6 +58,9 @@ export class InvestimentoFiltroComponent implements AfterViewInit{
         //             }
         //         )).subscribe();
 
+        
+        
+
         let consulta : Observable<any>[] = [
             this.infosService.getAllAnos()
                 .pipe(tap((anosList) => {
@@ -76,27 +79,36 @@ export class InvestimentoFiltroComponent implements AfterViewInit{
                 }))
         ]
 
-        // if(this.podeVerUnidades) {
-            consulta.push(this.unidadeService.getAllUnidadesOrcamentarias()
-            .pipe(tap((unidadeList) => {
-
-                this.unidades = unidadeList;
-                
-            })))
-        // } else {
-        //     consulta.push(this.unidadeService.getUnidadeDoUsuario()
-        //     .pipe(tap((unidade) => {
-                
-        //         this.filtro.unidade = unidade;
-                
-        //     })));
-        // }
-
-        merge(
+        this.permissaoService.getPermissao("inventarioinvestimentos").pipe(
+            tap(permissao => {
+                this.podeVerUnidades = permissao.verTodasUnidades;
+                if(permissao.verTodasUnidades) {
+                    consulta.push(this.unidadeService.getAllUnidadesOrcamentarias()
+                    .pipe(tap((unidadeList) => {
+        
+                        this.unidades = unidadeList;
+                        
+                    })))
+                } else {
+                    consulta.push(this.unidadeService.getUnidadeDoUsuario()
+                    .pipe(tap((unidade) => {
+                        
+                        this.filtro.unidade = unidade;
+                        
+                    })));
+                }
+            }),
+            finalize(() => {
+                merge(
             
-            ...consulta
-            
-        ).pipe(finalize(() => this.update())).subscribe()
+                    ...consulta
+                    
+                ).pipe(finalize(() => this.update())).subscribe()
+            })
+        ).subscribe();
+
+
+        
 
     }
 

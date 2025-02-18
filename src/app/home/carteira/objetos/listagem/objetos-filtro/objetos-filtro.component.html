@@ -5,8 +5,7 @@
     <p item *ngFor="let s of status" (click)="filtro.status = s">{{s.nome}}</p>
 </dropdown-filtro>
 
-<!-- <dropdown-filtro (valueChange)="update()" [disabled]="!podeVerUnidades" > -->
-<dropdown-filtro (valueChange)="update()" >
+<dropdown-filtro (valueChange)="update()" [disabled]="!podeVerUnidades" >
     <p display>{{filtro.unidade ? (filtro.unidade.codigo + " - " + filtro.unidade.sigla) : "Unidade Orçamentária"}}</p>
 
     <p item (click)="filtro.unidade = null">Unidade Orçamentária</p>

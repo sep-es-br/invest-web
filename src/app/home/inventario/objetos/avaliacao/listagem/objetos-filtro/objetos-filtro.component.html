@@ -9,7 +9,7 @@
         <option [ngValue]="statusUni"
             *ngFor="let statusUni of status">{{statusUni.nome}}</option>
     </select>
-    <select [(ngModel)]="filtro.unidade" [ngModelOptions]="{standalone: true}" (change)="atualizar()">
+    <select [(ngModel)]="filtro.unidade" [ngModelOptions]="{standalone: true}" (change)="atualizar()" [disabled]="!podeVerUnidades">
         <option [ngValue]="undefined">Unidade Orçamentária</option>
         <option *ngFor="let unidade of unidades" [ngValue]="unidade">{{unidade.sigla}}</option>
     </select>
