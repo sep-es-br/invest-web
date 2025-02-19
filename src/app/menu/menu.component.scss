@@ -8,10 +8,27 @@
     padding: 1rem;
     box-shadow: rgba(0, 0, 0, 0.26) 2px 2px 5px 0px;
 
-    #pipLogo img{
-        width: 42px;
-        cursor: pointer;
-        // opacity: 50%;
+    #pipLogo{
+        box-sizing: border-box;
+        height: 3.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        img{
+            width: 40px;
+            cursor: pointer;
+            opacity: 60%;
+
+        }
+    }
+
+    @-webkit-keyframes rotating {
+        from{
+            -webkit-transform: rotate(0deg);
+        }
+        to{
+            -webkit-transform: rotate(360deg);
+        }
     }
 
     div#nav {

@@ -626,7 +626,9 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                 && !!this.objeto.descricao 
                 && !!this.objeto.conta.unidadeOrcamentariaImplementadora
                 && !!this.objeto.microregiaoAtendida
-                && !!this.objeto.infoComplementares;
+                && !!this.objeto.planos 
+                && this.objeto.planos.length > 0
+                && !!this.objeto.possuiOrcamento;
 
         if(this.checarEtapaEnum(EtapaEnum.CADASTRO_PO)) {
             valido = valido 

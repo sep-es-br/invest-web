@@ -119,9 +119,9 @@
             <label for="inPossuiOrcamento">Orçamento <span class="obrigatorio">*</span></label>
             <select id="inPossuiOrcamento" formControlName="inPossuiOrcamento" [(ngModel)]="objeto.possuiOrcamento" >
                 <option [ngValue]="undefined">Selecionar se dispõe de orçamento</option>
-                <option [ngValue]="">Já dispõe, totalmente</option>
-                <option [ngValue]="">Já dispõe, parcialmente (indicar no campo Informações Complementares)</option>
-                <option [ngValue]="">Ainda não dispõe</option>
+                <option value="total">Já dispõe, totalmente</option>
+                <option value="parcial">Já dispõe, parcialmente (indicar no campo Informações Complementares)</option>
+                <option value="não">Ainda não dispõe</option>
             </select>
         </form>
         

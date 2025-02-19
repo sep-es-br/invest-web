@@ -9,8 +9,8 @@
 
   .loginBox {
     background-color: white;
-    height: 85%;
-    width: 85%;
+    height: fit-content;
+    width: fit-content;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -44,15 +44,23 @@
         
 
       button {
-        padding: 1rem;
+        padding: 2rem;
+        padding-block: 1rem;
+        border: none;
+        display: flex;
+        gap: 5px;
+        border-radius: 12px;
         color: white;
-        background-color: var(--cor-primaria);
+        background-color: #335885;
         cursor: pointer;
+        font-size: larger;
       }
     }
   }
 
   footer {
+    margin-top: 3rem;
+    font-size: small;
     text-align: center;
   }
 }

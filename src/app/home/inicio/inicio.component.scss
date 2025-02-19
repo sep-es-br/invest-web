@@ -7,16 +7,17 @@
     color: var(--cor-primaria);
 
     main {
-        background-color: white;
+        border: 1px var(--cor-primaria) solid;
         border-radius: 10px;
         box-shadow: var(--sombra-padrao);
         display: flex;
         flex-direction: column;
         align-items: center;
         padding: 2rem;
+        opacity: 60%;
     }
 
     img {
-        width: 50vw;
+        width: 40vw;
     }
 }
