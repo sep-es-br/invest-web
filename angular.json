@@ -33,11 +33,11 @@
               }
             ],
             "styles": [
-              "src/styles.scss",
               "node_modules/ngx-toastr/toastr.css",
               "node_modules/@ng-select/ng-select/scss/default.theme.scss",
               "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
-              "node_modules/primeng/resources/primeng.min.css"
+              "node_modules/primeng/resources/primeng.min.css",
+              "src/styles.scss"
             ],
             "scripts": []
           },

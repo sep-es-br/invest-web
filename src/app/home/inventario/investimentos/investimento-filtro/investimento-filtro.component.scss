@@ -2,9 +2,5 @@
     display: flex;
     justify-content: end;
 
-    dropdown-filtro {
-        color: rgb(127, 127, 127);
-        max-width: 20rem;
-        margin-left: 0.5rem;
-    }
+    @import '../../../../utils/styles/ngFilter.scss';
 }

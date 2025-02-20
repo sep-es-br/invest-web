@@ -1,6 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { AfterViewInit, Component, EventEmitter, Input, Output, ViewChild } from "@angular/core";
-import { FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { InvestimentosComponent } from "../investimentos.component";
 import { InfosService } from "../../../../utils/services/infos.service";
 import { Router } from "@angular/router";
@@ -15,15 +15,23 @@ import { IDropdownFiltroItem, DropdownFiltroComponent } from "../../../../utils/
 import { IFiltroInvestimento } from "./IFiltroInvestimento";
 import { ShortStringPipe } from "../../../../utils/pipes/shortString.pipe";
 import { PermissaoService } from "../../../../utils/services/permissao.service";
+import { NgSelectComponent, NgSelectModule } from "@ng-select/ng-select";
+import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
+import { faXmark, faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
 
 @Component({
     selector: 'spo-investimento-filtro',
     templateUrl: './investimento-filtro.component.html',
     styleUrl: './investimento-filtro.component.scss',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, DropdownFiltroComponent, ShortStringPipe]
+    imports: [
+        CommonModule, ReactiveFormsModule, DropdownFiltroComponent, NgSelectModule,
+        FormsModule, FontAwesomeModule
+    ]
 })
 export class InvestimentoFiltroComponent implements AfterViewInit{
+
+    removerIcon = faXmarkCircle;
 
     @Output() public filterChange = new EventEmitter<IFiltroInvestimento>();
 
@@ -93,7 +101,7 @@ export class InvestimentoFiltroComponent implements AfterViewInit{
                     consulta.push(this.unidadeService.getUnidadeDoUsuario()
                     .pipe(tap((unidade) => {
                         
-                        this.filtro.unidade = unidade;
+                        this.filtro.unidade = [unidade];
                         
                     })));
                 }
@@ -110,6 +118,21 @@ export class InvestimentoFiltroComponent implements AfterViewInit{
 
         
 
+    }
+
+    removerSelecao(arr : any[], item: any) : any[] {
+        arr = arr.filter(a => a !== item)
+        return arr;
+    }
+
+    searchUnidade(term : string, item : UnidadeOrcamentariaDTO) {
+        return item.sigla.toUpperCase().includes(term.toUpperCase())
+                || item.codigo.includes(term);
+    }
+
+    searchPlano(term : string, item : PlanoOrcamentarioDTO) {
+        return item.nome.toUpperCase().includes(term.toUpperCase())
+                || item.codigo.includes(term);
     }
 
     update() {

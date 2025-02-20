@@ -4,7 +4,7 @@ import { UnidadeOrcamentariaDTO } from "../../../../utils/models/UnidadeOrcament
 
 export interface IFiltroInvestimento {
     ano? : number,
-    plano? : PlanoOrcamentarioDTO,
-    unidade? : UnidadeOrcamentariaDTO,
+    plano? : PlanoOrcamentarioDTO[],
+    unidade? : UnidadeOrcamentariaDTO[],
     fonte? : FonteOrcamentariaDTO
 }

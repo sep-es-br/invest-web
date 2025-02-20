@@ -11,8 +11,9 @@ import { IEtapa } from "../../../../../../utils/interfaces/etapa.interface";
 import { EtapaService } from "../../../../../../utils/services/etapa.service";
 import { ISelectOpcao } from "../../../../../../utils/interfaces/selectOption.interface";
 import { NgSelectModule } from "@ng-select/ng-select";
-import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
+import { faAngleDown, faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
 import { PermissaoService } from "../../../../../../utils/services/permissao.service";
+import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 
 @Component({
     selector: 'spo-objeto-filtro',
@@ -20,7 +21,7 @@ import { PermissaoService } from "../../../../../../utils/services/permissao.ser
     styleUrl: './objetos-filtro.component.scss',
     standalone: true,
     imports: [
-        CommonModule, ReactiveFormsModule, FormsModule, NgSelectModule
+        CommonModule, ReactiveFormsModule, FormsModule, NgSelectModule, FontAwesomeModule
     ]
 })
 export class ObjetoFiltroComponent implements AfterViewInit {
@@ -32,7 +33,8 @@ export class ObjetoFiltroComponent implements AfterViewInit {
         ano: new Date().getFullYear()
     }
 
-    seta = faAngleDown
+    removerIcon = faXmarkCircle;
+
 
     @Output() onUpdate = new EventEmitter<IFiltro>()
 
@@ -93,7 +95,7 @@ export class ObjetoFiltroComponent implements AfterViewInit {
                     this.unidadeService.getUnidadeDoUsuario().pipe(
                         tap(_unidade => {
                             this.unidades = [_unidade]
-                            this.filtro.unidade = _unidade
+                            this.filtro.unidade = [_unidade]
                         }),
                         finalize(() => {
                             this.atualizar();
@@ -140,14 +142,24 @@ export class ObjetoFiltroComponent implements AfterViewInit {
     }
 
     
-    filtrar(term : string, item : ISelectOpcao<any>) : boolean {
-        return item.label.toUpperCase().includes(term.toUpperCase());
+    filtrarSimples(term : string, item : { nome : string}) : boolean {
+        return item.nome.toUpperCase().includes(term.toUpperCase());
+    }
+
+    searchUnidade(term : string, item : UnidadeOrcamentariaDTO) {
+        return item.sigla.toUpperCase().includes(term.toUpperCase())
+                || item.codigo.includes(term);
+    }
+
+    removerSelecao(arr : any[], item: any) : any[] {
+        arr = arr.filter(a => a !== item)
+        return arr;
     }
 }
 
 export interface IFiltro {
     status?: IStatus,
-    unidade?: UnidadeOrcamentariaDTO,
+    unidade?: UnidadeOrcamentariaDTO[],
     ano?: number,
     etapa?: IEtapa,
     nome? : string

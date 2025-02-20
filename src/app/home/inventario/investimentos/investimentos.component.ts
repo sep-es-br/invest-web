@@ -76,8 +76,8 @@ export class InvestimentosComponent implements AfterViewInit {
     atualizarFiltro(filtro : IFiltroInvestimento, novaPagina : number) {
         this.filtro = {
             exercicio: filtro.ano,
-            codPO: filtro.plano?.id,
-            codUnidade: filtro.unidade?.id,
+            codPO: filtro.plano && filtro.plano.length > 0 ? filtro.plano.map(p => p.id) : undefined,
+            codUnidade: filtro.unidade && filtro.unidade.length > 0 ? filtro.unidade.map(u => u.id) : undefined,
             idFonte: filtro.fonte?.id,
             nome: this.txtBusca.value,
             numPag: novaPagina,

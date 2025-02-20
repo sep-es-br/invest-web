@@ -1,19 +1,63 @@
 <form>
-    <select [(ngModel)]="filtro.etapa" [ngModelOptions]="{standalone: true}" (change)="atualizar()">
-        <option [ngValue]="undefined">Etapa</option>
-        <option [ngValue]="etapa"
-            *ngFor="let etapa of etapas">{{etapa.nome}}</option>
-    </select>
-    <select [(ngModel)]="filtro.status" [ngModelOptions]="{standalone: true}" (change)="atualizar()">
-        <option [ngValue]="undefined">Status</option>
-        <option [ngValue]="statusUni"
-            *ngFor="let statusUni of status">{{statusUni.nome}}</option>
-    </select>
-    <select [(ngModel)]="filtro.unidade" [ngModelOptions]="{standalone: true}" (change)="atualizar()" [disabled]="!podeVerUnidades">
-        <option [ngValue]="undefined">Unidade Orçamentária</option>
-        <option *ngFor="let unidade of unidades" [ngValue]="unidade">{{unidade.sigla}}</option>
-    </select>
-    <select [(ngModel)]="filtro.ano" [ngModelOptions]="{standalone: true}" (change)="atualizar()">
-        <option *ngFor="let ano of anos" [ngValue]="ano">{{ano}}</option>
-    </select>
+    <ng-select [items]="etapas"
+            placeholder="Etapa"
+            [(ngModel)]="filtro.etapa"
+            [ngModelOptions]="{standalone: true}"
+            [clearable]="true"
+            (ngModelChange)="atualizar()"
+            [searchFn]="filtrarSimples"
+        >
+        <ng-template ng-label-tmp let-item="item" let-index="index">
+            {{item.nome}}
+        </ng-template>
+        <ng-template ng-option-tmp let-item="item">
+            {{item.nome}}
+        </ng-template>
+    </ng-select>
+
+    <ng-select [items]="status"
+            placeholder="Status"
+            [(ngModel)]="filtro.status"
+            [ngModelOptions]="{standalone: true}"
+            [clearable]="true"
+            (ngModelChange)="atualizar()"
+            [searchFn]="filtrarSimples"
+        >
+        <ng-template ng-label-tmp let-item="item" let-index="index">
+            {{item.nome}}
+        </ng-template>
+        <ng-template ng-option-tmp let-item="item">
+            {{item.nome}}
+        </ng-template>
+    </ng-select>
+
+    <ng-select [items]="unidades"
+            [multiple]="true"
+            placeholder="Unidade Orçamentária"
+            [(ngModel)]="filtro.unidade"
+            [ngModelOptions]="{standalone: true}"
+            [disabled]="!podeVerUnidades"
+            [searchFn]="searchUnidade"
+            [clearable]="true"
+            (ngModelChange)="atualizar()"
+        >
+        <ng-template ng-label-tmp let-item="item" let-index="index">
+            {{item.codigo}}
+            <button (click)="filtro.unidade = removerSelecao(filtro.unidade, item); this.atualizar()">
+                <fa-icon class="removerItem" [icon]="removerIcon" [attr.aria-label]="'remover unidade ' + item.codigo"></fa-icon>
+            </button>
+        </ng-template>
+        <ng-template ng-option-tmp let-item="item">
+            {{item.codigo}} - {{item.sigla}}
+        </ng-template>
+    </ng-select>
+
+    <ng-select [items]="anos"
+            [(ngModel)]="filtro.ano"
+            [ngModelOptions]="{standalone: true}"
+            [searchable]="true"
+            [clearable]="true"
+            (ngModelChange)="atualizar()"
+        >
+    </ng-select>
 </form>

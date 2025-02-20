@@ -57,9 +57,9 @@
 
     main {
         display: grid;
-        grid-template-columns: repeat(4, 22rem);
+        grid-template-columns: repeat(auto-fill, minmax(22rem, 25rem));
         grid-auto-rows: 15rem;
-        gap: 1.5rem;
+        gap: 1rem;
         justify-content: space-between;
         font-family: var(--fonte-open-sans);
         font-size: small;

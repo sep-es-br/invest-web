@@ -100,11 +100,11 @@ export class ObjetosService {
         if(filtro.status) 
             params = params.set("statusId", filtro.status.id)
 
-        if(filtro.unidade)
-            params = params.set("unidadeId", filtro.unidade.id)
+        if(filtro.unidade && filtro.unidade.length > 0)
+            params = params.set("unidadeId", JSON.stringify(filtro.unidade.map(u => u.id)))
 
-        if(filtro.plano)
-            params = params.set("idPo", filtro.plano.id)
+        if(filtro.plano && filtro.plano.length > 0)
+            params = params.set("idPo", JSON.stringify( filtro.plano.map(p => p.id) ))
 
         if(filtro.etapa)
             params = params.set("etapaId", filtro.etapa.id)
@@ -120,10 +120,10 @@ export class ObjetosService {
             params = params.set("nome", filtro.nome) 
 
         if(filtro.codUnidade)
-            params = params.set("codUnidade", filtro.codUnidade) 
+            params = params.set("codUnidade", JSON.stringify(filtro.codUnidade) ) 
 
         if(filtro.codPO)
-            params = params.set("codPO", filtro.codPO) 
+            params = params.set("codPO", JSON.stringify(filtro.codPO)) 
 
 
         if(filtro.numPag)

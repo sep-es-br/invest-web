@@ -12,15 +12,24 @@ import { PermissaoService } from "../../../../../utils/services/permissao.servic
 import { ObjetosService } from "../../../../../utils/services/objetos.service";
 import { IStatus } from "../../../../../utils/interfaces/status.interface";
 import { StatusService } from "../../../../../utils/services/status.service";
+import { NgSelectModule } from "@ng-select/ng-select";
+import { FormsModule } from "@angular/forms";
+import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
+import { faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
 
 @Component({
     selector: "spo-objetos-filtro",
     standalone: true,
     templateUrl: "./objetos-filtro.component.html",
     styleUrl: "./objetos-filtro.component.scss",
-    imports: [CommonModule, DropdownFiltroComponent]
+    imports: [
+        CommonModule, DropdownFiltroComponent, NgSelectModule, FormsModule,
+        FontAwesomeModule
+    ]
 })
 export class ObjetosFiltroComponent implements AfterViewInit {
+
+    removerIcon = faXmarkCircle;
 
     filtro : IObjetoFiltro = {}
 
@@ -53,17 +62,29 @@ export class ObjetosFiltroComponent implements AfterViewInit {
         this.filterChange.emit(this.filtro);
     }
 
+    
+
+    
+    filtrarSimples(term : string, item : { nome : string}) : boolean {
+        return item.nome.toUpperCase().includes(term.toUpperCase());
+    }
+
+    searchUnidade(term : string, item : UnidadeOrcamentariaDTO) {
+        return item.sigla.toUpperCase().includes(term.toUpperCase())
+                || item.codigo.includes(term);
+    }
+
+    searchPlano(term : string, item : PlanoOrcamentarioDTO) {
+        return item.nome.toUpperCase().includes(term.toUpperCase())
+                || item.codigo.includes(term);
+    }
+
+    removerSelecao(arr : any[], item: any) : any[] {
+        arr = arr.filter(a => a !== item)
+        return arr;
+    }
+
     ngAfterViewInit(): void {
-
-        // this.permissaoService.podeVerUnidades().pipe(tap(
-        //     podeVer => {
-
-        //         this.podeVerUnidades = podeVer;
-
-                
-        //     }
-        // )).subscribe();
-
 
         let consulta : Observable<any>[] = [
             this.infosService.getAllAnos()
@@ -97,7 +118,10 @@ export class ObjetosFiltroComponent implements AfterViewInit {
                     })));
                 } else {
                     consulta.push(this.unidadeService.getUnidadeDoUsuario()
-                    .pipe(tap( unidade => this.filtro.unidade = unidade)))
+                    .pipe(tap( unidade => {
+                        this.filtro.unidade = [unidade]
+                        this.unidades = [unidade];
+                    })))
                 }
 
             }),
@@ -109,17 +133,6 @@ export class ObjetosFiltroComponent implements AfterViewInit {
                 ).pipe(finalize(() => this.update())).subscribe()
             })
         ).subscribe()
-
-        // if(this.podeVerUnidades) {
-            
-        // } else {
-            // consulta.push(this.unidadeService.getUnidadeDoUsuario()
-            // .pipe(tap((unidade) => {
-                
-            //     this.filtro.unidade = unidade;
-                
-            // })));
-        // }
 
         
         

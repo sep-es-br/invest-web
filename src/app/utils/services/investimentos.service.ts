@@ -46,10 +46,10 @@ export class InvestimentosService {
             params = params.set("nome", filtro.nome) 
 
         if(filtro.codUnidade)
-            params = params.set("codUnidade", filtro.codUnidade) 
+            params = params.set("codUnidade", JSON.stringify(filtro.codUnidade)) 
 
         if(filtro.codPO)
-            params = params.set("codPO", filtro.codPO) 
+            params = params.set("codPO", JSON.stringify(filtro.codPO)) 
 
         if(filtro.idFonte)
             params = params.set("idFonte", filtro.idFonte)

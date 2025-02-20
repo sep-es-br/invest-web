@@ -1,0 +1,49 @@
+ng-select {
+    min-width: 20rem;
+    max-width: 20rem;
+    box-sizing: border-box;
+
+    button {
+        background-color: unset;
+        border: unset;
+        margin-left: 0.5rem;
+        .removerItem {
+            color: red;
+        }
+    }
+
+
+}
+
+::ng-deep .ng-select {
+     
+    &.ng-select-multiple{
+        .ng-select-container {
+
+            .ng-value-container {
+    
+                .ng-value {
+                    color: var(--cor-primaria);
+                    background-color: unset;
+                    border-radius: 1rem;
+                    border: var(--cor-primaria) solid 1px;
+                    padding: 4px;
+                }
+            }
+        }
+    }
+
+    .ng-select-container {
+        background-color: unset !important;
+        height: 100% !important;
+
+        .ng-value-container {
+
+            .ng-placeholder {
+                position: unset !important;
+            }
+        }
+    }
+
+    
+}

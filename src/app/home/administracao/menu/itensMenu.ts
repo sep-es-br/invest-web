@@ -9,12 +9,12 @@ export const opcoesMenuAdm : {
         caminho: "/pessoas"
     },{
         icone: "groups",
-        titulo: "Grupos de Usuários",
+        titulo: "Grupos",
         caminho: "/grupo"
     },{
         icone: "flowchart",
         titulo: "Fluxos",
-        caminho: "/fluxos"
+        caminho: ""
     },{
         icone: "question_mark",
         titulo: "",
