@@ -53,9 +53,10 @@
     </ng-template>
 </ng-select>
 
-<ng-select [items]="anos"
+<ng-select [items]="anos" class="menor"
             [(ngModel)]="filtro.ano"
             [ngModelOptions]="{standalone: true}"
+            [clearable]="false"
             (ngModelChange)="update()"
         >
 </ng-select>

@@ -35,31 +35,13 @@
             }
         }
 
-        div.btn {
-            --tamanho: 35px;
-
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 10px;
-            color: var(--cor-primaria);
-            border: var(--cor-primaria) 1px solid;
-            height: var(--tamanho);
-            width: var(--tamanho);
-            align-self: flex-end;
-            cursor: pointer;
-
-            span {
-                font-size: 20px;
-            }
-        }
     }
 
     main {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(22rem, 25rem));
         grid-auto-rows: 15rem;
-        gap: 1rem;
+        gap: 10px;
         justify-content: space-between;
         font-family: var(--fonte-open-sans);
         font-size: small;

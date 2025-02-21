@@ -1,8 +1,10 @@
 :host {
     display: flex;
+    gap: 0.5rem;
 
-    dropdown-filtro {
-        margin-left: 0.5rem;
-        max-width: 15rem;
+    @import '../../../../../utils/styles/ngFilter.scss';
+
+    .menor {
+        min-width: 5rem;
     }
 }

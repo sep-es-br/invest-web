@@ -188,10 +188,16 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
     }
 
     salvarFeedBack(novosApontamentos : IApontamento[]){
+        if(this.acaoDebounce) return;
+
+        this.acaoDebounce = true;
+        
         if(!this.checarEtapaEnum(EtapaEnum.SOLICITACAO_CADASTRO)) {
             // if((this.checarEtapaEnum(EtapaEnum.APROVACAO_SUBEO) && !this.validarParecer())
-               if((!this.checarEtapaEnum(EtapaEnum.APROVACAO_SUBEO) &&  !this.validarApontamentos()))
-                return;
+               if((!this.checarEtapaEnum(EtapaEnum.APROVACAO_SUBEO) &&  !this.validarApontamentos())){
+                    this.acaoDebounce = false;
+                    return;
+               }
         }
 
         let objetoFinal : IObjeto = this.gerarObjetoFinal()
@@ -223,7 +229,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                 this.exibirFazerParecer = false;
                 this.exibirModal = false;
                 
-            })
+            }), finalize (() => this.acaoDebounce = false)
         ).subscribe();
         
 
@@ -554,8 +560,14 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
 
     }
 
+    acaoDebounce = false;
 
     executarAcao(acao : IAcao){
+
+        if(this.acaoDebounce) return;
+
+        this.acaoDebounce = true;
+
 
         let exercValidos = true;
 
@@ -568,6 +580,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
 
         if(acao.positivo && (!exercValidos || !this.validarForm())) {
             this.toastr.error("Favor preeencher os campos obrigatórios");
+            this.acaoDebounce = false;
         } else {
             let objetoFinal : IObjeto = this.gerarObjetoFinal()
 
@@ -585,7 +598,8 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                             this.router.navigate([".."], {relativeTo: this.route});
                         }
                         this.setObjeto(objeto);
-                    })
+                    }),
+                    finalize(() => this.acaoDebounce = false)
                 ).subscribe();
             } else {
                 // if(this.checarEtapaEnum(EtapaEnum.APROVACAO_SUBEO)){
@@ -603,7 +617,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                                 this.toastr.success("Objeto excluido com sucesso");
                                 this.router.navigate([".."], {relativeTo: this.route});
                                 
-                            })
+                            }), finalize(() => this.acaoDebounce = false)
                         ).subscribe();
                     }
                 }

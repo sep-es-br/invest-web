@@ -8,14 +8,18 @@ ng-select {
         border: unset;
         margin-left: 0.5rem;
         .removerItem {
-            color: red;
+            color: var(--cor-primaria);
         }
     }
 
 
 }
+.menor {
+    min-width: 5rem;
+}
 
 ::ng-deep .ng-select {
+
      
     &.ng-select-multiple{
         .ng-select-container {
@@ -33,14 +37,52 @@ ng-select {
         }
     }
 
+    
+    &.ng-select-opened {
+        .ng-select-container {
+            .ng-arrow-wrapper {
+                .ng-arrow {
+                    border-width: 5px 5px 2.5px;
+                    transform: rotate(0);
+                }
+            }
+        }
+    }
+
+    &.ng-select-focused {
+        .ng-select-container {
+            box-shadow: unset !important;
+            border-color: unset !important;
+        }
+    }
+
+    .ng-dropdown-panel {
+        min-width: 10rem;
+    }
+
     .ng-select-container {
         background-color: unset !important;
         height: 100% !important;
+        
+        border: unset;
+        border-radius: 0;
+        border-bottom: unset;
+        color: var(--cor-primaria) !important;
+
+        .ng-arrow-wrapper {
+            .ng-arrow {
+                border-color: var(--cor-primaria) transparent transparent !important;
+                transform: rotate(90deg) translate(25%, 0);
+                transform-origin: 50% 0;
+                transition: transform 0.3s ease;
+            }
+        }
 
         .ng-value-container {
 
             .ng-placeholder {
                 position: unset !important;
+                color: var(--cor-primaria);
             }
         }
     }

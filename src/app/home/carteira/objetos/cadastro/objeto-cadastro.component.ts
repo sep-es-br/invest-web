@@ -288,6 +288,8 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
         ).subscribe()
     }
 
+    salvarDebounce = false;
+
     salvar() {
 
         let exercValidos = true;
@@ -312,13 +314,17 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
                 recursosFinanceiros: this.objeto.recursosFinanceiros
             };
 
-            this.objetoService.salvarObjeto(objetoFinal).pipe(
-                tap(() => {
-                    this.toastr.success("Objeto Salvo");
-                    this.router.navigate(['../'], {relativeTo: this.route})
-                })
-
-            ).subscribe();
+            if(!this.salvarDebounce) {
+                this.salvarDebounce = true;
+                this.objetoService.salvarObjeto(objetoFinal).pipe(
+                    tap(() => {
+                        this.toastr.success("Objeto Salvo");
+                        this.router.navigate(['../'], {relativeTo: this.route})
+                    }), finalize(() => this.salvarDebounce = false)
+    
+                ).subscribe();
+            }
+            
             
         }
 

@@ -51,12 +51,12 @@
             
             <label for="inNome">Nome <span class="obrigatorio">*</span></label>
             <input type="text" id="inNome" formControlName="nome" [(ngModel)]="objeto.nome"
-                placeholder="Insira um nome"
+                placeholder="Insira um nome" [maxlength]="140"
                 [ngClass]="(checado && objetoCadastro.controls.nome.errors !== null) ? 'invalido' : ''"/>
 
             <label for="inDescricao">Descrição <span class="obrigatorio">*</span></label>
             <input type="text" id="inDescricao" formControlName="descricao" [(ngModel)]="objeto.descricao"
-                placeholder="Insira uma descrição"
+                placeholder="Insira uma descrição" [maxlength]="280"
                 [ngClass]="(checado && objetoCadastro.controls.descricao.errors !== null) ? 'invalido' : ''">
             
             <label>Unidade Orçamentária <span class="obrigatorio">*</span></label>
@@ -96,12 +96,12 @@
             </select>
 
             <label for="inInfoComplementar">Informações Complementares </label>
-            <input type="text" id="inInfoComplementar" formControlName="infoComplementares"
+            <input type="text" id="inInfoComplementar" formControlName="infoComplementares" [maxlength]="280"
                 [(ngModel)]="objeto.infoComplementares" placeholder="Insira as Informações Complementares"
                 [ngClass]="(checado && objetoCadastro.controls.infoComplementares.errors !== null) ? 'invalido' : ''">
 
             <label for="inContrato">Contrato ou Convênio</label>
-            <input type="text" id="inContrato" formControlName="contrato"
+            <input type="text" id="inContrato" formControlName="contrato" [maxlength]="140"
                 [(ngModel)]="objeto.contrato" placeholder="Insira o código ou número do contrato ou convênio">
             
             <label>Tipos de Plano(s): <span class="obrigatorio">*</span></label>

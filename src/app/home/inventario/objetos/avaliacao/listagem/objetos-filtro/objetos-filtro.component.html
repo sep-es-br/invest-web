@@ -1,36 +1,4 @@
 <form>
-    <ng-select [items]="etapas"
-            placeholder="Etapa"
-            [(ngModel)]="filtro.etapa"
-            [ngModelOptions]="{standalone: true}"
-            [clearable]="true"
-            (ngModelChange)="atualizar()"
-            [searchFn]="filtrarSimples"
-        >
-        <ng-template ng-label-tmp let-item="item" let-index="index">
-            {{item.nome}}
-        </ng-template>
-        <ng-template ng-option-tmp let-item="item">
-            {{item.nome}}
-        </ng-template>
-    </ng-select>
-
-    <ng-select [items]="status"
-            placeholder="Status"
-            [(ngModel)]="filtro.status"
-            [ngModelOptions]="{standalone: true}"
-            [clearable]="true"
-            (ngModelChange)="atualizar()"
-            [searchFn]="filtrarSimples"
-        >
-        <ng-template ng-label-tmp let-item="item" let-index="index">
-            {{item.nome}}
-        </ng-template>
-        <ng-template ng-option-tmp let-item="item">
-            {{item.nome}}
-        </ng-template>
-    </ng-select>
-
     <ng-select [items]="unidades"
             [multiple]="true"
             placeholder="Unidade Orçamentária"
@@ -52,11 +20,42 @@
         </ng-template>
     </ng-select>
 
-    <ng-select [items]="anos"
+    <ng-select [items]="etapas" class="menor"
+            placeholder="Etapa"
+            [(ngModel)]="filtro.etapa"
+            [ngModelOptions]="{standalone: true}"
+            [clearable]="true"
+            (ngModelChange)="atualizar()"
+            [searchFn]="filtrarSimples"
+        >
+        <ng-template ng-label-tmp let-item="item" let-index="index">
+            {{item.nome}}
+        </ng-template>
+        <ng-template ng-option-tmp let-item="item">
+            {{item.nome}}
+        </ng-template>
+    </ng-select>
+
+    <ng-select [items]="status" class="menor"
+            placeholder="Status"
+            [(ngModel)]="filtro.status"
+            [ngModelOptions]="{standalone: true}"
+            [clearable]="true"
+            (ngModelChange)="atualizar()"
+            [searchFn]="filtrarSimples"
+        >
+        <ng-template ng-label-tmp let-item="item" let-index="index">
+            {{item.nome}}
+        </ng-template>
+        <ng-template ng-option-tmp let-item="item">
+            {{item.nome}}
+        </ng-template>
+    </ng-select>
+
+    <ng-select [items]="anos" class="menor"
             [(ngModel)]="filtro.ano"
             [ngModelOptions]="{standalone: true}"
-            [searchable]="true"
-            [clearable]="true"
+            [clearable]="false"
             (ngModelChange)="atualizar()"
         >
     </ng-select>
