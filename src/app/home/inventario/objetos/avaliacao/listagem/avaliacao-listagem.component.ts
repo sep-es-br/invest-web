@@ -55,17 +55,18 @@ export class AvaliacaoListagemComponent implements AfterViewInit{
         private router : Router,
         private route : ActivatedRoute
     ) {
-        permissaoService.getPermissao("inventarioobjetos").pipe(
-            tap(pode => {
-                this.pode = pode
-                this.pode.excluir = false;
-            })
-        ).subscribe()
+        
     }
 
     ngAfterViewInit(): void {
         this.txtBusca.valueChanges.subscribe(value => this.recarregarLista(this.paginaAtual));
-        this.recarregarLista(this.paginaAtual);
+        this.permissaoService.getPermissao("inventarioobjetos").pipe(
+            tap(pode => {
+                this.pode = pode
+                this.pode.excluir = false;
+                this.recarregarLista(this.paginaAtual);
+            })
+        ).subscribe()
         
         
     }
@@ -78,7 +79,7 @@ export class AvaliacaoListagemComponent implements AfterViewInit{
             unidade : this.filtroComponent.filtro.unidade,
             etapa: this.filtroComponent.filtro.etapa,
             nome: this.txtBusca.value,
-            podeVerUnidades: !!this.filtroComponent.filtro.podeVerUnidades
+            podeVerUnidades: !!this.pode.verTodasUnidades
         };
     }
 
@@ -89,7 +90,6 @@ export class AvaliacaoListagemComponent implements AfterViewInit{
     }
 
     recarregarLista(novaPagina : number) {
-
         this.updateFiltro()
 
         this.paginaAtual = novaPagina;

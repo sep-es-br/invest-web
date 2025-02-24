@@ -33,7 +33,7 @@
     <main>
         <form #form="ngForm">
             <label for="inGnd">GND:<span class="obrigatorio">*</span></label>
-            <select id="inGnd" name="gnd" [(ngModel)]="gnd">
+            <select id="inGnd" name="gnd" [(ngModel)]="gnd" disabled>
                 <option [ngValue]="4">4</option>
                 <option [ngValue]="5">5</option>
             </select>

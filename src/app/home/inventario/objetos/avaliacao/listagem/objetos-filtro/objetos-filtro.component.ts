@@ -79,28 +79,33 @@ export class ObjetoFiltroComponent implements AfterViewInit {
                     etapa = _etapa
                 })
             ),
-            this.permissaoService.getPermissao('inventarioobjetos').pipe(
-                tap(_permissao => this.podeVerUnidades = _permissao.verTodasUnidades)
-            )
+            
         ).pipe(
             finalize(() => {
+                this.permissaoService.getPermissao('inventarioobjetos').pipe(
+                    tap(_permissao => {
+                        this.podeVerUnidades = _permissao.verTodasUnidades
+                        this.filtro.etapa = this.etapas.find(e => e.id === etapa?.id);
 
-                this.filtro.etapa = this.etapas.find(e => e.id === etapa?.id);
+                        if(this.podeVerUnidades) {
+                            this.unidadeService.getAllUnidadesOrcamentarias().pipe(
+                                tap(unidadeList => this.setUnidades(unidadeList))
+                            ).subscribe()
+                        } else {
+                            this.unidadeService.getUnidadeDoUsuario().pipe(
+                                tap(_unidades => {
+                                    this.unidades = _unidades;
+                                }),
+                                finalize(() => {
+                                    this.atualizar();
+                                })
+                            ).subscribe()
+                        }
 
-                if(this.podeVerUnidades) {
-                    this.unidadeService.getAllUnidadesOrcamentarias().pipe(
-                        tap(unidadeList => this.setUnidades(unidadeList))
-                    ).subscribe()
-                } else {
-                    this.unidadeService.getUnidadeDoUsuario().pipe(
-                        tap(_unidades => {
-                            this.unidades = _unidades;
-                        }),
-                        finalize(() => {
-                            this.atualizar();
-                        })
-                    ).subscribe()
-                }
+                    })
+                ).subscribe()
+                
+                
                 
             })
         ).subscribe();
