@@ -62,7 +62,7 @@
             <label>Unidade Orçamentária <span class="obrigatorio">*</span></label>
             <ng-select [(ngModel)]="objeto.conta.unidadeOrcamentariaImplementadora"
                 [ngClass]="(checado && unidade.invalid) ? 'invalido' : ''" [disabled]="!executaAcao"
-                [items]="opcoesUnidades" name="unidade" [disabled]="opcoesUnidades.length <= 1  || !executaAcao"
+                [items]="opcoesUnidades" name="unidade" [disabled]="opcoesUnidades?.length <= 1  || !executaAcao"
                 placeholder="Selecionar a unidade orçamentária"
                 bindLabel="label"
                 bindValue="value"
