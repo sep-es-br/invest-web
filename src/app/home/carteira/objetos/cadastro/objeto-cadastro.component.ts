@@ -29,6 +29,7 @@ import { IAreaTematica } from "../../../../utils/interfaces/IAreaTematica";
 import { OpcaoItemComponent } from "../../../../utils/components/dropdown-com-filtro/opcao-item.component";
 import { ISelectOpcao } from "../../../../utils/interfaces/selectOption.interface";
 import { NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent } from "@ng-select/ng-select";
+import { PermissaoService } from "../../../../utils/services/permissao.service";
 
 @Component({
     standalone: true,
@@ -68,6 +69,8 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
 
     checado = false;
 
+    podeVerUnidades = false;
+
     constructor(
         private unidadeService : UnidadeOrcamentariaService,
         private planoService : PlanoOrcamentarioService,
@@ -78,7 +81,8 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
         private route : ActivatedRoute,
         private dataUtil: DataUtilService,
         private tipoPlanoService : TipoPlanoService,
-        private areaTematicaService : AreaTematicaService
+        private areaTematicaService : AreaTematicaService,
+        private permissaoService : PermissaoService
     ) {}
 
     objetoCadastro = new FormGroup({
@@ -115,7 +119,8 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
                     {
                         fonteOrcamentaria: null, 
                         previsto: null,
-                        contratado: null
+                        contratado: null,
+                        gnd: 4
                     }
                 ]
             }
@@ -139,9 +144,24 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
             ),
             this.planoService.getDoSigefes(null).pipe(
                 tap(planoList => this.setPlanos(planoList))
+            ),
+            this.permissaoService.getPermissao("carteiraobjetos").pipe(
+                tap(permissao => this.podeVerUnidades = permissao.verTodasUnidades)
             )
         ).pipe(finalize(() => {
             
+            if(!this.podeVerUnidades) {
+                this.unidadeService.getUnidadeDoUsuario().pipe(
+                    tap(unidades => {
+                        this.setUnidades(unidades);
+                        if(unidades?.length == 1) {
+                            this.objetoCadastro.controls.unidade.setValue(unidades[0])
+                        }
+                    })
+                ).subscribe();
+            }
+
+
             this.route.params.pipe(tap(params => {
                 let objetoId = params['objetoId'];
     
@@ -252,9 +272,8 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
 
     setUnidades(unidadeList : UnidadeOrcamentariaDTO[]){
         this.unidades = unidadeList;
-        this.filtrarUnidades("");
 
-        this.opcoesUnidades = unidadeList.map(unidade => {
+        this.opcoesUnidades = unidadeList?.map(unidade => {
             return {
                 label: unidade.codigo + ' - ' + unidade.sigla,
                 value: unidade
@@ -262,7 +281,7 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
         })
 
         // em teoria não seria nescessario essa linha, mas o select ta bugado, então...
-        this.objeto.conta.unidadeOrcamentariaImplementadora = this.opcoesUnidades.find(opt => this.selecionarUnidade(opt, this.objeto.conta.unidadeOrcamentariaImplementadora) )?.value
+        this.objeto.conta.unidadeOrcamentariaImplementadora = this.opcoesUnidades?.find(opt => this.selecionarUnidade(opt, this.objeto.conta.unidadeOrcamentariaImplementadora) )?.value
     }
 
     filtrarUnidades(filtro : string) {
@@ -286,6 +305,10 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
                 this.objeto.planos = [tipo];
             })
         ).subscribe()
+    }
+
+    limparContratado() {
+        this.cadastroExercicios.forEach(c => c.limparContratado())
     }
 
     salvarDebounce = false;
@@ -338,7 +361,7 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
     addExercicio() {
         this.objeto.recursosFinanceiros.push({
             anoExercicio: this.objeto.recursosFinanceiros.length > 0 ? this.objeto.recursosFinanceiros[this.objeto.recursosFinanceiros.length-1].anoExercicio + 1 : new Date().getFullYear(),
-            indicadaPor: [{fonteOrcamentaria: null}]
+            indicadaPor: [{fonteOrcamentaria: null, gnd: 4}]
         })
     }
 

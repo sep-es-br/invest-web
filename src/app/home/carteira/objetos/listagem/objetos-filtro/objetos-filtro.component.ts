@@ -109,7 +109,7 @@ export class ObjetosFiltroComponent implements AfterViewInit {
             tap(permissao => {
 
                 this.podeVerUnidades = permissao.verTodasUnidades;
-                if(permissao.verTodasUnidades) {
+                if(this.podeVerUnidades) {
                     consulta.push(this.unidadeService.getAllUnidadesOrcamentarias()
                     .pipe(tap((unidadeList) => {
                         
@@ -118,9 +118,11 @@ export class ObjetosFiltroComponent implements AfterViewInit {
                     })));
                 } else {
                     consulta.push(this.unidadeService.getUnidadeDoUsuario()
-                    .pipe(tap( unidade => {
-                        this.filtro.unidade = [unidade]
-                        this.unidades = [unidade];
+                    .pipe(tap( unidades => {
+                        this.unidades = unidades;
+                        if(unidades?.length == 1) {
+                            this.filtro.unidade = unidades;
+                        }
                     })))
                 }
 

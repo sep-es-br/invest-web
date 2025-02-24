@@ -33,6 +33,10 @@ export class AvaliacaoExercicioFonteComponent implements OnInit {
 
     @Input() lastElem : boolean;
 
+    @Input() contratadoEditavel = false;
+
+    @Input() disabled = false;
+
     @Output() onRemover = new EventEmitter<IFonteExercicio>();
     @Output() onAdd = new EventEmitter<never>();
 
@@ -44,6 +48,10 @@ export class AvaliacaoExercicioFonteComponent implements OnInit {
     constructor(
         private fonteService : FonteOrcamentariaService
     ) {}
+
+    limparContratado() {
+        this.fonteValores.contratado = undefined;
+    }
 
 
     setFontes(fontList: FonteOrcamentariaDTO[]) {
@@ -75,7 +83,7 @@ export class AvaliacaoExercicioFonteComponent implements OnInit {
     }
 
     validar() : boolean {
-        this.valido = this.fonteValores.fonteOrcamentaria !== null;
+        this.valido = !!this.fonteValores.fonteOrcamentaria;
         this.checado = true;
 
         return this.valido;

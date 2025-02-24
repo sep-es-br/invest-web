@@ -1,12 +1,12 @@
-<form>
+<form [ngClass]="disabled ? 'disabled' : ''">
         
         <div>
-                <fa-icon *ngIf="lastElem" [icon]="addIcon" class="add" (click)="onAdd.emit()"></fa-icon>
+                <fa-icon *ngIf="lastElem" [icon]="addIcon" class="add" (click)="disabled ? undefined : onAdd.emit()"></fa-icon>
         </div>
         <div>
-                <fa-icon [icon]="removerIcon" class="remover" (click)="onRemover.emit(fonteValores)"></fa-icon>
+                <fa-icon [icon]="removerIcon" class="remover" (click)="disabled ? undefined : onRemover.emit(fonteValores)"></fa-icon>
         </div>
-        <ng-select [(ngModel)]="fonteValores.fonteOrcamentaria"
+        <ng-select [(ngModel)]="fonteValores.fonteOrcamentaria" [disabled]="disabled"
                 [ngModelOptions]="{standalone: true}"
                 [items]="optionsFontes"
                 placeholder="Selecionar a fonte orçamentária"
@@ -18,11 +18,15 @@
 
 
         <input type="text" [(ngModel)]="fonteValores.previsto" [ngModelOptions]="{standalone: true}"
-                prefix="R$ " mask="separator.2" placeholder="R$ "/>
-        <fa-icon [icon]="limparIcon" class="apagar" (click)="fonteValores.previsto = null"></fa-icon>
+                prefix="R$ " mask="separator.2" placeholder="R$ " [disabled]="disabled"/>
+        <fa-icon [icon]="limparIcon" class="apagar" (click)="disabled ? undefined : fonteValores.previsto = undefined"></fa-icon>
 
         <input type="text" [(ngModel)]="fonteValores.contratado" [ngModelOptions]="{standalone: true}"
-                prefix="R$ " mask="separator.2"  placeholder="R$ "/>
-        <fa-icon [icon]="limparIcon" class="apagar" (click)="fonteValores.contratado = null"></fa-icon>
+                prefix="R$ " mask="separator.2"  placeholder="R$ " [disabled]="disabled || !contratadoEditavel" />
+        <fa-icon [icon]="limparIcon" class="apagar" (click)="disabled ? undefined : fonteValores.contratado = undefined"></fa-icon>
 
+        <select [(ngModel)]="fonteValores.gnd" [ngModelOptions]="{standalone: true}" [disabled]="disabled">
+                <option [ngValue]="4">4</option>
+                <option [ngValue]="5">5</option>
+        </select>
 </form>

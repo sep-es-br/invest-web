@@ -3,7 +3,7 @@
             placeholder="Unidade Orçamentária"
             [(ngModel)]="filtro.unidade"
             [ngModelOptions]="{standalone: true}"
-            [disabled]="!podeVerUnidades"
+            [disabled]="unidades?.length <= 0"
             [searchFn]="searchUnidade"
             [clearable]="true"
             (ngModelChange)="update()"

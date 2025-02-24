@@ -6,5 +6,6 @@ export interface IFiltroInvestimento {
     ano? : number,
     plano? : PlanoOrcamentarioDTO[],
     unidade? : UnidadeOrcamentariaDTO[],
-    fonte? : FonteOrcamentariaDTO
+    fonte? : FonteOrcamentariaDTO,
+    gnd? : number
 }

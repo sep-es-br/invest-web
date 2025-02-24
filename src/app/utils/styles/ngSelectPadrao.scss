@@ -104,4 +104,17 @@
         }
         
     }
+
+    &.invalido {
+        
+        .ng-select-container {
+            
+            border-color: var(--vermelho-padrao);
+
+            
+            .ng-placeholder {
+                color: var(--vermelho-padrao);
+            }
+        }
+    }
 }

@@ -4,6 +4,7 @@ export class InvestimentoFiltro {
     codPO? : string[] | null;
     idFonte? : string | null; 
     exercicio?: number | null;
+    gnd? : number;
     numPag?: number | null;
     qtPorPag?: number | null;
 }

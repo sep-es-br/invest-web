@@ -53,14 +53,15 @@ export class InvestimentosService {
 
         if(filtro.idFonte)
             params = params.set("idFonte", filtro.idFonte)
-        
-
 
         if(filtro.numPag)
             params = params.set("numPag", filtro.numPag)
 
         if(filtro.qtPorPag)
             params = params.set("qtPorPag", filtro.qtPorPag) 
+
+        if(filtro.gnd)
+            params = params.set("gnd", filtro.gnd)
 
 
         return params.set("exercicio", filtro.exercicio)

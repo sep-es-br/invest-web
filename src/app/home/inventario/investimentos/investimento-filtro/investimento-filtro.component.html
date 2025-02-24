@@ -1,10 +1,9 @@
-   
 <ng-select [items]="unidades"
             [multiple]="true"
             placeholder="Unidade Orçamentária"
             [(ngModel)]="filtro.unidade"
             [ngModelOptions]="{standalone: true}"
-            [disabled]="!podeVerUnidades"
+            [disabled]="unidades?.length <= 1"
             [searchFn]="searchUnidade"
             [clearable]="true"
             (ngModelChange)="update()"
@@ -51,6 +50,16 @@
     <ng-template ng-option-tmp let-item="item">
         {{item.codigo}} - {{item.nome}}
     </ng-template>
+</ng-select>
+
+<ng-select [items]="[4, 5]"
+   class="menor"
+    placeholder="GND"
+    [(ngModel)]="filtro.gnd"
+    [ngModelOptions]="{standalone: true}"
+    [clearable]="true"
+    (ngModelChange)="update()"
+    >    
 </ng-select>
 
 <ng-select [items]="anos" class="menor"

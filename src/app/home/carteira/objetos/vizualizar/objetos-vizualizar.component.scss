@@ -77,10 +77,20 @@
         table {
             border-collapse: collapse;
             thead {
-                tr th{
-                    border-bottom: #d7d7d7 solid 1px;
-                    text-align: start;
-                    color: var(--cinza-escuro);
+                tr {
+                    th{
+                        border-bottom: #d7d7d7 solid 1px;
+                        text-align: start;
+                        color: var(--cinza-escuro);
+                    }
+
+                    th:nth-of-type(3), th:nth-of-type(2) {
+                        width: 10rem;
+                    }
+
+                    th:last-of-type {
+                        width: 5rem;
+                    }
                 }
             }
 

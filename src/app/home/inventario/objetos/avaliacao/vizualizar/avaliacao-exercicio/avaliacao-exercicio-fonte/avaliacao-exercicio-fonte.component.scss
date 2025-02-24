@@ -12,6 +12,10 @@
         flex-grow: 1;
         align-items: center;
 
+        &.disabled {
+            opacity: 0.7 !important;
+        }
+
         div {
             display: flex;
             width: 1.5rem;
@@ -21,6 +25,10 @@
             fa-icon.add {
                 color: var(--verde-padrao);
             }
+        }
+
+        ng-select.inGnd {
+            width: 5rem !important;
         }
 
         ::ng-deep .ng-select {
@@ -74,6 +82,14 @@
 
                 }
             }
+            
+            &.invalido {
+                
+                .ng-select-container {
+                    
+                    border-color: #0000 #0000 var(--vermelho-padrao) #0000;
+                }
+            }
         }
 
         fa-icon {
@@ -81,12 +97,14 @@
             color: red;
 
             &.apagar {
-                transform: translate(-215%, -15%);
+                transform: translate(-240%, 30%);
             }
             
         }
 
-        input {
+        input, select {
+
+            
             
             box-sizing: border-box;
             margin: 1rem 1rem 0 1rem;
@@ -102,6 +120,10 @@
                 color: var(--cor-primaria);
             }
 
+        }
+
+        select {
+            width: unset;
         }
     }
 }

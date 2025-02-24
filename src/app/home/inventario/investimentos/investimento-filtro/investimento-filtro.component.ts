@@ -90,7 +90,7 @@ export class InvestimentoFiltroComponent implements AfterViewInit{
         this.permissaoService.getPermissao("inventarioinvestimentos").pipe(
             tap(permissao => {
                 this.podeVerUnidades = permissao.verTodasUnidades;
-                if(permissao.verTodasUnidades) {
+                if(this.podeVerUnidades) {
                     consulta.push(this.unidadeService.getAllUnidadesOrcamentarias()
                     .pipe(tap((unidadeList) => {
         
@@ -99,9 +99,13 @@ export class InvestimentoFiltroComponent implements AfterViewInit{
                     })))
                 } else {
                     consulta.push(this.unidadeService.getUnidadeDoUsuario()
-                    .pipe(tap((unidade) => {
+                    .pipe(tap((unidades) => {
                         
-                        this.filtro.unidade = [unidade];
+                        this.unidades = unidades;
+                        if(unidades?.length == 1) {
+                            this.filtro.unidade = unidades;
+                        }
+
                         
                     })));
                 }

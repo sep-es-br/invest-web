@@ -93,9 +93,8 @@ export class ObjetoFiltroComponent implements AfterViewInit {
                     ).subscribe()
                 } else {
                     this.unidadeService.getUnidadeDoUsuario().pipe(
-                        tap(_unidade => {
-                            this.unidades = [_unidade]
-                            this.filtro.unidade = [_unidade]
+                        tap(_unidades => {
+                            this.unidades = _unidades;
                         }),
                         finalize(() => {
                             this.atualizar();

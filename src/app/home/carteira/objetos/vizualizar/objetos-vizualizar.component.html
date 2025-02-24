@@ -112,6 +112,7 @@
                 <th>Valores</th>
                 <th>Previsto</th>
                 <th>Contratado</th>
+                <th>GND</th>
             </tr>
         </thead>
         <tbody>
@@ -120,6 +121,7 @@
                 <td>{{linha.label}} <span>{{linha.nome}}</span></td>
                 <td><span title="{{linha.previsto | customCurrency}}">R$ {{linha.previsto | numeroResumido}}</span></td>
                 <td><span title="{{linha.contratado | customCurrency}}">R$ {{linha.contratado | numeroResumido}}</span></td>
+                <td>{{linha.gnd}}</td>
             </tr>
         </tbody>
     </table>

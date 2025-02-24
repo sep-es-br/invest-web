@@ -65,13 +65,17 @@ select, input:not(.pesquisa) {
     &:disabled {
         border-color: var(--cor-primaria);
         color: var(--cor-primaria);
-        
+        opacity: 0.7;
     }
 
 }
 
 .invalido {
-    border-color: var(--vermelho-padrao);
-    color: var(--vermelho-padrao);
+    border-color: var(--vermelho-padrao) !important;
+    color: var(--vermelho-padrao) !important;
+
+    &::placeholder {
+        color: var(--vermelho-padrao) !important;
+    }
 }
 

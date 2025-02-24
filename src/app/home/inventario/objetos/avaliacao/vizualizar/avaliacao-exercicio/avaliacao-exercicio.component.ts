@@ -23,6 +23,9 @@ export class AvaliacaoExercicioComponent implements AfterViewInit{
     addIcon = faPlusCircle;
     removerIcon = faMinusCircle;
 
+    @Input() disabled = false;
+    @Input() contratadoEditavel = false;
+
     @Input() exercicio : ICusto;
     @Input() lastElem : boolean;
 
@@ -53,6 +56,10 @@ export class AvaliacaoExercicioComponent implements AfterViewInit{
         })
 
         return valido;
+    }
+
+    limparContratado() {
+        this.fonteValores.forEach(fonteValor => fonteValor.limparContratado());
     }
 
 

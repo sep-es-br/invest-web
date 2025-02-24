@@ -116,22 +116,6 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
     acoesPositivas : IAcao[] = [];
     acoesNegativas : IAcao[] = [];
 
-    objetoCadastro = new FormGroup({
-        tipoConta: new FormControl(null, Validators.required),
-        tipo: new FormControl(null, Validators.required),
-        nome: new FormControl(null, Validators.required),
-        descricao: new FormControl(null, Validators.required),
-        unidade: new FormControl(undefined, Validators.required),
-        planoOrcamentario: new FormControl(undefined),
-        microregiaoAtendida: new FormControl(undefined, Validators.required),
-        infoComplementares: new FormControl(null),
-        planos : new FormControl([], Validators.required),
-        contrato : new FormControl(null),
-        areaTematica : new FormControl(null),
-        inPossuiOrcamento : new FormControl(undefined, Validators.required)
-
-    });
-
     etapasStatus : {
         etapa: IEtapa,
         status: number,
@@ -271,25 +255,25 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
         return (<any>EtapaEnum)[this.objeto.emEtapa?.etapa.etapaId] === etapaEnum;
     }
 
+    limparContratado() {
+        this.cadastroExercicios.forEach(c => c.limparContratado());
+    }
+
+
     setObjeto(objeto : IObjeto) {
         this.objeto = objeto;
 
         
         this.dataUtil.setTitleInfo("objetoId", this.objeto.nome);
     
-        this.objetoCadastro.controls.microregiaoAtendida.setValue(
-            this.objeto.microregiaoAtendida ? 
-            this.microregioes.find(value => value.id == this.objeto.microregiaoAtendida.id)
-            : null
-        );
-        
-        this.objetoCadastro.controls.planos.setValue(
-            this.tiposplano.filter(tipoItem => objeto.planos.map( objTipoPlano => objTipoPlano.id).includes(tipoItem.id))
-        );
+        this.objeto.microregiaoAtendida = this.objeto.microregiaoAtendida ? 
+                                            this.microregioes.find(value => value.id == this.objeto.microregiaoAtendida.id)
+                                            : undefined;
 
-        this.objetoCadastro.controls.areaTematica.setValue(
-            this.areasTematicas.find(area => objeto.areaTematica?.id == area.id)
-        );
+        
+        objeto.planos = this.tiposplano.filter(tipoItem => objeto.planos.map( objTipoPlano => objTipoPlano.id).includes(tipoItem.id));
+
+        this.objeto.areaTematica = this.areasTematicas.find(area => objeto.areaTematica?.id == area.id)
 
         this.usuarioService.getUser().pipe(
             tap(user => {
@@ -412,9 +396,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
 
     setAreasTematicas (areaList : IAreaTematica[]) {
         this.areasTematicas = areaList;
-        this.objetoCadastro.controls.areaTematica.setValue(
-            this.areasTematicas.find(area => this.objeto.areaTematica?.id == area.id)
-        );
+        this.objeto.areaTematica = this.areasTematicas.find(area => this.objeto.areaTematica?.id == area.id);
     }
 
     setPlanos (planoList : PlanoOrcamentarioDTO[]) {
@@ -462,10 +444,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
     setTiposPlano(tipoPlanoList : ITipoPlano[]) {
         this.tiposplano = tipoPlanoList;
 
-        this.objetoCadastro.controls.planos.setValue(
-            this.tiposplano.filter(tipoItem => this.objeto.planos?.map( objTipoPlano => objTipoPlano.id).includes(tipoItem.id))
-        );
-
+        this.objeto.planos = this.tiposplano.filter(tipoItem => this.objeto.planos?.map( objTipoPlano => objTipoPlano.id).includes(tipoItem.id));
         
         this.opcoesTipoPlano = tipoPlanoList.map(
             tpPlano => { return {
@@ -479,16 +458,14 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
 
     setMicrorregioes(localidadeList : LocalidadeDTO[]){
         this.microregioes = localidadeList;
-        this.objetoCadastro.controls.microregiaoAtendida.setValue(
-            this.objeto.microregiaoAtendida ? 
-            this.microregioes.find(value => value.id == this.objeto.microregiaoAtendida?.id)
-            : null
-        );
+
+        this.objeto.microregiaoAtendida = this.objeto.microregiaoAtendida ? 
+                                        this.microregioes.find(value => value.id == this.objeto.microregiaoAtendida?.id)
+                                        : null;
+
     }
 
     ngAfterViewInit(): void {
-        this.objetoCadastro.controls.tipoConta.disable({onlySelf: true});
-        this.objetoCadastro.controls.tipo.disable({onlySelf: true});
 
         merge(            
             this.unidadeService.getFromSigefes().pipe(
@@ -530,22 +507,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                                     tap(fluxo => this.setFluxo(fluxo)),
                                     finalize(() => this.setObjeto(objeto))
                                 ).subscribe()
-                                    
-                                this.usuarioService.getUser().pipe(
-                                    tap(user => {
-                                        if(!this.exibeTodasUnidades){
-                                            this.objetoCadastro.controls.unidade.disable({onlySelf: true});
-                                        }
-
-                                        this.grupoService.findByUsuario(user.id).pipe(
-                                            tap(grupos => {
-                                                this.executaAcao = grupos.map(g => g.id).includes(objeto.emEtapa.etapa.grupoResponsavel.id)
-                                                                   || Boolean(user.role.find(funcao => funcao.nome === "GESTOR_MASTER"));
-                                                this.objetoCadastro.disable;
-                                            })
-                                        ).subscribe()
-                                    })
-                                ).subscribe()
+                                
     
                             })
                         )
@@ -608,6 +570,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                     
                 // }
                 if(acao.proxEtapaId){
+                    this.acaoDebounce = false;
                     this.exibirModal = true;
                 } else {
                     let resp = confirm("Se você remover o objeto ele será excluido definitivamente.\n Tem certeza que deseja excluir?");
@@ -677,7 +640,8 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
     addExercicio() {
         this.objeto.recursosFinanceiros.push({
             anoExercicio: this.objeto.recursosFinanceiros.length > 0 ? this.objeto.recursosFinanceiros[this.objeto.recursosFinanceiros.length-1].anoExercicio + 1 : new Date().getFullYear(),
-            indicadaPor: [{fonteOrcamentaria: null}]
+            indicadaPor: [{fonteOrcamentaria: null, gnd: 4}],
+            
         })
     }
 

@@ -32,6 +32,7 @@ export class CadastroExercicioFonteComponent implements OnInit {
     @Input() fonteValores : IFonteExercicio;
 
     @Input() lastElem : boolean;
+    @Input() contratadoEditavel : boolean = false;
 
     @Output() onRemover = new EventEmitter<IFonteExercicio>();
     @Output() onAdd = new EventEmitter<never>();
@@ -74,8 +75,12 @@ export class CadastroExercicioFonteComponent implements OnInit {
         ).subscribe();
     }
 
+    limparContratado() {
+        this.fonteValores.contratado = undefined;
+    }
+
     validar() : boolean {
-        this.valido = this.fonteValores.fonteOrcamentaria !== null;
+        this.valido = !!this.fonteValores.fonteOrcamentaria;
         this.checado = true;
 
         return this.valido;

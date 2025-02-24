@@ -8,6 +8,12 @@
     header {
         display: flex;
         flex-direction: row;
+        align-items: center;
+        gap: 1rem;
+
+        &.disabled {
+            opacity: 0.7 !important;
+        }
 
         div {
             display: flex;
@@ -30,8 +36,8 @@
             font-weight: unset;
             font-family: inherit;
             box-sizing: border-box;
-            margin: 1rem 2rem 0 2rem;
-            width: 10rem;
+            margin-inline: 2rem ;
+            width: 7rem;
             text-align: center;
             span {
                 font-weight: bolder;
@@ -39,9 +45,13 @@
         }
         
 
-        h4:nth-of-type(1){
+        h4:first-of-type {
             text-align: start;
             flex-grow: 1;
+        }
+
+        h4:last-of-type {
+            width: 1.3rem;
         }
     }
 

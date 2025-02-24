@@ -80,8 +80,9 @@ export class InvestimentosComponent implements AfterViewInit {
             codUnidade: filtro.unidade && filtro.unidade.length > 0 ? filtro.unidade.map(u => u.id) : undefined,
             idFonte: filtro.fonte?.id,
             nome: this.txtBusca.value,
+            gnd: filtro.gnd,
             numPag: novaPagina,
-            qtPorPag: 15
+            qtPorPag: this.filtro.qtPorPag
         }
 
         this.executar(
@@ -108,7 +109,8 @@ export class InvestimentosComponent implements AfterViewInit {
                 this.filtro.codUnidade,
                 this.filtro.codPO,
                 this.filtro.idFonte,
-                Number(this.filtro.exercicio)
+                Number(this.filtro.exercicio),
+                this.filtro.gnd
             )
             .pipe(tap(totais => {
                             

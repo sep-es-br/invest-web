@@ -137,6 +137,10 @@
                     }
 
                     fa-icon {
+
+                        &.disabled {
+                            opacity: 0.7 !important;
+                        }
                         color: var(--verde-padrao);
                     }
                 }
