@@ -32,6 +32,11 @@
     </header>
     <main>
         <form #form="ngForm">
+            <label for="inGnd">GND:<span class="obrigatorio">*</span></label>
+            <select id="inGnd" name="gnd" [(ngModel)]="gnd">
+                <option [ngValue]="4">4</option>
+                <option [ngValue]="5">5</option>
+            </select>
 
             <label for="inConta">Tipo da Despesa:<span class="obrigatorio">*</span></label>
             <select id="inConta" name="tipoConta" [(ngModel)]="objeto.tipoConta" 

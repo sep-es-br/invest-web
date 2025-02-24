@@ -92,6 +92,8 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
     parecerIcon = faFileContract;
 
     fluxo : IFluxo;
+
+    gnd : number = 4;
     
     checado = false;
 
@@ -629,6 +631,8 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
         //     },
         //     recursosFinanceiros: this.objeto.recursosFinanceiros
         // };
+
+        this.objeto.recursosFinanceiros.forEach(r => r.indicadaPor.forEach(i => i.gnd = this.gnd))
 
         return this.objeto;
     }
