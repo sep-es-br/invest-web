@@ -10,4 +10,5 @@ export interface IObjetoFiltro {
     exercicio? : number,
     etapa? : IEtapa,
     status? : IStatus,
+    podeVerUnidades? : boolean
 }

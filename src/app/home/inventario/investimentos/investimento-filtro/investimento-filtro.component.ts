@@ -140,7 +140,7 @@ export class InvestimentoFiltroComponent implements AfterViewInit{
     }
 
     update() {
-
+        this.filtro.podeVerUnidades = this.podeVerUnidades;
         this.filterChange.emit(this.filtro);
     }
 

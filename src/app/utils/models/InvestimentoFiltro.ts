@@ -5,6 +5,7 @@ export class InvestimentoFiltro {
     idFonte? : string | null; 
     exercicio?: number | null;
     gnd? : number;
+    verUnidades?: boolean;
     numPag?: number | null;
     qtPorPag?: number | null;
 }

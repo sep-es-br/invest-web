@@ -109,6 +109,8 @@ export class ObjetosService {
         if(filtro.etapa)
             params = params.set("etapaId", filtro.etapa.id)
 
+        params = params.set("podeVerUnidades", !!filtro.podeVerUnidades)
+
 
         return params.set("ano", filtro.exercicio);
     }

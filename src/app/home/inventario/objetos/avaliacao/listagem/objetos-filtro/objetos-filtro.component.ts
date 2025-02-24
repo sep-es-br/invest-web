@@ -110,6 +110,7 @@ export class ObjetoFiltroComponent implements AfterViewInit {
     }
 
     atualizar(){
+        this.filtro.podeVerUnidades = this.podeVerUnidades;
         this.onUpdate.emit(this.filtro);
     }
 
@@ -161,5 +162,6 @@ export interface IFiltro {
     unidade?: UnidadeOrcamentariaDTO[],
     ano?: number,
     etapa?: IEtapa,
-    nome? : string
+    nome? : string,
+    podeVerUnidades? : boolean
 }

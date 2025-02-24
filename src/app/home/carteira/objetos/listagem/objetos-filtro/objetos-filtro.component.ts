@@ -58,13 +58,10 @@ export class ObjetosFiltroComponent implements AfterViewInit {
     ){}
 
     update() {
-
+        this.filtro.podeVerUnidades = this.podeVerUnidades;
         this.filterChange.emit(this.filtro);
     }
 
-    
-
-    
     filtrarSimples(term : string, item : { nome : string}) : boolean {
         return item.nome.toUpperCase().includes(term.toUpperCase());
     }

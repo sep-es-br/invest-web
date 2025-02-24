@@ -4,7 +4,6 @@
             placeholder="Unidade Orçamentária"
             [(ngModel)]="filtro.unidade"
             [ngModelOptions]="{standalone: true}"
-            [disabled]="!podeVerUnidades"
             [searchFn]="searchUnidade"
             [clearable]="true"
             (ngModelChange)="atualizar()"

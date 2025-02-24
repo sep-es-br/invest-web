@@ -63,6 +63,8 @@ export class InvestimentosService {
         if(filtro.gnd)
             params = params.set("gnd", filtro.gnd)
 
+        params = params.set("verUnidades", filtro.verUnidades)
+
 
         return params.set("exercicio", filtro.exercicio)
     }

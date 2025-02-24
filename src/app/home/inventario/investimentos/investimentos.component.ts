@@ -81,6 +81,7 @@ export class InvestimentosComponent implements AfterViewInit {
             idFonte: filtro.fonte?.id,
             nome: this.txtBusca.value,
             gnd: filtro.gnd,
+            verUnidades: filtro.podeVerUnidades,
             numPag: novaPagina,
             qtPorPag: this.filtro.qtPorPag
         }
