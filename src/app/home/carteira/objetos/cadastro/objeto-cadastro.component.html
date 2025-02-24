@@ -4,6 +4,11 @@
     </header>
     <main>
         <form [formGroup]="objetoCadastro">
+            <label for="inGnd">GND:<span class="obrigatorio">*</span></label>
+            <select id="inGnd" [ngModelOptions]="{standalone: true}" [(ngModel)]="gnd" disabled>
+                <option [ngValue]="4">4</option>
+                <option [ngValue]="5">5</option>
+            </select>
 
             <label for="inConta">Tipo da Despesa:<span class="obrigatorio">*</span></label>
             <select id="inConta" formControlName="tipoConta" [(ngModel)]="objeto.tipoConta"

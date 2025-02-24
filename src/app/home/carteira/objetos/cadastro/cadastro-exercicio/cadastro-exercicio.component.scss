@@ -8,7 +8,6 @@
     header {
         display: flex;
         flex-direction: row;
-        gap: 1rem;
 
         div {
             display: flex;
@@ -32,7 +31,7 @@
             font-family: inherit;
             box-sizing: border-box;
             margin-inline: 2rem ;
-            width: 7rem;
+            width: 10rem;
             text-align: center;
             span {
                 font-weight: bolder;
@@ -45,9 +44,9 @@
             flex-grow: 1;
         }
 
-        h4:last-of-type {
-            width: 1.3rem;
-        }
+        // h4:last-of-type {
+        //     width: 1.3rem;
+        // }
     }
 
     main {

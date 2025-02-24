@@ -71,6 +71,8 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
 
     podeVerUnidades = false;
 
+    gnd : number = 4;
+
     constructor(
         private unidadeService : UnidadeOrcamentariaService,
         private planoService : PlanoOrcamentarioService,
@@ -336,6 +338,8 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
                 },
                 recursosFinanceiros: this.objeto.recursosFinanceiros
             };
+            
+            this.objeto.recursosFinanceiros.forEach(r => r.indicadaPor.forEach(i => i.gnd = this.gnd))
 
             if(!this.salvarDebounce) {
                 this.salvarDebounce = true;

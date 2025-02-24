@@ -25,9 +25,5 @@
                 prefix="R$ " mask="separator.2"  placeholder="R$ " [disabled]="!contratadoEditavel"/>
         <fa-icon [icon]="limparIcon" class="apagar" (click)="fonteValores.contratado = null"></fa-icon>
 
-        <select [(ngModel)]="fonteValores.gnd" [ngModelOptions]="{standalone: true}">
-                <option [ngValue]="4">4</option>
-                <option [ngValue]="5">5</option>
-        </select>
 
 </form>
