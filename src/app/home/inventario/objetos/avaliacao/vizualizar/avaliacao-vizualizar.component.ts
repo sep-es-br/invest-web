@@ -558,10 +558,12 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                 this.acaoService.executarAcao(executarAcaoDto).pipe(
                     tap(objeto => {
                         this.toastr.success("Acão de " + acao.nome + " executada com sucesso");
-                        if(!objeto.emEtapa){
+                        if(!objeto?.emEtapa){
                             this.router.navigate([".."], {relativeTo: this.route});
+                        } else {
+                            this.setObjeto(objeto);
                         }
-                        this.setObjeto(objeto);
+                        
                     }),
                     finalize(() => this.acaoDebounce = false)
                 ).subscribe();
