@@ -9,5 +9,6 @@ export class InvestimentoTiraDTO {
     totalContratado!: number;
     totalAutorizado! : number;
     totalDisponivel! : number;
+    totalEmpenhado: number;
     objetos!: ObjetoTiraDTO[];
 }
