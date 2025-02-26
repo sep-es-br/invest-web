@@ -111,11 +111,10 @@ export class GrupoMembrosComponent implements AfterViewInit {
         if(membroForm) {
             membroForm.grupo = this.grupo;
 
-            console.log(membroForm)
-            // this.service.addMembro(membroForm).subscribe(value => {
-            //     this.service.grupoSession.next(value);
-            //     this.toastr.success("Membro Salvo");
-            // });
+            this.service.addMembro(membroForm).subscribe(value => {
+                this.service.grupoSession.next(value);
+                this.toastr.success("Membro Salvo");
+            });
         }
     }
     
