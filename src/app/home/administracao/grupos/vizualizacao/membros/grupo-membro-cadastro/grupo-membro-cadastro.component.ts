@@ -1,24 +1,31 @@
 import { CommonModule } from "@angular/common";
-import { Component, ElementRef, EventEmitter, HostListener, Output, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Output, ViewChild } from "@angular/core";
 import { IProfile } from "../../../../../../utils/interfaces/profile.interface";
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { UnidadeOrcamentariaDTO } from "../../../../../../utils/models/UnidadeOrcamentariaDTO";
-import { ISetorDTO } from "../../../../../../utils/models/SetorDTO";
+import { ISetorDTO, setorTodos } from "../../../../../../utils/models/SetorDTO";
 import { InfosService } from "../../../../../../utils/services/infos.service";
 import { IPapelDTO, papelTodos } from "../../../../../../utils/models/PapelDto";
 import { ICadastroMembroForm } from "./CadastroMembroForm";
 import { GrupoService } from "../../../../../../utils/services/grupo.service";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { NgSelectModule } from "@ng-select/ng-select";
+import { IOrgaoDTO } from "../../../../../../utils/models/OrgaoDTO";
+import { OrgaoService } from "../../../../../../utils/services/orgao.service";
+import { merge, tap } from "rxjs";
 
 @Component({
     selector: "spo-grupo-membro-cadastro",
     standalone: true,
     templateUrl: "./grupo-membro-cadastro.component.html",
     styleUrl: "./grupo-membro-cadastro.component.scss",
-    imports: [CommonModule, ReactiveFormsModule, FontAwesomeModule]
+    imports: [
+        CommonModule, ReactiveFormsModule, FontAwesomeModule, FormsModule,
+        NgSelectModule
+    ]
 })
-export class GrupoMembroCadastroComponent {
+export class GrupoMembroCadastroComponent implements AfterViewInit {
 
     @Output() onClose = new EventEmitter<ICadastroMembroForm>();
 
@@ -30,23 +37,33 @@ export class GrupoMembroCadastroComponent {
     iconFechar = faXmark;
 
     unidades : UnidadeOrcamentariaDTO[] = [];
+    orgaos : IOrgaoDTO[] = [];
+
     setores : ISetorDTO[] = [];
     papeis : IPapelDTO[] = [];
 
     papelTodos = papelTodos;
+    setorTodos = setorTodos;
 
     fora = true;
+
+    cadastroForm : ICadastroMembroForm = {
+        orgao: undefined,
+        setor: undefined,
+        papel: undefined
+    };
 
     constructor(
         private infosService: InfosService,
         private fb : FormBuilder,
-        private grupoService : GrupoService
+        private grupoService : GrupoService,
+        private orgaoService : OrgaoService
     ) {
 
         this.form = this.fb.group({
-            unidade: [null],
-            setor: [{value: null, disabled: true}],
-            papel: [{value: null, disabled: true}]
+            unidade: [undefined],
+            setor: [{value: undefined, disabled: true}],
+            papel: [{value: undefined, disabled: true}]
         });
 
         this.form.get("unidade").valueChanges.subscribe((novoValor : UnidadeOrcamentariaDTO) => {
@@ -92,50 +109,95 @@ export class GrupoMembroCadastroComponent {
             this.unidades = unidadeList;
         });
     }
+
+    ngAfterViewInit(): void {
+        merge(
+            this.orgaoService.getOrgaosSigefes().pipe(
+                tap(orgaos => this.setOrgaos(orgaos))
+            )
+        ).subscribe()
+    }
+
+    preencherSetores(orgao : IOrgaoDTO) {
+
+        if(orgao){
+            this.infosService.getSetores(orgao.guid).subscribe(setoresList => {
+                this.setores = [ setorTodos, ...setoresList];
+                this.cadastroForm.setor = undefined;
+            });
+
+        } else {
+            this.setores = [];
+            this.cadastroForm.setor = undefined;
+        }
+           
+    }
+
+    preencherPapeis(setor : ISetorDTO) {
+
+        if(setor && setor !== setorTodos){
+            this.infosService.getPapeis(setor.guid).subscribe(papeisList => {
+                
+                this.grupoService.grupoSession.subscribe(grupo => {
+                    let subList = grupo.membros.map(user => user.papel);
+
+                    this.papeis = [papelTodos, ...papeisList.filter(papel => subList.indexOf(papel.nome) < 0)] 
+                    this.cadastroForm.papel = undefined
+                })
+
+            })
+
+        } else {
+            this.cadastroForm.papel = undefined;
+        }
+
+           
+    }
+
+    setOrgaos(orgaos : IOrgaoDTO[]){
+        this.orgaos = orgaos;
+    }
   
     @HostListener("click", ["$event"])
     clickFora (event : MouseEvent) {
         if(!this.principalRef.nativeElement.contains(event.target)){
-            this.fechar();
+            this.fechar(null);
         }        
     }
 
 
-    fechar() {
-        this.form.get("unidade").setValue(null),
-        this.form.get("setor").setValue(null),
-        this.form.get("papel").setValue(null)
-        this.onClose.emit(null);
+    fechar(cadastroForm : ICadastroMembroForm) {
+        this.onClose.emit({...cadastroForm});
+        this.cadastroForm.orgao = undefined;
+        this.cadastroForm.setor = undefined;
+        this.cadastroForm.papel = undefined;
     }
 
     salvar() {
+       
+        console.log(this.cadastroForm)
 
-        const papelSelecionado = this.form.get("papel").value as IPapelDTO;
+        if(this.cadastroForm.setor === setorTodos)
+            this.cadastroForm.setor = undefined
 
-        let cadastroMembroForm : ICadastroMembroForm;
+        if(this.cadastroForm.papel === papelTodos)
+            this.cadastroForm.papel === undefined
 
-        if(papelSelecionado.guid === papelTodos.guid) {
-            cadastroMembroForm = {
-                orgao: this.form.get("unidade").value,
-                setor: this.form.get("setor").value,
-                papeis: this.papeis
-            }
-        } else {
-            cadastroMembroForm = {
-                orgao: this.form.get("unidade").value,
-                setor: this.form.get("setor").value,
-                papeis: [papelSelecionado]
-            }
-        }
- 
-        this.form.get("unidade").setValue(null);
-        this.form.get("setor").setValue(null);
-        this.form.get("papel").setValue(null);
+        this.fechar(this.cadastroForm);
+    }
 
-        
-        this.form.get("setor").disable({onlySelf: true});
-        this.form.get("papel").disable({onlySelf: true});
+    searchOrgao(term : string, orgao : IOrgaoDTO) : boolean {
+        return orgao.nome.toLowerCase().includes(term.toLowerCase())
+            || orgao.sigla?.toLowerCase().includes(term.toLowerCase());
+    }
 
-        this.onClose.emit(cadastroMembroForm);
+    searchSetor(term : string, setor : ISetorDTO) : boolean {
+        return setor.nome.toLowerCase().includes(term.toLowerCase())
+            || setor.sigla?.toLowerCase().includes(term.toLowerCase());
+    }
+
+    searchPapel(term : string, setor : IPapelDTO) : boolean {
+        return setor.nome.toLowerCase().includes(term.toLowerCase())
+            || setor.agenteNome?.toLowerCase().includes(term.toLowerCase());
     }
 }

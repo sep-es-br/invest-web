@@ -6,3 +6,11 @@ export interface IOrgaoDTO {
     sigla : string,
     nome : string
 }
+
+export const todosOrgao : IOrgaoDTO = {
+    id: undefined,
+    guid: "todos",
+    nome: "Todos",
+    sigla: undefined
+
+}

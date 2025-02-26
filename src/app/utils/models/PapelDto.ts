@@ -7,9 +7,9 @@ export interface IPapelDTO {
 }
 
 export const papelTodos : IPapelDTO = {
-    id: null,
+    id: undefined,
     guid: "todos",
-    nome: "Todos",
-    agenteSub: null,
-    agenteNome: null
+    nome: undefined,
+    agenteSub: undefined,
+    agenteNome: "Todos"
 }
