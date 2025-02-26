@@ -1,0 +1,61 @@
+<form>
+    <ng-select [items]="unidades"
+            [multiple]="true"
+            placeholder="Unidade Orçamentária"
+            [(ngModel)]="filtro.unidade"
+            [ngModelOptions]="{standalone: true}"
+            [searchFn]="searchUnidade"
+            [clearable]="true"
+            (ngModelChange)="atualizar()"
+        >
+        <ng-template ng-label-tmp let-item="item" let-index="index">
+            {{item.codigo}}
+            <button (click)="filtro.unidade = removerSelecao(filtro.unidade, item); this.atualizar()">
+                <fa-icon class="removerItem" [icon]="removerIcon" [attr.aria-label]="'remover unidade ' + item.codigo"></fa-icon>
+            </button>
+        </ng-template>
+        <ng-template ng-option-tmp let-item="item">
+            {{item.codigo}} - {{item.sigla}}
+        </ng-template>
+    </ng-select>
+
+    <ng-select [items]="etapas" class="menor"
+            placeholder="Etapa"
+            [(ngModel)]="filtro.etapa"
+            [ngModelOptions]="{standalone: true}"
+            [clearable]="true"
+            (ngModelChange)="atualizar()"
+            [searchFn]="filtrarSimples"
+        >
+        <ng-template ng-label-tmp let-item="item" let-index="index">
+            {{item.nome}}
+        </ng-template>
+        <ng-template ng-option-tmp let-item="item">
+            {{item.nome}}
+        </ng-template>
+    </ng-select>
+
+    <ng-select [items]="status" class="menor"
+            placeholder="Status"
+            [(ngModel)]="filtro.status"
+            [ngModelOptions]="{standalone: true}"
+            [clearable]="true"
+            (ngModelChange)="atualizar()"
+            [searchFn]="filtrarSimples"
+        >
+        <ng-template ng-label-tmp let-item="item" let-index="index">
+            {{item.nome}}
+        </ng-template>
+        <ng-template ng-option-tmp let-item="item">
+            {{item.nome}}
+        </ng-template>
+    </ng-select>
+
+    <ng-select [items]="anos" class="menor"
+            [(ngModel)]="filtro.ano"
+            [ngModelOptions]="{standalone: true}"
+            [clearable]="false"
+            (ngModelChange)="atualizar()"
+        >
+    </ng-select>
+</form>

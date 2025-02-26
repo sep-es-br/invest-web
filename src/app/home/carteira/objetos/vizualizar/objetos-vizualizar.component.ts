@@ -37,7 +37,8 @@ export class ObjetosVizualizarComponent implements AfterViewInit {
         label : string,
         nome: string,
         previsto: number,
-        contratado : number
+        contratado : number,
+        gnd? : number
     }[] = []
 
     constructor(
@@ -76,7 +77,8 @@ export class ObjetosVizualizarComponent implements AfterViewInit {
                                     label: 'Fonte:',
                                     nome: `${fonte.fonteOrcamentaria.nome}`,
                                     previsto: fonte.previsto,
-                                    contratado: fonte.contratado
+                                    contratado: fonte.contratado,
+                                    gnd: fonte.gnd
                                 })
                             })
                         })

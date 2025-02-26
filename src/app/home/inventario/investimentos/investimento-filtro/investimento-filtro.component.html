@@ -1,29 +1,72 @@
-   
-<dropdown-filtro (valueChange)="update()" [disabled]="!podeVerUnidades" >
-    <p display>{{filtro.unidade ? (filtro.unidade.codigo + " - " + filtro.unidade.sigla) : "Unidade Orçamentária"}}</p>
+<ng-select [items]="unidades"
+            [multiple]="true"
+            placeholder="Unidade Orçamentária"
+            [(ngModel)]="filtro.unidade"
+            [ngModelOptions]="{standalone: true}"
+            [disabled]="unidades?.length <= 1"
+            [searchFn]="searchUnidade"
+            [clearable]="true"
+            (ngModelChange)="update()"
+        >
+    <ng-template ng-label-tmp let-item="item" let-index="index">
+        {{item.codigo}}
+        <button (click)="filtro.unidade = removerSelecao(filtro.unidade, item); this.update()">
+            <fa-icon class="removerItem" [icon]="removerIcon" [attr.aria-label]="'remover unidade ' + item.codigo"></fa-icon>
+        </button>
+    </ng-template>
+    <ng-template ng-option-tmp let-item="item">
+        {{item.codigo}} - {{item.sigla}}
+    </ng-template>
+</ng-select>
 
-    <p item (click)="filtro.unidade = null">Unidade Orçamentária</p>
-    <p item *ngFor="let unidade of unidades" (click)="filtro.unidade = unidade">{{unidade.codigo}} - {{unidade.sigla}}</p>
-</dropdown-filtro>
+<ng-select [items]="planos"
+            [multiple]="true"
+            placeholder="Plano Orçamentário"
+            [(ngModel)]="filtro.plano"
+            [searchFn]="searchPlano"
+            [ngModelOptions]="{standalone: true}"
+            (ngModelChange)="update()"
+        >
+    <ng-template ng-label-tmp let-item="item">
+        {{item.codigo}}
+        <button (click)="filtro.plano = removerSelecao(filtro.plano, item); this.update()">
+            <fa-icon class="removerItem" [icon]="removerIcon" [attr.aria-label]="'remover p..o ' + item.codigo"></fa-icon>
+        </button>
+    </ng-template>
+    <ng-template ng-option-tmp let-item="item">
+        {{item.codigo}} - {{item.nome}}
+    </ng-template>
+</ng-select>
 
-<dropdown-filtro (valueChange)="update()">
-    <p display>{{filtro.plano ? ( filtro.plano.codigo + " - " + filtro.plano.nome) : "Plano Orçamentário"}}</p>
+<ng-select [items]="fontes"
+            placeholder="Fonte Orçamentária"
+            [(ngModel)]="filtro.fonte"
+            [ngModelOptions]="{standalone: true}"
+            (ngModelChange)="update()"
+        >
+    <ng-template ng-label-tmp let-item="item">
+        {{item.codigo}} - {{item.nome}}
+    </ng-template>
+    <ng-template ng-option-tmp let-item="item">
+        {{item.codigo}} - {{item.nome}}
+    </ng-template>
+</ng-select>
 
-    <p item (click)="filtro.plano = null">Plano Orçamentário</p>
-    <p item *ngFor="let plano of planos" (click)="filtro.plano = plano">{{plano.codigo}} - {{plano.nome}}</p>
+<ng-select [items]="[4, 5]"
+   class="menor"
+    placeholder="GND"
+    [(ngModel)]="filtro.gnd"
+    [ngModelOptions]="{standalone: true}"
+    [clearable]="true"
+    (ngModelChange)="update()"
+    >    
+</ng-select>
 
-</dropdown-filtro>
-
-<dropdown-filtro (valueChange)="update()">
-    <p display>{{filtro.fonte ? (filtro.fonte.codigo + " - " + filtro.fonte.nome): "Fonte Orçamentária"}}</p>
-
-    <p item (click)="filtro.fonte = null">Fonte Orçamentária</p>
-    <p item *ngFor="let fonte of fontes" (click)="filtro.fonte = fonte">{{fonte.codigo}} - {{fonte.nome}}</p>
-</dropdown-filtro>
-
-<dropdown-filtro (valueChange)="update()">
-    <p display>{{filtro.ano ? filtro.ano : "Ano"}}</p>
-
-    <p item *ngFor="let ano of anos" (click)="filtro.ano = ano">{{ano}}</p>
-</dropdown-filtro>
+<ng-select [items]="anos" class="menor"
+            [(ngModel)]="filtro.ano"
+            [ngModelOptions]="{standalone: true}"
+            [clearable]="false"
+            (ngModelChange)="update()"
+        >
+</ng-select>
 

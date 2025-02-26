@@ -8,5 +8,6 @@ export interface IVinculadaPor {
     empenhado : number[],
     liquidado : number[],
     pago : number[],
-    orcado : number
+    orcado : number,
+    gnd : number
 }

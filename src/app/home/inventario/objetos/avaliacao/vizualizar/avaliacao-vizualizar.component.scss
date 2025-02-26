@@ -1,0 +1,163 @@
+
+
+:host {
+
+    display: flex;
+    flex-direction: column;
+    padding-block: 3rem;
+    font-family: var(--fonte-open-sans);
+    color: var(--cor-primaria);
+
+    > header {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 3rem;
+
+        div.fluxo {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            > div {
+                flex-grow: 1;
+
+                div.label {
+                    font-weight: bolder;
+                }
+
+                div.valor {
+                    color: #6e7484;
+                }
+
+            }
+
+            fa-icon {
+                margin-inline: 1rem;
+                color: #aaaaaa;
+                font-size: larger;
+                font-weight: bolder;
+            }
+        }
+
+        svg.timeline {
+
+            circle {
+                &.status-1 {
+                    fill: var(--vermelho-padrao);
+                }
+
+                &.status0 {
+                    fill: var(--verde-padrao);
+                }
+
+                &.status1 {
+                    fill: orange;
+                }
+
+                &.status2 {
+                    fill: var(--cinza-claro);
+                }
+            }
+
+            text {
+                font-family: var(--fonte-open-sans);
+                font-size: medium;
+                
+            }
+            line {
+                stroke-width: 4;
+            }
+            
+            text, line {
+
+                &.status-1 {
+                    stroke: var(--vermelho-padrao);
+                }
+
+                &.status0 {
+                    stroke: var(--verde-padrao);
+                }
+
+                &.status1 {
+                    stroke: orange;
+                }
+
+                &.status2 {
+                    stroke: var(--cinza-claro);
+                }
+            }
+
+
+        }
+    }
+
+    > main {
+        background-color: white;
+        border-radius: 0.5rem;
+        box-shadow: var(--sombra-padrao);
+        width: 100%;
+        box-sizing: border-box;
+        padding: 4rem;
+
+        header {
+            padding-bottom: 0.5rem;
+            color: var(--cinza-escuro);
+            border-bottom: 1px #d7d7d7 solid;
+            font-size: large;
+        }
+
+        main {
+            padding-top: 1rem;
+
+            form {
+                @import "../../../../../utils/styles/ngSelectPadrao.scss";       
+
+                margin-bottom: 1.5rem;
+                display: grid;
+                grid-template-columns: max-content auto;
+                grid-template-rows: repeat(10, 2rem);
+                gap: 1rem;
+
+                
+            }
+
+            .recursos {
+                header {
+
+                    padding-bottom: 0.5rem;
+                    margin-bottom: 1rem;
+                    border-bottom: 1px #d7d7d7 solid;
+                    display: flex;
+
+                    h4 {
+                        color: var(--cinza-escuro);
+                        font-size: large;
+                        font-weight: unset;
+                        flex-grow: 1;
+                    }
+
+                    fa-icon {
+
+                        &.disabled {
+                            opacity: 0.7 !important;
+                        }
+                        color: var(--verde-padrao);
+                    }
+                }
+                
+
+                spo-cadastro-exercicio {
+                    margin-left: 1rem;
+                }
+            }
+
+            .acoes {
+                margin-top: 1rem;
+                display: flex;
+                justify-content: flex-end;
+            }
+
+        }
+    }
+
+}

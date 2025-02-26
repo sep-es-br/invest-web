@@ -8,9 +8,8 @@
     .listaOpcoes {
 
         display: grid;
-        grid-template-columns: repeat(5, 17rem);
-        gap: 1rem;
-        justify-content: space-between;
+        grid-template-columns: repeat(auto-fill, minmax(0, 22rem));
+        gap: 10px;
         margin-top: 3rem;
 
         .itemMenu {

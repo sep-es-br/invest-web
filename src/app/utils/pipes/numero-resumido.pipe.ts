@@ -9,6 +9,7 @@ export class NumeroResumidoPipe implements PipeTransform {
   transform(value: number, ...args: unknown[]): string | null {
     if (isNaN(value)) return null; // will only work value is a number
     if (value === null) return null;
+    if (value < 1000) return String(value.toFixed(2)).replace('.', ',');
     let abs = Math.abs(value);
     const rounder = Math.pow(10, 1);
     const isNegative = value < 0; // will also work for Negative numbers

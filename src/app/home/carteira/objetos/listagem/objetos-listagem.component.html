@@ -3,10 +3,10 @@
     <h3>Objetos ({{qtObjetos}})</h3>
     <div id="pesquisa">
         <fa-icon [icon]="searchIcon"></fa-icon>
-        <input type="text" [formControl]="txtBusca" placeholder="Procurar" />
+        <input type="text" [formControl]="txtBusca" placeholder="Procurar" class="pesquisa"/>
     </div>
     <div id="acoes">
-        <div id="novo-objeto" class="botaoAcao" routerLink="novo" *ngIf="pode.criar">
+        <div id="novo-objeto" class="botaoAcao" routerLink="novo" *ngIf="pode?.criar">
             <fa-icon [icon]="novoObjIcon"></fa-icon>
         </div>
         <!-- <div id="display-lista" class="botaoAcao ativo">

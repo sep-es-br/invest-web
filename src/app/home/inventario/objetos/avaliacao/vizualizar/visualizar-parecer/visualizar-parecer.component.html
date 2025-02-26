@@ -1,0 +1,12 @@
+<main #principalRef>
+    <fa-icon [icon]="fecharIcon" class="iconFechar" (click)="fechar()"></fa-icon>
+    <header>
+        <h4>Parecer</h4>
+    </header>
+    <main>
+        <h3>Realizado por: </h3>
+        <p>{{parecer?.feitoPor?.nomeCompleto}} ({{parecer?.doGrupo?.sigla}}) - {{parecer?.timestamp | date: 'dd/MM/yyyy HH:mm' }}</p>
+        <h3>Parecer:</h3>
+        <p>{{parecer?.texto}}</p>
+    </main>
+</main>

@@ -9,12 +9,12 @@
     <h4>Contratado</h4>
 </header>
 <main>
-    <spo-cadastro-exercicio-fonte 
+    <spo-cadastro-exercicio-fonte [contratadoEditavel]="contratadoEditavel"
         *ngFor="let fonte of exercicio.indicadaPor, index as i"
         [fonteValores]="fonte"
         [lastElem]="i == exercicio.indicadaPor.length-1"
         (alterado)="getAlterado($event)"
         (onRemover)="removerFonte($event)"
-        (onAdd)="exercicio.indicadaPor.push({fonteOrcamentaria: null})"
+        (onAdd)="exercicio.indicadaPor.push({fonteOrcamentaria: null, gnd: undefined})"
         ></spo-cadastro-exercicio-fonte>
 </main>

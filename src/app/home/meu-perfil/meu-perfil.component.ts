@@ -10,6 +10,7 @@ import { ProfileService } from "../../utils/services/profile.service";
 import { ActivatedRoute, RouterModule } from "@angular/router";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faPencil, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { ToastrService } from "ngx-toastr";
 
 @Component({
     selector: 'spo-meu-perfil',
@@ -37,7 +38,8 @@ export class MeuPerfilComponent implements AfterViewInit{
     })
 
     constructor(private dataUtilService : DataUtilService,
-            private profileService : ProfileService
+            private profileService : ProfileService,
+            private toastr : ToastrService
     ){}
 
     ngAfterViewInit(): void {
@@ -94,8 +96,9 @@ export class MeuPerfilComponent implements AfterViewInit{
         this.profileService.salvarUsuario(this.user).subscribe(user => {
             if(user){
                 this.profileService.userListener.next(this.user)
+                this.toastr.success("Usuário salvo com sucesso");
             } else
-                alert("erro ao salvar usuario")
+                this.toastr.error("erro ao salvar usuario");
         })
     }
 

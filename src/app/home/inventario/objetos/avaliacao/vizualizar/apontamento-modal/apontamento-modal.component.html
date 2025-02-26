@@ -1,0 +1,22 @@
+<main #principalRef>
+    <div class="modal-btn">
+        <fa-icon [icon]="closeBtnIcon" class="iconClose" (click)="fechar($event)"></fa-icon>
+    </div>
+    <header>
+        <h1>Realizar Apontamento</h1>
+    </header>
+    <main>
+        <div class="apontamentos">
+            <spo-item-apontamento *ngFor="let apontamento of apontamentos, index as i" 
+                [apontamento]="apontamento" [aberto]="i === apontamentoAberto" 
+                [editavel]="!apontamento.usuario || apontamento.usuario.id === userId"
+                (onclick)="mudarApontamento(i)" (onRemover)="removerApontamento(i)"></spo-item-apontamento>
+        </div>
+        <div class="acoes">
+            <fa-icon [icon]="addBtn" class="addBtn" (click)="addApontamento()" ></fa-icon>
+        </div>
+    </main>
+    <footer>
+        <button (click)="fechar($event, true)">{{acao?.nome}}</button>
+    </footer>
+</main>

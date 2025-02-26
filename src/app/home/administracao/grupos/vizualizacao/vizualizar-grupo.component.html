@@ -1,3 +1,8 @@
+<div class="acoes">
+    <button class="btn-acao" (click)="exibirModalEdicao = true">
+        <fa-icon [icon]="editarIcon" ></fa-icon>
+    </button>
+</div>
 <header>
     <header>
         <div class="icone">
@@ -21,3 +26,4 @@
     </nav>
 </header>
 <router-outlet></router-outlet>
+<spo-grupo-cadastro [ngClass]="exibirModalEdicao ? '' : 'esconder-modal'"  [grupo]="grupo" (onClose)="fecharEdicao($event)"></spo-grupo-cadastro>

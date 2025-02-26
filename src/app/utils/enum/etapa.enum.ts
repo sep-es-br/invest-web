@@ -1,0 +1,6 @@
+export enum EtapaEnum {
+    SOLICITACAO_CADASTRO,
+    ANALISE_TECNICA,
+    APROVACAO_SUBEO,
+    CADASTRO_PO
+}

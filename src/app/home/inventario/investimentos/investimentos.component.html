@@ -1,3 +1,4 @@
+<spo-progress-modal [visivel]="showProgress"></spo-progress-modal>
 <spo-investimento-filtro (filterChange)="atualizarFiltro($event, 1)" ></spo-investimento-filtro>
 <div id="valores">
     <spo-valor-card 
@@ -37,16 +38,16 @@
         [valor]="totalLiquidado"
     ></spo-valor-card>
     <spo-valor-card 
-        titulo="Disp. S/ Reserva" 
-        cor="var(--cor-sigefes)"
-        nomeIcone="savings" 
-        [valor]="totalDispSReserva"
-    ></spo-valor-card>
-    <spo-valor-card 
         titulo="Pago" 
         cor="var(--cor-sigefes)"
         nomeIcone="paid" 
         [valor]="totalPago"
+    ></spo-valor-card>
+    <spo-valor-card 
+        titulo="Disp. S/ Reserva" 
+        cor="var(--cor-sigefes)"
+        nomeIcone="savings" 
+        [valor]="totalDispSReserva"
     ></spo-valor-card>
 </div>
 <div id="cabecalho">
@@ -54,7 +55,7 @@
         <p>Investimentos ({{qtInvestimento}})</p>
         <div id="pesquisa">
             <fa-icon [icon]="searchIcon"></fa-icon>
-            <input type="text" [formControl]="txtBusca" placeholder="Procurar" />
+            <input type="text" [formControl]="txtBusca" placeholder="Procurar" class="pesquisa" />
         </div>
     </div>
     <div id="acoes">
@@ -69,4 +70,4 @@
 <div id="listaDados" class="displayLista">
     <spo-tira-investimento *ngFor="let inv of data" [investimento]="inv"></spo-tira-investimento>
 </div>
-<spo-barra-paginacao [larguraPaginacao]="larguraPaginacao" [quantidade]="qtInvestimento" (onPageChange)="recarregarLista($event)"></spo-barra-paginacao>
+<spo-barra-paginacao [larguraPaginacao]="larguraPaginacao" [quantidade]="qtInvestimento" (onPageChange)="executar(recarregarLista($event)) "></spo-barra-paginacao>

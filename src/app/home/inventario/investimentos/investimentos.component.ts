@@ -11,11 +11,13 @@ import { ValorCardComponent } from "../../../utils/components/valor-card/valor-c
 import { CustoService } from "../../../utils/services/custo.service";
 import { BarraPaginacaoComponent } from "../../../utils/components/barra-paginacao/barra-paginacao.component";
 import { ExecucaoOrcamentariaService } from "../../../utils/services/execucaoOrcamentaria.service";
-import { merge, tap } from "rxjs";
+import { concat, finalize, merge, Observable, tap } from "rxjs";
 import { InfosService } from "../../../utils/services/infos.service";
 import { IFiltroInvestimento } from "./investimento-filtro/IFiltroInvestimento";
 import { InvestimentoTiraDTO } from "../../../utils/models/InvestimentoTiraDTO";
 import { ContaService } from "../../../utils/services/conta.service";
+import { ProgressSpinnerModule } from "primeng/progressspinner";
+import { ProgressModalComponent } from "../../../utils/components/progress-modal/progress-modal.component";
 
 @Component({
     selector: 'spo-investimentos',
@@ -23,10 +25,11 @@ import { ContaService } from "../../../utils/services/conta.service";
     styleUrl: './investimentos.component.scss',
     standalone: true,
     imports: [
-        CommonModule, TiraInvestimentoComponent,
-        ReactiveFormsModule, InvestimentoFiltroComponent, 
-        FontAwesomeModule, ValorCardComponent, BarraPaginacaoComponent
-    ]
+    CommonModule, TiraInvestimentoComponent, ProgressSpinnerModule,
+    ReactiveFormsModule, InvestimentoFiltroComponent,
+    FontAwesomeModule, ValorCardComponent, BarraPaginacaoComponent,
+    ProgressModalComponent
+]
 })
 export class InvestimentosComponent implements AfterViewInit {
 
@@ -54,6 +57,8 @@ export class InvestimentosComponent implements AfterViewInit {
     larguraPaginacao = 7;
     qtPorPagina = 15;
 
+    showProgress = false;
+
     constructor( 
         private service: InvestimentosService,
         private contaService : ContaService,
@@ -71,29 +76,42 @@ export class InvestimentosComponent implements AfterViewInit {
     atualizarFiltro(filtro : IFiltroInvestimento, novaPagina : number) {
         this.filtro = {
             exercicio: filtro.ano,
-            codPO: filtro.plano?.id,
-            codUnidade: filtro.unidade?.id,
+            codPO: filtro.plano && filtro.plano.length > 0 ? filtro.plano.map(p => p.id) : undefined,
+            codUnidade: filtro.unidade && filtro.unidade.length > 0 ? filtro.unidade.map(u => u.id) : undefined,
             idFonte: filtro.fonte?.id,
             nome: this.txtBusca.value,
+            gnd: filtro.gnd,
+            verUnidades: filtro.podeVerUnidades,
             numPag: novaPagina,
-            qtPorPag: 15
+            qtPorPag: this.filtro.qtPorPag
         }
 
+        this.executar(
+            concat(
+                this.recarregarValores(),
+                this.recarregarLista(novaPagina)
+            )
+        );
         
-        this.recarregarLista(novaPagina);
-        this.recarregarValores();
+    }
+
+    executar(acao : Observable<any>) {
+        this.showProgress = true;
+
+        acao.pipe(finalize(() => this.showProgress = false)).subscribe()
     }
 
     recarregarValores() {
 
-        merge(
+        return merge(
 
             this.infoService.getCardTotais(
                 this.txtBusca.value,
                 this.filtro.codUnidade,
                 this.filtro.codPO,
                 this.filtro.idFonte,
-                Number(this.filtro.exercicio)
+                Number(this.filtro.exercicio),
+                this.filtro.gnd
             )
             .pipe(tap(totais => {
                             
@@ -107,7 +125,7 @@ export class InvestimentosComponent implements AfterViewInit {
                 this.totalPago = totais.pago;
             }))
 
-        ).subscribe()
+        )
        
     }
 
@@ -115,19 +133,14 @@ export class InvestimentosComponent implements AfterViewInit {
 
         this.filtro.numPag = novaPagina;
 
-        merge(
-            this.contaService.findAllTira(this.filtro)
+         return merge(
+            this.service.getListaTiraInvestimentos(this.filtro)
             .pipe(tap(invs => {
-                this.data = invs;
-            })),
-
-            this.contaService.getCount(this.filtro)
-            .pipe(tap(quantidade => {
-                this.qtInvestimento = quantidade
-                this.barraPaginacaoComponent.updatePaginacao(quantidade);  
+                this.data = invs.data;
+                this.qtInvestimento = invs.ammount;
+                this.barraPaginacaoComponent.updatePaginacao(invs.ammount);
             }))
-
-        ).subscribe()
+        )
        
     }
 }

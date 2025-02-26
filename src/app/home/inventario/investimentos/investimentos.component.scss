@@ -1,24 +1,27 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 
 :host {
+    position: relative;
     display: flex;
     flex-direction: column;
     padding-top: 2rem;
     padding-bottom: 2rem;
 
     div#valores {
-        display: grid;
-        grid-template-columns: repeat(8, 10.5rem);
-        grid-gap: 10px;
+        display: flex;
         flex-direction: row;
+        gap: 1rem;
         justify-content: space-between;
         padding-top: 2rem;
         padding-bottom: 2rem;
+        flex-wrap: wrap;
 
         > * {
             display: flex;
+            flex: 1 0 0px;
             align-items: center;
             height: 3rem;
+            width: auto;
             padding: 0.5rem;
             border-radius: 0.3rem;
             box-shadow: rgba(170, 170, 170, 0.35) 1px 1px 5px 0px;
@@ -27,6 +30,7 @@
             font-family: "Open Sans", sans-serif;
             font-weight: 600;
             font-size: 0.96rem;
+
         }
 
         #icone {
@@ -34,20 +38,25 @@
         }
     }
 
-    @media screen and (max-width: 1745px) {
+    @media screen and (max-width: 1733px) {
         
         div#valores {
-            grid-template-columns: 20rem 20rem;
-            justify-content: left;
+            width: 40rem;
+            align-self: center;
+
+            > * {
+                width: auto;
+            }
         }
 
     }
 
-    @media screen and (max-width: 825px) {
+    @media screen and (max-width: 990px) {
         
         div#valores {
-            grid-template-columns: 20rem;
-            justify-content: left;
+            width: 22rem;
+
+            
         }
 
     }
@@ -184,6 +193,8 @@
         overflow-x: auto;
 
     }
+
+    
 
 } 
 

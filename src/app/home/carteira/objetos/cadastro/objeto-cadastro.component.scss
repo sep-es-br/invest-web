@@ -12,6 +12,7 @@
         border-radius: 0.5rem;
         box-shadow: var(--sombra-padrao);
         width: 100%;
+        min-width: fit-content;
         padding: 4rem;
 
         header {
@@ -24,71 +25,24 @@
         main {
             padding-top: 1rem;
 
+
             form {
+                @import "../../../../utils/styles/ngSelectPadrao.scss";       
+
                 margin-bottom: 1.5rem;
                 display: grid;
                 grid-template-columns: max-content auto;
                 grid-template-rows: repeat(10, 2rem);
                 gap: 1rem;
 
-                label {
-                    display: flex;
-                    align-items: center;
-
-                    span.obrigatorio {
-                        color: red;
-                        padding-left: 0.2rem;
-                    }
-                }
-
-                select, input {
-                    border: var(--cor-primaria) solid 1px;
-                    border-radius: 4px;
-                    color: var(--cor-primaria);
-                    outline: none;
-                    padding-left: 1rem;
-
-                    &::placeholder {
-                        color: var(--cor-primaria);
-                    }
-
-                }
-
-                div {
-                    display: flex;
-                    flex-direction: row;
-                    align-items: center;
-                    dropdown-com-filtro {
-                        flex-grow: 1;
-                    }
-
-                    fa-icon {
-                        margin-left: 0.5rem;
-                        color: red;
-                    }
-                }
-
-                dropdown-com-filtro{
-                    border: var(--cor-primaria) solid 1px;
-                    border-radius: 4px;
-                    height: 100%;
-                    padding-left: 1rem;
-                    padding-right: 1rem;
-                    
-                }
-
-                .invalido {
-                    border-color: red;
-                    color: red;
-                }
-
-                spo-checkbox {
-                    align-self: center;
-                }
                 
             }
 
             .recursos {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
                 header {
 
                     padding-bottom: 0.5rem;
@@ -111,8 +65,19 @@
 
                 spo-cadastro-exercicio {
                     margin-left: 1rem;
+
                 }
             }
+
+            .acoes {
+                display: flex;
+                justify-content: flex-end;
+                margin-top: 1.5rem;
+                button {
+                    margin-left: unset;
+                }
+            }
+            
 
         }
     }

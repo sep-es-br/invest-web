@@ -15,5 +15,8 @@
     <div>
         <input type="checkbox" id="inExcluir" formControlName="inExcluir" /><label>Excluir</label>
     </div>
+    <div>
+        <input type="checkbox" id="inVerTodasUnidades" formControlName="inVerTodasUnidades" /><label>Ver Todas Unidades</label>
+    </div>
 </form>
 <spo-modulo-config *ngFor="let filho of modulo.filhos" [grupo]="grupo" [modulo]="filho"></spo-modulo-config>

@@ -4,7 +4,7 @@
     </div>
     <div id="invNome">
         <div id="label">Investimento</div>
-        <div id="value"><span [title]="investimento.nome">{{investimento.nome | shortString : 50}}</span></div>
+        <div id="value"><span [title]="investimento.nome">{{investimento.nome}}</span></div>
     </div>
     <div>
         <div id="label">Unidade</div>
@@ -20,11 +20,15 @@
     </div>
     <div>
         <div id="label">Contratado</div>
-        <div id="value"><span [title]="investimento.totalHomologado | customCurrency">R$ {{investimento.totalHomologado | numeroResumido }}</span></div>
+        <div id="value"><span [title]="investimento.totalContratado | customCurrency">R$ {{investimento.totalContratado | numeroResumido }}</span></div>
     </div>
     <div>
         <div id="label">Autorizado</div>
         <div id="value"><span [title]="investimento.totalAutorizado | customCurrency">R$ {{investimento.totalAutorizado | numeroResumido }}</span></div>
+    </div>
+    <div>
+        <div id="label">Empenhado</div>
+        <div id="value"><span [title]="investimento.totalEmpenhado | customCurrency">R$ {{investimento.totalEmpenhado | numeroResumido }}</span></div>
     </div>
     <div>
         <div id="label">Disp. S/ Reserva</div>

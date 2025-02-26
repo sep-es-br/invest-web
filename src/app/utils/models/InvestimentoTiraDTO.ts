@@ -6,8 +6,9 @@ export class InvestimentoTiraDTO {
     unidadeOrcamentaria!: string;
     codPO!: string;
     totalPrevisto!: number;
-    totalHomologado!: number;
+    totalContratado!: number;
     totalAutorizado! : number;
     totalDisponivel! : number;
+    totalEmpenhado: number;
     objetos!: ObjetoTiraDTO[];
 }

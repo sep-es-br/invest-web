@@ -1,0 +1,187 @@
+<header>
+    <div class="fluxo">
+        <div class="nome">
+            <div class="label">Fluxo</div>
+            <div class="valor">{{fluxo?.nome}}</div>
+        </div>
+        <fa-icon [icon]="setaDireita"></fa-icon>
+        <div class="grupo">
+            <div class="label">Grupo</div>
+            <div class="valor">{{objeto.emEtapa?.etapa.grupoResponsavel.nome}}-{{objeto.emEtapa?.etapa.grupoResponsavel.sigla}}</div>
+        </div>
+        <fa-icon [icon]="setaDireita"></fa-icon>
+        <div class="grupo">
+            <div class="label">Atividade</div>
+            <div class="valor">{{objeto.emEtapa?.atividade}}</div>
+        </div>
+    </div>
+    <svg class="timeline" viewBox="-50 0 1500 100" width="100%" >
+        <line *ngFor="let linha of linhas" [ngClass]="'status' + linha.status" [attr.x1]="linha.posInicial" [attr.x2]="linha.posFinal" y1="50%" y2="50%" ></line>
+        <circle r ="10" cy="50%" cx="-20" class="status0"></circle>
+        <g *ngFor="let status of etapasStatus">
+            <circle r="15" cy="50%" [attr.cx]="status.pos" [ngClass]="'status' + status.status"></circle>
+            <path [attr.d]="gerarPath(status.pos, status.status)" stroke="white" stroke-width="3" fill="none"></path>
+            <text [ngClass]="'status' + status.status" y="85%" [attr.x]="status.pos" text-anchor="middle">{{status.etapa.ordem}}. {{status.etapa.nome}}</text>
+        </g>
+        <circle r ="10" cy="50%" cx="1420" class="status2"></circle>
+    </svg>
+</header>
+<main>
+    <header>
+        Solicitação
+    </header>
+    <main>
+        <form #form="ngForm">
+            <label for="inGnd">GND:<span class="obrigatorio">*</span></label>
+            <select id="inGnd" name="gnd" [(ngModel)]="gnd" disabled>
+                <option [ngValue]="4">4</option>
+                <option [ngValue]="5">5</option>
+            </select>
+
+            <label for="inConta">Tipo da Despesa:<span class="obrigatorio">*</span></label>
+            <select id="inConta" name="tipoConta" [(ngModel)]="objeto.tipoConta" 
+                [ngClass]="(checado && !objeto.tipoConta) ? 'invalido' : ''" disabled>
+                <option [ngValue]="undefined" disabled>Selecionar o tipo da despesa</option>
+                <option value="Investimento">Investimento</option>
+                <option value="Custeio">Outras Desp. Correntes</option>
+            </select>
+
+            <label for="inTipo">Tipo de Objeto <span class="obrigatorio">*</span></label>
+            <select id="inTipo" name="tipo" [(ngModel)]="objeto.tipo" disabled
+                [ngClass]="(checado && !objeto.tipo) ? 'invalido' : ''">
+                <option [ngValue]="undefined">Selecionar o tipo de objeto</option>
+                <option ngValue="Projeto">Projeto</option>
+                <option ngValue="Entrega">Entrega</option>
+            </select>
+            
+            <label for="inNome">Nome <span class="obrigatorio">*</span></label>
+            <input type="text" id="inNome" [(ngModel)]="objeto.nome" required [disabled]="!executaAcao"
+                placeholder="Insira um nome" maxlength="140" name="nome" #nome="ngModel"
+                [ngClass]="(checado && nome.invalid) ? 'invalido' : ''"/>
+
+            <label for="inDescricao">Descrição <span class="obrigatorio">*</span></label>
+            <input type="text" id="inDescricao" [(ngModel)]="objeto.descricao" name="descricao"
+                placeholder="Insira uma descrição" maxlength="280" required #descricao="ngModel"
+                [ngClass]="(checado && descricao.invalid) ? 'invalido' : ''" [disabled]="!executaAcao">
+            
+            <label>Unidade Orçamentária <span class="obrigatorio">*</span></label>
+            <ng-select [(ngModel)]="objeto.conta.unidadeOrcamentariaImplementadora"
+                [ngClass]="(checado && unidade.invalid) ? 'invalido' : ''" [disabled]="!executaAcao"
+                [items]="opcoesUnidades" name="unidade" [disabled]="opcoesUnidades?.length <= 1  || !executaAcao"
+                placeholder="Selecionar a unidade orçamentária"
+                bindLabel="label"
+                bindValue="value"
+                [compareWith]="selecionarUnidade"
+                [searchFn]="filtrar"
+                required #unidade="ngModel"
+                ></ng-select>            
+           
+            <label>Plano Orçamentário <span *ngIf="checarEtapaEnum(EtapaEnum.CADASTRO_PO)" class="obrigatorio">*</span></label>
+            <ng-select [(ngModel)]="objeto.conta.planoOrcamentario" name="planoOrcamentario"
+                [items]="opcoesPlanosOrcamentarios" [disabled]="!executaAcao"
+                placeholder="Selecionar plano orçamentário"
+                bindLabel="label"
+                bindValue="value"
+                [compareWith]="selecionarPlanoOrcamentario"
+                [searchFn]="filtrar"
+                [required]="checarEtapaEnum(EtapaEnum.CADASTRO_PO)" #planoOrcamentario="ngModel"
+                [ngClass]="(checado && planoOrcamentario.invalid) ? 'invalido' : ''"
+                ></ng-select>
+
+            
+            <label for="inMicroregiao">Microrregião Atendida <span class="obrigatorio">*</span></label>
+            <select id="inMicroregiao" [(ngModel)]="objeto.microregiaoAtendida" required #microregiaoAtendida="ngModel"
+                [disabled]="!executaAcao"
+                [ngClass]="(checado && microregiaoAtendida.invalid) ? 'invalido' : ''" name="microregiaoAtendida">
+                <option [ngValue]="undefined">Selecionar microrregião</option>
+                <option *ngFor="let microregiao of microregioes" [ngValue]="microregiao">{{microregiao.nome}}</option>
+            </select>
+            
+            <label for="inAreaTematica">Área Temática <span class="obrigatorio">*</span></label>
+            <select id="inAreaTematica" [(ngModel)]="objeto.areaTematica" [ngClass]="(checado && areaTematica.invalid) ? 'invalido' : ''"
+                name="areaTematica" #areaTematica="ngModel" required [disabled]="!executaAcao">
+                <option [ngValue]="undefined">Selecionar a área temática</option>
+                <option *ngFor="let area of areasTematicas" [ngValue]="area">{{area.nome}}</option>
+            </select>
+
+            <label for="inInfoComplementar">Informações Complementares </label>
+            <input type="text" id="inInfoComplementar" name="infoComplementares" [maxlength]="280" #infoComplementares="ngModel"
+                [(ngModel)]="objeto.infoComplementares" placeholder="Insira as Informações Complementares" [disabled]="!executaAcao">
+
+            <label for="inContrato">Contrato ou Convênio</label>
+            <input type="text" id="inContrato" name="contrato" [maxlength]="140" #contrato="ngModel"
+                (blur)="(objeto.contrato && objeto.contrato.length > 0) ? undefined : limparContratado()"
+                [(ngModel)]="objeto.contrato" placeholder="Insira o código ou número do contrato ou convênio"
+                [disabled]="!executaAcao">
+            
+            <label>Tipos de Plano(s): <span class="obrigatorio">*</span></label>
+            <ng-select [(ngModel)]="objeto.planos" [ngModel]="checado && (planos.invalid || objeto.planos?.length === 0) "
+                [items]="opcoesTipoPlano" [disabled]="!executaAcao"
+                [multiple]="true"
+                placeholder="Selecione os tipos de plano"
+                bindValue="value"
+                [compareWith]="selecionarTiposPlanos"
+                [searchFn]="filtrar"
+                name="planos"
+                #planos="ngModel"
+                class="multiple"
+                ></ng-select>
+            
+            <label for="inPossuiOrcamento">Orçamento <span class="obrigatorio">*</span></label>
+            <select id="inPossuiOrcamento" name="possuiOrcamento" [(ngModel)]="objeto.possuiOrcamento" [disabled]="!executaAcao"
+                #possuiOrcamento="ngModel" required [ngClass]="(checado && possuiOrcamento.invalid) ? 'invalido' : ''" >
+                <option [ngValue]="undefined">Selecionar se dispõe de orçamento</option>
+                <option value="total">Já dispõe, totalmente</option>
+                <option value="parcial">Já dispõe, parcialmente (indicar no campo Informações Complementares)</option>
+                <option value="não">Ainda não dispõe</option>
+            </select>
+        </form>
+        
+        <div class="recursos">
+            <header>
+                <h4>Valores</h4>
+                <fa-icon [ngClass]="!executaAcao ? 'disabled' : ''" 
+                    [icon]="addIcon" 
+                    (click)=" !executaAcao ? undefined : addExercicio()" ></fa-icon>
+            </header>
+            <spo-avaliacao-exercicio [disabled]="!executaAcao"
+                [exercicio]="exercicio" [contratadoEditavel]="!!objeto.contrato"
+                *ngFor="let exercicio of objeto.recursosFinanceiros, index as i"
+                [lastElem]="i === objeto.recursosFinanceiros.length-1"
+                (onRemover)="removerExercicio($event)"></spo-avaliacao-exercicio>
+        </div>
+        <div class="acoes" *ngIf="executaAcao">
+            <button *ngIf="objeto?.emEtapa?.devolvido" (click)="doExibirFeedBack()"
+                class="btn neutro">
+                <!-- <span *ngIf="checarEtapaEnum(EtapaEnum.ANALISE_TECNICA); else verParecer"><fa-icon [icon]="parecerIcon"></fa-icon> Vizualizar Parecer</span>
+                <ng-template #verParecer><fa-icon [icon]="apontamentoIcon"></fa-icon> Vizualizar apontamentos</ng-template> -->
+                
+                <fa-icon [icon]="apontamentoIcon"></fa-icon> Vizualizar apontamentos
+            </button>
+            
+            <button *ngFor="let acao of acoesNegativas"
+                class="btn negativo" (click)="executarAcao(acao)">
+                <fa-icon [icon]="acao.positivo ? positivoIcon : negativoIcon"></fa-icon>
+                {{acao.nome}}
+            </button>
+            
+            <button *ngFor="let acao of acoesPositivas"
+                class="btn positivo" (click)="executarAcao(acao)">
+                <fa-icon [icon]="acao.positivo ? positivoIcon : negativoIcon"></fa-icon>
+                {{acao.nome}}
+            </button>
+        </div>
+    </main>
+</main>
+<spo-modal-apontamento [ngClass]="exibirModal ? '' : 'esconder-elem'" [apontamentos]="objeto.apontamentos" [acao]="acaoDoModal" 
+    (onFechar)="fecharModal()" (onSalvar)="salvarFeedBack($event)" [userId]="userId" ></spo-modal-apontamento>
+<!-- <spo-fazer-parecer-modal [ngClass]="exibirFazerParecer ? '' : 'esconder-elem'" [parecer]="parecer" [acao]="acaoDoModal" 
+    (onClose)="fecharFazerParecer($event)"></spo-fazer-parecer-modal> -->
+
+<!-- <spo-visualizar-parecer *ngIf="checarEtapaEnum(EtapaEnum.ANALISE_TECNICA); else modalApontamento" [ngClass]="exibirVerParecer ? '' : 'esconder-elem'" [parecer]="feedbackAsParecer()" 
+    (onClose)="this.exibirVerParecer = false"></spo-visualizar-parecer> -->
+
+<!-- <ng-template #modalApontamento> -->
+    <spo-vizualizar-apontamento  [ngClass]="exibirFeedback ? '' : 'esconder-elem'" [apontamentos]="feedbackAsIApontamento()"
+        (onClose)="this.exibirFeedback = false"></spo-vizualizar-apontamento>
+<!-- </ng-template> -->

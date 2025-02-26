@@ -18,13 +18,14 @@ import { ToastrService } from "ngx-toastr";
 })
 export class CadastroExercicioComponent implements AfterViewInit{
 
-    @ViewChildren(CadastroExercicioFonteComponent) fonteValores : QueryList<CadastroExercicioComponent>;
+    @ViewChildren(CadastroExercicioFonteComponent) fonteValores : QueryList<CadastroExercicioFonteComponent>;
 
     addIcon = faPlusCircle;
     removerIcon = faMinusCircle;
 
     @Input() exercicio : ICusto;
     @Input() lastElem : boolean;
+    @Input() contratadoEditavel : boolean = false;
 
     @Output() onRemover = new EventEmitter<ICusto>();
     @Output() onAdd = new EventEmitter<never>();
@@ -33,6 +34,10 @@ export class CadastroExercicioComponent implements AfterViewInit{
     
     getAlterado(valor : any) {
         console.log(valor)
+    }
+
+    limparContratado() {
+        this.fonteValores.forEach( f => f.limparContratado())
     }
 
     removerFonte(fonte: IFonteExercicio){

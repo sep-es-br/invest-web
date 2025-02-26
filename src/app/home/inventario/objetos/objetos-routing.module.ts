@@ -1,11 +1,10 @@
 import { Route, RouterModule } from "@angular/router";
-import { AvaliacaoComponent } from "./avaliacao/avaliacao.component";
 import { NgModule } from "@angular/core";
 
 const ROUTES : Route[] = [
     {
         path: 'avaliacao',
-        component: AvaliacaoComponent
+        loadChildren: () => import('./avaliacao/avaliacao.routing').then(m => m.AvaliacaoRoutingModule)
     },{
         path: "",
         pathMatch: "full",

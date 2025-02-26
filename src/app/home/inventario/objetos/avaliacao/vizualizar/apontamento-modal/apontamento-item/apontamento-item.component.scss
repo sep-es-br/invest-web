@@ -1,0 +1,60 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    font-size: small;
+    
+    header {
+        display: flex;
+        border: var(--cor-primaria) solid 1px;
+        border-radius: 4px;
+        padding-inline: 4px;
+        align-items: center;
+        height: 1.5rem;
+        box-sizing: content-box;
+        cursor: default;
+        
+        h2 {
+            font-size: medium;
+            margin-left: 0.5rem;
+            margin-right: auto;
+        }
+
+        .removerIcon {
+            color: red;
+        }
+    }
+
+    main {
+        display: none;
+        flex-direction: column;
+        padding: 1rem;
+
+        > * {
+            margin-block: 0.2rem;
+        }
+
+        select, textarea {
+            border: var(--cor-primaria) solid 1px;
+            border-radius: 4px;
+            color: var(--cor-primaria);
+            outline: none;
+            font-family: var(--fonte-open-sans);
+            font-size: small;
+        }
+
+        textarea {
+            resize: none;
+            padding: 4px;
+
+            &::placeholder {
+                color: var(--cor-primaria);
+                font-family: var(--fonte-open-sans);
+            }
+        }
+
+        &.aberto {
+            display: flex;
+        }
+
+    }
+}

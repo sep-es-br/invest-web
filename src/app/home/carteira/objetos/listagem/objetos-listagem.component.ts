@@ -63,7 +63,9 @@ export class ObjetosListagemComponent implements AfterViewInit{
             this.recarregarLista(this.paginaAtual)
         })).subscribe();
 
-        this.permissaoService.getPermissao("carteiraobjetos").subscribe(pode => this.pode = pode);
+        this.permissaoService.getPermissao("carteiraobjetos").subscribe(pode => {
+            this.pode = pode;
+        });
     }
 
     updateFiltro(novoFiltro : IObjetoFiltro) {
@@ -92,6 +94,7 @@ export class ObjetosListagemComponent implements AfterViewInit{
         
         this.filtro.nome = this.txtBusca.value;
 
+        
         merge(
             this.objService.getListaTiraObjetos(this.filtro, this.paginaAtual, this.qtPorPagina).pipe(tap(
                 objetos => this.objetos = objetos

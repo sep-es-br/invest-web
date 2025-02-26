@@ -108,6 +108,14 @@
                                 width: 0;
                                 text-align: center;
                             }
+                            
+                            &:nth-of-type(2) {
+                                width: 20rem;
+                            }
+
+                            &:nth-of-type(3) {
+                                width: 20rem;
+                            }
 
                             &:last-of-type {
                                 width: 0;

@@ -12,6 +12,10 @@ import { ObjetosService } from "../utils/services/objetos.service";
 import { InvestimentoFiltro } from "../utils/models/InvestimentoFiltro";
 import { PermissaoService } from "../utils/services/permissao.service";
 import { concat, Observable, tap } from "rxjs";
+import { ObjetoFiltro } from "../utils/models/ObjetoFiltro";
+import { IFiltro } from "../home/inventario/objetos/avaliacao/listagem/objetos-filtro/objetos-filtro.component";
+import { EtapaService } from "../utils/services/etapa.service";
+import { IObjetoFiltro } from "../utils/interfaces/objetoFiltro.interface";
 
 @Component({
     selector: 'spo-header',
@@ -44,7 +48,7 @@ export class HeaderComponent implements OnInit {
     private concat$ : Observable<any>;
 
     constructor(private route : ActivatedRoute, private router : Router, private dataUtilService : DataUtilService,
-        private objetoService: ObjetosService, private permissaoService : PermissaoService) {
+        private objetoService: ObjetosService, private permissaoService : PermissaoService, private etapaService : EtapaService) {
         this.dataUtilService.headerUpdate.subscribe(value => this.updateTitle())
         
         this.router.events.subscribe(event => {
@@ -59,11 +63,25 @@ export class HeaderComponent implements OnInit {
             numPag: 1,
             qtPorPag: 15
         }
+
+        this.etapaService.getDoUsuario().pipe(
+            tap(etapa => {
+                if(etapa) {
+                    let objFiltro : IObjetoFiltro = {
+                        etapa: etapa,
+                        exercicio: new Date().getFullYear()
+                    }
+
+                    objetoService.getQuantidadeItensEmProcessamento(objFiltro).pipe(
+                        tap(qt => this.qtObjetos = qt)
+                    ).subscribe()
+                }
+            })
+        ).subscribe();
+        
+        
         
         this.concat$ = concat(
-            this.objetoService.getQuantidadeInvFiltroItens(filtro).pipe(tap(quantidade => {
-                this.qtObjetos = quantidade;
-            })),
             this.permissaoService.usuarioTemAcesso("administracao").pipe(tap(temAcesso => {
                 this.permissaoAdm = temAcesso
             }))

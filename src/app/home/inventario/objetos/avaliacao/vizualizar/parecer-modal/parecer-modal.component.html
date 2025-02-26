@@ -1,0 +1,14 @@
+<main #principalRef>
+    <fa-icon [icon]="fecharIcon" class="iconFechar" (click)="fechar(undefined, $event)" ></fa-icon>
+    <header>
+        <h2>Gerar Parecer</h2>
+    </header>
+    <main>
+        <h3>Parecer:</h3>
+        <textarea rows="10" placeholder="Faça o seu parecer"
+            [(ngModel)]="parecer.texto" [ngModelOptions]="{standalone: true}"></textarea>
+    </main>
+    <footer>
+        <button (click)="fechar(acao, $event)">{{acao?.nome}}</button>
+    </footer>
+</main>

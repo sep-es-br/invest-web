@@ -4,10 +4,19 @@
 :host {
 
     #tira {
+        cursor: pointer;
         > div {
-            width: 7rem !important;
+            width: 6.5rem !important;
 
+            &.status {
+                width: 5rem !important;
+            }
 
+            &#invNome {
+                min-width: 5rem;
+            }
+
+           
         }
 
         > div.colMenor {

@@ -35,11 +35,11 @@ export class ContaService {
         if(filtro.nome)
             params = params.set("nome", filtro.nome) 
 
-        if(filtro.codUnidade)
-            params = params.set("codUnidade", filtro.codUnidade) 
+        if(filtro.codUnidade && filtro.codUnidade.length > 0)
+            params = params.set("codUnidade", JSON.stringify(filtro.codUnidade) ) 
 
-        if(filtro.codPO)
-            params = params.set("codPO", filtro.codPO) 
+        if(filtro.codPO && filtro.codPO.length > 0)
+            params = params.set("codPO", JSON.stringify(filtro.codPO)) 
 
         if(filtro.idFonte)
             params = params.set("idFonte", filtro.idFonte)

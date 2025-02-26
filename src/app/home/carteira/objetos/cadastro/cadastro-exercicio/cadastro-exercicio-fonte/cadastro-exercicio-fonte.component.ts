@@ -10,13 +10,17 @@ import { faMinusCircle, faPlusCircle, faXmarkCircle } from "@fortawesome/free-so
 import { FonteOrcamentariaService } from "../../../../../../utils/services/fonteOrcamentaria.service";
 import { DropdownFiltroComponent } from "../../../../../../utils/components/dropdown-com-filtro/dropdown-com-filtro.component";
 import { OpcaoItemComponent } from "../../../../../../utils/components/dropdown-com-filtro/opcao-item.component";
+import { ISelectOpcao } from "../../../../../../utils/interfaces/selectOption.interface";
+import { NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent } from "@ng-select/ng-select";
 
 @Component({
     selector: "spo-cadastro-exercicio-fonte",
     standalone: true, 
     templateUrl: "./cadastro-exercicio-fonte.component.html",
     styleUrl: "./cadastro-exercicio-fonte.component.scss",
-    imports: [CommonModule, FormsModule, NgxMaskDirective, FontAwesomeModule, DropdownFiltroComponent, OpcaoItemComponent],
+    imports: [CommonModule, FormsModule, NgxMaskDirective, FontAwesomeModule, DropdownFiltroComponent, OpcaoItemComponent,
+        NgSelectComponent, NgOptionTemplateDirective, NgLabelTemplateDirective
+    ],
     providers: [provideNgxMask()]
 })
 export class CadastroExercicioFonteComponent implements OnInit {
@@ -28,12 +32,12 @@ export class CadastroExercicioFonteComponent implements OnInit {
     @Input() fonteValores : IFonteExercicio;
 
     @Input() lastElem : boolean;
+    @Input() contratadoEditavel : boolean = false;
 
     @Output() onRemover = new EventEmitter<IFonteExercicio>();
     @Output() onAdd = new EventEmitter<never>();
 
-    fontes : FonteOrcamentariaDTO[] = [];
-    fontesFiltrados : FonteOrcamentariaDTO[] = [];
+    optionsFontes : ISelectOpcao<FonteOrcamentariaDTO>[];
 
     public valido = false;
     public checado = false;
@@ -42,29 +46,41 @@ export class CadastroExercicioFonteComponent implements OnInit {
         private fonteService : FonteOrcamentariaService
     ) {}
 
-    filtrarFonte(filtro : string) {
-        this.fontesFiltrados = this.fontes.filter(fonte => fonte.codigo.includes(filtro) || fonte.nome.toUpperCase().includes(filtro.toUpperCase()))
-    }
 
     setFontes(fontList: FonteOrcamentariaDTO[]) {
-        this.fontes = fontList;
-        this.filtrarFonte("");
+
+        this.optionsFontes = [];
+
+        this.optionsFontes.push(...fontList.map(fonte => {
+            return {
+                label: `${fonte.codigo} - ${fonte.nome}`,
+                value: fonte
+            }
+        }))
+
+        this.fonteValores.fonteOrcamentaria = this.optionsFontes.find(opt => this.selecionarFonte(opt, this.fonteValores.fonteOrcamentaria) )?.value
     }
 
-    setFonte(fonte : FonteOrcamentariaDTO) {
-        this.fonteValores.fonteOrcamentaria = fonte;
-        if(this.checado)
-            this.validar()
+    selecionarFonte(option : ISelectOpcao<FonteOrcamentariaDTO>, model : FonteOrcamentariaDTO) : boolean {
+        return option.value?.codigo === model?.codigo
+    }
+
+    filtrar(term : string, item : ISelectOpcao<any>) : boolean {
+        return item.label.toUpperCase().includes(term.toUpperCase());
     }
 
     ngOnInit(): void {
-        this.fonteService.getDoSigefes().pipe(
+        this.fonteService.extras().pipe(
             tap(fonteList => this.setFontes(fonteList))
         ).subscribe();
     }
 
+    limparContratado() {
+        this.fonteValores.contratado = undefined;
+    }
+
     validar() : boolean {
-        this.valido = this.fonteValores.fonteOrcamentaria !== null;
+        this.valido = !!this.fonteValores.fonteOrcamentaria;
         this.checado = true;
 
         return this.valido;

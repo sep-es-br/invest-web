@@ -7,6 +7,7 @@ import { ErrorHandlerService } from "./error-handler.service";
 import { IHttpError } from "../interfaces/http-error.interface";
 import { Router } from "@angular/router";
 import { ICadastroMembroForm } from "../../home/administracao/grupos/vizualizacao/membros/grupo-membro-cadastro/CadastroMembroForm";
+import { ToastrService } from "ngx-toastr";
 
 @Injectable({providedIn: "root"})
 export class GrupoService {
@@ -18,7 +19,8 @@ export class GrupoService {
     constructor(
         private http : HttpClient,
         private errorHandler : ErrorHandlerService,
-        private router : Router
+        private router : Router,
+        private toastr : ToastrService
     ){}
 
     public findByFilter(nome : string, pagAtual : number, tamPag : number) : Observable<GrupoDTO[]>{
@@ -37,13 +39,24 @@ export class GrupoService {
 
     }
 
+    public findAllBy(nome : string) : Observable<GrupoDTO[]> {
+
+        let params = new HttpParams;
+
+        if(nome)
+            params = params.set("nome", nome)
+
+        return this.http.get<GrupoDTO[]>(`${this.grupoUrl}`, { params: params })
+        .pipe(catchError(err => this.errorHandler.handleError(err)));
+    }
+
     public findById(idGrupo : string) {
-        return this.http.get<GrupoDTO>(`${this.grupoUrl}/`, {params: {grupoId: idGrupo}})
+        return this.http.get<GrupoDTO>(`${this.grupoUrl}`, {params: {grupoId: idGrupo}})
             .pipe(catchError(err => {
                 let backendError = err.error as IHttpError;
 
                 if(backendError.codigo = HttpStatusCode.NotFound) {
-                    alert(backendError.mensagem);
+                    this.toastr.error(backendError.mensagem)
                     this.router.navigateByUrl("/home/administracao/grupo");
                     return EMPTY;
                 }

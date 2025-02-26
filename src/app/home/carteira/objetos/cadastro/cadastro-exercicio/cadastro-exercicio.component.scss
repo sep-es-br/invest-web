@@ -29,7 +29,9 @@
         h4 {
             font-weight: unset;
             font-family: inherit;
-            width: 13rem;
+            box-sizing: border-box;
+            margin-inline: 2rem ;
+            width: 10rem;
             text-align: center;
             span {
                 font-weight: bolder;
@@ -37,10 +39,14 @@
         }
         
 
-        h4:nth-of-type(1){
+        h4:first-of-type {
             text-align: start;
             flex-grow: 1;
         }
+
+        // h4:last-of-type {
+        //     width: 1.3rem;
+        // }
     }
 
     main {

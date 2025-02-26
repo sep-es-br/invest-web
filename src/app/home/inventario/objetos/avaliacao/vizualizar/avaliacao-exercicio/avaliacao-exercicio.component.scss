@@ -1,0 +1,68 @@
+:host {
+
+    font-family: var(--fonte-open-sans);
+    font-size: 15px;
+    display: flex;
+    flex-direction: column;
+
+    header {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        &.disabled {
+            opacity: 0.7 !important;
+        }
+
+        div {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 1.5rem;
+            
+            fa-icon {
+                &.add {
+                    color: var(--verde-padrao);
+                }
+
+                &.remover {
+                    color: var(--vermelho-padrao);
+                }
+            }
+        }
+
+        h4 {
+            font-weight: unset;
+            font-family: inherit;
+            box-sizing: border-box;
+            margin-inline: 2rem ;
+            width: 10rem;
+            text-align: center;
+            span {
+                font-weight: bolder;
+            }
+        }
+        
+
+        h4:first-of-type {
+            text-align: start;
+            flex-grow: 1;
+        }
+
+        // h4:last-of-type {
+        //     width: 1.3rem;
+        // }
+    }
+
+    main {
+        display: flex;
+        flex-direction: column;
+
+        spo-cadastro-exercicio-fonte {
+            margin-left: 1rem;
+        }
+    }               
+
+
+        
+}

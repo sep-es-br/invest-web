@@ -1,11 +1,11 @@
 <header>
     <div id="pesquisa">
         <fa-icon [icon]="searchIcon"></fa-icon>
-        <input type="text" [formControl]="txtBusca" placeholder="Procurar" />
+        <input type="text" [formControl]="txtBusca" class="pesquisa" placeholder="Procurar" />
     </div>
-    <div class="btn" *ngIf="permissao?.criar" (click)="mostrarModal()">
+    <button class="btn-acao" *ngIf="permissao?.criar" (click)="mostrarModal()">
         <span class="material-symbols-outlined">group</span>
-    </div>
+    </button>
 </header>
 <main>
     <div class="grupoItem" *ngFor="let grupo of grupos" (click)="navegar(grupo.id, $event)">

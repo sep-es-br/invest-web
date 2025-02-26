@@ -13,6 +13,7 @@ import { avatarPadrao } from "../../../../../utils/interfaces/avatar.interface";
 import { concat, merge, tap } from "rxjs";
 import { PermissaoService } from "../../../../../utils/services/permissao.service";
 import { IPodeDTO } from "../../../../../utils/models/PodeDto";
+import { ToastrService } from "ngx-toastr";
 
 @Component({
     selector: "spo-grupo-resumo",
@@ -56,7 +57,11 @@ export class GrupoMembrosComponent implements AfterViewInit {
     }
     
 
-    constructor(private service : GrupoService, private permissaoService: PermissaoService){
+    constructor(
+        private service : GrupoService, 
+        private permissaoService: PermissaoService,
+        private toastr : ToastrService
+    ){
         this.service.grupoSession.pipe(tap(grupoSession => {
                 
             this.grupo = grupoSession;
@@ -95,7 +100,8 @@ export class GrupoMembrosComponent implements AfterViewInit {
        this.service.removerMembro(this.grupo.id, membroId).subscribe(grupo => {
             this.service.grupoSession.next(grupo);
             this.subAberto = -1;
-            alert('Membro removido');
+            this.toastr.success('Membro removido')
+            
        }) 
     }
 
@@ -107,7 +113,7 @@ export class GrupoMembrosComponent implements AfterViewInit {
 
             this.service.addMembro(membroForm).subscribe(value => {
                 this.service.grupoSession.next(value);
-                alert("Membro Salvo");
+                this.toastr.success("Membro Salvo");
             });
         }
     }

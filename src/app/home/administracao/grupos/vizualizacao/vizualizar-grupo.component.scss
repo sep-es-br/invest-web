@@ -3,6 +3,11 @@
     display: flex;
     flex-direction: column;
     font-family: var(----fonte-open-sans);
+    > .acoes {
+        display:flex;
+        justify-content: flex-end;
+        padding-bottom: 1rem;
+    }
 
     > header {
         display: flex;
@@ -16,6 +21,8 @@
         padding-bottom: 0;
         border-radius: 6px;
         margin-bottom: 1rem;
+
+        
 
         > header {
             display: flex;
@@ -44,11 +51,14 @@
                 display: flex;
                 flex-direction: column;
                 justify-content: space-evenly;
+                margin-right: auto;
 
                 h2 {
                     font-size: medium;
                 }
             }
+
+            
         }
 
         p {
@@ -72,5 +82,8 @@
         }
     }
     
+    .esconder-modal {
+        display: none;
+    }
 
 }

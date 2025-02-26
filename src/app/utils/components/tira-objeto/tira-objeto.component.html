@@ -1,7 +1,7 @@
 <div id="tira">
     <div id="invNome">
         <div id="label">Objeto</div>
-        <div id="value"><span [title]="objeto.nome">{{objeto.nome | shortString : 70}}</span></div>
+        <div id="value"><span [title]="objeto.nome">{{objeto.nome}}</span></div>
     </div>
     <div>
         <div id="label">Status</div>
@@ -22,6 +22,10 @@
     <div>
         <div id="label">Autorizado</div>
         <div id="value"><span [title]="objeto.totalAutorizado | customCurrency">R$ {{objeto.totalAutorizado | numeroResumido }}</span></div>
+    </div>
+    <div>
+        <div id="label">Empenhado</div>
+        <div id="value"><span [title]="objeto.totalEmpenhado | customCurrency">R$ {{objeto.totalEmpenhado | numeroResumido }}</span></div>
     </div>
     <div>
         <div id="label">Disp. S/ Reserva</div>

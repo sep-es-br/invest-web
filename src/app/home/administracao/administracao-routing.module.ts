@@ -16,7 +16,7 @@ const routes : Route[] = [
         component: EmConstrucaoComponent
     }, {
         path: 'fluxos',
-        loadChildren: () => import("./fluxos/fluxos-routing.module").then(m => m.FluxosRoutingModule)
+        component: EmConstrucaoComponent
     }
 
 ]
