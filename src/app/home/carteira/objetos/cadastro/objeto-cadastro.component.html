@@ -3,42 +3,42 @@
         Solicitação
     </header>
     <main>
-        <form [formGroup]="objetoCadastro">
+        <form #cadastroObjeto="ngForm">
             <label for="inGnd">GND:<span class="obrigatorio">*</span></label>
-            <select id="inGnd" [ngModelOptions]="{standalone: true}" [(ngModel)]="gnd" disabled>
+            <select id="inGnd" name="gnd" [(ngModel)]="gnd" disabled>
                 <option [ngValue]="4">4</option>
                 <option [ngValue]="5">5</option>
             </select>
 
             <label for="inConta">Tipo da Despesa:<span class="obrigatorio">*</span></label>
-            <select id="inConta" formControlName="tipoConta" [(ngModel)]="objeto.tipoConta"
-                [ngClass]="(checado && !objeto.tipoConta) ? 'invalido' : ''">
+            <select id="inConta" name="tipoConta" [(ngModel)]="objeto.tipoConta" required disabled
+                [ngClass]="(checado && tipoConta.invalid) ? 'invalido' : ''" #tipoConta="ngModel" >
                 <option [ngValue]="undefined" disabled>Selecionar o tipo da despesa</option>
                 <option value="Investimento">Investimento</option>
                 <option value="Custeio">Outras Desp. Correntes</option>
             </select>
 
             <label for="inTipo">Tipo de Objeto <span class="obrigatorio">*</span></label>
-            <select id="inTipo" formControlName="tipo" [(ngModel)]="objeto.tipo"
+            <select id="inTipo" name="tipo" [(ngModel)]="objeto.tipo" required disabled
                 [ngClass]="(checado && !objeto.tipo) ? 'invalido' : ''">
-                <option [ngValue]="undefined">Selecionar o tipo de objeto</option>
+                <option [ngValue]="undefined" disabled>Selecionar o tipo de objeto</option>
                 <option ngValue="Projeto">Projeto</option>
                 <option ngValue="Entrega">Entrega</option>
             </select>
             
             <label for="inNome">Nome <span class="obrigatorio">*</span></label>
-            <input type="text" id="inNome" formControlName="nome" [(ngModel)]="objeto.nome"
-                placeholder="Insira um nome" [maxlength]="140"
-                [ngClass]="(checado && (!objeto.nome || objeto.nome.trim() === '') ) ? 'invalido' : ''"/>
+            <input type="text" id="inNome" name="nome" [(ngModel)]="objeto.nome"
+                placeholder="Insira um nome" [maxlength]="140" required #nome="ngModel"
+                [ngClass]="(checado && nome.invalid) ? 'invalido' : ''"/>
 
             <label for="inDescricao">Descrição <span class="obrigatorio">*</span></label>
-            <input type="text" id="inDescricao" formControlName="descricao" [(ngModel)]="objeto.descricao"
-                placeholder="Insira uma descrição" [maxlength]="280"
-                [ngClass]="(checado && (!objeto.descricao || objeto.descricao.trim() === '')) ? 'invalido' : ''">
+            <input type="text" id="inDescricao" name="descricao" [(ngModel)]="objeto.descricao"
+                placeholder="Insira uma descrição" [maxlength]="280" required #descricao="ngModel"
+                [ngClass]="(checado && descricao.invalid) ? 'invalido' : ''">
             
             <label>Unidade Orçamentária <span class="obrigatorio">*</span></label>
-            <ng-select [(ngModel)]="objeto.conta.unidadeOrcamentariaImplementadora"
-                [ngClass]="(checado && (!objeto.conta.unidadeOrcamentariaImplementadora)) ? 'invalido' : ''"
+            <ng-select [(ngModel)]="objeto.conta.unidadeOrcamentariaImplementadora" required
+                [ngClass]="(checado && unidade.invalid) ? 'invalido' : ''"
                 [items]="opcoesUnidades"
                 [disabled]="this.unidades?.length <= 1"
                 placeholder="Selecionar a unidade orçamentária"
@@ -46,61 +46,62 @@
                 bindValue="value"
                 [compareWith]="selecionarUnidade"
                 [searchFn]="filtrar"
-                formControlName="unidade"
+                name="unidade" #unidade="ngModel"
                 ></ng-select>            
            
             <label>Plano Orçamentário <span *ngIf="checarCadastrado()" class="obrigatorio">*</span></label>
             <ng-select [(ngModel)]="objeto.conta.planoOrcamentario"
-                [items]="opcoesPlanosOrcamentarios"
+                [items]="opcoesPlanosOrcamentarios" [required]="checarCadastrado()"
                 placeholder="Selecionar plano orçamentário"
-                bindLabel="label"
-                bindValue="value"
+                bindLabel="label" [ngClass]="(checado && checarCadastrado() && planoOrcamentario.invalid) ? 'invalido' : ''"
+                bindValue="value" #planoOrcamentario="ngModel"
                 [compareWith]="selecionarPlanoOrcamentario"
                 [searchFn]="filtrar"
-                formControlName="planoOrcamentario"
+                name="planoOrcamentario"
                 ></ng-select>
 
             
             <label for="inMicroregiao">Microrregião Atendida <span class="obrigatorio">*</span></label>
-            <select id="inMicroregiao" formControlName="microregiaoAtendida" [(ngModel)]="objeto.microregiaoAtendida"
-                [ngClass]="(checado && !objeto.microregiaoAtendida) ? 'invalido' : ''">
+            <select id="inMicroregiao" name="microregiaoAtendida" [(ngModel)]="objeto.microregiaoAtendida"
+                [ngClass]="(checado && microregiaoAtendida.invalid) ? 'invalido' : ''" required
+                #microregiaoAtendida="ngModel">
                 <option [ngValue]="undefined">Selecionar microrregião</option>
                 <option *ngFor="let microregiao of microregioes" [ngValue]="microregiao">{{microregiao.nome}}</option>
             </select>
             
             <label for="inAreaTematica">Área Temática <span class="obrigatorio">*</span></label>
-            <select id="inAreaTematica" formControlName="areaTematica" [(ngModel)]="objeto.areaTematica"
-                [ngClass]="(checado && !objeto.areaTematica) ? 'invalido' : ''">
+            <select id="inAreaTematica" name="areaTematica" [(ngModel)]="objeto.areaTematica"
+                [ngClass]="(checado && areaTematica.invalid) ? 'invalido' : ''" required 
+                #areaTematica="ngModel">
                 <option [ngValue]="undefined">Selecionar a área temática</option>
                 <option *ngFor="let area of areasTematicas" [ngValue]="area">{{area.nome}}</option>
             </select>
 
             <label for="inInfoComplementar">Informações Complementares </label>
-            <input type="text" id="inInfoComplementar" formControlName="infoComplementares" [maxlength]="280"
-                [(ngModel)]="objeto.infoComplementares" placeholder="Insira as Informações Complementares"
-                [ngClass]="(checado && objetoCadastro.controls.infoComplementares.errors !== null) ? 'invalido' : ''">
+            <input type="text" id="inInfoComplementar" name="infoComplementares" [maxlength]="280"
+                [(ngModel)]="objeto.infoComplementares" placeholder="Insira as Informações Complementares">
 
             <label for="inContrato">Contrato ou Convênio</label>
-            <input type="text" id="inContrato" formControlName="contrato" [maxlength]="140"
+            <input type="text" id="inContrato" name="contrato" [maxlength]="140" #contrato="ngModel"
                 (blur)="(objeto.contrato && objeto.contrato.length > 0) ? undefined : limparContratado()"
                 [(ngModel)]="objeto.contrato" placeholder="Insira o código ou número do contrato ou convênio">
             
             <label>Tipos de Plano(s): <span class="obrigatorio">*</span></label>
             <ng-select [(ngModel)]="objeto.planos"
-                [ngClass]="(checado && (!objeto.planos || objeto.planos.length == 0)) ? 'invalido' : ''"
-                [items]="opcoesTipoPlano"
+                [ngClass]="(checado && planos.invalid) ? 'invalido' : ''"
+                [items]="opcoesTipoPlano" required #planos="ngModel"
                 [multiple]="true"
                 placeholder="Selecione os tipos de plano"
                 bindValue="value"
                 [compareWith]="selecionarTiposPlanos"
                 [searchFn]="filtrar"
-                formControlName="planos"
-                class="multiple"
+                name="planos"
+                class="multiple" 
                 ></ng-select>
             
             <label for="inPossuiOrcamento">Orçamento <span class="obrigatorio">*</span></label>
-            <select id="inPossuiOrcamento" formControlName="inPossuiOrcamento" [(ngModel)]="objeto.possuiOrcamento" 
-                [ngClass]="(checado && !objeto.possuiOrcamento) ? 'invalido' : ''"    >
+            <select id="inPossuiOrcamento" name="inPossuiOrcamento" [(ngModel)]="objeto.possuiOrcamento" 
+                [ngClass]="(checado && possuiOrcamento.invalid) ? 'invalido' : ''" required  #possuiOrcamento="ngModel">
                 <option [ngValue]="undefined">Selecionar se dispõe de orçamento</option>
                 <option value="total">Já dispõe, totalmente</option>
                 <option value="parcial">Já dispõe, parcialmente (indicar no campo Informações Complementares)</option>

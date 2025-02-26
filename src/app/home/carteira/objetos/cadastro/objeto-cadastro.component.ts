@@ -1,34 +1,28 @@
 import { CommonModule } from "@angular/common";
 import { AfterViewInit, Component, OnInit, QueryList, ViewChild, ViewChildren } from "@angular/core";
-import { FormControl, FormGroup, FormsModule, NgModel, ReactiveFormsModule, Validators } from "@angular/forms";
+import { FormsModule, NgForm, NgModel, ReactiveFormsModule } from "@angular/forms";
 import { UnidadeOrcamentariaDTO } from "../../../../utils/models/UnidadeOrcamentariaDTO";
 import { PlanoOrcamentarioDTO } from "../../../../utils/models/PlanoOrcamentarioDTO";
 import { LocalidadeDTO } from "../../../../utils/models/LocalidadeDTO";
-import { CheckBoxComponent } from "../../../../utils/components/checkbox/checkbox.component";
 import { CadastroExercicioComponent } from "./cadastro-exercicio/cadastro-exercicio.component";
 import { IObjeto } from "../../../../utils/interfaces/IObjeto";
 import { ICusto } from "./exercicio-cadastro.interface";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
-import { faFloppyDisk, faMinusCircle, faPaperPlane, faPlusCircle, faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
-import { concat, finalize, merge, tap } from "rxjs";
+import { faFloppyDisk, faPaperPlane, faPlusCircle, faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
+import { finalize, merge, tap } from "rxjs";
 import { UnidadeOrcamentariaService } from "../../../../utils/services/unidadeOrcamentaria.service";
 import { PlanoOrcamentarioService } from "../../../../utils/services/planoOrcamentario.service";
-import { DropdownFiltroComponent } from "../../../../utils/components/dropdown-com-filtro/dropdown-com-filtro.component";
 import { LocalidadeService } from "../../../../utils/services/localidade.service";
-import { FonteOrcamentariaService } from "../../../../utils/services/fonteOrcamentaria.service";
 import { ToastrService } from "ngx-toastr";
 import { ObjetosService } from "../../../../utils/services/objetos.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { DataUtilService } from "../../../../utils/services/data-util.service";
-import { IMultSelectValor, MultSelectDropDownComponent } from "../../../../utils/components/multSelectDropDown/multSelect-dropdown.component";
 import { ITipoPlano } from "../../../../utils/interfaces/ITipoPlano";
 import { TipoPlanoService } from "../../../../utils/services/tipoPlano.service";
-import MultiSelectDropdownItemComponent from "../../../../utils/components/multSelectDropDown/multSelect-dropdown-item/multSelect-dropdown-item.component";
 import { AreaTematicaService } from "../../../../utils/services/areaTematica.service";
 import { IAreaTematica } from "../../../../utils/interfaces/IAreaTematica";
-import { OpcaoItemComponent } from "../../../../utils/components/dropdown-com-filtro/opcao-item.component";
 import { ISelectOpcao } from "../../../../utils/interfaces/selectOption.interface";
-import { NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent } from "@ng-select/ng-select";
+import { NgSelectComponent } from "@ng-select/ng-select";
 import { PermissaoService } from "../../../../utils/services/permissao.service";
 
 @Component({
@@ -37,16 +31,13 @@ import { PermissaoService } from "../../../../utils/services/permissao.service";
     styleUrl: "./objeto-cadastro.component.scss",
     imports: [
     CommonModule, ReactiveFormsModule,
-    CadastroExercicioComponent, FontAwesomeModule,
-    DropdownFiltroComponent, FormsModule,
-    MultSelectDropDownComponent,
-    MultiSelectDropdownItemComponent,
-    OpcaoItemComponent, NgSelectComponent, NgOptionTemplateDirective, NgLabelTemplateDirective
+    CadastroExercicioComponent, FontAwesomeModule, FormsModule, NgSelectComponent
 ]
 })
 export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
 
     @ViewChildren(CadastroExercicioComponent) cadastroExercicios : QueryList<CadastroExercicioComponent>;
+    @ViewChild('cadastroObjeto') cadastroObjeto : NgForm;
 
     addIcon = faPlusCircle;
     limparIcon = faXmarkCircle;
@@ -87,22 +78,6 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
         private permissaoService : PermissaoService
     ) {}
 
-    objetoCadastro = new FormGroup({
-        tipoConta: new FormControl(null, Validators.required),
-        tipo: new FormControl(null, Validators.required),
-        nome: new FormControl(null, Validators.required),
-        descricao: new FormControl(null, Validators.required),
-        unidade: new FormControl(undefined, Validators.required),
-        planoOrcamentario: new FormControl(undefined),
-        microregiaoAtendida: new FormControl(undefined, Validators.required),
-        infoComplementares: new FormControl(null),
-        planos : new FormControl([], Validators.required),
-        contrato : new FormControl(null),
-        areaTematica : new FormControl(null),
-        inPossuiOrcamento : new FormControl(undefined, Validators.required)
-
-    });
-
     @ViewChild('inNome') inNome: NgModel;
 
     objeto : IObjeto = {
@@ -127,9 +102,6 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
                 ]
             }
         ]
-
-        this.objetoCadastro.controls.tipoConta.disable({onlySelf: true});
-        this.objetoCadastro.controls.tipo.disable({onlySelf: true});
 
         merge(
             this.unidadeService.getFromSigefes().pipe(
@@ -157,7 +129,7 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
                     tap(unidades => {
                         this.setUnidades(unidades);
                         if(unidades?.length == 1) {
-                            this.objetoCadastro.controls.unidade.setValue(unidades[0])
+                            this.objeto.conta.unidadeOrcamentariaImplementadora = unidades[0]
                         }
                     })
                 ).subscribe();
@@ -189,33 +161,21 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
     setObjeto(objeto : IObjeto) {
         this.objeto = objeto;
 
-        if(this.checarCadastrado()) {
-            this.objetoCadastro.controls.planoOrcamentario.addValidators(Validators.required);
-            this.objetoCadastro.controls.planoOrcamentario.updateValueAndValidity();
-        }
        
         let nome = `${objeto.conta.unidadeOrcamentariaImplementadora.sigla} - Objeto - ${objeto.id.split(':')[2]}`;
 
         this.dataUtil.setTitleInfo('objetoId', nome);
 
-        
-        this.objetoCadastro.controls.microregiaoAtendida.setValue(
-            this.objeto.microregiaoAtendida ? 
+        this.objeto.microregiaoAtendida = this.objeto.microregiaoAtendida ? 
             this.microregioes.find(value => value.id == this.objeto.microregiaoAtendida.id)
             : undefined
-        );
 
-        this.objetoCadastro.controls.planoOrcamentario.setValue(
-            this.planosOrcamentario.find(plano => plano.codigo == objeto.conta.planoOrcamentario?.codigo)
-        );
+        this.objeto.conta.planoOrcamentario = this.planosOrcamentario.find(plano => plano.codigo == objeto.conta.planoOrcamentario?.codigo)
         
-        this.objetoCadastro.controls.planos.setValue(
-            this.tiposplano.filter(tipoItem => objeto.planos.map( objTipoPlano => objTipoPlano.id).includes(tipoItem.id))
-        );
+        this.objeto.planos = this.tiposplano.filter(tipoItem => objeto.planos.map( objTipoPlano => objTipoPlano.id).includes(tipoItem.id));
+        
+        this.objeto.areaTematica = this.areasTematicas.find(area => objeto.areaTematica?.id == area.id)
 
-        this.objetoCadastro.controls.areaTematica.setValue(
-            this.areasTematicas.find(area => objeto.areaTematica?.id == area.id)
-        );
     }
 
     checarCadastrado() {
@@ -326,24 +286,15 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
             }
         )
 
-        if(!exercValidos || this.objetoCadastro.invalid) {
+        if(!exercValidos || this.cadastroObjeto.invalid) {
             this.toastr.error("Favor preeencher os campos obrigatórios");
         } else {
-            let objetoFinal : IObjeto = {
-                ...this.objeto,
-                ...this.objetoCadastro.getRawValue(),
-                conta: {
-                    planoOrcamentario: this.objetoCadastro.value.planoOrcamentario,
-                    unidadeOrcamentariaImplementadora: this.objetoCadastro.value.unidade
-                },
-                recursosFinanceiros: this.objeto.recursosFinanceiros
-            };
             
             this.objeto.recursosFinanceiros.forEach(r => r.indicadaPor.forEach(i => i.gnd = this.gnd))
 
             if(!this.salvarDebounce) {
                 this.salvarDebounce = true;
-                this.objetoService.salvarObjeto(objetoFinal).pipe(
+                this.objetoService.salvarObjeto(this.objeto).pipe(
                     tap(() => {
                         this.toastr.success("Objeto Salvo");
                         this.router.navigate(['../'], {relativeTo: this.route})
