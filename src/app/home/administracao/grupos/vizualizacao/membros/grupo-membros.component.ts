@@ -9,11 +9,12 @@ import { IProfile } from "../../../../../utils/interfaces/profile.interface";
 import { ICadastroMembroForm } from "./grupo-membro-cadastro/CadastroMembroForm";
 import { GrupoService } from "../../../../../utils/services/grupo.service";
 import { ProfileService } from "../../../../../utils/services/profile.service";
-import { avatarPadrao } from "../../../../../utils/interfaces/avatar.interface";
-import { concat, merge, tap } from "rxjs";
+import { avatarGrupo, avatarPadrao } from "../../../../../utils/interfaces/avatar.interface";
+import { concat, finalize, merge, tap } from "rxjs";
 import { PermissaoService } from "../../../../../utils/services/permissao.service";
 import { IPodeDTO } from "../../../../../utils/models/PodeDto";
 import { ToastrService } from "ngx-toastr";
+import { IMembroGrupo } from "../../../../../utils/interfaces/membro-grupo.interface";
 
 @Component({
     selector: "spo-grupo-resumo",
@@ -38,14 +39,17 @@ export class GrupoMembrosComponent implements AfterViewInit {
 
     qtMembros = 0;
     
-    membros : IProfile[] = [];
+    membros : IMembroGrupo[];
 
     subAberto = -1;
     debounce = true;
 
     mostrarCadastro = false;
 
-    permissao : IPodeDTO
+    todosMembros : IProfile;
+
+    permissao : IPodeDTO;
+
 
     @HostListener('document:click', ['$event'])
     clickout(event : MouseEvent) {
@@ -67,9 +71,19 @@ export class GrupoMembrosComponent implements AfterViewInit {
             this.grupo = grupoSession;
             
             if(grupoSession){
-                this.service.quantidadeMembros(grupoSession.id).pipe(tap(quantidade => {
-                    this.qtMembros = quantidade;
-                })).subscribe()
+                concat(
+                    this.service.quantidadeMembros(grupoSession.id).pipe(tap(quantidade => {
+                        this.qtMembros = quantidade;
+                    })),
+                    this.service.getMembros(grupoSession.id).pipe(
+                        tap( membros => this.membros = membros )
+                    )
+                ).pipe(finalize(() => console.log(this.membros))).subscribe();
+                
+                
+
+                
+                
             }
         })).subscribe()
         
@@ -82,8 +96,10 @@ export class GrupoMembrosComponent implements AfterViewInit {
 
     }
 
-    getAvatar(usuario : IProfile){
-        return usuario.imgPerfil == null ? avatarPadrao : usuario.imgPerfil.blob;
+    getAvatar(avatar : string) : string {
+        if(!avatar) return avatarPadrao;
+        if(avatar === 'todos') return avatarGrupo;
+        return avatar;
     }
 
     ngAfterViewInit(): void {

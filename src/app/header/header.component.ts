@@ -155,7 +155,7 @@ export class HeaderComponent implements OnInit {
         sessionStorage.removeItem('token');
         sessionStorage.removeItem('user-profile');
 
-        this.router.navigateByUrl('login');
+        window.open('https://acessocidadao.es.gov.br/is/connect/endsession', '_self');
         
     }
 

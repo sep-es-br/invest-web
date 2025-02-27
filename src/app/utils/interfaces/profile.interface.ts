@@ -1,5 +1,6 @@
 
 import { GrupoDTO } from "../models/GrupoDTO";
+import { IPapelDTO } from "../models/PapelDto";
 import { ISetorDTO } from "../models/SetorDTO";
 import { IAvatar } from "./avatar.interface";
 import { IFuncao } from "./funcao.interface";
@@ -16,5 +17,6 @@ export interface IProfile {
     papel : string;
     role: IFuncao[];
     setor: ISetorDTO;
+    papeis: IPapelDTO[];
 }
 

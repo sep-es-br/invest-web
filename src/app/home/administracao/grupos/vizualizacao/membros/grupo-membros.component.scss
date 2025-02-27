@@ -82,20 +82,22 @@
 
                 td {
                     padding-top: 0.5rem;
-                    color: #6e7484;
+                    color: var(--cinza-escuro);
                     font-size: 15px;
+                    width: auto;
 
                     &:nth-of-type(1){
                         width: 30px;
                     }
 
-                    &:nth-of-type(4){
-                        min-width: 5rem;
-                    }
-
                     &:nth-of-type(2){
                         padding-left: 0.5rem;
                     }
+
+                    // &:nth-of-type(4){
+                    //     min-width: 5rem;
+                    // }
+
 
                     &:nth-of-type(6){
                         color: var(--cor-primaria);

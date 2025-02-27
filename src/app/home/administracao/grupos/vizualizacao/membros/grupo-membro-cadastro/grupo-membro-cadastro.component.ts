@@ -175,13 +175,11 @@ export class GrupoMembroCadastroComponent implements AfterViewInit {
 
     salvar() {
        
-        console.log(this.cadastroForm)
-
         if(this.cadastroForm.setor === setorTodos)
             this.cadastroForm.setor = undefined
 
         if(this.cadastroForm.papel === papelTodos)
-            this.cadastroForm.papel === undefined
+            this.cadastroForm.papel = undefined
 
         this.fechar(this.cadastroForm);
     }

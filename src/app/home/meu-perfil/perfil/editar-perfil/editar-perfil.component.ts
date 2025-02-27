@@ -9,6 +9,7 @@ import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faFloppyDisk, faWrench } from "@fortawesome/free-solid-svg-icons";
 import { Router, RouterModule } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
+import { IPapelDTO } from "../../../../utils/models/PapelDto";
 
 @Component({
     selector: 'spo-meuperfil-perfil-editar',
@@ -57,6 +58,25 @@ export class EditarPerfilComponent implements AfterViewInit{
         this.form.get("inTelefone").setValue(this.user.telefone);
     }
 
+    getPapelUser() : IPapelDTO{
+        if(this.user.papeis){
+            if(this.user.papeis.length === 1)
+                return this.user.papeis[0]
+            else
+                return this.user.papeis.find(p => p.prioritario)
+        } else {
+            return {
+                id: undefined,
+                nome: this.user.papel,
+                agenteNome: undefined,
+                agenteSub: undefined,
+                guid: undefined,
+                prioritario: undefined,
+                setor: this.user.setor
+            }
+        }
+    }
+
     salvarUser() {
 
         this.profileService.getAvatarFromLoggedSub().subscribe(avatar => {
@@ -71,8 +91,9 @@ export class EditarPerfilComponent implements AfterViewInit{
                 role: this.user.role,
                 sub: this.user.sub,
                 token: this.user.token,
-                setor: this.user.setor
-                
+                setor: this.user.setor,
+                papeis: this.user.papeis
+                                
             }
     
             this.profileService.salvarUsuario(this.user).subscribe(novoUser => {

@@ -8,6 +8,7 @@ import { ProfileService } from "../../../utils/services/profile.service";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faWrench } from "@fortawesome/free-solid-svg-icons";
 import { RouterModule } from "@angular/router";
+import { IPapelDTO } from "../../../utils/models/PapelDto";
 
 @Component({
     selector: 'spo-meuperfil-perfil',
@@ -39,6 +40,27 @@ export class PerfilComponent implements AfterViewInit{
 
         this.dataUtilService.editModeListener.next(false);
 
+    }
+    
+    getPapelUser() : IPapelDTO{
+        if(!this.user) return undefined;
+
+        if(this.user.papeis){
+            if(this.user.papeis.length === 1)
+                return this.user.papeis[0]
+            else
+                return this.user.papeis.find(p => p.prioritario)
+        } else {
+            return {
+                id: undefined,
+                nome: this.user.papel,
+                agenteNome: undefined,
+                agenteSub: undefined,
+                guid: undefined,
+                prioritario: undefined,
+                setor: this.user.setor
+            }
+        }
     }
 
     // loadUser(){

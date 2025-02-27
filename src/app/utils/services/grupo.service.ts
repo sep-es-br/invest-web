@@ -8,6 +8,7 @@ import { IHttpError } from "../interfaces/http-error.interface";
 import { Router } from "@angular/router";
 import { ICadastroMembroForm } from "../../home/administracao/grupos/vizualizacao/membros/grupo-membro-cadastro/CadastroMembroForm";
 import { ToastrService } from "ngx-toastr";
+import { IMembroGrupo } from "../interfaces/membro-grupo.interface";
 
 @Injectable({providedIn: "root"})
 export class GrupoService {
@@ -75,6 +76,11 @@ export class GrupoService {
         return this.http.put<GrupoDTO>(`${this.grupoUrl}/save`, grupo).pipe(
             catchError(err => this.errorHandler.handleError(err))
         )
+    }
+
+    public getMembros(grupoId : string) : Observable<IMembroGrupo[]> {
+        return this.http.get<IMembroGrupo[]>(`${this.grupoUrl}/membros`, {params: {  grupoId: grupoId }})
+        .pipe(catchError(err => this.errorHandler.handleError(err)))
     }
 
     public addMembro(membroForm : ICadastroMembroForm) : Observable<GrupoDTO> {

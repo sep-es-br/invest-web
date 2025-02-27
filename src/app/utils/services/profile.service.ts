@@ -8,6 +8,7 @@ import { ErrorHandlerService } from './error-handler.service';
 import { catchError, tap } from 'rxjs/operators';
 import { IAvatar } from '../interfaces/avatar.interface';
 import { Router } from '@angular/router';
+import { IPapelDTO } from '../models/PapelDto';
 
 
 @Injectable({
@@ -48,9 +49,15 @@ export class ProfileService {
 
   }
 
-  public getUserWithAvatar(): Observable<IProfile> {
+  public getUserWithAvatar(userSub? : string): Observable<IProfile> {
 
-    return this.http.get<IProfile>(`${this._url}/comAvatar`).pipe(
+    let param = undefined;
+    if(userSub)
+      param = {
+        sub: userSub
+      }
+
+    return this.http.get<IProfile>(`${this._url}/comAvatar`, {params: param}).pipe(
       catchError(err => this.errorHandlerService.handleError(err))
     )
 
@@ -69,6 +76,29 @@ export class ProfileService {
     }}).pipe(
       catchError(err => this.errorHandlerService.handleError(err))
     )
+
+  }
+
+  public static getPapelUsuario(user : IProfile) : IPapelDTO {
+
+    if(!user) return undefined;
+    
+    if(user.papeis){
+      if(user.papeis.length === 1)
+        return user.papeis[0]
+      else 
+        return user.papeis.find(p => p.prioritario)
+    } else {
+      return {
+        agenteNome: undefined,
+        agenteSub: undefined,
+        guid: undefined,
+        id: undefined,
+        prioritario: undefined,
+        nome: user.papel,
+        setor: user.setor
+      }
+    }
 
   }
 }

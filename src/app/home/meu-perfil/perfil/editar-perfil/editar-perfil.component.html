@@ -17,12 +17,12 @@
         <input type="tel" formControlName="inTelefone">
 
         <div class="label">Orgão</div>
-        <div class="campo">{{user?.setor.orgao.sigla}} - {{user?.setor.orgao.nome}}</div>
+        <div class="campo">{{getPapelUser().setor.orgao.sigla}} - {{getPapelUser().setor.orgao.nome}}</div>
 
         <div class="label">Setor</div>
-        <div class="campo">{{user?.setor.sigla}} - {{user?.setor.nome}}</div>
+        <div class="campo">{{getPapelUser().setor.sigla}} - {{getPapelUser().setor.nome}}</div>
 
         <div class="label">Papel</div>
-        <div class="campo">{{user?.papel}}</div>
+        <div class="campo">{{getPapelUser().nome}}</div>
     </form>
 </div>

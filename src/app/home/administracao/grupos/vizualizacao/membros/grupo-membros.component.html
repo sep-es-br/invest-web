@@ -15,17 +15,17 @@
         <thead>
             <tr>
                 <th colSpan="2">Membro</th>
-                <th>Unidade</th>
                 <th>Setor</th>
+                <th>Unidade</th>
                 <th colspan="2">Papel</th>
             </tr>
         </thead>
         <tbody #tabela>
-            <tr *ngFor="let membro of grupo?.membros; index as i">
-                <td><img class="avatar" [src]="getAvatar(membro)"></td>
+            <tr *ngFor="let membro of membros; index as i">
+                <td><img class="avatar" [src]="getAvatar(membro.icone)"></td>
                 <td>{{membro.nomeCompleto}}</td>
-                <td>{{membro.setor?.orgao.sigla}} - {{membro.setor?.orgao.nome}}</td>
-                <td>{{membro.setor?.sigla}}</td>
+                <td>{{membro.setor}}</td>
+                <td>{{membro.orgao}}</td>
                 <td>{{membro.papel}}</td>
                 <td *ngIf="permissao?.editar" (click)="mostrarSub(i)">
                     <fa-icon [icon]="maisOpcs"></fa-icon>

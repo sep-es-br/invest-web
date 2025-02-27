@@ -5,3 +5,4 @@ export interface IAvatar{
 }
 
 export const avatarPadrao = 'assets/img/placeholderUserM.webp';
+export const avatarGrupo = 'assets/img/placeholderGroupM.svg';
