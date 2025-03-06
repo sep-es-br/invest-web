@@ -111,7 +111,8 @@ export class InvestimentosComponent implements AfterViewInit {
                 this.filtro.codPO,
                 this.filtro.idFonte,
                 Number(this.filtro.exercicio),
-                this.filtro.gnd
+                this.filtro.gnd,
+                this.filtro.verUnidades
             )
             .pipe(tap(totais => {
                             
