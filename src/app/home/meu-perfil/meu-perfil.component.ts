@@ -11,6 +11,7 @@ import { ActivatedRoute, RouterModule } from "@angular/router";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faPencil, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { ToastrService } from "ngx-toastr";
+import { IPapelDTO } from "../../utils/models/PapelDto";
 
 @Component({
     selector: 'spo-meu-perfil',
@@ -90,6 +91,27 @@ export class MeuPerfilComponent implements AfterViewInit{
             this.salvarUser();
 
          })
+    }
+        
+    getPapelUser() : IPapelDTO{
+        if(!this.user) return undefined;
+
+        if(this.user.papeis){
+            if(this.user.papeis.length === 1)
+                return this.user.papeis[0]
+            else
+                return this.user.papeis.find(p => p.prioritario)
+        } else {
+            return {
+                id: undefined,
+                nome: this.user.papel,
+                agenteNome: undefined,
+                agenteSub: undefined,
+                guid: undefined,
+                prioritario: undefined,
+                setor: this.user.setor
+            }
+        }
     }
 
     salvarUser() {

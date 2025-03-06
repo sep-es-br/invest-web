@@ -17,4 +17,5 @@ export class AuthenticationService {
     window.location.href = this._url;
   }
 
+
 }
