@@ -64,12 +64,6 @@ export class ObjetosService {
         );
     }
 
-    public getQuantidadeInvFiltroItens( filtro : InvestimentoFiltro) : Observable<number> {
-        return this.http.get<number>(`${this.objetoUrl}/countInvestimentoFiltro`, {params: this.investimentoFilterToParams(filtro)}).pipe(
-            catchError(err => this.errorHandlerService.handleError(err))
-        );
-    }
-
     public salvarObjeto(objeto : IObjeto) : Observable<any> {
         return this.http.post(`${this.objetoUrl}`, objeto)
             .pipe(catchError(err => this.errorHandlerService.handleError(err)));
@@ -113,37 +107,6 @@ export class ObjetosService {
 
 
         return params.set("ano", filtro.exercicio);
-    }
-
-    public investimentoFilterToParams(filtro : InvestimentoFiltro) : HttpParams {
-        let params : HttpParams = new HttpParams();
-
-        if(filtro.nome)
-            params = params.set("nome", filtro.nome) 
-
-        if(filtro.codUnidade)
-            params = params.set("codUnidade", JSON.stringify(filtro.codUnidade) ) 
-
-        if(filtro.codPO)
-            params = params.set("codPO", JSON.stringify(filtro.codPO)) 
-
-
-        if(filtro.numPag)
-            params = params.set("numPag", filtro.numPag)
-
-        if(filtro.qtPorPag)
-            params = params.set("qtPorPag", filtro.qtPorPag) 
-
-        if(filtro.exercicio)
-            params = params.set("exercicio", filtro.exercicio)
-
-
-        return params
-    }
-
-    public findStatusCadastrados() : Observable<IStatus[]>{
-        return this.http.get<IStatus[]>(`${this.objetoUrl}/statusCadastrado`)
-        .pipe(catchError(err => this.errorHandlerService.handleError(err)))
     }
 
     public removerObjeto(objetoId : string) : Observable<IObjeto> {

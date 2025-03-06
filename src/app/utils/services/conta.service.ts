@@ -15,19 +15,6 @@ export class ContaService {
         private http : HttpClient,
         private errorHandler : ErrorHandlerService
     ){}
-
-    public findAllTira(filtro : InvestimentoFiltro) : Observable<InvestimentoTiraDTO[]> {
-        return this.http.get<InvestimentoTiraDTO[]>(`${this.contaApi}/contaTira`, {params: this.filterToParams(filtro)}).pipe(
-                        catchError(err => this.errorHandler.handleError(err))
-                    );
-    }
-
-    public getCount(filtro : InvestimentoFiltro) : Observable<number> {
-        return this.http.get<number>(`${this.contaApi}/count`, {params: this.filterToParams(filtro)}).pipe(
-                        catchError(err => this.errorHandler.handleError(err))
-                    );
-    }
-
     
     public filterToParams(filtro : InvestimentoFiltro) : HttpParams {
         let params : HttpParams = new HttpParams();

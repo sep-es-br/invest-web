@@ -110,8 +110,8 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
             this.localidadeService.findAll().pipe(
                 tap(localidadeList => this.setMicrorregioes(localidadeList))
             ),
-            this.tipoPlanoService.findAll().pipe(
-                tap(tipoPlanoList => this.setTiposPlano(tipoPlanoList))
+            this.tipoPlanoService.findBy().pipe(
+                tap(tipoPlanoList => this.setTiposPlano(tipoPlanoList as ITipoPlano[]))
             ),
             this.areaTematicaService.findAllAreaTematica().pipe(
                 tap(areasTematicas => this.setAreasTematicas(areasTematicas))
@@ -264,7 +264,7 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
 
         this.tipoPlanoService.findBy(undefined, 'PIP').pipe(
             tap( tipo => {
-                this.objeto.planos = [tipo];
+                this.objeto.planos = [tipo as ITipoPlano];
             })
         ).subscribe()
     }
