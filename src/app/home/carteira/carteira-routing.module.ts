@@ -4,16 +4,18 @@ import { NgModule } from "@angular/core";
 import { ObjetosListagemComponent } from "./objetos/listagem/objetos-listagem.component";
 
 const routes : Route[] = [
+    // {
+    //     path: "investimentos",
+    //     component: EmConstrucaoComponent
+    // },
     {
-        path: "investimentos",
-        component: EmConstrucaoComponent
-    },{
         path: "objetos",
         loadChildren: () => import("./objetos/objetos.routing").then(m => m.CarteiraObjetosRouting)
-    },{
+    },
+    {
         path: "",
         pathMatch: "full",
-        redirectTo: "investimentos"
+        redirectTo: "objetos"
     }
 ];
 
