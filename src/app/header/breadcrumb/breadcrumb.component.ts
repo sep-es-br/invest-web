@@ -48,7 +48,7 @@ export class BreadCrumbComponent {
             return {
                 pathName: this.breadCrumNames[path.url[0].path] ? 
                             this.breadCrumNames[path.url[0].path] : 
-                            path.routeConfig.path.startsWith(":") ? this.dataUtil.titleInfo[path.routeConfig.path.slice(1)]  : "",
+                            path.routeConfig.path.startsWith(":") ? this.dataUtil.titleInfo[path.routeConfig.path.slice(1)]  : path.routeConfig.path,
                 pathLink: () => {
                     let pathLinks = path.pathFromRoot.map(p => p.url)
                     pathLinks.shift();
