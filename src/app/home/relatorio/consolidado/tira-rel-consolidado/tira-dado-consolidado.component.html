@@ -1,8 +1,4 @@
 <div id="tira">
-    <div id="invNome">
-        <div id="label">Investimento</div>
-        <div id="value"><span [title]="investimento.nome">{{investimento.nome}}</span></div>
-    </div>
     <div>
         <div id="label">Unidade</div>
         <div id="value">teste</div>
@@ -10,6 +6,10 @@
     <div>
         <div id="label">Código P.O</div>
         <div id="value">teste</div>
+    </div>
+    <div id="invNome">
+        <div id="label">Nome do Investimento/PO</div>
+        <div id="value"><span [title]="dadoConsolidado.nomePO">{{dadoConsolidado.nomePO}}</span></div>
     </div>
     <div>
         <div id="label">Previsto</div>

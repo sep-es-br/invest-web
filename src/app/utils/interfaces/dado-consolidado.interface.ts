@@ -7,15 +7,13 @@ export interface IDadoConsolidado {
     projEstrategico: boolean;
     contrato : string;
     anoExercicio: number;
-    dadosPrevisto: {
-        idFonte: string;
-        nomeFonte: string;
-        valor: number;
-    }[]
-    dadosContratado: {
-        idFonte: string;
-        nomeFonte: string;
-        valor: number;
-    }[]
+    dadosPrevisto: IDadosValores[]
+    dadosContratado: IDadosValores[]
 
+}
+
+interface IDadosValores {
+    idFonte: string;
+    nomeFonte: string;
+    valor: number;
 }
