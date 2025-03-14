@@ -1,17 +1,19 @@
 import { CommonModule } from "@angular/common";
-import { Component } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import { BarraPaginacaoComponent } from "../../../utils/components/barra-paginacao/barra-paginacao.component";
 import { ValorCardComponent } from "../../../utils/components/valor-card/valor-card.component";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
-import { concat, finalize, merge, Observable, tap } from "rxjs";
+import { catchError, concat, finalize, merge, Observable, tap } from "rxjs";
 import { ProgressModalComponent } from "../../../utils/components/progress-modal/progress-modal.component";
 import { InvestimentoFiltroComponent } from "./investimento-filtro/investimento-filtro.component";
 import { IFiltroInvestimento } from "./investimento-filtro/IFiltroInvestimento";
 import { InvestimentoFiltro } from "../../../utils/models/InvestimentoFiltro";
-import { TiraInvestimentoComponent } from "../../../utils/components/tira-investimento/tira-investimento.component";
-import { InvestimentoTiraDTO } from "../../../utils/models/InvestimentoTiraDTO";
+import { ContaService } from "../../../utils/services/conta.service";
+import { ErrorHandlerService } from "../../../utils/services/error-handler.service";
+import { IDadoConsolidado } from "../../../utils/interfaces/dado-consolidado.interface";
+import { TiraDadoConsolidadoComponent } from "./tira-rel-consolidado/tira-dado-consolidado.component";
 
 @Component({
     standalone: true,
@@ -20,10 +22,13 @@ import { InvestimentoTiraDTO } from "../../../utils/models/InvestimentoTiraDTO";
     imports: [
         CommonModule, BarraPaginacaoComponent, ValorCardComponent, FontAwesomeModule,
         ReactiveFormsModule, ProgressModalComponent,InvestimentoFiltroComponent,
-        TiraInvestimentoComponent
+        TiraDadoConsolidadoComponent
     ]
 })
 export class RelatorioConsolidadoComponent {
+
+    
+    @ViewChild(BarraPaginacaoComponent) barraPaginacaoComponent : BarraPaginacaoComponent;
 
     searchIcon = faMagnifyingGlass;
 
@@ -35,27 +40,45 @@ export class RelatorioConsolidadoComponent {
     
     showProgress = false;
 
-    data : InvestimentoTiraDTO[] = [];
+    data : IDadoConsolidado[] = [];
     
-    filtro : InvestimentoFiltro = { qtPorPag: 15, numPag: 1 };
+    filtro = {
+        exercicio: new Date().getFullYear(),
+        pag: 1, 
+        pagSize: 15
+     };
+
+    constructor(
+        private contaService : ContaService,
+        private errorHandler : ErrorHandlerService
+    ){}
 
     executar(acao : Observable<any>) {
         this.showProgress = true;
 
-        acao.pipe(finalize(() => this.showProgress = false)).subscribe()
+        acao.pipe(
+            catchError(err => this.errorHandler.handleError(err)),
+            finalize(() => this.showProgress = false)
+        ).subscribe()
     }
 
     atualizarFiltro(filtro : IFiltroInvestimento, novaPagina : number) {
+        // this.filtro = {
+        //     exercicio: filtro.ano,
+        //     codPO: filtro.plano && filtro.plano.length > 0 ? filtro.plano.map(p => p.id) : undefined,
+        //     codUnidade: filtro.unidade && filtro.unidade.length > 0 ? filtro.unidade.map(u => u.id) : undefined,
+        //     idFonte: filtro.fonte?.id,
+        //     nome: this.txtBusca.value,
+        //     gnd: filtro.gnd,
+        //     verUnidades: filtro.podeVerUnidades,
+        //     numPag: novaPagina,
+        //     qtPorPag: this.filtro.qtPorPag
+        // }
+
         this.filtro = {
-            exercicio: filtro.ano,
-            codPO: filtro.plano && filtro.plano.length > 0 ? filtro.plano.map(p => p.id) : undefined,
-            codUnidade: filtro.unidade && filtro.unidade.length > 0 ? filtro.unidade.map(u => u.id) : undefined,
-            idFonte: filtro.fonte?.id,
-            nome: this.txtBusca.value,
-            gnd: filtro.gnd,
-            verUnidades: filtro.podeVerUnidades,
-            numPag: novaPagina,
-            qtPorPag: this.filtro.qtPorPag
+            ...this.filtro,
+            pag: novaPagina,
+            pagSize: this.filtro.pagSize
         }
 
         this.executar(
@@ -98,15 +121,15 @@ export class RelatorioConsolidadoComponent {
 
     recarregarLista(novaPagina : number) {
 
-        this.filtro.numPag = novaPagina;
+        this.filtro.pag = novaPagina;
 
          return merge(
-            // this.service.getListaTiraInvestimentos(this.filtro)
-            // .pipe(tap(invs => {
-            //     this.data = invs.data;
-            //     this.qtInvestimento = invs.ammount;
-            //     this.barraPaginacaoComponent.updatePaginacao(invs.ammount);
-            // }))
+            this.contaService.getDadosConsolidados(this.filtro)
+            .pipe(tap(dados => {
+                this.data = dados.data;
+                this.qtDados = dados.ammount;
+                this.barraPaginacaoComponent.updatePaginacao(dados.ammount);
+            }))
         )
        
     }

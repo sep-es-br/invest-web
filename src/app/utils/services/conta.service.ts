@@ -5,6 +5,8 @@ import { ErrorHandlerService } from "./error-handler.service";
 import { InvestimentoFiltro } from "../models/InvestimentoFiltro";
 import { catchError, Observable } from "rxjs";
 import { InvestimentoTiraDTO } from "../models/InvestimentoTiraDTO";
+import { IDataList } from "../interfaces/dataList.interface";
+import { IDadoConsolidado } from "../interfaces/dado-consolidado.interface";
 
 @Injectable({providedIn: "root"})
 export class ContaService {
@@ -26,6 +28,17 @@ export class ContaService {
         return this.http.get<number>(`${this.contaApi}/count`, {params: this.filterToParams(filtro)}).pipe(
                         catchError(err => this.errorHandler.handleError(err))
                     );
+    }
+
+    public getDadosConsolidados(filtro : any) : Observable<IDataList<IDadoConsolidado>> {
+
+        let params : HttpParams = new HttpParams();
+
+        params = params
+            .set("pag", filtro.pag)
+            .set("pagSize", filtro.pagSize);
+
+        return this.http.get<IDataList<IDadoConsolidado>>(`${this.contaApi}/dadosConsolidados`, {params: params})
     }
 
     

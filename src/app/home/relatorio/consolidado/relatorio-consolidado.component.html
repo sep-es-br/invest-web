@@ -68,6 +68,6 @@
     </div>
 </div>
 <div id="listaDados" class="displayLista">
-    <spo-tira-investimento *ngFor="let inv of data" [investimento]="inv"></spo-tira-investimento>
+    <spo-tira-dado-consolidado *ngFor="let inv of data" [dadoConsolidado]="inv"></spo-tira-dado-consolidado>
 </div>
 <spo-barra-paginacao [larguraPaginacao]="larguraPaginacao" [quantidade]="qtDados" (onPageChange)="executar(recarregarLista($event)) "></spo-barra-paginacao>

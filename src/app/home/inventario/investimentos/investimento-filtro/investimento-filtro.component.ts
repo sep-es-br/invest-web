@@ -25,7 +25,7 @@ import { faXmark, faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
     styleUrl: './investimento-filtro.component.scss',
     standalone: true,
     imports: [
-        CommonModule, ReactiveFormsModule, DropdownFiltroComponent, NgSelectModule,
+        CommonModule, ReactiveFormsModule, NgSelectModule,
         FormsModule, FontAwesomeModule
     ]
 })

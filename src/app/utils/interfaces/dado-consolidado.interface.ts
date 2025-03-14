@@ -1,5 +1,5 @@
 export interface IDadoConsolidado {
-    idUnidada : string;
+    idUnidade : string;
     unidadeResponsavel : string;
     idPO : string;
     codPO : string;
@@ -7,13 +7,13 @@ export interface IDadoConsolidado {
     projEstrategico: boolean;
     contrato : string;
     anoExercicio: number;
-    dadosPrevisto: IDadosValores[]
-    dadosContratado: IDadosValores[]
+    valores: IDadosValores[];
 
 }
 
 interface IDadosValores {
     idFonte: string;
     nomeFonte: string;
-    valor: number;
+    valorPrevisto: number;
+    valorContratado: number;
 }

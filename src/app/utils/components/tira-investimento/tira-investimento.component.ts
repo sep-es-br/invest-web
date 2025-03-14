@@ -13,7 +13,7 @@ import { InvestimentoTiraDTO } from "../../models/InvestimentoTiraDTO";
     templateUrl: './tira-investimento.component.html',
     styleUrl: './tira-investimento.component.scss',
     standalone: true,
-    imports: [CommonModule, ShortStringPipe, FontAwesomeModule, CustomCurrencyPipe, TiraObjetoComponent, NumeroResumidoPipe]
+    imports: [CommonModule, FontAwesomeModule, CustomCurrencyPipe, TiraObjetoComponent, NumeroResumidoPipe]
 })
 export class TiraInvestimentoComponent implements AfterViewInit {
 
