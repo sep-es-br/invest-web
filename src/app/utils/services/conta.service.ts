@@ -6,7 +6,7 @@ import { InvestimentoFiltro } from "../models/InvestimentoFiltro";
 import { catchError, Observable } from "rxjs";
 import { InvestimentoTiraDTO } from "../models/InvestimentoTiraDTO";
 import { IDataList } from "../interfaces/dataList.interface";
-import { IDadoConsolidado } from "../interfaces/dado-consolidado.interface";
+import { IDadoDetalhado } from "../interfaces/dado-detalhado.interface";
 
 @Injectable({providedIn: "root"})
 export class ContaService {
@@ -30,7 +30,7 @@ export class ContaService {
                     );
     }
 
-    public getDadosConsolidados(filtro : any) : Observable<IDataList<IDadoConsolidado>> {
+    public getDadosConsolidados(filtro : any) : Observable<IDataList<IDadoDetalhado>> {
 
         let params : HttpParams = new HttpParams();
 
@@ -38,7 +38,7 @@ export class ContaService {
             .set("pag", filtro.pag)
             .set("pagSize", filtro.pagSize);
 
-        return this.http.get<IDataList<IDadoConsolidado>>(`${this.contaApi}/dadosConsolidados`, {params: params})
+        return this.http.get<IDataList<IDadoDetalhado>>(`${this.contaApi}/dadosDetalhados`, {params: params})
     }
 
     

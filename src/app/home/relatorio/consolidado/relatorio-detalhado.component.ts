@@ -3,7 +3,7 @@ import { Component, ViewChild } from "@angular/core";
 import { BarraPaginacaoComponent } from "../../../utils/components/barra-paginacao/barra-paginacao.component";
 import { ValorCardComponent } from "../../../utils/components/valor-card/valor-card.component";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { faFileDownload, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { catchError, concat, finalize, merge, Observable, tap } from "rxjs";
 import { ProgressModalComponent } from "../../../utils/components/progress-modal/progress-modal.component";
@@ -12,25 +12,26 @@ import { IFiltroInvestimento } from "./investimento-filtro/IFiltroInvestimento";
 import { InvestimentoFiltro } from "../../../utils/models/InvestimentoFiltro";
 import { ContaService } from "../../../utils/services/conta.service";
 import { ErrorHandlerService } from "../../../utils/services/error-handler.service";
-import { IDadoConsolidado } from "../../../utils/interfaces/dado-consolidado.interface";
-import { TiraDadoConsolidadoComponent } from "./tira-rel-consolidado/tira-dado-consolidado.component";
+import { IDadoDetalhado } from "../../../utils/interfaces/dado-detalhado.interface";
+import { TiraDadoDetalhadoComponent } from "./tira-rel-detalhado/tira-dado-detalhado.component";
 
 @Component({
     standalone: true,
-    templateUrl: "./relatorio-consolidado.component.html",
-    styleUrl: "./relatorio-consolidado.component.scss",
+    templateUrl: "./relatorio-detalhado.component.html",
+    styleUrl: "./relatorio-detalhado.component.scss",
     imports: [
         CommonModule, BarraPaginacaoComponent, ValorCardComponent, FontAwesomeModule,
         ReactiveFormsModule, ProgressModalComponent,InvestimentoFiltroComponent,
-        TiraDadoConsolidadoComponent
+        TiraDadoDetalhadoComponent, FontAwesomeModule
     ]
 })
-export class RelatorioConsolidadoComponent {
+export class RelatorioDetalhadoComponent {
 
     
     @ViewChild(BarraPaginacaoComponent) barraPaginacaoComponent : BarraPaginacaoComponent;
 
     searchIcon = faMagnifyingGlass;
+    downloadIcon = faFileDownload;
 
     txtBusca = new FormControl(undefined);
 
@@ -40,7 +41,7 @@ export class RelatorioConsolidadoComponent {
     
     showProgress = false;
 
-    data : IDadoConsolidado[] = [];
+    data : IDadoDetalhado[] = [];
     
     filtro = {
         exercicio: new Date().getFullYear(),

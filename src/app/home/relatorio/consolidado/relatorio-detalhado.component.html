@@ -59,15 +59,10 @@
         </div>
     </div>
     <div id="acoes">
-        <!-- <div id="display-grade" class="botaoAcao">
-            <img src="assets/img/grid-layout.svg" width="20px">
-        </div> -->
-        <!-- <div id="display-lista" class="botaoAcao ativo">
-            <img src="assets/img/align-left-branco.svg" width="20px">
-        </div> -->
+        <button class="btn-acao"><fa-icon [icon]="downloadIcon"></fa-icon></button>
     </div>
 </div>
 <div id="listaDados" class="displayLista">
-    <spo-tira-dado-consolidado *ngFor="let inv of data" [dadoConsolidado]="inv"></spo-tira-dado-consolidado>
+    <spo-tira-dado-detalhado *ngFor="let inv of data" [dadoDetalhado]="inv"></spo-tira-dado-detalhado>
 </div>
 <spo-barra-paginacao [larguraPaginacao]="larguraPaginacao" [quantidade]="qtDados" (onPageChange)="executar(recarregarLista($event)) "></spo-barra-paginacao>

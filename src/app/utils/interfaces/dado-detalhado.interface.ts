@@ -1,4 +1,4 @@
-export interface IDadoConsolidado {
+export interface IDadoDetalhado {
     idUnidade : string;
     unidadeResponsavel : string;
     idPO : string;

@@ -19,6 +19,7 @@ export const breadCrumbNames : { [index : string] : string } = {
     novo: "Novo",
     edit: "Editar",
     relatorio: "Relatório",
-    consolidado: "Consolidado"
+    consolidado: "Consolidado",
+    detalhado: "Detalhado"
 
 }

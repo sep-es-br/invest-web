@@ -1,11 +1,11 @@
 import { Route, RouterModule } from "@angular/router";
-import { RelatorioConsolidadoComponent } from "./consolidado/relatorio-consolidado.component";
 import { NgModule } from "@angular/core";
+import { RelatorioDetalhadoComponent } from "./consolidado/relatorio-detalhado.component";
 
 const routes : Route[] = [
     {
-        path: 'consolidado',
-        component: RelatorioConsolidadoComponent
+        path: 'detalhado',
+        component: RelatorioDetalhadoComponent
     }, {
         path: '',
         pathMatch: "full",
