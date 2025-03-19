@@ -63,7 +63,7 @@ export class RelatorioDetalhadoComponent {
         ).subscribe()
     }
 
-    atualizarFiltro(filtro : IFiltroInvestimento, novaPagina : number) {
+    atualizarFiltro(filtro : Partial<IFiltroInvestimento>, novaPagina : number) {
         // this.filtro = {
         //     exercicio: filtro.ano,
         //     codPO: filtro.plano && filtro.plano.length > 0 ? filtro.plano.map(p => p.id) : undefined,

@@ -32,18 +32,19 @@ export class InvestimentoFiltroComponent implements AfterViewInit{
 
     removerIcon = faXmarkCircle;
 
-    @Output() public filterChange = new EventEmitter<IFiltroInvestimento>();
+    @Output() public filterChange = new EventEmitter<Partial<IFiltroInvestimento>>();
 
     @ViewChild("dropdownAno", {read: DropdownFiltroComponent}) dropdownAnoComponent : DropdownFiltroComponent;
     
-    anos : number[];
+    anosMin : number[];
+    anosMax : number[];
     planos : PlanoOrcamentarioDTO[];
     unidades : UnidadeOrcamentariaDTO[];
     fontes : FonteOrcamentariaDTO[];
 
-    filtro : IFiltroInvestimento = {};
+    filtro : Partial<IFiltroInvestimento> = {};
 
-    
+         
     podeVerUnidades = false;
 
     constructor(private infosService: InfosService,
@@ -71,9 +72,11 @@ export class InvestimentoFiltroComponent implements AfterViewInit{
         let consulta : Observable<any>[] = [
             this.infosService.getAllAnos()
                 .pipe(tap((anosList) => {
-                    this.anos = anosList;
-
-                    this.filtro.ano = new Date().getFullYear();
+                    this.applyFilterMin(anosList);
+                    this.applyFilterMax(anosList);
+                    
+                    this.setFiltroAnoDe(new Date().getFullYear() - 1);
+                    this.setFiltroAnoAte(new Date().getFullYear() + 1);
 
                 })),
                 this.planoService.getAllPlanos()
@@ -141,6 +144,22 @@ export class InvestimentoFiltroComponent implements AfterViewInit{
     update() {
         this.filtro.podeVerUnidades = this.podeVerUnidades;
         this.filterChange.emit(this.filtro);
+    }
+
+    applyFilterMax(list : number[]){
+        this.anosMax = list?.filter(ano => ano <= this.filtro.anoAte);
+    }
+
+    applyFilterMin(list : number[]) {
+        this.anosMin = list?.filter(ano => ano >= this.filtro.anoAte);
+    }
+
+    setFiltroAnoDe(ano : number){
+        this.filtro.anoDe = Math.min(ano, this.filtro.anoAte);
+    }
+
+    setFiltroAnoAte(ano : number){
+        this.filtro.anoAte = Math.max(ano, this.filtro.anoDe);
     }
 
     

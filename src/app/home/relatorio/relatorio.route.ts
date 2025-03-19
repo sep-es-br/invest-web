@@ -1,6 +1,6 @@
 import { Route, RouterModule } from "@angular/router";
 import { NgModule } from "@angular/core";
-import { RelatorioDetalhadoComponent } from "./consolidado/relatorio-detalhado.component";
+import { RelatorioDetalhadoComponent } from "./detalhado/relatorio-detalhado.component";
 
 const routes : Route[] = [
     {

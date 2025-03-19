@@ -3,10 +3,11 @@ import { PlanoOrcamentarioDTO } from "../../../../utils/models/PlanoOrcamentario
 import { UnidadeOrcamentariaDTO } from "../../../../utils/models/UnidadeOrcamentariaDTO";
 
 export interface IFiltroInvestimento {
-    ano? : number,
-    plano? : PlanoOrcamentarioDTO[],
-    unidade? : UnidadeOrcamentariaDTO[],
-    fonte? : FonteOrcamentariaDTO,
-    gnd? : number,
-    podeVerUnidades? : boolean
+    anoDe : number,
+    anoAte : number,
+    plano : PlanoOrcamentarioDTO[],
+    unidade : UnidadeOrcamentariaDTO[],
+    fonte : FonteOrcamentariaDTO,
+    gnd : number,
+    podeVerUnidades : boolean
 }

@@ -61,12 +61,21 @@
     (ngModelChange)="update()"
     >    
 </ng-select>
-
-<ng-select [items]="anos" class="menor"
-            [(ngModel)]="filtro.ano"
-            [ngModelOptions]="{standalone: true}"
-            [clearable]="false"
-            (ngModelChange)="update()"
-        >
-</ng-select>
-
+<div class="dataRange">
+    De: 
+    <ng-select [items]="anosMin " class="menor"
+        [(ngModel)]="filtro.anoDe"
+        [ngModelOptions]="{standalone: true}"
+        [clearable]="false"
+        (ngModelChange)="update(); setFiltroAnoDe(filtro.anoDe)"
+    >
+    </ng-select>
+    Até:
+    <ng-select [items]="anosMax" class="menor"
+        [(ngModel)]="filtro.anoAte"
+        [ngModelOptions]="{standalone: true}"
+        [clearable]="false"
+        (ngModelChange)="update(); setFiltroAnoAte(filtro.anoAte)"
+    >
+    </ng-select>
+</div>
