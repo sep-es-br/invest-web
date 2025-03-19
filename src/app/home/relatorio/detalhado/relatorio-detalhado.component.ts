@@ -90,6 +90,10 @@ export class RelatorioDetalhadoComponent {
         );
         
     }
+
+    gerarRelatorio() {
+        
+    }
     
     recarregarValores() {
     

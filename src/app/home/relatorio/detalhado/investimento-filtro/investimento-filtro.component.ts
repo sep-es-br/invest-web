@@ -1,8 +1,7 @@
 import { CommonModule } from "@angular/common";
-import { AfterViewInit, Component, EventEmitter, Input, Output, ViewChild } from "@angular/core";
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { AfterViewInit, Component, EventEmitter, Output, ViewChild } from "@angular/core";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { InfosService } from "../../../../utils/services/infos.service";
-import { Router } from "@angular/router";
 import { PlanoOrcamentarioService } from "../../../../utils/services/planoOrcamentario.service";
 import { PlanoOrcamentarioDTO } from "../../../../utils/models/PlanoOrcamentarioDTO";
 import { UnidadeOrcamentariaDTO } from "../../../../utils/models/UnidadeOrcamentariaDTO";
@@ -10,13 +9,13 @@ import { UnidadeOrcamentariaService } from "../../../../utils/services/unidadeOr
 import { FonteOrcamentariaDTO } from "../../../../utils/models/FonteOrcamentariaDTO";
 import { FonteOrcamentariaService } from "../../../../utils/services/fonteOrcamentaria.service";
 import { finalize, merge, Observable, tap } from "rxjs";
-import { IDropdownFiltroItem, DropdownFiltroComponent } from "../../../../utils/components/dropdown-filtro/dropdown-filtro.component";
+import { DropdownFiltroComponent } from "../../../../utils/components/dropdown-filtro/dropdown-filtro.component";
 import { IFiltroInvestimento } from "./IFiltroInvestimento";
-import { ShortStringPipe } from "../../../../utils/pipes/shortString.pipe";
 import { PermissaoService } from "../../../../utils/services/permissao.service";
-import { NgSelectComponent, NgSelectModule } from "@ng-select/ng-select";
+import { NgSelectModule } from "@ng-select/ng-select";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
-import { faXmark, faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
+import { faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
+import { CalendarModule } from 'primeng/calendar';
 
 @Component({
     selector: 'spo-investimento-filtro',
@@ -25,7 +24,7 @@ import { faXmark, faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
     standalone: true,
     imports: [
         CommonModule, ReactiveFormsModule, NgSelectModule,
-        FormsModule, FontAwesomeModule
+        FormsModule, FontAwesomeModule, CalendarModule
     ]
 })
 export class InvestimentoFiltroComponent implements AfterViewInit{
@@ -42,6 +41,10 @@ export class InvestimentoFiltroComponent implements AfterViewInit{
     unidades : UnidadeOrcamentariaDTO[];
     fontes : FonteOrcamentariaDTO[];
 
+    rangeDates : Date[];
+    minDate : Date;
+    maxDate : Date;
+
     filtro : Partial<IFiltroInvestimento> = {};
 
          
@@ -53,6 +56,11 @@ export class InvestimentoFiltroComponent implements AfterViewInit{
                 private fonteService : FonteOrcamentariaService,
                 private permissaoService : PermissaoService
     ) {}
+
+    print(){
+        console.log(this.rangeDates.map(d => d as Date));
+        
+    }
 
     ngAfterViewInit(): void {
         // this.resetarCampos();
@@ -72,12 +80,8 @@ export class InvestimentoFiltroComponent implements AfterViewInit{
         let consulta : Observable<any>[] = [
             this.infosService.getAllAnos()
                 .pipe(tap((anosList) => {
-                    this.applyFilterMin(anosList);
-                    this.applyFilterMax(anosList);
-                    
-                    this.setFiltroAnoDe(new Date().getFullYear() - 1);
-                    this.setFiltroAnoAte(new Date().getFullYear() + 1);
-
+                    this.maxDate = new Date(anosList[anosList.length-1], 0, 1);
+                    this.minDate = new Date(anosList[0], 0, 1);
                 })),
                 this.planoService.getAllPlanos()
                 .pipe(tap((planoList) => {
@@ -144,22 +148,6 @@ export class InvestimentoFiltroComponent implements AfterViewInit{
     update() {
         this.filtro.podeVerUnidades = this.podeVerUnidades;
         this.filterChange.emit(this.filtro);
-    }
-
-    applyFilterMax(list : number[]){
-        this.anosMax = list?.filter(ano => ano <= this.filtro.anoAte);
-    }
-
-    applyFilterMin(list : number[]) {
-        this.anosMin = list?.filter(ano => ano >= this.filtro.anoAte);
-    }
-
-    setFiltroAnoDe(ano : number){
-        this.filtro.anoDe = Math.min(ano, this.filtro.anoAte);
-    }
-
-    setFiltroAnoAte(ano : number){
-        this.filtro.anoAte = Math.max(ano, this.filtro.anoDe);
     }
 
     
