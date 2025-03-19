@@ -1,7 +1,8 @@
+@use '../../../../../utils/styles/ngFilter.scss';
 :host {
     display: flex;
     gap: 0.5rem;
 
-    @import '../../../../../utils/styles/ngFilter.scss';
+    
 
 }

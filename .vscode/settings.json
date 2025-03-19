@@ -1,4 +1,8 @@
 { 
     "typescript.suggest.paths": false,
-    "javascript.suggest.paths": false 
+    "javascript.suggest.paths": false,
+    "search.exclude": {
+        "**/node_modules": false,
+        "**/node_moduless": true
+    }
 }

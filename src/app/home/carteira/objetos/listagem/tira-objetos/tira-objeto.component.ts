@@ -13,8 +13,7 @@ import { IPodeDTO } from "../../../../../utils/models/PodeDto";
     selector: 'spo-tira-listagem-objetos',
     templateUrl: './tira-objeto.component.html',
     styleUrl: './tira-objeto.component.scss',
-    standalone: true,
-    imports: [CommonModule, ShortStringPipe, CustomCurrencyPipe, NumeroResumidoPipe, FontAwesomeModule]
+    imports: [CommonModule, CustomCurrencyPipe, NumeroResumidoPipe, FontAwesomeModule]
 })
 export class TiraObjetoComponent {
 

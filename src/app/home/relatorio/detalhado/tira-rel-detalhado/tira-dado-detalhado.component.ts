@@ -7,7 +7,6 @@ import { ToSiglaPipe } from "../../../../utils/pipes/toSigla.pipe";
 
 @Component({
     selector: 'spo-tira-dado-detalhado ',
-    standalone: true,
     templateUrl: "./tira-dado-detalhado.component.html",
     styleUrls: [
         '../../../../utils/styles/tira-base.scss', './tira-dado-detalhado.component.scss'

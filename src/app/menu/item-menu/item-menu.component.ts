@@ -5,7 +5,6 @@ import { IItemMenu } from "../../utils/IItemMenu";
 
 @Component({
     selector: "spo-menu-item",
-    standalone: true,
     templateUrl: "./item-menu.component.html",
     styleUrl: "./item-menu.component.scss",
     imports: [CommonModule, ItemSubMenuComponent]

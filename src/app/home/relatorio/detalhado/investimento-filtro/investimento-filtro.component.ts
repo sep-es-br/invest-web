@@ -15,7 +15,8 @@ import { PermissaoService } from "../../../../utils/services/permissao.service";
 import { NgSelectModule } from "@ng-select/ng-select";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
-import { CalendarModule } from 'primeng/calendar';
+import { DatePickerModule } from 'primeng/datepicker';
+import { TipoDespesaEnum } from "../../../../utils/enum/tipoDespesa.enum";
 
 @Component({
     selector: 'spo-investimento-filtro',
@@ -24,7 +25,7 @@ import { CalendarModule } from 'primeng/calendar';
     standalone: true,
     imports: [
         CommonModule, ReactiveFormsModule, NgSelectModule,
-        FormsModule, FontAwesomeModule, CalendarModule
+        FormsModule, FontAwesomeModule, DatePickerModule
     ]
 })
 export class InvestimentoFiltroComponent implements AfterViewInit{
@@ -41,14 +42,14 @@ export class InvestimentoFiltroComponent implements AfterViewInit{
     unidades : UnidadeOrcamentariaDTO[];
     fontes : FonteOrcamentariaDTO[];
 
-    rangeDates : Date[];
-    minDate : Date;
-    maxDate : Date;
-
     filtro : Partial<IFiltroInvestimento> = {};
 
-         
+    maxDate : Date;
+    minDate : Date;
+    
     podeVerUnidades = false;
+
+    TipoDespesa = TipoDespesaEnum;
 
     constructor(private infosService: InfosService,
                 private planoService: PlanoOrcamentarioService,
@@ -57,31 +58,26 @@ export class InvestimentoFiltroComponent implements AfterViewInit{
                 private permissaoService : PermissaoService
     ) {}
 
-    print(){
-        console.log(this.rangeDates.map(d => d as Date));
-        
-    }
+    dataRange : Date[];
 
     ngAfterViewInit(): void {
-        // this.resetarCampos();
-
-        //  this.permissaoService.podeVerUnidades().pipe(tap(
-        //             podeVer => {
-        
-        //                 this.podeVerUnidades = podeVer;
-        
-                        
-        //             }
-        //         )).subscribe();
-
-        
-        
+               
 
         let consulta : Observable<any>[] = [
             this.infosService.getAllAnos()
                 .pipe(tap((anosList) => {
                     this.maxDate = new Date(anosList[anosList.length-1], 0, 1);
                     this.minDate = new Date(anosList[0], 0, 1);
+
+                    let hoje = new Date();
+
+                    let anoPassado : Date = new Date(hoje);
+                    let anoQVem : Date = new Date(hoje);
+
+                    anoPassado.setFullYear(hoje.getFullYear() - 1);
+                    anoQVem.setFullYear(hoje.getFullYear() + 1);
+
+                    this.dataRange = [anoPassado, anoQVem];
                 })),
                 this.planoService.getAllPlanos()
                 .pipe(tap((planoList) => {
@@ -147,6 +143,10 @@ export class InvestimentoFiltroComponent implements AfterViewInit{
 
     update() {
         this.filtro.podeVerUnidades = this.podeVerUnidades;
+        if(this.dataRange[0] && this.dataRange[1]){
+            this.filtro.anoDe = this.dataRange[0].getFullYear();
+            this.filtro.anoAte = this.dataRange[1].getFullYear();
+        }
         this.filterChange.emit(this.filtro);
     }
 

@@ -21,12 +21,11 @@ import { TiraObjetoComponent } from "../../../../carteira/objetos/listagem/tira-
     selector: "spo-avaliacao",
     templateUrl: "./avaliacao-listagem.component.html",
     styleUrl: "./avaliacao-listagem.component.scss",
-    standalone: true,
     imports: [
-    CommonModule, ReactiveFormsModule, ObjetoFiltroComponent,
-    FontAwesomeModule, TiraObjetoComponent,
-    BarraPaginacaoComponent, RouterModule
-]
+        CommonModule, ReactiveFormsModule, ObjetoFiltroComponent,
+        FontAwesomeModule, TiraObjetoComponent,
+        BarraPaginacaoComponent, RouterModule
+    ]
 })
 export class AvaliacaoListagemComponent implements AfterViewInit{
 

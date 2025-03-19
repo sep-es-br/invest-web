@@ -7,6 +7,7 @@ import { catchError, Observable } from "rxjs";
 import { InvestimentoTiraDTO } from "../models/InvestimentoTiraDTO";
 import { IDataList } from "../interfaces/dataList.interface";
 import { IDadoDetalhado } from "../interfaces/dado-detalhado.interface";
+import { IFiltroInvestimento } from "../../home/relatorio/detalhado/investimento-filtro/IFiltroInvestimento";
 
 @Injectable({providedIn: "root"})
 export class ContaService {
@@ -33,6 +34,10 @@ export class ContaService {
     public getDadosConsolidados(filtro : any) : Observable<IDataList<IDadoDetalhado>> {
 
         let params : HttpParams = new HttpParams();
+
+        if(filtro.exercicio) {
+            params = params.set("exercicio", filtro.exercicio);
+        }
 
         params = params
             .set("pag", filtro.pag)

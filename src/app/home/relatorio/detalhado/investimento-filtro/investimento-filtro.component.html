@@ -1,3 +1,7 @@
+<select [disabled]="true">
+    <option [defaultSelected]="true" [value]="TipoDespesa.INVESTIMENTO">{{TipoDespesa.INVESTIMENTO}}</option>
+</select>
+
 <ng-select [items]="unidades"
             [multiple]="true"
             placeholder="Unidade Orçamentária"
@@ -61,12 +65,12 @@
     (ngModelChange)="update()"
     >    
 </ng-select>
-<p-calendar 
-    [(ngModel)]="rangeDates" 
+<p-datePicker 
+    [(ngModel)]="dataRange" 
+    (ngModelChange)="update()"
     selectionMode="range" 
     [minDate]="minDate"
     [maxDate]="maxDate"
     dateFormat="yy"
     view="year" />
 
-<button class="btn-acao" (click)="print()" ></button>

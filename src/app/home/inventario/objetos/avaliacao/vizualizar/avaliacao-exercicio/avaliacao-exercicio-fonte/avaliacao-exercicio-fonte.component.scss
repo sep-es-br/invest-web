@@ -1,11 +1,10 @@
+@use "../../../../../../../utils/styles/ngSelectPadrao.scss";
 :host{
 
     display: flex;
     flex-grow: 1;
 
     form {
-
-        @import "../../../../../../../utils/styles/ngSelectPadrao.scss";
 
         display: flex;
         flex-direction: row;

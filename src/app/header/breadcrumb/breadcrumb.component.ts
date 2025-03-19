@@ -8,7 +8,6 @@ import { DataUtilService } from "../../utils/services/data-util.service";
     selector: 'spo-breadcrumb',
     templateUrl: './breadcrumb.component.html',
     styleUrl: 'breadcrumb.component.scss',
-    standalone: true,
     imports: [CommonModule, RouterModule, RouterLink]
 })
 export class BreadCrumbComponent {

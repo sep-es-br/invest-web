@@ -18,11 +18,10 @@ import { PermissaoService } from "../../../../utils/services/permissao.service";
 import { IPodeDTO } from "../../../../utils/models/PodeDto";
 
 @Component({
-    standalone: true,
     templateUrl: "./objetos-listagem.component.html",
     styleUrl: "./objetos-listagem.component.scss",
     imports: [
-        CommonModule, ObjetosFiltroComponent, FontAwesomeModule, 
+        CommonModule, ObjetosFiltroComponent, FontAwesomeModule,
         ReactiveFormsModule, TiraObjetoComponent, BarraPaginacaoComponent,
         RouterModule
     ]

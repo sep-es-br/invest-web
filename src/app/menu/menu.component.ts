@@ -11,7 +11,6 @@ import { Observable } from "rxjs";
     selector: 'spo-menu',
     templateUrl: 'menu.component.html',
     styleUrl: 'menu.component.scss',
-    standalone: true,
     imports: [CommonModule, ItemMenuComponent]
 })
 export class MenuComponent implements OnInit{

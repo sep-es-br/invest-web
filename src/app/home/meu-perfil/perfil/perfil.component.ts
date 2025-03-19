@@ -11,7 +11,6 @@ import { RouterModule } from "@angular/router";
 
 @Component({
     selector: 'spo-meuperfil-perfil',
-    standalone: true,
     templateUrl: './perfil.component.html',
     styleUrl: './perfil.component.scss',
     imports: [CommonModule, ReactiveFormsModule, FontAwesomeModule, RouterModule]

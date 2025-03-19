@@ -1,7 +1,7 @@
+@use 'ngx-toastr/toastr';
+@use './app/utils/styles/UI_Pattern.scss';
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 @import url("https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined");
-@import 'ngx-toastr/toastr';
-@import './app/utils/styles/UI_Pattern.scss';
 
 /* You can add global styles to this file, and also import other style files */
 :root {
@@ -20,7 +20,7 @@
 * {
     margin: 0;
     padding: 0;
-    box-sizing: unset;
+    box-sizing: unset !important;
 }
 
 body, app-root {

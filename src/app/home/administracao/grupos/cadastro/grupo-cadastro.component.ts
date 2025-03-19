@@ -8,7 +8,6 @@ import { SeletorIconeComponent } from "../../../../utils/components/seletor-icon
 
 @Component({
     selector: "spo-grupo-cadastro",
-    standalone: true,
     templateUrl: "./grupo-cadastro.component.html",
     styleUrl: "./grupo-cadastro.component.scss",
     imports: [CommonModule, ReactiveFormsModule, FontAwesomeModule, SeletorIconeComponent]

@@ -12,7 +12,6 @@ import { InvestimentoTiraDTO } from "../../models/InvestimentoTiraDTO";
     selector: 'spo-tira-investimento',
     templateUrl: './tira-investimento.component.html',
     styleUrl: './tira-investimento.component.scss',
-    standalone: true,
     imports: [CommonModule, FontAwesomeModule, CustomCurrencyPipe, TiraObjetoComponent, NumeroResumidoPipe]
 })
 export class TiraInvestimentoComponent implements AfterViewInit {
