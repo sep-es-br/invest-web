@@ -7,7 +7,7 @@ import { FormControl, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { catchError, concat, finalize, merge, Observable, tap } from "rxjs";
 import { ProgressModalComponent } from "../../../utils/components/progress-modal/progress-modal.component";
 import { InvestimentoFiltroComponent } from "./investimento-filtro/investimento-filtro.component";
-import { IFiltroInvestimento } from "./investimento-filtro/IFiltroInvestimento";
+import { IFiltroInvestimento, IFiltroInvestimentoComPag } from "./investimento-filtro/IFiltroInvestimento";
 import { ContaService } from "../../../utils/services/conta.service";
 import { ErrorHandlerService } from "../../../utils/services/error-handler.service";
 import { IDadoDetalhado } from "../../../utils/interfaces/dado-detalhado.interface";
@@ -40,7 +40,6 @@ export class RelatorioDetalhadoComponent implements AfterViewInit {
 
     qtDados = 0;
     larguraPaginacao = 7;
-    qtPorPagina = 15;
     
     showProgress = false;
 
@@ -50,11 +49,11 @@ export class RelatorioDetalhadoComponent implements AfterViewInit {
     
     filtroCompleto : Partial<IFiltroInvestimento> = {}
 
-    filtro = {
+    filtro : IFiltroInvestimentoComPag = {
+        ...this.filtroCompleto,
         exercicio: new Date().getFullYear(),
-        tipoDespesa: TipoDespesaEnum.INVESTIMENTO,
         pag: 1, 
-        pagSize: 15
+        pagSize: 15,
      };
 
     constructor(
@@ -84,9 +83,9 @@ export class RelatorioDetalhadoComponent implements AfterViewInit {
 
         this.filtro = {
             ...this.filtro,
+            ...filtro,
             exercicio: this.selectAno.value,
-            pag: novaPagina,
-            pagSize: this.filtro.pagSize
+            pag: novaPagina
         }
 
         this.executar(

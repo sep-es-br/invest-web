@@ -15,11 +15,22 @@ export class RelatorioService {
 
     public gerarRelatorio(filtro : Partial<IFiltroInvestimento>) : Observable<any> {
         
-        let params = new HttpParams()
-                        .set("anoDe", filtro.anoDe)
-                        .set("anoAte", filtro.anoAte);
+        let params = new HttpParams();
         
-        return this.http.get<any>(`${this.relatorioApi}/gerarRelatorio`, {
+        if(filtro.unidade)
+            params.set("idsUnidade", JSON.stringify(filtro.unidade.map(u => u.id)))
+        
+        
+        if(filtro.plano) 
+            params.set("idsPlanos", JSON.stringify(filtro.plano.map(p => p.id)))
+        
+        if(filtro.fonte)
+            params.set("idFonte", filtro.fonte.id)
+
+        if(filtro.gnd)
+            params.set("gnd", filtro.gnd);
+        
+        return this.http.get<any>(`${this.relatorioApi}/gerarRelatorio/Investimento/${filtro.anoDe}/${filtro.anoAte}`, {
             params: params, 
             responseType: 'blob' as 'json', 
             observe: 'response'

@@ -7,7 +7,7 @@ import { catchError, Observable } from "rxjs";
 import { InvestimentoTiraDTO } from "../models/InvestimentoTiraDTO";
 import { IDataList } from "../interfaces/dataList.interface";
 import { IDadoDetalhado } from "../interfaces/dado-detalhado.interface";
-import { IFiltroInvestimento } from "../../home/relatorio/detalhado/investimento-filtro/IFiltroInvestimento";
+import { IFiltroInvestimento, IFiltroInvestimentoComPag } from "../../home/relatorio/detalhado/investimento-filtro/IFiltroInvestimento";
 
 @Injectable({providedIn: "root"})
 export class ContaService {
@@ -31,19 +31,29 @@ export class ContaService {
                     );
     }
 
-    public getDadosConsolidados(filtro : any) : Observable<IDataList<IDadoDetalhado>> {
+    public getDadosConsolidados(filtro : IFiltroInvestimentoComPag) : Observable<IDataList<IDadoDetalhado>> {
 
-        let params : HttpParams = new HttpParams();
+        let params : HttpParams = new HttpParams()
+                        .set("pag", filtro.pag)
+                        .set("pagSize", filtro.pagSize);
 
-        if(filtro.exercicio) {
+        if(filtro.exercicio) 
             params = params.set("exercicio", filtro.exercicio);
-        }
+        
+        if(filtro.unidade && filtro.unidade.length > 0)
+            params = params.set("idsUnidade", JSON.stringify(filtro.unidade.map(u => u.id)) );
 
-        params = params
-            .set("pag", filtro.pag)
-            .set("pagSize", filtro.pagSize);
+        if(filtro.plano && filtro.plano.length > 0)
+            params = params.set("idsPlanos", JSON.stringify(filtro.plano.map(p => p.id)));
 
-        return this.http.get<IDataList<IDadoDetalhado>>(`${this.contaApi}/dadosDetalhados`, {params: params})
+        if(filtro.fonte)
+            params = params.set("idFonte", filtro.fonte.id);
+
+        if(filtro.gnd)
+            params = params.set("gnd", filtro.gnd);
+
+
+        return this.http.get<IDataList<IDadoDetalhado>>(`${this.contaApi}/Investimento/dadosDetalhados/${filtro.exercicio}`, {params: params})
     }
 
     

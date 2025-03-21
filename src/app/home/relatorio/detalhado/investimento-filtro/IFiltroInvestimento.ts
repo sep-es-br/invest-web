@@ -11,3 +11,9 @@ export interface IFiltroInvestimento {
     gnd : number,
     podeVerUnidades : boolean
 }
+
+export interface IFiltroInvestimentoComPag extends Partial<IFiltroInvestimento> {
+    exercicio: number,
+    pag: number, 
+    pagSize: number,
+}
