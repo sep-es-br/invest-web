@@ -43,8 +43,6 @@ export class GrupoPermissoesComponent implements OnInit {
 
             if(!grupo) return
 
-            this.verTodasUnidadesFormControl.setValue(grupo.podeVerTodasUnidades);
-
             concat(
                 this.moduloService.findAll().pipe(tap( moduloList => {
                     this.modulos = moduloList;
@@ -83,7 +81,6 @@ export class GrupoPermissoesComponent implements OnInit {
 
 
         this.grupo.permissoes = permissoes;
-        this.grupo.podeVerTodasUnidades = this.verTodasUnidadesFormControl.value
 
 
         this.grupoService.save(this.grupo).subscribe(grupo => {

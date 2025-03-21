@@ -8,5 +8,5 @@ export interface ICadastroMembroForm {
     grupo? : GrupoDTO;
     orgao : IOrgaoDTO,
     setor : ISetorDTO,
-    papeis : IPapelDTO[]
+    papel : IPapelDTO;
 }
