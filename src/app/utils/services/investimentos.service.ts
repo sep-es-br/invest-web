@@ -18,12 +18,6 @@ export class InvestimentosService {
         private router : Router){
     }
 
-    // public getListaInvestimentos( filtro : InvestimentoFiltro ) : Observable<InvestimentoDTO[]> {
-        
-    //     return this.http.get<InvestimentoDTO[]>(`${this.investimentoUrl}/all`, {params: this.filterToParams(filtro)}).pipe(
-    //             catchError(err => this.errorHandlerService.handleError(err))
-    //         );
-    // }
 
     public getListaTiraInvestimentos( filtro : InvestimentoFiltro ) : Observable<IDataList<InvestimentoTiraDTO>> {
         
@@ -31,13 +25,6 @@ export class InvestimentosService {
                 catchError(err => this.errorHandlerService.handleError(err))
             );
     }
-
-    public getQuantidadeItens( filtro : InvestimentoFiltro) : Observable<number> {
-        return this.http.get<number>(`${this.investimentoUrl}/countValores`, {params: this.filterToParams(filtro)}).pipe(
-            catchError(err => this.errorHandlerService.handleError(err))
-        );
-    }
-
     
     public filterToParams(filtro : InvestimentoFiltro) : HttpParams {
         let params : HttpParams = new HttpParams();

@@ -11,7 +11,6 @@ import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { IPodeDTO } from "../../../../utils/models/PodeDto";
 import { concat, Observable } from "rxjs";
 import { PermissaoService } from "../../../../utils/services/permissao.service";
-import { ToastService } from "../../../../utils/services/toast.service";
 import { ToastrService } from "ngx-toastr";
 
 @Component({

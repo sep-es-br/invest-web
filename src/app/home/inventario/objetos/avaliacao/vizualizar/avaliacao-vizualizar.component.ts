@@ -471,8 +471,8 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
             this.localidadeService.findAll().pipe(
                 tap(localidadeList => this.setMicrorregioes(localidadeList))
             ),
-            this.tipoPlanoService.findAll().pipe(
-                tap(tipoPlanoList => this.setTiposPlano(tipoPlanoList))
+            this.tipoPlanoService.findBy().pipe(
+                tap(tipoPlanoList => this.setTiposPlano(tipoPlanoList as ITipoPlano[]))
             ),
             this.areaTematicaService.findAllAreaTematica().pipe(
                 tap(areasTematicas => this.setAreasTematicas(areasTematicas))
