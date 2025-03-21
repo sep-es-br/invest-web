@@ -110,14 +110,9 @@ export class RelatorioDetalhadoComponent implements AfterViewInit {
     }
 
     gerarRelatorio() {
-        this.relatorioService.gerarRelatorio(this.filtroCompleto).pipe(
-            tap(
-                value => {
-                    console.log(value);
-                }
-            ),
+        this.executar(this.relatorioService.gerarRelatorio(this.filtroCompleto).pipe(
             catchError(err => this.errorHandler.handleError(err))
-        ).subscribe();
+        ));
     }
     
     recarregarLista(novaPagina : number) {

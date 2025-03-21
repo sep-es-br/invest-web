@@ -18,17 +18,17 @@ export class RelatorioService {
         let params = new HttpParams();
         
         if(filtro.unidade)
-            params.set("idsUnidade", JSON.stringify(filtro.unidade.map(u => u.id)))
+            params = params.set("idsUnidade", JSON.stringify(filtro.unidade.map(u => u.id)))
         
         
         if(filtro.plano) 
-            params.set("idsPlanos", JSON.stringify(filtro.plano.map(p => p.id)))
+            params = params.set("idsPlanos", JSON.stringify(filtro.plano.map(p => p.id)))
         
         if(filtro.fonte)
-            params.set("idFonte", filtro.fonte.id)
+            params = params.set("idFonte", filtro.fonte.id)
 
         if(filtro.gnd)
-            params.set("gnd", filtro.gnd);
+            params = params.set("gnd", filtro.gnd);
         
         return this.http.get<any>(`${this.relatorioApi}/gerarRelatorio/Investimento/${filtro.anoDe}/${filtro.anoAte}`, {
             params: params, 
