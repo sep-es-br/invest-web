@@ -13,7 +13,6 @@ import { IPapelDTO } from "../../../../utils/models/PapelDto";
 
 @Component({
     selector: 'spo-meuperfil-perfil-editar',
-    standalone: true,
     templateUrl: './editar-perfil.component.html',
     styleUrl: './editar-perfil.component.scss',
     imports: [CommonModule, ReactiveFormsModule, FontAwesomeModule, RouterModule]

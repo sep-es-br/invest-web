@@ -18,10 +18,9 @@ import { IMembroGrupo } from "../../../../../utils/interfaces/membro-grupo.inter
 
 @Component({
     selector: "spo-grupo-resumo",
-    standalone: true,
     templateUrl: "./grupo-membros.component.html",
     styleUrl: "./grupo-membros.component.scss",
-    imports: [CommonModule,ReactiveFormsModule, FontAwesomeModule, GrupoMembroCadastroComponent]
+    imports: [CommonModule, ReactiveFormsModule, FontAwesomeModule, GrupoMembroCadastroComponent]
 })
 export class GrupoMembrosComponent implements AfterViewInit {
 

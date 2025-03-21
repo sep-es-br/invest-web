@@ -23,13 +23,12 @@ import { ProgressModalComponent } from "../../../utils/components/progress-modal
     selector: 'spo-investimentos',
     templateUrl: './investimentos.component.html',
     styleUrl: './investimentos.component.scss',
-    standalone: true,
     imports: [
-    CommonModule, TiraInvestimentoComponent, ProgressSpinnerModule,
-    ReactiveFormsModule, InvestimentoFiltroComponent,
-    FontAwesomeModule, ValorCardComponent, BarraPaginacaoComponent,
-    ProgressModalComponent
-]
+        CommonModule, TiraInvestimentoComponent, ProgressSpinnerModule,
+        ReactiveFormsModule, InvestimentoFiltroComponent,
+        FontAwesomeModule, ValorCardComponent, BarraPaginacaoComponent,
+        ProgressModalComponent
+    ]
 })
 export class InvestimentosComponent implements AfterViewInit {
 

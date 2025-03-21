@@ -17,7 +17,6 @@ import { merge, tap } from "rxjs";
 
 @Component({
     selector: "spo-grupo-membro-cadastro",
-    standalone: true,
     templateUrl: "./grupo-membro-cadastro.component.html",
     styleUrl: "./grupo-membro-cadastro.component.scss",
     imports: [

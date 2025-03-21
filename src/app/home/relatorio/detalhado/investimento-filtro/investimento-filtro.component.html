@@ -1,0 +1,76 @@
+<select [disabled]="true">
+    <option [defaultSelected]="true" [value]="TipoDespesa.INVESTIMENTO">{{TipoDespesa.INVESTIMENTO}}</option>
+</select>
+
+<ng-select [items]="unidades"
+            [multiple]="true"
+            placeholder="Unidade Orçamentária"
+            [(ngModel)]="filtro.unidade"
+            [ngModelOptions]="{standalone: true}"
+            [disabled]="unidades?.length <= 1"
+            [searchFn]="searchUnidade"
+            [clearable]="true"
+            (ngModelChange)="update()"
+        >
+    <ng-template ng-label-tmp let-item="item" let-index="index">
+        {{item.codigo}}
+        <button (click)="filtro.unidade = removerSelecao(filtro.unidade, item); this.update()">
+            <fa-icon class="removerItem" [icon]="removerIcon" [attr.aria-label]="'remover unidade ' + item.codigo"></fa-icon>
+        </button>
+    </ng-template>
+    <ng-template ng-option-tmp let-item="item">
+        {{item.codigo}} - {{item.sigla}}
+    </ng-template>
+</ng-select>
+
+<ng-select [items]="planos"
+            [multiple]="true"
+            placeholder="Plano Orçamentário"
+            [(ngModel)]="filtro.plano"
+            [searchFn]="searchPlano"
+            [ngModelOptions]="{standalone: true}"
+            (ngModelChange)="update()"
+        >
+    <ng-template ng-label-tmp let-item="item">
+        {{item.codigo}}
+        <button (click)="filtro.plano = removerSelecao(filtro.plano, item); this.update()">
+            <fa-icon class="removerItem" [icon]="removerIcon" [attr.aria-label]="'remover p..o ' + item.codigo"></fa-icon>
+        </button>
+    </ng-template>
+    <ng-template ng-option-tmp let-item="item">
+        {{item.codigo}} - {{item.nome}}
+    </ng-template>
+</ng-select>
+
+<ng-select [items]="fontes"
+            placeholder="Fonte Orçamentária"
+            [(ngModel)]="filtro.fonte"
+            [ngModelOptions]="{standalone: true}"
+            (ngModelChange)="update()"
+        >
+    <ng-template ng-label-tmp let-item="item">
+        {{item.codigo}} - {{item.nome}}
+    </ng-template>
+    <ng-template ng-option-tmp let-item="item">
+        {{item.codigo}} - {{item.nome}}
+    </ng-template>
+</ng-select>
+
+<ng-select [items]="[4, 5]"
+   class="menor"
+    placeholder="GND"
+    [(ngModel)]="filtro.gnd"
+    [ngModelOptions]="{standalone: true}"
+    [clearable]="true"
+    (ngModelChange)="update()"
+    >    
+</ng-select>
+<p-datePicker 
+    [(ngModel)]="dataRange" 
+    (ngModelChange)="update()"
+    selectionMode="range" 
+    [minDate]="minDate"
+    [maxDate]="maxDate"
+    dateFormat="yy"
+    view="year" />
+

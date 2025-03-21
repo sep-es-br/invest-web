@@ -17,7 +17,6 @@ import { IPapelDTO } from "../../utils/models/PapelDto";
     selector: 'spo-meu-perfil',
     templateUrl: './meu-perfil.component.html',
     styleUrl: './meu-perfil.component.scss',
-    standalone: true,
     imports: [CommonModule, ReactiveFormsModule, RouterModule, FontAwesomeModule]
 })
 export class MeuPerfilComponent implements AfterViewInit{

@@ -8,7 +8,6 @@ import { DataUtilService } from "../../utils/services/data-util.service";
     selector: 'spo-breadcrumb',
     templateUrl: './breadcrumb.component.html',
     styleUrl: 'breadcrumb.component.scss',
-    standalone: true,
     imports: [CommonModule, RouterModule, RouterLink]
 })
 export class BreadCrumbComponent {
@@ -48,7 +47,7 @@ export class BreadCrumbComponent {
             return {
                 pathName: this.breadCrumNames[path.url[0].path] ? 
                             this.breadCrumNames[path.url[0].path] : 
-                            path.routeConfig.path.startsWith(":") ? this.dataUtil.titleInfo[path.routeConfig.path.slice(1)]  : "",
+                            path.routeConfig.path.startsWith(":") ? this.dataUtil.titleInfo[path.routeConfig.path.slice(1)]  : path.routeConfig.path,
                 pathLink: () => {
                     let pathLinks = path.pathFromRoot.map(p => p.url)
                     pathLinks.shift();

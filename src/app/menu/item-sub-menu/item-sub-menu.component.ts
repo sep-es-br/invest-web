@@ -7,7 +7,6 @@ import { IItemMenu } from "../../utils/IItemMenu";
 
 @Component({
     selector: "spo-item-sub-menu",
-    standalone: true,
     templateUrl: "./item-sub-menu.component.html",
     styleUrl: "./item-sub-menu.component.scss",
     imports: [CommonModule, FontAwesomeModule]

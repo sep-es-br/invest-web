@@ -15,10 +15,11 @@ import { ToastService } from "../../../../utils/services/toast.service";
 import { ToastrService } from "ngx-toastr";
 
 @Component({
-    standalone: true,
     templateUrl: "./grupo-lista.component.html",
     styleUrl: "./grupo-lista.component.scss",
-    imports: [CommonModule, FontAwesomeModule, ReactiveFormsModule, GrupoCadastroComponent, RouterLink]
+    imports: [
+        CommonModule, FontAwesomeModule, ReactiveFormsModule, GrupoCadastroComponent
+    ]
 })
 export class GrupoListaComponent implements AfterViewInit{
     readonly searchIcon = faMagnifyingGlass;

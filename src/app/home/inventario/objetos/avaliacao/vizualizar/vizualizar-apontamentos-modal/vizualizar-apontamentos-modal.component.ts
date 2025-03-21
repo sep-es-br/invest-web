@@ -6,7 +6,6 @@ import { apontamentoPadrao, IApontamento } from "../../../../../../utils/interfa
 
 @Component({
     selector: "spo-vizualizar-apontamento",
-    standalone: true,
     templateUrl: "./vizualizar-apontamentos-modal.component.html",
     styleUrl: "./vizualizar-apontamentos-modal.component.scss",
     imports: [CommonModule, FontAwesomeModule]

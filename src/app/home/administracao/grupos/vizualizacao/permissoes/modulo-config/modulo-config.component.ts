@@ -9,7 +9,6 @@ import { concat, merge, pipe, tap } from "rxjs";
 
 @Component({
     selector: "spo-modulo-config",
-    standalone: true,
     templateUrl: "./modulo-config.component.html",
     styleUrl: "./modulo-config.component.scss",
     imports: [CommonModule, ReactiveFormsModule]

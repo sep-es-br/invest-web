@@ -19,11 +19,10 @@ import { faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
 
 @Component({
     selector: "spo-objetos-filtro",
-    standalone: true,
     templateUrl: "./objetos-filtro.component.html",
     styleUrl: "./objetos-filtro.component.scss",
     imports: [
-        CommonModule, DropdownFiltroComponent, NgSelectModule, FormsModule,
+        CommonModule, NgSelectModule, FormsModule,
         FontAwesomeModule
     ]
 })
