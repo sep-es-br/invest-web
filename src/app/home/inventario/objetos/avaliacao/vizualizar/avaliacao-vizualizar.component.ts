@@ -1,7 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { AfterViewInit, Component, QueryList, ViewChildren } from "@angular/core";
 import { IObjeto } from "../../../../../utils/interfaces/IObjeto";
-import { ActivatedRoute, Router, RouterModule } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { concat, finalize, merge, tap } from "rxjs";
 import { ToastrService } from "ngx-toastr";
 import { ObjetosService } from "../../../../../utils/services/objetos.service";
@@ -11,10 +11,7 @@ import { IEtapa } from "../../../../../utils/interfaces/etapa.interface";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faChevronRight, faFileContract, faHandPointDown, faPlusCircle, faThumbsDown, faThumbsUp, faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
 import { FluxosService } from "../../../../../utils/services/fluxos.service";
-import { MultSelectDropDownComponent } from "../../../../../utils/components/multSelectDropDown/multSelect-dropdown.component";
-import MultiSelectDropdownItemComponent from "../../../../../utils/components/multSelectDropDown/multSelect-dropdown-item/multSelect-dropdown-item.component";
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
-import { OpcaoItemComponent } from "../../../../../utils/components/dropdown-com-filtro/opcao-item.component";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { IAreaTematica } from "../../../../../utils/interfaces/IAreaTematica";
 import { ITipoPlano } from "../../../../../utils/interfaces/ITipoPlano";
 import { LocalidadeDTO } from "../../../../../utils/models/LocalidadeDTO";
@@ -26,32 +23,30 @@ import { AreaTematicaService } from "../../../../../utils/services/areaTematica.
 import { LocalidadeService } from "../../../../../utils/services/localidade.service";
 import { PlanoOrcamentarioService } from "../../../../../utils/services/planoOrcamentario.service";
 import { TipoPlanoService } from "../../../../../utils/services/tipoPlano.service";
-import { DropdownFiltroComponent } from "../../../../../utils/components/dropdown-com-filtro/dropdown-com-filtro.component";
 import { AvaliacaoExercicioComponent } from "./avaliacao-exercicio/avaliacao-exercicio.component";
 import { ProfileService } from "../../../../../utils/services/profile.service";
 import { GrupoService } from "../../../../../utils/services/grupo.service";
 import { IAcao } from "../../../../../utils/interfaces/acao.interface";
 import { IExecutarAcao } from "../../../../../utils/interfaces/executar-acao.interface";
 import { AcaoService } from "../../../../../utils/services/acao.service";
-import { NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
+import { NgSelectComponent } from '@ng-select/ng-select';
 import { ISelectOpcao } from "../../../../../utils/interfaces/selectOption.interface";
 import { ApontamentoModalComponent } from "./apontamento-modal/apontamento-modal.component";
-import { apontamentoPadrao, IApontamento } from "../../../../../utils/interfaces/apontamento.interface";
+import { IApontamento } from "../../../../../utils/interfaces/apontamento.interface";
 import { VizualizarApontamentoModalComponent } from "./vizualizar-apontamentos-modal/vizualizar-apontamentos-modal.component";
-import { AcaoEvent, ParecerModalComponent } from "./parecer-modal/parecer-modal.component";
+import { AcaoEvent } from "./parecer-modal/parecer-modal.component";
 import { IParecer, parecerPadrao } from "../../../../../utils/interfaces/parecer.interface";
 import { EtapaEnum } from "../../../../../utils/enum/etapa.enum";
-import { VisualizarParecerComponent } from "./visualizar-parecer/visualizar-parecer.component";
 import { PermissaoService } from "../../../../../utils/services/permissao.service";
 
 @Component({
-    standalone: true,
     templateUrl: "./avaliacao-vizualizar.component.html",
     styleUrl: "./avaliacao-vizualizar.component.scss",
-    imports: [CommonModule, FontAwesomeModule, AvaliacaoExercicioComponent,
-    MultSelectDropDownComponent, MultiSelectDropdownItemComponent, NgSelectComponent,
-    ReactiveFormsModule, FormsModule, OpcaoItemComponent, DropdownFiltroComponent,
-    NgLabelTemplateDirective, NgOptionTemplateDirective, ApontamentoModalComponent, VizualizarApontamentoModalComponent, ParecerModalComponent, VisualizarParecerComponent]
+    imports: [
+        CommonModule, FontAwesomeModule, AvaliacaoExercicioComponent,
+        NgSelectComponent, ReactiveFormsModule, FormsModule,
+        ApontamentoModalComponent, VizualizarApontamentoModalComponent
+    ]
 })
 export class AvaliacaoVizualizarComponent implements AfterViewInit {
 

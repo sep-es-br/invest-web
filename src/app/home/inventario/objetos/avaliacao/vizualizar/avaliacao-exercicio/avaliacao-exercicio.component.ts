@@ -9,7 +9,6 @@ import { AvaliacaoExercicioFonteComponent } from "./avaliacao-exercicio-fonte/av
 
 @Component({
     selector: "spo-avaliacao-exercicio",
-    standalone: true,
     templateUrl: "./avaliacao-exercicio.component.html",
     styleUrl: "./avaliacao-exercicio.component.scss",
     imports: [

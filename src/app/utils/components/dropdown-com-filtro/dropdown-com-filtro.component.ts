@@ -8,7 +8,6 @@ import { OpcaoItemComponent } from "./opcao-item.component";
 
 @Component({
     selector: "dropdown-com-filtro",
-    standalone: true,
     templateUrl: "./dropdown-com-filtro.component.html",
     styleUrl: "./dropdown-com-filtro.component.scss",
     imports: [CommonModule, ReactiveFormsModule, FontAwesomeModule],

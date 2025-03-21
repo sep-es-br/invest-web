@@ -19,7 +19,6 @@ import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
     selector: 'spo-objeto-filtro',
     templateUrl: './objetos-filtro.component.html',
     styleUrl: './objetos-filtro.component.scss',
-    standalone: true,
     imports: [
         CommonModule, ReactiveFormsModule, FormsModule, NgSelectModule, FontAwesomeModule
     ]

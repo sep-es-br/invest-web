@@ -21,7 +21,6 @@ import { IObjetoFiltro } from "../utils/interfaces/objetoFiltro.interface";
     selector: 'spo-header',
     templateUrl: 'header.component.html',
     styleUrl: 'header.component.scss',
-    standalone: true,
     imports: [CommonModule, BreadCrumbComponent]
 })
 export class HeaderComponent implements OnInit {

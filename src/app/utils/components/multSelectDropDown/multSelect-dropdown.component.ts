@@ -9,7 +9,6 @@ import { tap } from "rxjs";
 
 @Component({
     selector: "spo-multSelect-dropdown",
-    standalone: true,
     templateUrl: "./multSelect-dropdown.component.html",
     styleUrl: "./multSelect-dropdown.component.scss",
     imports: [CommonModule, FontAwesomeModule],

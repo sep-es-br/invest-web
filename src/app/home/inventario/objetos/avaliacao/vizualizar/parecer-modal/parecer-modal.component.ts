@@ -8,7 +8,6 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
 @Component({
     selector: 'spo-fazer-parecer-modal',
-    standalone: true,
     templateUrl: "./parecer-modal.component.html",
     styleUrl: "./parecer-modal.component.scss",
     imports: [

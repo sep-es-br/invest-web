@@ -6,7 +6,6 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
 @Component({
     selector: "spo-visualizar-parecer",
-    standalone: true,
     templateUrl: "./visualizar-parecer.component.html",
     styleUrl: "./visualizar-parecer.component.scss",
     imports: [

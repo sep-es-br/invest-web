@@ -1,6 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, Input, OnChanges, SimpleChanges } from "@angular/core";
-import { ShortStringPipe } from "../../pipes/shortString.pipe";
+import { Component, Input } from "@angular/core";
 import { CustomCurrencyPipe } from "../../pipes/customCurrency.pipe";
 import { NumeroResumidoPipe } from "../../pipes/numero-resumido.pipe";
 import { ObjetoTiraDTO } from "../../models/ObjetoTiraDTO";
@@ -9,8 +8,7 @@ import { ObjetoTiraDTO } from "../../models/ObjetoTiraDTO";
     selector: 'spo-tira-objeto',
     templateUrl: './tira-objeto.component.html',
     styleUrl: './tira-objeto.component.scss',
-    standalone: true,
-    imports: [CommonModule, ShortStringPipe, CustomCurrencyPipe, NumeroResumidoPipe]
+    imports: [CommonModule, CustomCurrencyPipe, NumeroResumidoPipe]
 })
 export class TiraObjetoComponent{
     

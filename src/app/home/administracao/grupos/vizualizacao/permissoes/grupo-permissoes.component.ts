@@ -14,7 +14,6 @@ import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { ToastrService } from "ngx-toastr";
 
 @Component({
-    standalone: true,
     templateUrl: "./grupo-permissoes.component.html",
     styleUrl: "./grupo-permissoes.component.scss",
     imports: [CommonModule, ModuloConfigComponent, FontAwesomeModule, ReactiveFormsModule]

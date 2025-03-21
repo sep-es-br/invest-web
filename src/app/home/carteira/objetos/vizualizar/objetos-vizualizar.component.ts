@@ -16,11 +16,10 @@ import { PermissaoService } from "../../../../utils/services/permissao.service";
 import { IPodeDTO } from "../../../../utils/models/PodeDto";
 
 @Component({
-    standalone: true,
     templateUrl: "./objetos-vizualizar.component.html",
     styleUrl: "./objetos-vizualizar.component.scss",
     imports: [
-        CommonModule, CustomCurrencyPipe, NumeroResumidoPipe, 
+        CommonModule, CustomCurrencyPipe, NumeroResumidoPipe,
         FontAwesomeModule
     ]
 })

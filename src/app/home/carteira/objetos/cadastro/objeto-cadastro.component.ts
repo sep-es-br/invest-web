@@ -26,13 +26,12 @@ import { NgSelectComponent } from "@ng-select/ng-select";
 import { PermissaoService } from "../../../../utils/services/permissao.service";
 
 @Component({
-    standalone: true,
     templateUrl: "./objeto-cadastro.component.html",
     styleUrl: "./objeto-cadastro.component.scss",
     imports: [
-    CommonModule, ReactiveFormsModule,
-    CadastroExercicioComponent, FontAwesomeModule, FormsModule, NgSelectComponent
-]
+        CommonModule, ReactiveFormsModule,
+        CadastroExercicioComponent, FontAwesomeModule, FormsModule, NgSelectComponent
+    ]
 })
 export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
 

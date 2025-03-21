@@ -1,4 +1,4 @@
-
+@use "../../../../../utils/styles/ngSelectPadrao.scss"; 
 
 :host {
 
@@ -109,8 +109,7 @@
         main {
             padding-top: 1rem;
 
-            form {
-                @import "../../../../../utils/styles/ngSelectPadrao.scss";       
+            form {      
 
                 margin-bottom: 1.5rem;
                 display: grid;

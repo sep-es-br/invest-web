@@ -15,11 +15,11 @@ import { NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent 
 
 @Component({
     selector: "spo-cadastro-exercicio-fonte",
-    standalone: true, 
     templateUrl: "./cadastro-exercicio-fonte.component.html",
     styleUrl: "./cadastro-exercicio-fonte.component.scss",
-    imports: [CommonModule, FormsModule, NgxMaskDirective, FontAwesomeModule, DropdownFiltroComponent, OpcaoItemComponent,
-        NgSelectComponent, NgOptionTemplateDirective, NgLabelTemplateDirective
+    imports: [
+        CommonModule, FormsModule, NgxMaskDirective, FontAwesomeModule,
+        NgSelectComponent
     ],
     providers: [provideNgxMask()]
 })
