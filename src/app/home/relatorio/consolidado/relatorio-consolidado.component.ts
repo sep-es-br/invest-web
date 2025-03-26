@@ -7,26 +7,27 @@ import { FormControl, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { catchError, concat, finalize, merge, Observable, tap } from "rxjs";
 import { ProgressModalComponent } from "../../../utils/components/progress-modal/progress-modal.component";
 import { InvestimentoFiltroComponent } from "./investimento-filtro/investimento-filtro.component";
-import { IFiltroInvestimento, IFiltroInvestimentoComPag } from "./investimento-filtro/IFiltroInvestimento";
+import { IDadoConsolidadoFiltro, IDadoConsolidadoFiltroComPag } from "./investimento-filtro/dado-consolidado-filtro.interface";
 import { ContaService } from "../../../utils/services/conta.service";
 import { ErrorHandlerService } from "../../../utils/services/error-handler.service";
 import { IDadoDetalhado } from "../../../utils/interfaces/dado-detalhado.interface";
-import { TiraDadoDetalhadoComponent } from "./tira-rel-detalhado/tira-dado-detalhado.component";
+import { TiraDadoConsolidadoComponent } from "./tira-rel-consolidado/tira-dado-consolidado.component";
 import { NgSelectModule } from "@ng-select/ng-select";
 import { PlanoOrcamentarioDTO } from "../../../utils/models/PlanoOrcamentarioDTO";
 import { TipoDespesaEnum } from "../../../utils/enum/tipoDespesa.enum";
 import { RelatorioService } from "../../../utils/services/relatorio.service";
+import { IDadoConsolidado } from "../../../utils/interfaces/dado-consolidado.interface";
 
 @Component({
-    templateUrl: "./relatorio-detalhado.component.html",
-    styleUrl: "./relatorio-detalhado.component.scss",
+    templateUrl: "./relatorio-consolidado.component.html",
+    styleUrl: "./relatorio-consolidado.component.scss",
     imports: [
         CommonModule, BarraPaginacaoComponent, FontAwesomeModule,
         ReactiveFormsModule, ProgressModalComponent, InvestimentoFiltroComponent,
-        TiraDadoDetalhadoComponent, FontAwesomeModule, NgSelectModule
+        TiraDadoConsolidadoComponent, FontAwesomeModule, NgSelectModule
     ]
 })
-export class RelatorioDetalhadoComponent implements AfterViewInit {
+export class RelatorioConsolidadoComponent {
 
     
     @ViewChild(BarraPaginacaoComponent) barraPaginacaoComponent : BarraPaginacaoComponent;
@@ -36,22 +37,19 @@ export class RelatorioDetalhadoComponent implements AfterViewInit {
 
     txtBusca = new FormControl(undefined);
 
-    selectAno = new FormControl(new Date().getFullYear());
-
     qtDados = 0;
     larguraPaginacao = 7;
     
     showProgress = false;
 
-    data : IDadoDetalhado[] = [];
+    data : IDadoConsolidado[] = [];
 
     datas : number[] = [];
     
-    filtroCompleto : Partial<IFiltroInvestimento> = {}
+    filtroCompleto : Partial<IDadoConsolidadoFiltro> = {}
 
-    filtro : IFiltroInvestimentoComPag = {
+    filtro : IDadoConsolidadoFiltroComPag = {
         ...this.filtroCompleto,
-        exercicio: new Date().getFullYear(),
         pag: 1, 
         pagSize: 15,
      };
@@ -62,12 +60,6 @@ export class RelatorioDetalhadoComponent implements AfterViewInit {
         private relatorioService : RelatorioService
     ){}
 
-    ngAfterViewInit(): void {
-        this.selectAno.valueChanges.subscribe(value => {
-            this.mudarAno(value);
-        })
-    }
-
     executar(acao : Observable<any>) {
         this.showProgress = true;
 
@@ -77,14 +69,13 @@ export class RelatorioDetalhadoComponent implements AfterViewInit {
         ).subscribe()
     }
 
-    atualizarFiltro(filtro : Partial<IFiltroInvestimento>, novaPagina : number) {
+    atualizarFiltro(filtro : Partial<IDadoConsolidadoFiltro>, novaPagina : number) {
         
         this.filtroCompleto = filtro;
 
         this.filtro = {
             ...this.filtro,
             ...filtro,
-            exercicio: this.selectAno.value,
             pag: novaPagina
         }
 
@@ -96,7 +87,6 @@ export class RelatorioDetalhadoComponent implements AfterViewInit {
                         for(let i = filtro.anoDe; i <= filtro.anoAte; i++)
                             this.datas.push(i);
 
-                        this.selectAno.setValue(filtro.anoDe);
                     }
                 ))
             )
@@ -104,13 +94,9 @@ export class RelatorioDetalhadoComponent implements AfterViewInit {
         
     }
 
-    mudarAno(novoAno : number) {
-        this.filtro.exercicio = novoAno;
-        this.executar(this.recarregarLista(1));
-    }
 
     gerarRelatorio() {
-        this.executar(this.relatorioService.gerarRelatorio(this.filtroCompleto).pipe(
+        this.executar(this.relatorioService.gerarRelatorioConsolidado(this.filtroCompleto).pipe(
             catchError(err => this.errorHandler.handleError(err))
         ));
     }
@@ -120,7 +106,7 @@ export class RelatorioDetalhadoComponent implements AfterViewInit {
         this.filtro.pag = novaPagina;
 
          return merge(
-            this.contaService.getDadosDetalhados(this.filtro)
+            this.contaService.getDadosConsolidados(this.filtro)
             .pipe(tap(dados => {
                 this.data = dados.data;
                 this.qtDados = dados.ammount;
