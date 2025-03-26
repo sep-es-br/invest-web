@@ -17,15 +17,17 @@ import { PlanoOrcamentarioDTO } from "../../../utils/models/PlanoOrcamentarioDTO
 import { TipoDespesaEnum } from "../../../utils/enum/tipoDespesa.enum";
 import { RelatorioService } from "../../../utils/services/relatorio.service";
 import { IDadoConsolidado } from "../../../utils/interfaces/dado-consolidado.interface";
+import { ValorCardComponent } from "../../../utils/components/valor-card/valor-card.component";
 
 @Component({
     templateUrl: "./relatorio-consolidado.component.html",
     styleUrl: "./relatorio-consolidado.component.scss",
     imports: [
-        CommonModule, BarraPaginacaoComponent, FontAwesomeModule,
-        ReactiveFormsModule, ProgressModalComponent, InvestimentoFiltroComponent,
-        TiraDadoConsolidadoComponent, FontAwesomeModule, NgSelectModule
-    ]
+    CommonModule, BarraPaginacaoComponent, FontAwesomeModule,
+    ReactiveFormsModule, ProgressModalComponent, InvestimentoFiltroComponent,
+    TiraDadoConsolidadoComponent, FontAwesomeModule, NgSelectModule,
+    ValorCardComponent
+]
 })
 export class RelatorioConsolidadoComponent {
 
@@ -52,7 +54,12 @@ export class RelatorioConsolidadoComponent {
         ...this.filtroCompleto,
         pag: 1, 
         pagSize: 15,
-     };
+    };
+
+    totalPrevisto : number;
+    totalContratado : number;
+    totalAutorizado : number;
+    totalDifAutorizadoContratado : number;     
 
     constructor(
         private contaService : ContaService,
@@ -80,7 +87,14 @@ export class RelatorioConsolidadoComponent {
         }
 
         this.executar(
-            concat(
+            merge(
+                this.relatorioService.getValoresRelatorioConsolidado(filtro)
+                .pipe(tap( valores => {
+                    this.totalPrevisto = valores.previsto;
+                    this.totalContratado = valores.contratado;
+                    this.totalAutorizado = valores.autorizado;
+                    this.totalDifAutorizadoContratado = valores.difAutorizadoContratado;
+                } )),
                 this.recarregarLista(novaPagina).pipe(finalize(
                     () => {
                         this.datas = [];

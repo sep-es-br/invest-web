@@ -4,6 +4,7 @@ import { IFiltroInvestimento } from "../../home/relatorio/detalhado/investimento
 import { Observable, tap } from "rxjs";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { IDadoConsolidadoFiltro } from "../../home/relatorio/consolidado/investimento-filtro/dado-consolidado-filtro.interface";
+import { IDadoConsolidado } from "../interfaces/dado-consolidado.interface";
 
 @Injectable({providedIn: "root"})
 export class RelatorioService {
@@ -103,6 +104,25 @@ export class RelatorioService {
             a.click();
             URL.revokeObjectURL(objectUrl);
         }));
+
+    }
+
+    public getValoresRelatorioConsolidado(filtro : Partial<IDadoConsolidadoFiltro>) : Observable<IDadoConsolidado> {
+        
+        let params = new HttpParams();
+        
+        if(filtro.unidade)
+            params = params.set("idsUnidade", JSON.stringify(filtro.unidade.map(u => u.id)))
+                
+        if(filtro.fonte)
+            params = params.set("idFonte", filtro.fonte.id)
+
+        if(filtro.gnd)
+            params = params.set("gnd", filtro.gnd);
+        
+        return this.http.get<IDadoConsolidado>(`${this.relatorioApi}/valoresTotalizadosConsolidado/Investimento/${filtro.anoDe}/${filtro.anoAte}`, {
+            params: params
+        });
 
     }
 

@@ -1,5 +1,27 @@
 <spo-progress-modal [visivel]="showProgress"></spo-progress-modal>
 <spo-investimento-filtro (filterChange)="atualizarFiltro($event, 1)" ></spo-investimento-filtro>
+<div class="valoresCard">
+    <spo-valor-card 
+        titulo="Previsto" 
+        nomeIcone="paid" 
+        [valor]="totalPrevisto"
+    ></spo-valor-card>
+    <spo-valor-card 
+        titulo="Contratado" 
+        nomeIcone="paid" 
+        [valor]="totalContratado"
+    ></spo-valor-card>
+    <spo-valor-card 
+        titulo="Autorizado" 
+        nomeIcone="paid" 
+        [valor]="totalAutorizado"
+    ></spo-valor-card>
+    <spo-valor-card 
+        titulo="Autorizado - Contratado" 
+        nomeIcone="paid" 
+        [valor]="totalDifAutorizadoContratado"
+    ></spo-valor-card>
+</div>
 <div id="cabecalho">
     <div id="title">
         <p>Relatório ({{qtDados}})</p>

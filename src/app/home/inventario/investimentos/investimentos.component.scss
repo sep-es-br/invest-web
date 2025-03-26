@@ -16,23 +16,6 @@
         padding-bottom: 2rem;
         flex-wrap: wrap;
 
-        > * {
-            display: flex;
-            flex: 1 0 0px;
-            align-items: center;
-            height: 3rem;
-            width: auto;
-            padding: 0.5rem;
-            border-radius: 0.3rem;
-            box-shadow: rgba(170, 170, 170, 0.35) 1px 1px 5px 0px;
-            background-color: white;
-            color: var(--cinza-escuro);
-            font-family: "Open Sans", sans-serif;
-            font-weight: 600;
-            font-size: 0.96rem;
-
-        }
-
         #icone {
             border-radius: 3px;
         }

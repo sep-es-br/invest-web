@@ -96,7 +96,14 @@ export class RelatorioDetalhadoComponent implements AfterViewInit {
                         for(let i = filtro.anoDe; i <= filtro.anoAte; i++)
                             this.datas.push(i);
 
-                        this.selectAno.setValue(filtro.anoDe);
+                        let esseAno = new Date().getFullYear();
+
+                        if(this.datas.includes(esseAno))
+                            this.selectAno.setValue(esseAno);
+                        else if(esseAno > filtro.anoAte)
+                            this.selectAno.setValue(filtro.anoAte);
+                        else 
+                            this.selectAno.setValue(filtro.anoDe);
                     }
                 ))
             )
