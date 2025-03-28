@@ -71,11 +71,7 @@ export class InvestimentoFiltroComponent implements AfterViewInit{
 
                     let hoje = new Date();
 
-                    let anoQVem : Date = new Date(hoje);
-
-                    anoQVem.setFullYear(hoje.getFullYear() + 1);
-
-                    this.dataRange = [hoje, anoQVem];
+                    this.dataRange = [hoje, hoje];
                 })),
                 this.planoService.getAllPlanos()
                 .pipe(tap((planoList) => {
