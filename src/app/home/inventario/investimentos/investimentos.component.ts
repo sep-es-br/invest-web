@@ -11,24 +11,27 @@ import { ValorCardComponent } from "../../../utils/components/valor-card/valor-c
 import { CustoService } from "../../../utils/services/custo.service";
 import { BarraPaginacaoComponent } from "../../../utils/components/barra-paginacao/barra-paginacao.component";
 import { ExecucaoOrcamentariaService } from "../../../utils/services/execucaoOrcamentaria.service";
-import { concat, finalize, merge, Observable, tap } from "rxjs";
+import { combineLatest, concat, finalize, merge, Observable, take, tap } from "rxjs";
 import { InfosService } from "../../../utils/services/infos.service";
 import { IFiltroInvestimento } from "./investimento-filtro/IFiltroInvestimento";
 import { InvestimentoTiraDTO } from "../../../utils/models/InvestimentoTiraDTO";
 import { ContaService } from "../../../utils/services/conta.service";
 import { ProgressSpinnerModule } from "primeng/progressspinner";
 import { ProgressModalComponent } from "../../../utils/components/progress-modal/progress-modal.component";
+import { InvestimentoOrdenacaoComponent } from "./investimento-ordenacao/investimento-ordenacao.component";
+import { IOrdemItem } from "../../../utils/interfaces/ordem-item.interface";
 
 @Component({
     selector: 'spo-investimentos',
     templateUrl: './investimentos.component.html',
     styleUrl: './investimentos.component.scss',
     imports: [
-        CommonModule, TiraInvestimentoComponent, ProgressSpinnerModule,
-        ReactiveFormsModule, InvestimentoFiltroComponent,
-        FontAwesomeModule, ValorCardComponent, BarraPaginacaoComponent,
-        ProgressModalComponent
-    ]
+    CommonModule, TiraInvestimentoComponent, ProgressSpinnerModule,
+    ReactiveFormsModule, InvestimentoFiltroComponent,
+    FontAwesomeModule, ValorCardComponent, BarraPaginacaoComponent,
+    ProgressModalComponent,
+    InvestimentoOrdenacaoComponent
+]
 })
 export class InvestimentosComponent implements AfterViewInit {
 
@@ -36,6 +39,7 @@ export class InvestimentosComponent implements AfterViewInit {
 
     @ViewChild(InvestimentoFiltroComponent) filtroComponent! : InvestimentoFiltroComponent;
     @ViewChild(BarraPaginacaoComponent) barraPaginacaoComponent : BarraPaginacaoComponent;
+    @ViewChild(InvestimentoOrdenacaoComponent) ordenacaoComponent : InvestimentoOrdenacaoComponent;
 
     totalPrevisto : number = 0;
     totalHomologado : number = 0;
@@ -46,7 +50,8 @@ export class InvestimentosComponent implements AfterViewInit {
     totalDispSReserva : number = 0;
     totalPago : number = 0;
 
-    filtro : InvestimentoFiltro = { qtPorPag: 15, numPag: 1 };
+    filtro : IFiltroInvestimento;
+    ordem : IOrdemItem[];
 
     txtBusca = new FormControl('');
 
@@ -60,38 +65,51 @@ export class InvestimentosComponent implements AfterViewInit {
 
     constructor( 
         private service: InvestimentosService,
-        private contaService : ContaService,
-        private custoService: CustoService,
-        private execucaoService: ExecucaoOrcamentariaService,
         private infoService : InfosService
     ) {
         
     }
 
+    lock = true;
+
     ngAfterViewInit(): void {
-        this.txtBusca.valueChanges.subscribe(value => this.atualizarFiltro(this.filtroComponent.filtro, 1) );
+        
+
+        combineLatest([
+            this.filtroComponent.filterChange,
+            this.ordenacaoComponent.onChange
+        ]).pipe(take(1)).subscribe(([filtro, ordem]) => {
+            this.txtBusca.valueChanges.subscribe(value => this.setFiltro(filtro) );
+            this.executar(
+                concat(
+                    this.recarregarValores(filtro),
+                    this.recarregarLista(1, ordem)
+                ).pipe(finalize(() => this.lock = false))
+            );
+        })
     }
 
-    atualizarFiltro(filtro : IFiltroInvestimento, novaPagina : number) {
+    setFiltro(filtro : IFiltroInvestimento) {
         this.filtro = {
-            exercicio: filtro.ano,
-            codPO: filtro.plano && filtro.plano.length > 0 ? filtro.plano.map(p => p.id) : undefined,
-            codUnidade: filtro.unidade && filtro.unidade.length > 0 ? filtro.unidade.map(u => u.id) : undefined,
-            idFonte: filtro.fonte?.id,
+            ano: filtro.ano,
+            planos: filtro.planos && filtro.planos.length > 0 ? filtro.planos : undefined,
+            unidades: filtro.unidades && filtro.unidades.length > 0 ? filtro.unidades : undefined,
+            fonte: filtro.fonte,
             nome: this.txtBusca.value,
             gnd: filtro.gnd,
-            verUnidades: filtro.podeVerUnidades,
-            numPag: novaPagina,
-            qtPorPag: this.filtro.qtPorPag
+            podeVerUnidades: filtro.podeVerUnidades,
+            numPag: filtro.numPag,
+            qtPorPag: filtro.qtPorPag,
         }
 
-        this.executar(
-            concat(
-                this.recarregarValores(),
-                this.recarregarLista(novaPagina)
-            )
-        );
-        
+        if(!this.lock)
+            this.executar(
+                concat(
+                    this.recarregarValores(this.filtro),
+                    this.recarregarLista(1)
+                )
+            );
+         
     }
 
     executar(acao : Observable<any>) {
@@ -100,18 +118,18 @@ export class InvestimentosComponent implements AfterViewInit {
         acao.pipe(finalize(() => this.showProgress = false)).subscribe()
     }
 
-    recarregarValores() {
+    recarregarValores(filtro : IFiltroInvestimento) {
 
         return merge(
 
             this.infoService.getCardTotais(
                 this.txtBusca.value,
-                this.filtro.codUnidade,
-                this.filtro.codPO,
-                this.filtro.idFonte,
-                Number(this.filtro.exercicio),
-                this.filtro.gnd,
-                this.filtro.verUnidades
+                filtro.unidades && filtro.unidades.length > 0 ? filtro.unidades.map(u => u.id) : undefined,
+                filtro.planos && filtro.planos.length > 0 ? filtro.planos.map(p => p.id) : undefined,
+                filtro.fonte?.id,
+                Number(this.filtro.ano),
+                filtro.gnd,
+                filtro.podeVerUnidades
             )
             .pipe(tap(totais => {
                             
@@ -129,12 +147,24 @@ export class InvestimentosComponent implements AfterViewInit {
        
     }
 
-    recarregarLista(novaPagina : number) {
+    setOrdem(novaOrdem : IOrdemItem[]) {
+        if(this.filtro)
+            this.ordem = novaOrdem;
+        
+
+        if(!this.lock)
+            this.executar(this.recarregarLista(this.filtro?.numPag, novaOrdem));
+    }
+
+    recarregarLista(novaPagina : number, novaOrdem? : IOrdemItem[]) {
 
         this.filtro.numPag = novaPagina;
 
+        if(novaOrdem)
+            this.ordem = novaOrdem;
+        
          return merge(
-            this.service.getListaTiraInvestimentos(this.filtro)
+            this.service.getListaTiraInvestimentos(this.filtro, this.ordem)
             .pipe(tap(invs => {
                 this.data = invs.data;
                 this.qtInvestimento = invs.ammount;

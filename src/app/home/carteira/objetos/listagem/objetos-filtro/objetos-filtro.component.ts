@@ -117,7 +117,7 @@ export class ObjetosFiltroComponent implements AfterViewInit {
                     .pipe(tap( unidades => {
                         this.unidades = unidades;
                         if(unidades?.length == 1) {
-                            this.filtro.unidade = unidades;
+                            this.filtro.unidades = unidades;
                         }
                     })))
                 }

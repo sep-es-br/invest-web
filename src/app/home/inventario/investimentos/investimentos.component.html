@@ -1,5 +1,5 @@
 <spo-progress-modal [visivel]="showProgress"></spo-progress-modal>
-<spo-investimento-filtro (filterChange)="atualizarFiltro($event, 1)" ></spo-investimento-filtro>
+<spo-investimento-filtro (filterChange)="setFiltro($event)" ></spo-investimento-filtro>
 <div id="valores">
     <spo-valor-card 
         titulo="Previsto"
@@ -67,6 +67,8 @@
         </div> -->
     </div>
 </div>
+<spo-investimento-ordenacao 
+    (onChange)="this.setOrdem($event)"></spo-investimento-ordenacao>
 <div id="listaDados" class="displayLista">
     <spo-tira-investimento *ngFor="let inv of data" [investimento]="inv"></spo-tira-investimento>
 </div>

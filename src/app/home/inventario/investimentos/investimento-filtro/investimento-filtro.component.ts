@@ -41,7 +41,7 @@ export class InvestimentoFiltroComponent implements AfterViewInit{
     unidades : UnidadeOrcamentariaDTO[];
     fontes : FonteOrcamentariaDTO[];
 
-    filtro : IFiltroInvestimento = {};
+    filtro : IFiltroInvestimento = { qtPorPag: 15, numPag: 1 };
 
     
     podeVerUnidades = false;
@@ -54,19 +54,6 @@ export class InvestimentoFiltroComponent implements AfterViewInit{
     ) {}
 
     ngAfterViewInit(): void {
-        // this.resetarCampos();
-
-        //  this.permissaoService.podeVerUnidades().pipe(tap(
-        //             podeVer => {
-        
-        //                 this.podeVerUnidades = podeVer;
-        
-                        
-        //             }
-        //         )).subscribe();
-
-        
-        
 
         let consulta : Observable<any>[] = [
             this.infosService.getAllAnos()
@@ -102,7 +89,7 @@ export class InvestimentoFiltroComponent implements AfterViewInit{
                         
                         this.unidades = unidades;
                         if(unidades?.length == 1) {
-                            this.filtro.unidade = unidades;
+                            this.filtro.unidades = unidades;
                         }
 
                         
