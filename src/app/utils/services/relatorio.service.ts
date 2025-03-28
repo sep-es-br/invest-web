@@ -17,7 +17,8 @@ export class RelatorioService {
 
     public gerarRelatorio(filtro : Partial<IFiltroInvestimento>) : Observable<any> {
         
-        let params = new HttpParams();
+        let params = new HttpParams()
+        .set("verTodasUnidades", !!filtro.podeVerUnidades);
         
         if(filtro.unidade)
             params = params.set("idsUnidade", JSON.stringify(filtro.unidade.map(u => u.id)))
@@ -65,7 +66,8 @@ export class RelatorioService {
 
     public gerarRelatorioConsolidado(filtro : Partial<IDadoConsolidadoFiltro>) : Observable<any> {
         
-        let params = new HttpParams();
+        let params = new HttpParams()
+        .set("verTodasUnidades", !!filtro.podeVerUnidades);
         
         if(filtro.unidade)
             params = params.set("idsUnidade", JSON.stringify(filtro.unidade.map(u => u.id)))
@@ -109,7 +111,8 @@ export class RelatorioService {
 
     public getValoresRelatorioConsolidado(filtro : Partial<IDadoConsolidadoFiltro>) : Observable<IDadoConsolidado> {
         
-        let params = new HttpParams();
+        let params = new HttpParams()
+                        .set("verTodasUnidades", !!filtro.podeVerUnidades);
         
         if(filtro.unidade)
             params = params.set("idsUnidade", JSON.stringify(filtro.unidade.map(u => u.id)))
