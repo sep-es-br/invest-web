@@ -26,9 +26,9 @@ export class ObjetosOrdenacaoComponent implements AfterViewInit {
 
     readonly defaultValue = {
         nome: CampoOrdenacaoComponent.NONE,
-        codUnidade: CampoOrdenacaoComponent.ASC,
+        codUnidade: CampoOrdenacaoComponent.NONE,
         siglaUnidade: CampoOrdenacaoComponent.NONE,
-        codPo: CampoOrdenacaoComponent.ASC,
+        codPo: CampoOrdenacaoComponent.NONE,
         previsto: CampoOrdenacaoComponent.NONE,
         contratado: CampoOrdenacaoComponent.NONE,
         autorizado: CampoOrdenacaoComponent.NONE,

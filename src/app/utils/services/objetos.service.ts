@@ -49,20 +49,14 @@ export class ObjetosService {
         );
     }
 
-    public getListaTiraObjetosEmProcessamento( filtro : IObjetoFiltro, pgAtual : number, tamPg : number ) : Observable<ObjetoTiraDTO[]> {
+    public getListaTiraObjetosEmProcessamento( filtro : IObjetoFiltro, pgAtual : number, tamPg : number ) : Observable<IDataList<ObjetoTiraDTO>> {
 
         let params = this.objetoFilterToParams(filtro)
                         .set("pgAtual", pgAtual)
                         .set("tamPag", tamPg);
         
 
-        return this.http.get<ObjetoTiraDTO[]>(`${this.objetoUrl}/allTiraEmProcessamento`, { params: params }).pipe(
-            catchError(err => this.errorHandlerService.handleError(err))
-        );
-    }
-
-    public getQuantidadeItens( filtro : IObjetoFiltro) : Observable<number> {
-        return this.http.get<number>(`${this.objetoUrl}/count`, {params: this.objetoFilterToParams(filtro)}).pipe(
+        return this.http.get<IDataList<ObjetoTiraDTO>>(`${this.objetoUrl}/allTiraEmProcessamento`, { params: params }).pipe(
             catchError(err => this.errorHandlerService.handleError(err))
         );
     }

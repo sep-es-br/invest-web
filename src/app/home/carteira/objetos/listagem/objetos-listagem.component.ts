@@ -19,6 +19,7 @@ import { IPodeDTO } from "../../../../utils/models/PodeDto";
 import { ObjetosOrdenacaoComponent } from "./objetos-ordenacao/objetos-ordenacao.component";
 import { IOrdemItem } from "../../../../utils/interfaces/ordem-item.interface";
 import { ProgressModalComponent } from "../../../../utils/components/progress-modal/progress-modal.component";
+import { CampoPesquisaComponent } from "../../../../utils/components/campo-pesquisa/campo-pesquisa.component";
 
 @Component({
     templateUrl: "./objetos-listagem.component.html",
@@ -27,7 +28,8 @@ import { ProgressModalComponent } from "../../../../utils/components/progress-mo
     CommonModule, ObjetosFiltroComponent, FontAwesomeModule,
     ReactiveFormsModule, TiraObjetoComponent, BarraPaginacaoComponent,
     RouterModule, ObjetosOrdenacaoComponent,
-    ProgressModalComponent
+    ProgressModalComponent,
+    CampoPesquisaComponent
 ]
 })
 export class ObjetosListagemComponent implements AfterViewInit{

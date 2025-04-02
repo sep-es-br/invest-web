@@ -20,6 +20,7 @@ import { ProgressSpinnerModule } from "primeng/progressspinner";
 import { ProgressModalComponent } from "../../../utils/components/progress-modal/progress-modal.component";
 import { InvestimentoOrdenacaoComponent } from "./investimento-ordenacao/investimento-ordenacao.component";
 import { IOrdemItem } from "../../../utils/interfaces/ordem-item.interface";
+import { CampoPesquisaComponent } from "../../../utils/components/campo-pesquisa/campo-pesquisa.component";
 
 @Component({
     selector: 'spo-investimentos',
@@ -30,7 +31,8 @@ import { IOrdemItem } from "../../../utils/interfaces/ordem-item.interface";
     ReactiveFormsModule, InvestimentoFiltroComponent,
     FontAwesomeModule, ValorCardComponent, BarraPaginacaoComponent,
     ProgressModalComponent,
-    InvestimentoOrdenacaoComponent
+    InvestimentoOrdenacaoComponent,
+    CampoPesquisaComponent
 ]
 })
 export class InvestimentosComponent implements AfterViewInit {

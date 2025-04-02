@@ -16,16 +16,18 @@ import { EtapaService } from "../../../../../utils/services/etapa.service";
 import { IPodeDTO } from "../../../../../utils/models/PodeDto";
 import { PermissaoService } from "../../../../../utils/services/permissao.service";
 import { TiraObjetoComponent } from "../../../../carteira/objetos/listagem/tira-objetos/tira-objeto.component";
+import { CampoPesquisaComponent } from "../../../../../utils/components/campo-pesquisa/campo-pesquisa.component";
 
 @Component({
     selector: "spo-avaliacao",
     templateUrl: "./avaliacao-listagem.component.html",
     styleUrl: "./avaliacao-listagem.component.scss",
     imports: [
-        CommonModule, ReactiveFormsModule, ObjetoFiltroComponent,
-        FontAwesomeModule, TiraObjetoComponent,
-        BarraPaginacaoComponent, RouterModule
-    ]
+    CommonModule, ReactiveFormsModule, ObjetoFiltroComponent,
+    FontAwesomeModule, TiraObjetoComponent,
+    BarraPaginacaoComponent, RouterModule,
+    CampoPesquisaComponent
+]
 })
 export class AvaliacaoListagemComponent implements AfterViewInit{
 
@@ -95,14 +97,10 @@ export class AvaliacaoListagemComponent implements AfterViewInit{
 
         concat(
             this.service.getListaTiraObjetosEmProcessamento(this.filtro, novaPagina, 15).pipe(
-                tap(invs => {
-                    this.data = invs;
-                })
-            ),
-            this.service.getQuantidadeItensEmProcessamento(this.filtro).pipe(
-                tap(quantidade => {
-                    this.qtObjetos = quantidade
-                    this.barraPaginacaoComponent.updatePaginacao(quantidade);  
+                tap(listResult => {
+                    this.data = listResult.data;
+                    this.qtObjetos = listResult.ammount
+                    this.barraPaginacaoComponent.updatePaginacao(listResult.ammount);  
                 })
             )
         ).subscribe()
