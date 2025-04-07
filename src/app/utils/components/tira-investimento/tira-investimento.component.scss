@@ -3,8 +3,6 @@
 
 :host {
 
-    gap: 1rem;
-
     div#tira {
         cursor: pointer;
 
@@ -12,8 +10,6 @@
 
     > div#objetoList {
         display: flex;
-        flex-direction: column;
-        margin-left: 3rem;
         // margin-top: 1rem;
         height: 0;
         transition: height 0.5s ease-in-out;
@@ -21,6 +17,14 @@
 
         &.aberto {
             height: auto;
+        }
+
+        #objetoListInner {
+            display: flex;
+            padding-top: 1rem;
+            flex-direction: column;
+            margin-left: 3rem;
+            flex-grow: 1;
         }
         
     }

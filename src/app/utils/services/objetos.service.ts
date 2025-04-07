@@ -62,7 +62,7 @@ export class ObjetosService {
     }
 
     public getQuantidadeItensEmProcessamento( filtro : IObjetoFiltro) : Observable<number> {
-        return this.http.get<number>(`${this.objetoUrl}/countEmProcessameto`, {params: this.objetoFilterToParams(filtro)}).pipe(
+        return this.http.post<number>(`${this.objetoUrl}/countEmProcessameto`, {params: this.objetoFilterToParams(filtro)}).pipe(
             catchError(err => this.errorHandlerService.handleError(err))
         );
     }
