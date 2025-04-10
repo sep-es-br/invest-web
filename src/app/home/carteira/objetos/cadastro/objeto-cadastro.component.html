@@ -51,6 +51,7 @@
            
             <label>Plano Orçamentário <span *ngIf="checarCadastrado()" class="obrigatorio">*</span></label>
             <ng-select [(ngModel)]="objeto.conta.planoOrcamentario"
+                (ngModelChange)="updateTipoPlano($event)"
                 [items]="opcoesPlanosOrcamentarios" [required]="checarCadastrado()"
                 placeholder="Selecionar plano orçamentário"
                 bindLabel="label" [ngClass]="(checado && checarCadastrado() && planoOrcamentario.invalid) ? 'invalido' : ''"
@@ -88,6 +89,8 @@
             
             <label>Tipos de Plano(s): <span class="obrigatorio">*</span></label>
             <ng-select [(ngModel)]="objeto.planos"
+                disabled
+                [clearable]="false"
                 [ngClass]="(checado && planos.invalid) ? 'invalido' : ''"
                 [items]="opcoesTipoPlano" required #planos="ngModel"
                 [multiple]="true"

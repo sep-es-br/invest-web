@@ -14,13 +14,13 @@
                 border-radius: 1.5rem !important ;
                 background-color: white;
                 border: var(--cor-primaria) solid 1px;
-                color: var(--cor-primaria);
+                color: var(--cor-primaria) !important;
                 align-items: center;
 
                 .ng-value-icon.left {
                     margin-left: 4px;
                     border: none;
-                    color: white;
+                    color: white !important;
                     background-color: var(--vermelho-padrao);
                     box-sizing: border-box !important;
                     height: 1rem;
@@ -37,7 +37,7 @@
     .ng-select-container {
         
         border-color: var(--cor-primaria);
-        color: var(--cor-primaria);
+        color: var(--cor-primaria) !important;
         padding-left: 1rem;
 
         .ng-value-container {
@@ -45,7 +45,7 @@
         }
 
         .ng-placeholder {
-            color: var(--cor-primaria);
+            color: var(--cor-primaria) !important;
         }
 
         .ng-clear-wrapper {
@@ -55,11 +55,11 @@
             width: 18px;
             height: 18px;
             border-radius: 18px;
-            color: white;
             background-color: var(--vermelho-padrao);
             position: relative;
 
             .ng-clear {
+                color: white !important;
                 position: absolute;
                 top: -1px;
             }
@@ -75,11 +75,11 @@
 
     ng-dropdown-panel {
         .ng-option {
-            color: var(--cor-primaria);
+            color: var(--cor-primaria) !important;
 
             &:hover {
-                color: white;
-                background-color: var(--cor-primaria);
+                color: white !important;
+                background-color: var(--cor-primaria) !important;
             }
         }
     }
@@ -100,6 +100,10 @@
         .ng-select-container {
             opacity: 0.7;
             background-color: unset;
+
+            .ng-value .ng-value-icon {
+                display: none !important;
+            }
 
         }
         

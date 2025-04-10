@@ -29,4 +29,9 @@ export class TipoPlanoService {
         .pipe(catchError(err => this.errorHandlerService.handleError(err)))
     }
 
+    public fromSigefes(codPo : string) : Observable<ITipoPlano[]> {
+        return this.http.get<ITipoPlano[]>(`${this.tipoPlanoUrl}/fromSigefes`, {params: {codPO: codPo}})
+        .pipe(catchError(err => this.errorHandlerService.handleError(err)));
+    }
+
 }

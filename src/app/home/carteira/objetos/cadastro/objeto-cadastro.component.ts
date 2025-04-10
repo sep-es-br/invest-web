@@ -149,8 +149,36 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
             })).subscribe();
 
 
-        })).subscribe()
+        })).subscribe();
 
+        
+
+    }
+
+    updateTipoPlano(po : PlanoOrcamentarioDTO) {
+        this.tipoPlanoService.fromSigefes(po.codigo)
+        .subscribe({
+            next: (tiposList) => {
+                this.objeto.planos = tiposList
+
+                this.objeto.planos.forEach(plano => {
+                    if(!plano.id) {
+                        this.tiposplano.push(plano);
+                    }
+
+                    this.opcoesTipoPlano.push({
+                                label: `${plano.nome} - ${plano.sigla}`,
+                                value: plano
+                            })
+
+        
+                });
+            }
+        });
+    }
+
+    removerTipoPlano(tpPlano : ITipoPlano) {
+        
     }
 
     setMicrorregioes(microrregiaoList : LocalidadeDTO[]) {
