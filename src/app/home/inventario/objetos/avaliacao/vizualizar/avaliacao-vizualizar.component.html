@@ -79,6 +79,7 @@
             <label>Plano Orçamentário <span *ngIf="checarEtapaEnum(EtapaEnum.CADASTRO_PO)" class="obrigatorio">*</span></label>
             <ng-select [(ngModel)]="objeto.conta.planoOrcamentario" name="planoOrcamentario"
                 [items]="opcoesPlanosOrcamentarios" [disabled]="!executaAcao"
+                (ngModelChange)="updateTipoPlano($event)"
                 placeholder="Selecionar plano orçamentário"
                 bindLabel="label"
                 bindValue="value"

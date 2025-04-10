@@ -177,10 +177,6 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
         });
     }
 
-    removerTipoPlano(tpPlano : ITipoPlano) {
-        
-    }
-
     setMicrorregioes(microrregiaoList : LocalidadeDTO[]) {
         this.microregioes = microrregiaoList;
     }

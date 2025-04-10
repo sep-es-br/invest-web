@@ -1,5 +1,6 @@
 ::ng-deep ng-select  {
     
+
     &:not(.ng-select-multiple){
         height: 32px;
     }
@@ -39,6 +40,7 @@
         border-color: var(--cor-primaria);
         color: var(--cor-primaria) !important;
         padding-left: 1rem;
+        width: unset;
 
         .ng-value-container {
             padding-left: unset;
