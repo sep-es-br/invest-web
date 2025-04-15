@@ -38,15 +38,17 @@ import { AcaoEvent } from "./parecer-modal/parecer-modal.component";
 import { IParecer, parecerPadrao } from "../../../../../utils/interfaces/parecer.interface";
 import { EtapaEnum } from "../../../../../utils/enum/etapa.enum";
 import { PermissaoService } from "../../../../../utils/services/permissao.service";
+import { ProgressModalComponent } from "../../../../../utils/components/progress-modal/progress-modal.component";
 
 @Component({
     templateUrl: "./avaliacao-vizualizar.component.html",
     styleUrl: "./avaliacao-vizualizar.component.scss",
     imports: [
-        CommonModule, FontAwesomeModule, AvaliacaoExercicioComponent,
-        NgSelectComponent, ReactiveFormsModule, FormsModule,
-        ApontamentoModalComponent, VizualizarApontamentoModalComponent
-    ]
+    CommonModule, FontAwesomeModule, AvaliacaoExercicioComponent,
+    NgSelectComponent, ReactiveFormsModule, FormsModule,
+    ApontamentoModalComponent, VizualizarApontamentoModalComponent,
+    ProgressModalComponent
+]
 })
 export class AvaliacaoVizualizarComponent implements AfterViewInit {
 
@@ -112,6 +114,10 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
 
     acoesPositivas : IAcao[] = [];
     acoesNegativas : IAcao[] = [];
+
+    carregamento = 0;
+
+    isGestorMaster = false;
 
     etapasStatus : {
         etapa: IEtapa,
@@ -184,21 +190,17 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
         let objetoFinal : IObjeto = this.gerarObjetoFinal()
         
         let executarAcaoDto : IExecutarAcao;
-        // if(this.checarEtapaEnum(EtapaEnum.APROVACAO_SUBEO)){
-        //     executarAcaoDto = {
-        //         acao: this.acaoDoModal,
-        //         parecer: this.parecer,
-        //         objeto: objetoFinal
-        //     }
-        // } else {
-            executarAcaoDto = {
-                acao: this.acaoDoModal,
-                apontamentos: novosApontamentos,
-                objeto: objetoFinal
-            }
-        // }
+     
+        executarAcaoDto = {
+            acao: this.acaoDoModal,
+            apontamentos: novosApontamentos,
+            objeto: objetoFinal
+        }
         
+        this.carregamento++;
         
+        this.exibirFazerParecer = false;
+        this.exibirModal = false;
         this.acaoService.executarAcao(executarAcaoDto).pipe(
             tap(objeto => {
                 this.toastr.success("Acão de " + this.acaoDoModal.nome + " executada com sucesso");
@@ -207,18 +209,20 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                 this.setObjeto(objeto);
                 
 
-                this.exibirFazerParecer = false;
-                this.exibirModal = false;
                 
-            }), finalize (() => this.acaoDebounce = false)
+            }), finalize (() => { this.acaoDebounce = false; this.carregamento--})
         ).subscribe();
         
 
     }
 
+    
+
     updateTipoPlano(po : PlanoOrcamentarioDTO) {
+
+        this.carregamento++;
         this.tipoPlanoService.fromSigefes(po.codigo)
-        .subscribe({
+        .pipe(finalize(() => this.carregamento--)).subscribe({
             next: (tiposList) => {
                 this.objeto.planos = tiposList
 
@@ -294,6 +298,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
 
         this.objeto.areaTematica = this.areasTematicas.find(area => objeto.areaTematica?.id == area.id)
 
+        this.carregamento++;
         this.usuarioService.getUser().pipe(
             tap(user => {
                 this.userId = user.id;
@@ -304,23 +309,12 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                     })
                 ).subscribe()
             })
-        ).subscribe()
+        ).pipe(finalize(() => this.carregamento--)).subscribe()
 
         this.acaoDoModal = objeto.emEtapa.etapa.acoes.find(acao => acao.positivo !== undefined && !acao.positivo);
         this.recarregarFluxo();
         this.feedback = this.objeto.apontamentos
-        // this.feedback = this.checarEtapaEnum(EtapaEnum.ANALISE_TECNICA) ?
-        //      this.objeto.pareceres?.sort((p1, p2) => {
-        //         let d1 = new Date(p1.timestamp);
-        //         let d2 = new Date(p2.timestamp);
-
-        //         return d2.getTime() - d1.getTime();
-        //      })[0] :
-        
-        //     this.objeto.apontamentos?.filter(apontamento => {
-        //         return apontamento.etapa.id === this.objeto.emEtapa.etapa.id;
-        //     })
-        
+              
         this.acoesNegativas = this.objeto.emEtapa.etapa.acoes.filter(a => a.positivo !== undefined && !a.positivo);
         this.acoesPositivas = this.objeto.emEtapa.etapa.acoes.filter(a => a.positivo !== undefined && a.positivo);
 
@@ -337,11 +331,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
     }
 
     doExibirFeedBack(){
-        // if(this.checarEtapaEnum(EtapaEnum.ANALISE_TECNICA)) {
-        //     this.exibirVerParecer = true;
-        // } else {
-            this.exibirFeedback = true;
-        // }
+        this.exibirFeedback = true;
     }
 
     recarregarFluxo(){
@@ -486,6 +476,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
 
     ngAfterViewInit(): void {
 
+        this.carregamento++;
         merge(            
             this.unidadeService.getFromSigefes().pipe(
                 tap(unidadeList => this.setUnidades(unidadeList))
@@ -506,7 +497,8 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                 tap(permissao => {
                     this.exibeTodasUnidades = !!permissao?.verTodasUnidades;
                 })
-            )
+            ),
+            this.permissaoService.isGestorMaster().then(isGestor => this.isGestorMaster = isGestor)
         ).pipe(finalize(() => {
             this.route.params.pipe(
                 tap(params => {
@@ -516,9 +508,8 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                         this.toastr.error("Id do objeto inexistente");
                         this.router.navigate([".."], {relativeTo: this.route});
                     }
-    
+                    this.carregamento++;
                     concat(
-                        
                         this.objetoService.getById(objetoId).pipe(
                             tap(objeto => {
                                 
@@ -530,11 +521,12 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
     
                             })
                         )
-                    ).subscribe()
+                    ).pipe(finalize(() => this.carregamento--)).subscribe()
                     
     
                 })
-            ).subscribe()
+            ).subscribe();
+            this.carregamento--;
         })).subscribe();
 
         
@@ -572,6 +564,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
             }
             
             if(acao.positivo){
+                this.carregamento++;
                 this.acaoService.executarAcao(executarAcaoDto).pipe(
                     tap(objeto => {
                         this.toastr.success("Acão de " + acao.nome + " executada com sucesso");
@@ -582,26 +575,22 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                         }
                         
                     }),
-                    finalize(() => this.acaoDebounce = false)
+                    finalize(() => { this.acaoDebounce = false; this.carregamento-- })
                 ).subscribe();
             } else {
-                // if(this.checarEtapaEnum(EtapaEnum.APROVACAO_SUBEO)){
-                    // this.exibirFazerParecer = true;
-                // } else {
-                    
-                // }
                 if(acao.proxEtapaId){
                     this.acaoDebounce = false;
                     this.exibirModal = true;
                 } else {
                     let resp = confirm("Se você remover o objeto ele será excluido definitivamente.\n Tem certeza que deseja excluir?");
                     if(resp){
+                        this.carregamento++;
                         this.acaoService.executarAcao(executarAcaoDto).pipe(
                             tap(objeto => {
                                 this.toastr.success("Objeto excluido com sucesso");
                                 this.router.navigate([".."], {relativeTo: this.route});
                                 
-                            }), finalize(() => this.acaoDebounce = false)
+                            }), finalize(() => { this.acaoDebounce = false; this.carregamento--})
                         ).subscribe();
                     }
                 }
@@ -637,19 +626,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
     }
 
     gerarObjetoFinal() : IObjeto {
-        // return {
-        //     id: this.objeto.id,
-        //     ...this.objetoCadastro.getRawValue(),
-        //     emEtapa: this.objeto.emEtapa,
-        //     emStatus: this.objeto.emStatus,
-        //     apontamentos: this.objeto.apontamentos,
-        //     pareceres: this.objeto.pareceres,
-        //     conta: {
-        //         planoOrcamentario: this.objetoCadastro.value.planoOrcamentario,
-        //         unidadeOrcamentariaImplementadora: this.objetoCadastro.value.unidade
-        //     },
-        //     recursosFinanceiros: this.objeto.recursosFinanceiros
-        // };
+        
 
         this.objeto.recursosFinanceiros.forEach(r => r.indicadaPor.forEach(i => i.gnd = this.gnd))
 

@@ -1,3 +1,4 @@
+<spo-progress-modal [visivel]="carregamento !== 0"></spo-progress-modal>
 <header>
     <div class="fluxo">
         <div class="nome">
@@ -117,7 +118,10 @@
             
             <label>Tipos de Plano(s): <span class="obrigatorio">*</span></label>
             <ng-select [(ngModel)]="objeto.planos" [ngModel]="checado && (planos.invalid || objeto.planos?.length === 0) "
-                [items]="opcoesTipoPlano" [disabled]="!executaAcao"
+                [items]="opcoesTipoPlano" 
+                
+                
+                [disabled]="!executaAcao || checarEtapaEnum(EtapaEnum.CADASTRO_PO)" 
                 [multiple]="true"
                 placeholder="Selecione os tipos de plano"
                 bindValue="value"
@@ -175,7 +179,7 @@
     </main>
 </main>
 <spo-modal-apontamento [ngClass]="exibirModal ? '' : 'esconder-elem'" [apontamentos]="objeto.apontamentos" [acao]="acaoDoModal" 
-    (onFechar)="fecharModal()" (onSalvar)="salvarFeedBack($event)" [userId]="userId" ></spo-modal-apontamento>
+    (onFechar)="fecharModal()" (onSalvar)="salvarFeedBack($event)" [userId]="userId" [isGestorMaster]="isGestorMaster" ></spo-modal-apontamento>
 <!-- <spo-fazer-parecer-modal [ngClass]="exibirFazerParecer ? '' : 'esconder-elem'" [parecer]="parecer" [acao]="acaoDoModal" 
     (onClose)="fecharFazerParecer($event)"></spo-fazer-parecer-modal> -->
 

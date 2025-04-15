@@ -24,12 +24,13 @@ import { IAreaTematica } from "../../../../utils/interfaces/IAreaTematica";
 import { ISelectOpcao } from "../../../../utils/interfaces/selectOption.interface";
 import { NgSelectComponent } from "@ng-select/ng-select";
 import { PermissaoService } from "../../../../utils/services/permissao.service";
+import { ProgressModalComponent } from "../../../../utils/components/progress-modal/progress-modal.component";
 
 @Component({
     templateUrl: "./objeto-cadastro.component.html",
     styleUrl: "./objeto-cadastro.component.scss",
     imports: [
-        CommonModule, ReactiveFormsModule,
+        CommonModule, ReactiveFormsModule, ProgressModalComponent, 
         CadastroExercicioComponent, FontAwesomeModule, FormsModule, NgSelectComponent
     ]
 })
@@ -60,6 +61,8 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
     checado = false;
 
     podeVerUnidades = false;
+
+    carregamento = 0;
 
     gnd : number = 4;
 
@@ -102,6 +105,7 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
             }
         ]
 
+        this.carregamento++;
         merge(
             this.unidadeService.getFromSigefes().pipe(
                 tap(unidadeList => this.setUnidades(unidadeList))
@@ -124,6 +128,8 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
         ).pipe(finalize(() => {
             
             if(!this.podeVerUnidades) {
+                
+                this.carregamento++;
                 this.unidadeService.getUnidadeDoUsuario().pipe(
                     tap(unidades => {
                         this.setUnidades(unidades);
@@ -131,7 +137,7 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
                             this.objeto.conta.unidadeOrcamentariaImplementadora = unidades[0]
                         }
                     })
-                ).subscribe();
+                ).pipe(finalize(() => this.carregamento -= 1)).subscribe();
             }
 
 
@@ -139,14 +145,17 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
                 let objetoId = params['objetoId'];
     
                 if(!objetoId) return;
+                this.carregamento++;
                 this.objetoService.getById(objetoId).pipe(tap(
                     obj => {
     
                         this.setObjeto(obj)
     
                     }
-                )).subscribe()
+                )).pipe(finalize(() => this.carregamento -= 1)).subscribe()
             })).subscribe();
+
+            this.carregamento -= 1;
 
 
         })).subscribe();

@@ -31,6 +31,7 @@ export class ApontamentoModalComponent implements OnChanges {
     @Input() apontamentos : IApontamento[] = [];
     @Input() acao : IAcao;
     @Input() userId : string;
+    @Input() isGestorMaster = false;
 
     apontamentoAberto : number = 0;
 
