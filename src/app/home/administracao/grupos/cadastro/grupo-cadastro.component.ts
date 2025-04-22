@@ -8,7 +8,6 @@ import { SeletorIconeComponent } from "../../../../utils/components/seletor-icon
 
 @Component({
     selector: "spo-grupo-cadastro",
-    standalone: true,
     templateUrl: "./grupo-cadastro.component.html",
     styleUrl: "./grupo-cadastro.component.scss",
     imports: [CommonModule, ReactiveFormsModule, FontAwesomeModule, SeletorIconeComponent]
@@ -83,8 +82,10 @@ export class GrupoCadastroComponent implements OnChanges {
             icone: this.form.get("icone").value,
             descricao: this.form.get("descricao").value,
             membros: this.grupo ? this.grupo.membros : [],
+            papeisMembro: this.grupo ? this.grupo.papeisMembro : [],
+            setoresMembros: this.grupo ? this.grupo.setoresMembros : [],
+            orgaoMembro: this.grupo ? this.grupo.orgaoMembro : [],
             permissoes: this.grupo ? this.grupo.permissoes : [],
-            podeVerTodasUnidades: false
         }
 
         this.onClose.emit(novoGrupo);

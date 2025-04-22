@@ -1,0 +1,16 @@
+
+div#tira {
+    font-size: 200;
+    section {
+        display: flex;
+        gap: 1rem;
+
+        > div {
+            min-width: 8rem;
+        }
+    }
+
+    > div {
+        min-width: 10rem;
+    }
+}

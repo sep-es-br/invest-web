@@ -9,13 +9,12 @@ import { ToastrService } from "ngx-toastr";
 
 @Component({
     selector: "spo-modal-apontamento",
-    standalone: true,
     templateUrl: "./apontamento-modal.component.html",
     styleUrl: "./apontamento-modal.component.scss",
     imports: [
-    CommonModule, FontAwesomeModule,
-    ApontamentoItemComponent
-]
+        CommonModule, FontAwesomeModule,
+        ApontamentoItemComponent
+    ]
 })
 export class ApontamentoModalComponent implements OnChanges {
     
@@ -32,6 +31,7 @@ export class ApontamentoModalComponent implements OnChanges {
     @Input() apontamentos : IApontamento[] = [];
     @Input() acao : IAcao;
     @Input() userId : string;
+    @Input() isGestorMaster = false;
 
     apontamentoAberto : number = 0;
 

@@ -15,14 +15,7 @@ export class TipoPlanoService {
         private errorHandlerService : ErrorHandlerService
     ){}
 
-    public findAll() : Observable<ITipoPlano[]> {
-
-        return this.http.get<ITipoPlano[]>(`${this.tipoPlanoUrl}`)
-        .pipe(catchError(err => this.errorHandlerService.handleError(err)))
-
-    }
-
-    public findBy(id? : string, sigla? : string) : Observable<ITipoPlano> {
+    public findBy(id? : string, sigla? : string) : Observable<ITipoPlano | ITipoPlano[]> {
 
         let params = new HttpParams();
 
@@ -32,8 +25,13 @@ export class TipoPlanoService {
         if(sigla)
             params = params.set("sigla", sigla)
 
-        return this.http.get<ITipoPlano>(`${this.tipoPlanoUrl}`, {params: params})
+        return this.http.get<ITipoPlano | ITipoPlano[]>(`${this.tipoPlanoUrl}`, {params: params})
         .pipe(catchError(err => this.errorHandlerService.handleError(err)))
+    }
+
+    public fromSigefes(codPo : string) : Observable<ITipoPlano[]> {
+        return this.http.get<ITipoPlano[]>(`${this.tipoPlanoUrl}/fromSigefes`, {params: {codPO: codPo}})
+        .pipe(catchError(err => this.errorHandlerService.handleError(err)));
     }
 
 }

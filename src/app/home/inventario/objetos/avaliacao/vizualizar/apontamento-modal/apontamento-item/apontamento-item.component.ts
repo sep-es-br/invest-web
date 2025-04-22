@@ -10,7 +10,6 @@ import { FormsModule } from "@angular/forms";
 
 @Component({
     selector: "spo-item-apontamento",
-    standalone: true,
     templateUrl: "./apontamento-item.component.html",
     styleUrl: "./apontamento-item.component.scss",
     imports: [

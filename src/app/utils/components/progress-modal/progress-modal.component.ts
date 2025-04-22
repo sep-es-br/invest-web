@@ -4,7 +4,6 @@ import { ProgressSpinnerModule } from "primeng/progressspinner";
 
 @Component({
     selector: 'spo-progress-modal',
-    standalone: true,
     templateUrl: './progress-modal.component.html',
     styleUrl: './progress-modal.component.scss',
     imports: [CommonModule, ProgressSpinnerModule]

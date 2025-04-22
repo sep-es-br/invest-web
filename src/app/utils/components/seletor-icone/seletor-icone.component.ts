@@ -6,15 +6,14 @@ import { tap } from "rxjs";
 
 @Component({
     selector: "spo-seletor-icone",
-    standalone: true,
     templateUrl: "./seletor-icone.component.html",
     styleUrl: "./seletor-icone.component.scss",
     imports: [CommonModule, ReactiveFormsModule],
-    providers:[{
-        provide: NG_VALUE_ACCESSOR,
-        multi: true,
-        useExisting: SeletorIconeComponent
-    }]
+    providers: [{
+            provide: NG_VALUE_ACCESSOR,
+            multi: true,
+            useExisting: SeletorIconeComponent
+        }]
 })
 export class SeletorIconeComponent implements ControlValueAccessor, AfterViewInit {
     value : string;

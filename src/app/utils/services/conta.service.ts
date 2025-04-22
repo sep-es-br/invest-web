@@ -5,6 +5,11 @@ import { ErrorHandlerService } from "./error-handler.service";
 import { InvestimentoFiltro } from "../models/InvestimentoFiltro";
 import { catchError, Observable } from "rxjs";
 import { InvestimentoTiraDTO } from "../models/InvestimentoTiraDTO";
+import { IDataList } from "../interfaces/dataList.interface";
+import { IDadoDetalhado } from "../interfaces/dado-detalhado.interface";
+import { IFiltroInvestimento, IFiltroInvestimentoComPag } from "../../home/relatorio/detalhado/investimento-filtro/IFiltroInvestimento";
+import { IDadoConsolidado } from "../interfaces/dado-consolidado.interface";
+import { IDadoConsolidadoFiltro, IDadoConsolidadoFiltroComPag } from "../../home/relatorio/consolidado/investimento-filtro/dado-consolidado-filtro.interface";
 
 @Injectable({providedIn: "root"})
 export class ContaService {
@@ -28,6 +33,50 @@ export class ContaService {
                     );
     }
 
+    public getDadosDetalhados(filtro : IFiltroInvestimentoComPag) : Observable<IDataList<IDadoDetalhado>> {
+
+        let params : HttpParams = new HttpParams()
+                        .set("pag", filtro.pag)
+                        .set("pagSize", filtro.pagSize);
+
+        if(filtro.exercicio) 
+            params = params.set("exercicio", filtro.exercicio);
+        
+        if(filtro.unidade && filtro.unidade.length > 0)
+            params = params.set("idsUnidade", JSON.stringify(filtro.unidade.map(u => u.id)) );
+
+        if(filtro.plano && filtro.plano.length > 0)
+            params = params.set("idsPlanos", JSON.stringify(filtro.plano.map(p => p.id)));
+
+        if(filtro.fonte)
+            params = params.set("idFonte", filtro.fonte.id);
+
+        if(filtro.gnd)
+            params = params.set("gnd", filtro.gnd);
+
+
+        return this.http.get<IDataList<IDadoDetalhado>>(`${this.contaApi}/Investimento/dadosDetalhados/${filtro.exercicio}`, {params: params})
+    }
+
+    public getDadosConsolidados(filtro : IDadoConsolidadoFiltroComPag) : Observable<IDataList<IDadoConsolidado>> {
+
+        let params : HttpParams = new HttpParams()
+                        .set("pag", filtro.pag)
+                        .set("pagSize", filtro.pagSize);
+        
+        if(filtro.unidade && filtro.unidade.length > 0)
+            params = params.set("idsUnidade", JSON.stringify(filtro.unidade.map(u => u.id)) );
+
+        if(filtro.fonte)
+            params = params.set("idFonte", filtro.fonte.id);
+
+        if(filtro.gnd)
+            params = params.set("gnd", filtro.gnd);
+
+
+        return this.http.get<IDataList<IDadoConsolidado>>(`${this.contaApi}/Investimento/dadosConsolidado/${filtro.anoDe}/${filtro.anoAte}`, {params: params})
+    }
+
     
     public filterToParams(filtro : InvestimentoFiltro) : HttpParams {
         let params : HttpParams = new HttpParams();
@@ -37,9 +86,6 @@ export class ContaService {
 
         if(filtro.codUnidade && filtro.codUnidade.length > 0)
             params = params.set("codUnidade", JSON.stringify(filtro.codUnidade) ) 
-
-        if(filtro.codPO && filtro.codPO.length > 0)
-            params = params.set("codPO", JSON.stringify(filtro.codPO)) 
 
         if(filtro.idFonte)
             params = params.set("idFonte", filtro.idFonte)

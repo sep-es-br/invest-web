@@ -3,7 +3,7 @@ import { AfterViewInit, Component } from "@angular/core";
 import { IObjeto } from "../../../../utils/interfaces/IObjeto";
 import { ObjetosService } from "../../../../utils/services/objetos.service";
 import { ActivatedRoute, Router } from "@angular/router";
-import { concat, merge, tap } from "rxjs";
+import { concat, finalize, merge, tap } from "rxjs";
 import { DataUtilService } from "../../../../utils/services/data-util.service";
 import { FonteOrcamentariaDTO } from "../../../../utils/models/FonteOrcamentariaDTO";
 import { IFonteExercicio } from "../cadastro/fonte-exercicio.interface";
@@ -14,15 +14,16 @@ import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faPencil } from "@fortawesome/free-solid-svg-icons";
 import { PermissaoService } from "../../../../utils/services/permissao.service";
 import { IPodeDTO } from "../../../../utils/models/PodeDto";
+import { ProgressModalComponent } from "../../../../utils/components/progress-modal/progress-modal.component";
 
 @Component({
-    standalone: true,
     templateUrl: "./objetos-vizualizar.component.html",
     styleUrl: "./objetos-vizualizar.component.scss",
     imports: [
-        CommonModule, CustomCurrencyPipe, NumeroResumidoPipe, 
-        FontAwesomeModule
-    ]
+    CommonModule, CustomCurrencyPipe, NumeroResumidoPipe,
+    FontAwesomeModule,
+    ProgressModalComponent
+]
 })
 export class ObjetosVizualizarComponent implements AfterViewInit {
 
@@ -39,7 +40,9 @@ export class ObjetosVizualizarComponent implements AfterViewInit {
         previsto: number,
         contratado : number,
         gnd? : number
-    }[] = []
+    }[] = [];
+
+    carregando = true;
 
     constructor(
         private objetoService : ObjetosService,
@@ -55,7 +58,6 @@ export class ObjetosVizualizarComponent implements AfterViewInit {
                 this.objetoService.getById(params['objetoId']).pipe(
                     tap(obj => {
                         this.objeto = obj
-
 
                         let nome = `${obj.conta.unidadeOrcamentariaImplementadora.sigla} - Objeto - ${obj.id.split(':')[2]}`;
 
@@ -87,7 +89,7 @@ export class ObjetosVizualizarComponent implements AfterViewInit {
 
                     })
                 )
-            ).subscribe();
+            ).pipe(finalize(() => this.carregando = false)).subscribe();
         })
 
     }

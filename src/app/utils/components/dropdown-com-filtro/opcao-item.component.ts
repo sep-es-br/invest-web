@@ -3,7 +3,6 @@ import { Component, ElementRef, EventEmitter, HostListener, Input, Output } from
 
 @Component({
     selector: "spo-opcao-item",
-    standalone: true,
     template: "{{text}}",
     imports: [CommonModule]
 })

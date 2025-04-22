@@ -37,6 +37,7 @@
     
 </div>
 <div id="objetoList" #objLista [ngClass]="aberto ? 'aberto' : ''">
-    <spo-tira-objeto *ngFor="let obj of investimento.objetos" [objeto]="obj"></spo-tira-objeto>
+    <div id="objetoListInner" [ngClass]="aberto ? 'aberto' : ''">
+        <spo-tira-objeto *ngFor="let obj of investimento.objetos" [objeto]="obj"></spo-tira-objeto>
+    </div>
 </div>
-<!-- display : aberto ? 'flex' : 'none', -->

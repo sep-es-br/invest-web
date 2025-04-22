@@ -13,7 +13,7 @@
     </div>
     <div>
         <div id="label">Código P.O.</div>
-        <div id="value">{{objeto.codPlano}}</div>
+        <div id="value">{{objeto.codPO ? objeto.codPO : "Sem P.O"}}</div>
     </div>
     <div>
         <div id="label">Previsto</div>
@@ -21,7 +21,7 @@
     </div>
     <div>
         <div id="label">Contratado</div>
-        <div id="value"><span [title]="objeto.totalHomologado | customCurrency">R$ {{objeto.totalHomologado | numeroResumido }}</span></div>
+        <div id="value"><span [title]="objeto.totalContratado | customCurrency">R$ {{objeto.totalContratado | numeroResumido }}</span></div>
     </div>
     <div>
         <div id="label">Autorizado</div>

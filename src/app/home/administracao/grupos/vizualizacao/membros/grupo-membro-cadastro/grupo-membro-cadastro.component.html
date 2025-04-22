@@ -2,32 +2,54 @@
     <header>
         <h4>Adicionar Membro</h4>
         
-        <div class="botaoAcao" (click)="fechar()">
+        <div class="botaoAcao" (click)="fechar(null)">
             <fa-icon [icon]="iconFechar"></fa-icon>
         </div>
     </header>
     <div class="conteudo">
-        <form [formGroup]="form">
-            <label for="inUnidade">Unidade Orçamentária <span class="obrigatorio">*</span></label>
-            <select formControlName="unidade" id="inUnidade">
-                <option [ngValue]="null">Selecionar a Unidade Orçamentária</option>
-                <option [ngValue]="unidade" *ngFor="let unidade of unidades">({{unidade.sigla}}) {{unidade.nome}}</option> 
-            </select>
-            <label for="inSetor">Setor <span class="obrigatorio">*</span></label>
-            <select formControlName="setor" id="inSetor">
-                <option [ngValue]="null">Selecionar o Setor</option>
-                <option [ngValue]="setor" *ngFor="let setor of setores">({{setor.sigla}}) {{setor.nome}}</option> 
-            </select>
-            <label for="inPapel">Pessoa / Papel <span class="obrigatorio">*</span></label>
-            <select formControlName="papel" id="inPapel" >
-                <option [ngValue]="null">Selecionar o papel</option>
-                <option [ngValue]="papelTodos">Todos</option>
-                <option [ngValue]="papel" *ngFor="let papel of papeis">{{papel.agenteNome}} ({{papel.nome}})</option> 
-            </select>
+        <form #cadastroMembro="ngForm">
+            <label>Orgão <span class="obrigatorio">*</span></label>
+            <ng-select [(ngModel)]="cadastroForm.orgao" name="inOrgao"
+                [items]="orgaos" #inOrgao="ngModel" required
+                [searchFn]="searchOrgao" (ngModelChange)="preencherSetores($event)"
+                placeholder="Selecionar o Orgão"
+                >
+                <ng-template ng-label-tmp let-item="item">
+                    ({{ (item.sigla && item.sigla.length > 0 ) ? item.sigla : ' - ' }}) {{item.nome}}
+                </ng-template>
+                <ng-template ng-option-tmp let-item="item">
+                    ({{ (item.sigla && item.sigla.length > 0 ) ? item.sigla : ' - ' }}) {{item.nome}}
+                </ng-template>
+            </ng-select>
+
+            <label>Setor <span class="obrigatorio">*</span></label>
+            <ng-select [(ngModel)]="cadastroForm.setor" name="inSetor"
+                [items]="setores" [disabled]="inOrgao.invalid" required
+                [searchFn]="searchSetor" #inSetor="ngModel" (ngModelChange)="preencherPapeis($event)"
+                placeholder="Selecionar o Setor"
+                >
+                <ng-template ng-label-tmp ng-option-tmp let-item="item">
+                    {{ (item != setorTodos ) ? '(' + item.sigla + ')' : '' }} {{item.nome}}
+                </ng-template>
+            </ng-select>
+
+            <label>Papel <span class="obrigatorio">*</span></label>
+            <ng-select [(ngModel)]="cadastroForm.papel" name="inPapel"
+                [items]="papeis" [disabled]="inSetor.invalid || cadastroForm.setor === setorTodos || inOrgao.invalid"
+                [searchFn]="searchPapel" required
+                placeholder="Selecionar o Papel"
+                >
+                <ng-template ng-label-tmp ng-option-tmp let-item="item">
+                    {{item.agenteNome}} {{item != papelTodos ? '(' + item.nome + ')' : ''}}
+                </ng-template>
+
+                
+            </ng-select>
+
         </form>
     </div>
     <footer>
-        <button [disabled]="form.get('papel').value == null" (click)="salvar()">
+        <button [disabled]="cadastroMembro.invalid" (click)="salvar()">
             Adicionar
         </button>
     </footer>

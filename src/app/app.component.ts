@@ -4,11 +4,10 @@ import { HeaderComponent } from './header/header.component';
 import { MenuComponent } from './menu/menu.component';
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [RouterOutlet],
-  template: '<router-outlet></router-outlet>',
-  styles: ':host {height: 100vh}'
+    selector: 'app-root',
+    imports: [RouterOutlet],
+    template: '<router-outlet></router-outlet>',
+    styles: ':host {height: 100vh}'
 })
 export class AppComponent {
   title = 'SPO';

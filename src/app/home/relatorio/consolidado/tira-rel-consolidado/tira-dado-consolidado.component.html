@@ -1,0 +1,23 @@
+<div id="tira">
+    <div id="invNome">
+        <div id="label">UO</div>
+        <div id="value">{{dadoConsolidado.unidadeOrcamentaria}}</div>
+    </div>
+    <div>
+        <div id="label">Previsto</div>
+        <div id="value"><span [title]="dadoConsolidado.previsto | customCurrency">R$ {{dadoConsolidado.previsto | numeroResumido }}</span></div>
+    </div>
+    <div>
+        <div id="label">Contratado</div>
+        <div id="value"><span [title]="dadoConsolidado.contratado | customCurrency">R$ {{dadoConsolidado.contratado | numeroResumido }}</span></div>
+    </div>
+    <div>
+        <div id="label">Autorizado</div>
+        <div id="value"><span [title]="dadoConsolidado.autorizado | customCurrency">R$ {{dadoConsolidado.autorizado | numeroResumido }}</span></div>
+    </div>
+    <div>
+        <div id="label">Autorizado - Contratado</div>
+        <div id="value"><span [title]="dadoConsolidado.difAutorizadoContratado | customCurrency">R$ {{dadoConsolidado.difAutorizadoContratado | numeroResumido }}</span></div>
+    </div>
+        
+</div>

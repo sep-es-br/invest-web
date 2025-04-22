@@ -12,14 +12,13 @@ import { GrupoCadastroComponent } from "../cadastro/grupo-cadastro.component";
 import { tap } from "rxjs";
 
 @Component({
-    standalone: true,
     templateUrl: './vizualizar-grupo.component.html',
     styleUrl: "./vizualizar-grupo.component.scss",
     imports: [
-    CommonModule, RouterLink, RouterLinkActive, RouterOutlet,
-    FontAwesomeModule,
-    GrupoCadastroComponent
-]
+        CommonModule, RouterLink, RouterLinkActive, RouterOutlet,
+        FontAwesomeModule,
+        GrupoCadastroComponent
+    ]
 })
 export class VizualizarGrupoComponent implements OnInit, OnDestroy{
 

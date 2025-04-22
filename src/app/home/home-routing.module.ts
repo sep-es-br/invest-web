@@ -23,6 +23,9 @@ const routes : Route[] = [
         path: "administracao",
         loadChildren: () => import('./administracao/administracao-routing.module').then( m => m.AdministracaoRoutingModule)
     },{
+        path: "relatorio",
+        loadChildren: () => import('./relatorio/relatorio.route').then( m => m.RelatorioModule)
+    },{
         path: "", 
         pathMatch: "full", 
         component: InicioComponent

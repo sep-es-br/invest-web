@@ -21,7 +21,6 @@ import { IObjetoFiltro } from "../utils/interfaces/objetoFiltro.interface";
     selector: 'spo-header',
     templateUrl: 'header.component.html',
     styleUrl: 'header.component.scss',
-    standalone: true,
     imports: [CommonModule, BreadCrumbComponent]
 })
 export class HeaderComponent implements OnInit {
@@ -155,7 +154,7 @@ export class HeaderComponent implements OnInit {
         sessionStorage.removeItem('token');
         sessionStorage.removeItem('user-profile');
 
-        this.router.navigateByUrl('login');
+        window.open('https://acessocidadao.es.gov.br/is/connect/endsession', '_self');
         
     }
 
