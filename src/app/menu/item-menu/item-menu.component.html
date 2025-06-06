@@ -3,5 +3,11 @@
 </div>
 <div class="subMenu" [ngClass]="aberto ? 'aberto' : ''">
     <h4>{{item.titulo}}</h4>
-    <spo-item-sub-menu *ngFor="let itemFilho of filhos" [item]="itemFilho" [parentPath]="'/home' + item.link" ></spo-item-sub-menu>
+    <spo-item-sub-menu
+      *ngFor="let itemFilho of filhos"
+      [item]="itemFilho"
+      [parentPath]="'/home' + item.link"
+      (menuButtonClicked)="menuButtonClicked.emit()"
+    >
+    </spo-item-sub-menu>
 </div>

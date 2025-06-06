@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 import { AuthenticationService } from '../utils/services/authentication.service';
 import { faArrowRightToBracket } from '@fortawesome/free-solid-svg-icons';
 import { CommonModule } from '@angular/common';
@@ -16,11 +15,9 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 export class LoginComponent  {
 
   faRightToBracket = faArrowRightToBracket;
-  constructor(private router: Router, private authenticationService: AuthenticationService ) { 
-  }
+  constructor(private authenticationService: AuthenticationService ) {}
 
-  login(){
-  this.authenticationService.acessoCidadaoSignIn();
+  login() {
+    this.authenticationService.acessoCidadaoSignIn();
   }
-
 }

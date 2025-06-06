@@ -1,16 +1,14 @@
+<div class="d-flex w-100 h-100 justify-content-center align-items-center" id="loginBox">
+	<div class="d-flex flex-column card justify-content-around align-items-center h-45 w-50 shadow p-2">
+		<img id="LogoSPO" src="assets/img/Logo SPO_azuil-04.1.png" alt="SPO.ES - Sistema de Planejamento Orçamentário">
+		<button class="btn btn-light bg-main-blue py-1 px-2 py-md-3 px-md-4 m-0 rounded" id="loginButton" (click)="login()">
+			<span class="mx-2">Entrar</span>
+			<fa-icon [icon]="faRightToBracket"></fa-icon>
+		</button>
 
-<div class="loginBox">
-    <main>
-        <div id="mainLogo">
-            <img class="icone-info-plan" src="assets/img/Logo SPO_azuil-04.1.png">
-        </div>
-        <button type="button" (click)="login()">
-            <div>Entrar</div>
-            <fa-icon [icon]="faRightToBracket"></fa-icon>
-        </button>
-    </main>
-    <footer>
-        <div>Secretaria de Economia e Planejamento</div>
-        <div>Governo do Estado do Espírito Santo</div>
-    </footer>
+		<footer class="d-flex flex-column text-center">
+			<span class="f-12 mb-2">Secretaria de Economia e Planejamento</span>
+			<span class="f-12">Governo do Estado do Espírito Santo</span>
+		</footer>
+	</div>
 </div>

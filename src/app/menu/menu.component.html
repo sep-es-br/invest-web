@@ -1,9 +1,14 @@
 <div id="pipLogo">
-    <img src="assets/img/Ícone SPO_32x32_branco-04.1.png" (click)="navegarPara('/home')" />
+  <img src="assets/img/Ícone SPO_32x32_branco-04.1.png" (click)="navegarPara('/home')" />
 </div>
 <nav>
-    <spo-menu-item *ngFor="let item of itensMenu" [item]="item"></spo-menu-item>
+  <spo-menu-item
+    *ngFor="let item of itensMenu"
+    [item]="item"
+    (menuButtonClicked)="menuButtonClicked.emit()"
+  >
+  </spo-menu-item>
 </nav>
 <div id="esLogo">
-    <img src="assets/img/es_logo.png" />
+  <img src="assets/img/es_logo.png" />
 </div>

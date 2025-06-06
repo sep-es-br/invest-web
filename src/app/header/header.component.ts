@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from "@angular/core";
 import { BreadCrumbComponent } from "./breadcrumb/breadcrumb.component";
 import { ActivatedRoute, NavigationEnd, Router, RouterLink } from "@angular/router";
 import { breadCrumbNames } from "./breadcrumb/breadCrumb-data";
@@ -16,15 +16,22 @@ import { ObjetoFiltro } from "../utils/models/ObjetoFiltro";
 import { IFiltro } from "../home/inventario/objetos/avaliacao/listagem/objetos-filtro/objetos-filtro.component";
 import { EtapaService } from "../utils/services/etapa.service";
 import { IObjetoFiltro } from "../utils/interfaces/objetoFiltro.interface";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 
 @Component({
     selector: 'spo-header',
     templateUrl: 'header.component.html',
     styleUrl: 'header.component.scss',
     standalone: true,
-    imports: [CommonModule, BreadCrumbComponent]
+    imports: [CommonModule, BreadCrumbComponent, FontAwesomeModule]
 })
 export class HeaderComponent implements OnInit {
+    @Input() home : HomeComponent;
+
+    @Input() user : IProfile;
+
+    @Output() menuButtonClickEvent: EventEmitter<any> = new EventEmitter();
 
     @ViewChild('menuUser') private menuUserElem? : ElementRef;
 
@@ -41,9 +48,7 @@ export class HeaderComponent implements OnInit {
 
     permissaoAdm = false;
 
-    @Input() home : HomeComponent;
-
-    @Input() user : IProfile;
+    IconBars = faBars;
 
     private concat$ : Observable<any>;
 

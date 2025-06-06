@@ -31,3 +31,28 @@ body, app-root {
     font-family: var(--fonte-open-sans);
 }
 
+@for $i from 1 through 100 {
+	.h-#{$i} {
+		height: $i * 1%;
+	}
+
+	.w-#{$i} {
+		width: $i * 1%;
+	}
+}
+
+@for $i from 4 through 26 {
+	.f-#{$i} {
+		font-size: $i * 1px;
+	}
+}
+
+$colors-main-blue: #335885;
+
+.bg-main-blue {
+	background-color: $colors-main-blue;
+}
+
+.color-main-blue {
+	color: $colors-main-blue;
+}
