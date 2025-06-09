@@ -1,29 +1,42 @@
 <form>
-        
-        <div>
-                <fa-icon *ngIf="lastElem" [icon]="addIcon" class="add" (click)="onAdd.emit()"></fa-icon>
-        </div>
-        <div>
-                <fa-icon [icon]="removerIcon" class="remover" (click)="onRemover.emit(fonteValores)"></fa-icon>
-        </div>
-        <ng-select [(ngModel)]="fonteValores.fonteOrcamentaria"
-                [ngModelOptions]="{standalone: true}"
-                [items]="optionsFontes"
-                placeholder="Selecionar a fonte orçamentária"
-                bindValue="value"
-                [compareWith]="selecionarFonte"
-                [searchFn]="filtrar"
-                [ngClass]="(checado && !valido) ? 'invalido' : ''"
-                ></ng-select>  
+  <div>
+    <fa-icon *ngIf="lastElem" [icon]="addIcon" class="add" (click)="onAdd.emit()"></fa-icon>
+  </div>
+  <div>
+    <fa-icon [icon]="removerIcon" class="remover" (click)="onRemover.emit(fonteValores)"></fa-icon>
+  </div>
 
+  <ng-select
+    placeholder="Selecionar a fonte orçamentária"
+    bindValue="value"
+    [items]="optionsFontes"
+    [compareWith]="selecionarFonte"
+    [searchFn]="filtrar"
+    [ngClass]="(checado && !valido) ? 'invalido' : ''"
+    [(ngModel)]="fonteValores.fonteOrcamentaria"
+    [ngModelOptions]="{standalone: true}"
+  >
+  </ng-select>
 
-        <input type="text" [(ngModel)]="fonteValores.previsto" [ngModelOptions]="{standalone: true}"
-                prefix="R$ " mask="separator.2" placeholder="R$ "/>
-        <fa-icon [icon]="limparIcon" class="apagar" (click)="fonteValores.previsto = null"></fa-icon>
+  <input
+    type="text"
+    prefix="R$ "
+    mask="separator.2"
+    placeholder="R$ "
+    [(ngModel)]="fonteValores.previsto"
+    [ngModelOptions]="{standalone: true}"
+  />
+  <fa-icon [icon]="limparIcon" class="apagar" (click)="fonteValores.previsto = null"></fa-icon>
 
-        <input type="text" [(ngModel)]="fonteValores.contratado" [ngModelOptions]="{standalone: true}"
-                prefix="R$ " mask="separator.2"  placeholder="R$ " [disabled]="!contratadoEditavel"/>
-        <fa-icon [icon]="limparIcon" class="apagar" (click)="fonteValores.contratado = null"></fa-icon>
-
-
+  
+  <input
+    type="text"
+    prefix="R$ "
+    mask="separator.2"
+    placeholder="R$ "
+    [disabled]="!contratadoEditavel"
+    [(ngModel)]="fonteValores.contratado"
+    [ngModelOptions]="{standalone: true}"
+  />
+  <fa-icon [icon]="limparIcon" class="apagar" (click)="fonteValores.contratado = null"></fa-icon>
 </form>

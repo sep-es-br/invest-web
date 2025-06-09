@@ -1,66 +1,82 @@
-<ng-select [items]="unidades"
-            [multiple]="true"
-            placeholder="Unidade Orçamentária"
-            [(ngModel)]="filtro.unidade"
-            [ngModelOptions]="{standalone: true}"
-            [disabled]="unidades?.length <= 0"
-            [searchFn]="searchUnidade"
-            [clearable]="true"
-            (ngModelChange)="update()"
-        >
-    <ng-template ng-label-tmp let-item="item" let-index="index">
+<div class="d-flex justify-content-center justify-content-lg-between row">
+  <div class="col-6 col-lg-3">
+    <ng-select
+      class="menor"
+      placeholder="Unidade Orçamentária"
+      [items]="unidades"
+      [multiple]="true"
+      [disabled]="unidades?.length <= 0"
+      [searchFn]="searchUnidade"
+      [clearable]="true"
+      [ngModelOptions]="{standalone: true}"
+      [(ngModel)]="filtro.unidade"
+      (ngModelChange)="update()"
+    >
+      <ng-template ng-label-tmp let-item="item" let-index="index">
         {{item.codigo}}
         <button (click)="filtro.unidade = removerSelecao(filtro.unidade, item); this.update()">
-            <fa-icon class="removerItem" [icon]="removerIcon" [attr.aria-label]="'remover unidade ' + item.codigo"></fa-icon>
+          <fa-icon class="removerItem" [icon]="removerIcon" [attr.aria-label]="'remover unidade ' + item.codigo"></fa-icon>
         </button>
-    </ng-template>
-    <ng-template ng-option-tmp let-item="item">
+      </ng-template>
+      <ng-template ng-option-tmp let-item="item">
         {{item.codigo}} - {{item.sigla}}
-    </ng-template>
-</ng-select>
+      </ng-template>
+    </ng-select>
+  </div>
 
-<ng-select [items]="planos"
-            [multiple]="true"
-            placeholder="Plano Orçamentário"
-            [(ngModel)]="filtro.plano"
-            [ngModelOptions]="{standalone: true}"
-            [searchFn]="searchPlano"
-            [clearable]="true"
-            (ngModelChange)="update()"
-        >
-    <ng-template ng-label-tmp let-item="item" let-index="index">
+  <div class="col-6 col-lg-3">
+    <ng-select
+      class="menor"
+      placeholder="Plano Orçamentário"
+      [items]="planos"
+      [multiple]="true"
+      [searchFn]="searchPlano"
+      [clearable]="true"
+      [ngModelOptions]="{standalone: true}"
+      [(ngModel)]="filtro.plano"
+      (ngModelChange)="update()"
+    >
+      <ng-template ng-label-tmp let-item="item" let-index="index">
         {{item.codigo}}
         <button (click)="filtro.plano = removerSelecao(filtro.plano, item); this.update()">
-            <fa-icon class="removerItem" [icon]="removerIcon" [attr.aria-label]="'remover plano ' + item.codigo"></fa-icon>
+          <fa-icon class="removerItem" [icon]="removerIcon" [attr.aria-label]="'remover plano ' + item.codigo"></fa-icon>
         </button>
-    </ng-template>
-    <ng-template ng-option-tmp let-item="item">
+      </ng-template>
+      <ng-template ng-option-tmp let-item="item">
         {{item.codigo}} - {{item.nome}}
-    </ng-template>
-</ng-select>
+      </ng-template>
+    </ng-select>
+  </div>
 
-<ng-select class="menor"
-            [items]="status"
-            placeholder="Status"
-            [(ngModel)]="filtro.status"
-            [ngModelOptions]="{standalone: true}"
-            [searchFn]="filtrarSimples"
-            [clearable]="true"
-            (ngModelChange)="update()"
-        >
-    <ng-template ng-label-tmp let-item="item" let-index="index">
+  <div class="col-6 col-lg-3">
+    <ng-select
+      class="menor"
+      placeholder="Status"
+      [items]="status"
+      [searchFn]="filtrarSimples"
+      [clearable]="true"
+      [ngModelOptions]="{standalone: true}"
+      [(ngModel)]="filtro.status"
+      (ngModelChange)="update()"
+    >
+      <ng-template ng-label-tmp let-item="item" let-index="index">
         {{item.nome}}
-    </ng-template>
-    <ng-template ng-option-tmp let-item="item">
+      </ng-template>
+      <ng-template ng-option-tmp let-item="item">
         {{item.nome}}
-    </ng-template>
-</ng-select>
+      </ng-template>
+    </ng-select>
+  </div>
 
-<ng-select class="menor"
-            [items]="anos"
-            [(ngModel)]="filtro.exercicio"
-            [ngModelOptions]="{standalone: true}"
-            [clearable]="false"
-            (ngModelChange)="update()"
-        >
-</ng-select>
+  <div class="col-6 col-lg-3">
+    <ng-select
+      class="menor"
+      [clearable]="false"
+      [items]="anos"
+      [(ngModel)]="filtro.exercicio"
+      [ngModelOptions]="{standalone: true}"
+      (ngModelChange)="update()"
+    >
+    </ng-select>
+  </div>
+</div>
