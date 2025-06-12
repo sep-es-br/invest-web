@@ -4,25 +4,19 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  padding-top: 2rem;
-  padding-bottom: 2rem;
 
   div#valores {
     display: flex;
     flex-direction: row;
     gap: 1rem;
-    justify-content: space-between;
+    justify-content: space-around;
     padding-top: 2rem;
     padding-bottom: 2rem;
     flex-wrap: wrap;
 
     > * {
       display: flex;
-      flex: 1 0 0px;
       align-items: center;
-      height: 3rem;
-      width: auto;
-      padding: 0.5rem;
       border-radius: 0.3rem;
       box-shadow: rgba(170, 170, 170, 0.35) 1px 1px 5px 0px;
       background-color: white;
@@ -50,7 +44,7 @@
 
   @media screen and (max-width: 990px) {
     div#valores {
-      width: 22rem;
+      width: 90%;
     }
   }
 
@@ -192,5 +186,6 @@
   
   div#listaDados {
     overflow-x: auto;
+    background-color: white;
   }
 }

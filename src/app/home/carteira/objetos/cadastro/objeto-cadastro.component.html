@@ -1,130 +1,226 @@
-<div class="container" id="content">
-    <header>
-        Solicitação
-    </header>
-    <main>
-        <form #cadastroObjeto="ngForm">
-            <label for="inGnd">GND:<span class="obrigatorio">*</span></label>
-            <select id="inGnd" name="gnd" [(ngModel)]="gnd" disabled>
-                <option [ngValue]="4">4</option>
-                <option [ngValue]="5">5</option>
-            </select>
+<div class="container overflow-auto p-5" id="content">
+  <header>
+    Solicitação
+  </header>
+  <main class="w-100">
+    <form #cadastroObjeto="ngForm" class="w-100 d-flex flex-column">
+      <div class="d-flex flex-column flex-sm-row align-items-sm-center">
+        <label class="col-12 col-sm-4" for="inGnd">GND:<span class="obrigatorio">*</span></label>
+        <select class="col-12 col-sm-8" id="inGnd" name="gnd" [(ngModel)]="gnd" disabled>
+          <option [ngValue]="4">4</option>
+          <option [ngValue]="5">5</option>
+        </select>
+      </div>
 
-            <label for="inConta">Tipo da Despesa:<span class="obrigatorio">*</span></label>
-            <select id="inConta" name="tipoConta" [(ngModel)]="objeto.tipoConta" required disabled
-                [ngClass]="(checado && tipoConta.invalid) ? 'invalido' : ''" #tipoConta="ngModel" >
-                <option [ngValue]="undefined" disabled>Selecionar o tipo da despesa</option>
-                <option value="Investimento">Investimento</option>
-                <option value="Custeio">Outras Desp. Correntes</option>
-            </select>
+      <div class="d-flex flex-column flex-sm-row align-items-sm-center">
+        <label class="col-12 col-sm-4" for="inConta">Tipo da Despesa:<span class="obrigatorio">*</span></label>
+        <select
+          class="col-12 col-sm-8"
+          id="inConta"
+          name="tipoConta"
+          [(ngModel)]="objeto.tipoConta"
+          required
+          disabled
+          [ngClass]="(checado && tipoConta.invalid) ? 'invalido' : ''"
+          #tipoConta="ngModel"
+        >
+          <option [ngValue]="undefined" disabled>Selecionar o tipo da despesa</option>
+          <option value="Investimento">Investimento</option>
+          <option value="Custeio">Outras Desp. Correntes</option>
+        </select>
+      </div>
 
-            <label for="inTipo">Tipo de Objeto <span class="obrigatorio">*</span></label>
-            <select id="inTipo" name="tipo" [(ngModel)]="objeto.tipo" required disabled
-                [ngClass]="(checado && !objeto.tipo) ? 'invalido' : ''">
-                <option [ngValue]="undefined" disabled>Selecionar o tipo de objeto</option>
-                <option ngValue="Projeto">Projeto</option>
-                <option ngValue="Entrega">Entrega</option>
-            </select>
-            
-            <label for="inNome">Nome <span class="obrigatorio">*</span></label>
-            <input type="text" id="inNome" name="nome" [(ngModel)]="objeto.nome"
-                placeholder="Insira um nome" [maxlength]="140" required #nome="ngModel"
-                [ngClass]="(checado && nome.invalid) ? 'invalido' : ''"/>
+      <div class="d-flex flex-column flex-sm-row align-items-sm-center">
+        <label class="col-12 col-sm-4" for="inTipo">Tipo de Objeto <span class="obrigatorio">*</span></label>
+        <select
+          class="col-12 col-sm-8"
+          id="inTipo"
+          name="tipo"
+          [(ngModel)]="objeto.tipo"
+          required
+          disabled
+          [ngClass]="(checado && !objeto.tipo) ? 'invalido' : ''"
+        >
+          <option [ngValue]="undefined" disabled>Selecionar o tipo de objeto</option>
+          <option ngValue="Projeto">Projeto</option>
+          <option ngValue="Entrega">Entrega</option>
+        </select>
+      </div>
+      
+      <div class="d-flex flex-column flex-sm-row align-items-sm-center">
+        <label class="col-12 col-sm-4" for="inNome">Nome <span class="obrigatorio">*</span></label>
+        <input
+          class="col-12 col-sm-8"
+          type="text"
+          id="inNome"
+          name="nome" [(ngModel)]="objeto.nome"
+          placeholder="Insira um nome"
+          [maxlength]="140"
+          required
+          #nome="ngModel"
+          [ngClass]="(checado && nome.invalid) ? 'invalido' : ''"
+        />
+      </div>
 
-            <label for="inDescricao">Descrição <span class="obrigatorio">*</span></label>
-            <input type="text" id="inDescricao" name="descricao" [(ngModel)]="objeto.descricao"
-                placeholder="Insira uma descrição" [maxlength]="280" required #descricao="ngModel"
-                [ngClass]="(checado && descricao.invalid) ? 'invalido' : ''">
-            
-            <label>Unidade Orçamentária <span class="obrigatorio">*</span></label>
-            <ng-select [(ngModel)]="objeto.conta.unidadeOrcamentariaImplementadora" required
-                [ngClass]="(checado && unidade.invalid) ? 'invalido' : ''"
-                [items]="opcoesUnidades"
-                [disabled]="this.unidades?.length <= 1"
-                placeholder="Selecionar a unidade orçamentária"
-                bindLabel="label"
-                bindValue="value"
-                [compareWith]="selecionarUnidade"
-                [searchFn]="filtrar"
-                name="unidade" #unidade="ngModel"
-                ></ng-select>            
-           
-            <label>Plano Orçamentário <span *ngIf="checarCadastrado()" class="obrigatorio">*</span></label>
-            <ng-select [(ngModel)]="objeto.conta.planoOrcamentario"
-                [items]="opcoesPlanosOrcamentarios" [required]="checarCadastrado()"
-                placeholder="Selecionar plano orçamentário"
-                bindLabel="label" [ngClass]="(checado && checarCadastrado() && planoOrcamentario.invalid) ? 'invalido' : ''"
-                bindValue="value" #planoOrcamentario="ngModel"
-                [compareWith]="selecionarPlanoOrcamentario"
-                [searchFn]="filtrar"
-                name="planoOrcamentario"
-                ></ng-select>
+      <div class="d-flex flex-column flex-sm-row align-items-sm-center">
+        <label class="col-12 col-sm-4" for="inDescricao">Descrição <span class="obrigatorio">*</span></label>
+        <input
+          class="col-12 col-sm-8"
+          type="text"
+          id="inDescricao"
+          name="descricao"
+          [(ngModel)]="objeto.descricao"
+          placeholder="Insira uma descrição"
+          [maxlength]="280" required #descricao="ngModel"
+          [ngClass]="(checado && descricao.invalid) ? 'invalido' : ''"
+        />
+      </div>
+      
+      <div class="d-flex flex-column flex-sm-row align-items-sm-center">
+        <label class="col-12 col-sm-4">Unidade Orçamentária <span class="obrigatorio">*</span></label>
+        <ng-select
+          class="col-12 col-sm-8"
+          required
+          placeholder="Selecionar a unidade orçamentária"
+          bindLabel="label"
+          bindValue="value"
+          name="unidade"
+          [items]="opcoesUnidades"
+          [compareWith]="selecionarUnidade"
+          [searchFn]="filtrar"
+          [disabled]="this.unidades?.length <= 1"
+          [ngClass]="(checado && unidade.invalid) ? 'invalido' : ''"
+          [(ngModel)]="objeto.conta.unidadeOrcamentariaImplementadora"
+          #unidade="ngModel"
+        ></ng-select>
+      </div>
+      
+      <div class="d-flex flex-column flex-sm-row align-items-sm-center">
+        <label class="col-12 col-sm-4">Plano Orçamentário <span *ngIf="checarCadastrado()" class="obrigatorio">*</span></label>
+        <ng-select
+          class="col-12 col-sm-8"
+          [(ngModel)]="objeto.conta.planoOrcamentario"
+          [items]="opcoesPlanosOrcamentarios"
+          [required]="checarCadastrado()"
+          placeholder="Selecionar plano orçamentário"
+          bindLabel="label"
+          [ngClass]="(checado && checarCadastrado() && planoOrcamentario.invalid) ? 'invalido' : ''"
+          bindValue="value" #planoOrcamentario="ngModel"
+          [compareWith]="selecionarPlanoOrcamentario"
+          [searchFn]="filtrar"
+          name="planoOrcamentario"
+        ></ng-select>
+      </div>
 
-            
-            <label for="inMicroregiao">Microrregião Atendida <span class="obrigatorio">*</span></label>
-            <select id="inMicroregiao" name="microregiaoAtendida" [(ngModel)]="objeto.microregiaoAtendida"
-                [ngClass]="(checado && microregiaoAtendida.invalid) ? 'invalido' : ''" required
-                #microregiaoAtendida="ngModel">
-                <option [ngValue]="undefined">Selecionar microrregião</option>
-                <option *ngFor="let microregiao of microregioes" [ngValue]="microregiao">{{microregiao.nome}}</option>
-            </select>
-            
-            <label for="inAreaTematica">Área Temática <span class="obrigatorio">*</span></label>
-            <select id="inAreaTematica" name="areaTematica" [(ngModel)]="objeto.areaTematica"
-                [ngClass]="(checado && areaTematica.invalid) ? 'invalido' : ''" required 
-                #areaTematica="ngModel">
-                <option [ngValue]="undefined">Selecionar a área temática</option>
-                <option *ngFor="let area of areasTematicas" [ngValue]="area">{{area.nome}}</option>
-            </select>
+      <div class="d-flex flex-column flex-sm-row align-items-sm-center">
+        <label class="col-12 col-sm-4" for="inMicroregiao">Microrregião Atendida <span class="obrigatorio">*</span></label>
+        <select
+          class="col-12 col-sm-8"
+          id="inMicroregiao"
+          name="microregiaoAtendida"
+          [(ngModel)]="objeto.microregiaoAtendida"
+          [ngClass]="(checado && microregiaoAtendida.invalid) ? 'invalido' : ''" required
+          #microregiaoAtendida="ngModel"
+        >
+            <option [ngValue]="undefined">Selecionar microrregião</option>
+            <option *ngFor="let microregiao of microregioes" [ngValue]="microregiao">{{microregiao.nome}}</option>
+        </select>
+      </div>
+      
+      <div class="d-flex flex-column flex-sm-row align-items-sm-center">
+        <label class="col-12 col-sm-4" for="inAreaTematica">Área Temática <span class="obrigatorio">*</span></label>
+        <select
+          class="col-12 col-sm-8"
+          id="inAreaTematica"
+          name="areaTematica"
+          [(ngModel)]="objeto.areaTematica"
+          [ngClass]="(checado && areaTematica.invalid) ? 'invalido' : ''" required
+          #areaTematica="ngModel"
+        >
+            <option [ngValue]="undefined">Selecionar a área temática</option>
+            <option *ngFor="let area of areasTematicas" [ngValue]="area">{{area.nome}}</option>
+        </select>
+      </div>
 
-            <label for="inInfoComplementar">Informações Complementares </label>
-            <input type="text" id="inInfoComplementar" name="infoComplementares" [maxlength]="280"
-                [(ngModel)]="objeto.infoComplementares" placeholder="Insira as Informações Complementares">
+      <div class="d-flex flex-column flex-sm-row align-items-sm-center">
+        <label class="col-12 col-sm-4" for="inInfoComplementar">Informações Complementares </label>
+        <input
+          class="col-12 col-sm-8"
+          type="text"
+          id="inInfoComplementar"
+          name="infoComplementares"
+          [maxlength]="280"
+          [(ngModel)]="objeto.infoComplementares"
+          placeholder="Insira as Informações Complementares"
+        />
+      </div>
 
-            <label for="inContrato">Contrato ou Convênio</label>
-            <input type="text" id="inContrato" name="contrato" [maxlength]="140" #contrato="ngModel"
-                (blur)="(objeto.contrato && objeto.contrato.length > 0) ? undefined : limparContratado()"
-                [(ngModel)]="objeto.contrato" placeholder="Insira o código ou número do contrato ou convênio">
-            
-            <label>Tipos de Plano(s): <span class="obrigatorio">*</span></label>
-            <ng-select [(ngModel)]="objeto.planos"
-                [ngClass]="(checado && planos.invalid) ? 'invalido' : ''"
-                [items]="opcoesTipoPlano" required #planos="ngModel"
-                [multiple]="true"
-                placeholder="Selecione os tipos de plano"
-                bindValue="value"
-                [compareWith]="selecionarTiposPlanos"
-                [searchFn]="filtrar"
-                name="planos"
-                class="multiple" 
-                ></ng-select>
-            
-            <label for="inPossuiOrcamento">Orçamento <span class="obrigatorio">*</span></label>
-            <select id="inPossuiOrcamento" name="inPossuiOrcamento" [(ngModel)]="objeto.possuiOrcamento" 
-                [ngClass]="(checado && possuiOrcamento.invalid) ? 'invalido' : ''" required  #possuiOrcamento="ngModel">
-                <option [ngValue]="undefined">Selecionar se dispõe de orçamento</option>
-                <option value="total">Já dispõe, totalmente</option>
-                <option value="parcial">Já dispõe, parcialmente (indicar no campo Informações Complementares)</option>
-                <option value="não">Ainda não dispõe</option>
-            </select>
-        </form>
-        
-        <div class="recursos">
-            <header>
-                <h4>Valores</h4>
-                <fa-icon [icon]="addIcon" (click)="addExercicio()" ></fa-icon>
-            </header>
-            <spo-cadastro-exercicio [contratadoEditavel]="objeto.contrato && objeto.contrato.length > 0"
-                [exercicio]="exercicio" 
-                *ngFor="let exercicio of objeto.recursosFinanceiros, index as i"
-                [lastElem]="i === objeto.recursosFinanceiros.length-1"
-                (onRemover)="removerExercicio($event)"></spo-cadastro-exercicio>
-        </div>
-        <div class="acoes">
-            <button (click)="salvar()" class="btn positivo" >
-                <span *ngIf="!objeto.emEtapa && objeto.emStatus, else enviar"><fa-icon [icon]="salvarIcon"></fa-icon> SALVAR</span>
-                <ng-template #enviar><fa-icon [icon]="enviarIcon"></fa-icon> ENVIAR</ng-template> 
-            </button>
-        </div>
-    </main>
+      <div class="d-flex flex-column flex-sm-row align-items-sm-center">
+        <label class="col-12 col-sm-4" for="inContrato">Contrato ou Convênio</label>
+        <input
+          class="col-12 col-sm-8"
+          type="text"
+          id="inContrato"
+          name="contrato"
+          [maxlength]="140"
+          #contrato="ngModel"
+          (blur)="(objeto.contrato && objeto.contrato.length > 0) ? undefined : limparContratado()"
+          [(ngModel)]="objeto.contrato"
+          placeholder="Insira o código ou número do contrato ou convênio"
+        />
+      </div>
+      
+      <div class="d-flex flex-column flex-sm-row align-items-sm-center">
+        <label class="col-12 col-sm-4">Tipos de Plano(s): <span class="obrigatorio">*</span></label>
+        <ng-select
+          class="multiple col-12 col-sm-8"
+          [(ngModel)]="objeto.planos"
+          [ngClass]="(checado && planos.invalid) ? 'invalido' : ''"
+          [items]="opcoesTipoPlano" required #planos="ngModel"
+          [multiple]="true"
+          placeholder="Selecione os tipos de plano"
+          bindValue="value"
+          [compareWith]="selecionarTiposPlanos"
+          [searchFn]="filtrar"
+          name="planos"
+        ></ng-select>
+      </div>
+      
+      <div class="d-flex flex-column flex-sm-row align-items-sm-center">
+        <label class="col-12 col-sm-4" for="inPossuiOrcamento">Orçamento <span class="obrigatorio">*</span></label>
+        <select
+          class="col-12 col-sm-8"
+          id="inPossuiOrcamento"
+          name="inPossuiOrcamento"
+          [(ngModel)]="objeto.possuiOrcamento" 
+          [ngClass]="(checado && possuiOrcamento.invalid) ? 'invalido' : ''" required  #possuiOrcamento="ngModel"
+        >
+          <option [ngValue]="undefined">Selecionar se dispõe de orçamento</option>
+          <option value="total">Já dispõe, totalmente</option>
+          <option value="parcial">Já dispõe, parcialmente (indicar no campo Informações Complementares)</option>
+          <option value="não">Ainda não dispõe</option>
+        </select>
+      </div>
+    </form>
+    
+    <div class="recursos">
+      <header>
+        <h4>Valores</h4>
+        <fa-icon [icon]="addIcon" (click)="addExercicio()" ></fa-icon>
+      </header>
+      <spo-cadastro-exercicio
+        *ngFor="let exercicio of objeto.recursosFinanceiros, index as i"
+        [contratadoEditavel]="objeto.contrato && objeto.contrato.length > 0"
+        [exercicio]="exercicio" 
+        [lastElem]="i === objeto.recursosFinanceiros.length-1"
+        (onRemover)="removerExercicio($event)"
+      ></spo-cadastro-exercicio>
+    </div>
+    <div class="acoes">
+      <button (click)="salvar()" class="btn positivo" >
+        <span *ngIf="!objeto.emEtapa && objeto.emStatus, else enviar"><fa-icon [icon]="salvarIcon"></fa-icon> SALVAR</span>
+        <ng-template #enviar><fa-icon [icon]="enviarIcon"></fa-icon> ENVIAR</ng-template> 
+      </button>
+    </div>
+  </main>
 </div>

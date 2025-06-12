@@ -1,88 +1,83 @@
 import { CommonModule } from "@angular/common";
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { IFonteExercicio } from "../../fonte-exercicio.interface";
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { FormsModule } from "@angular/forms";
 import { FonteOrcamentariaDTO } from "../../../../../../utils/models/FonteOrcamentariaDTO";
 import { NgxMaskDirective, provideNgxMask } from "ngx-mask";
-import { debounceTime, tap } from "rxjs";
+import { tap } from "rxjs";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faMinusCircle, faPlusCircle, faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
 import { FonteOrcamentariaService } from "../../../../../../utils/services/fonteOrcamentaria.service";
-import { DropdownFiltroComponent } from "../../../../../../utils/components/dropdown-com-filtro/dropdown-com-filtro.component";
-import { OpcaoItemComponent } from "../../../../../../utils/components/dropdown-com-filtro/opcao-item.component";
 import { ISelectOpcao } from "../../../../../../utils/interfaces/selectOption.interface";
-import { NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent } from "@ng-select/ng-select";
+import { NgSelectComponent } from "@ng-select/ng-select";
 
 @Component({
-    selector: "spo-cadastro-exercicio-fonte",
-    standalone: true, 
-    templateUrl: "./cadastro-exercicio-fonte.component.html",
-    styleUrl: "./cadastro-exercicio-fonte.component.scss",
-    imports: [CommonModule, FormsModule, NgxMaskDirective, FontAwesomeModule, DropdownFiltroComponent, OpcaoItemComponent,
-        NgSelectComponent, NgOptionTemplateDirective, NgLabelTemplateDirective
-    ],
-    providers: [provideNgxMask()]
+  selector: "spo-cadastro-exercicio-fonte",
+  standalone: true, 
+  templateUrl: "./cadastro-exercicio-fonte.component.html",
+  styleUrl: "./cadastro-exercicio-fonte.component.scss",
+  imports: [CommonModule, FormsModule, NgxMaskDirective, FontAwesomeModule, NgSelectComponent],
+  providers: [provideNgxMask()]
 })
 export class CadastroExercicioFonteComponent implements OnInit {
+  @Input() fonteValores: IFonteExercicio;
 
-    limparIcon = faXmarkCircle;
-    removerIcon = faMinusCircle;
-    addIcon = faPlusCircle;
+  @Input() lastElem: boolean;
 
-    @Input() fonteValores : IFonteExercicio;
+  @Input() contratadoEditavel: boolean = false;
 
-    @Input() lastElem : boolean;
-    @Input() contratadoEditavel : boolean = false;
+  @Input() isFirstElem: boolean;
 
-    @Output() onRemover = new EventEmitter<IFonteExercicio>();
-    @Output() onAdd = new EventEmitter<never>();
+  @Output() onRemover = new EventEmitter<IFonteExercicio>();
 
-    optionsFontes : ISelectOpcao<FonteOrcamentariaDTO>[];
+  @Output() onAdd = new EventEmitter<never>();
 
-    public valido = false;
-    public checado = false;
+  limparIcon = faXmarkCircle;
+  removerIcon = faMinusCircle;
+  addIcon = faPlusCircle;
 
-    constructor(
-        private fonteService : FonteOrcamentariaService
-    ) {}
+  optionsFontes : ISelectOpcao<FonteOrcamentariaDTO>[];
 
+  public valido = false;
+  public checado = false;
 
-    setFontes(fontList: FonteOrcamentariaDTO[]) {
+  constructor(private fonteService : FonteOrcamentariaService) {}
 
-        this.optionsFontes = [];
+  ngOnInit(): void {
+    this.fonteService.extras().pipe(
+      tap(fonteList => this.setFontes(fonteList))
+    ).subscribe();
+  }
 
-        this.optionsFontes.push(...fontList.map(fonte => {
-            return {
-                label: `${fonte.codigo} - ${fonte.nome}`,
-                value: fonte
-            }
-        }))
+  setFontes(fontList: FonteOrcamentariaDTO[]) {
+    this.optionsFontes = [];
 
-        this.fonteValores.fonteOrcamentaria = this.optionsFontes.find(opt => this.selecionarFonte(opt, this.fonteValores.fonteOrcamentaria) )?.value
-    }
+    this.optionsFontes.push(...fontList.map(fonte => {
+      return {
+        label: `${fonte.codigo} - ${fonte.nome}`,
+        value: fonte
+      }
+    }));
 
-    selecionarFonte(option : ISelectOpcao<FonteOrcamentariaDTO>, model : FonteOrcamentariaDTO) : boolean {
-        return option.value?.codigo === model?.codigo
-    }
+    this.fonteValores.fonteOrcamentaria = this.optionsFontes.find(opt => this.selecionarFonte(opt, this.fonteValores.fonteOrcamentaria) )?.value;
+  }
 
-    filtrar(term : string, item : ISelectOpcao<any>) : boolean {
-        return item.label.toUpperCase().includes(term.toUpperCase());
-    }
+  selecionarFonte(option : ISelectOpcao<FonteOrcamentariaDTO>, model : FonteOrcamentariaDTO): boolean {
+    return option.value?.codigo === model?.codigo;
+  }
 
-    ngOnInit(): void {
-        this.fonteService.extras().pipe(
-            tap(fonteList => this.setFontes(fonteList))
-        ).subscribe();
-    }
+  filtrar(term: string, item: ISelectOpcao<any>): boolean {
+    return item.label.toUpperCase().includes(term.toUpperCase());
+  }
 
-    limparContratado() {
-        this.fonteValores.contratado = undefined;
-    }
+  limparContratado() {
+    this.fonteValores.contratado = undefined;
+  }
 
-    validar() : boolean {
-        this.valido = !!this.fonteValores.fonteOrcamentaria;
-        this.checado = true;
+  validar(): boolean {
+    this.valido = !!this.fonteValores.fonteOrcamentaria;
+    this.checado = true;
 
-        return this.valido;
-    }
+    return this.valido;
+  }
 }

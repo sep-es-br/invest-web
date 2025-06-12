@@ -5,17 +5,7 @@
   form {
     @import "../../../../../../utils/styles/ngSelectPadrao.scss";
 
-    display: flex;
-    flex-direction: row;
-    flex-grow: 1;
-    align-items: center;
-
     div {
-      display: flex;
-      width: 1.5rem;
-      justify-content: center;
-      align-items: center;
-
       fa-icon.add {
         color: var(--verde-padrao);
       }
@@ -26,7 +16,6 @@
 
       .ng-select-container {
         border-color: #0000 #0000 var(--cor-primaria) #0000;
-        min-width: 20rem;
       }
 
       &.invalido {
@@ -53,7 +42,6 @@
       color: var(--cor-primaria);
 
       outline: none;
-      // width: 10rem;
 
       &::placeholder {
         color: var(--cor-primaria);

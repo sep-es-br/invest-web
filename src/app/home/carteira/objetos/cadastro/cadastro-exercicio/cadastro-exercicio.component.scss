@@ -1,63 +1,28 @@
 :host {
+  font-family: var(--fonte-open-sans);
+  font-size: 15px;
+  display: flex;
+  flex-direction: column;
 
-    font-family: var(--fonte-open-sans);
-    font-size: 15px;
-    display: flex;
-    flex-direction: column;
-
-    header {
-        display: flex;
-        flex-direction: row;
-
-        div {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 1.5rem;
-            
-            fa-icon {
-                &.add {
-                    color: green;
-                }
-
-                &.remover {
-                    color: red;
-                }
-            }
+  header {
+    div {
+      fa-icon {
+        &.add {
+          color: green;
         }
-
-        h4 {
-            font-weight: unset;
-            font-family: inherit;
-            box-sizing: border-box;
-            margin-inline: 2rem ;
-            width: 10rem;
-            text-align: center;
-            span {
-                font-weight: bolder;
-            }
+        &.remover {
+          color: red;
         }
-        
-
-        h4:first-of-type {
-            text-align: start;
-            flex-grow: 1;
-        }
-
-        // h4:last-of-type {
-        //     width: 1.3rem;
-        // }
+      }
     }
 
-    main {
-        display: flex;
-        flex-direction: column;
+    h4 {
+      font-weight: unset;
+      font-family: inherit;
 
-        spo-cadastro-exercicio-fonte {
-            margin-left: 1rem;
-        }
-    }               
-
-
-        
+      span {
+        font-weight: bolder;
+      }
+    }
+  }
 }

@@ -1,6 +1,9 @@
 :host {
   display: flex;
   flex-direction: row;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  min-width: 12rem;
 
   div {
     &#icone {

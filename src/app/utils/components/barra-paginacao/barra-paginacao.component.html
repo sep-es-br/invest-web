@@ -7,7 +7,7 @@
     <fa-icon [icon]="anteriorIcon"></fa-icon>
 </div>
 <div class="btnPagina {{n === paginaAtual ? 'pgAtual' : ''}}" *ngFor="let n of paginas" (click)="setPaginaAtual(n)">
-    <p>{{n}}</p>
+    <p class="m-0">{{n}}</p>
 </div>
 <div id="btnAcao" class="btnPagina {{paginaAtual === maxPgNum ? 'btnPgInativo' : ''}}"
     (click)="avancarUmaPagina()">

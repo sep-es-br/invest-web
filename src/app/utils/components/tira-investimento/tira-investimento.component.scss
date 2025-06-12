@@ -2,26 +2,21 @@
 @import url('../../styles/tira-base.scss');
 
 :host {
+  div#tira {
+    cursor: pointer;
+    background-color: #F7F9F9;
+  }
 
-    div#tira {
-        cursor: pointer;
+  > div#objetoList {
+    display: flex;
+    flex-direction: column;
+    margin-left: 3rem;
+    height: 0;
+    transition: height 0.5s ease-in-out;
+    overflow: hidden;
 
+    &.aberto {
+      height: auto;
     }
-
-    > div#objetoList {
-        display: flex;
-        flex-direction: column;
-        margin-left: 3rem;
-        height: 0;
-        transition: height 0.5s ease-in-out;
-        overflow: hidden;
-
-        &.aberto {
-            height: auto;
-        }
-        
-    }
-
-
+  }
 }
-

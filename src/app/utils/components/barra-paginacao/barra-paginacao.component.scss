@@ -1,44 +1,49 @@
 :host {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  align-items: center;
+
+  // Telas de até 768px (md)
+  @media screen and (max-width: 768px) {
+    justify-content: center;
+  }
+
+  fa-icon {
+    font-size: small;
+  }
+
+  #btnAcao {
+    font-size: x-large;
     display: flex;
-        flex-direction: row;
-        justify-content: end;
-        align-items: center;
+    justify-content: center;
+    align-items: center;
+    margin-left: 0;
+    margin-right: 0;
+    width: 1.5rem;
+  }
 
-        fa-icon {
-            font-size: small;
-        }
+  .btnPagina {
+    font-family: var(--fonte-open-sans);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 2rem;
+    height: 2rem;
+    margin-right: 0.5rem;
+    border-radius: 0.5rem;
+    color: var(--cor-primaria);
+    font-weight: bolder;
+    font-size: small;
+    cursor: pointer;
+  }
 
-        #btnAcao {
-            font-size: x-large;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-left: 0;
-            margin-right: 0;
-            width: 1.5rem;
-        }
+  .pgAtual {
+    background-color: var(--cor-primaria);
+    color: white;
+  }
 
-        .btnPagina {
-            font-family: var(--fonte-open-sans);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 2rem;
-            height: 2rem;
-            margin-right: 0.5rem;
-            border-radius: 0.5rem;
-            color: var(--cor-primaria);
-            font-weight: bolder;
-            font-size: small;
-            cursor: pointer;
-        }
-
-        .pgAtual {
-            background-color: var(--cor-primaria);
-            color: white;
-        }
-
-        .btnPgInativo {
-            color: gray
-        }
+  .btnPgInativo {
+    color: gray
+  }
 }

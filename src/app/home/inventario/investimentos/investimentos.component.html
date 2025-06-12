@@ -67,7 +67,9 @@
         </div> -->
     </div>
 </div>
-<div id="listaDados" class="displayLista">
+<div id="listaDados" class="displayLista p-4 rounded">
     <spo-tira-investimento *ngFor="let inv of data" [investimento]="inv"></spo-tira-investimento>
 </div>
-<spo-barra-paginacao [larguraPaginacao]="larguraPaginacao" [quantidade]="qtInvestimento" (onPageChange)="executar(recarregarLista($event)) "></spo-barra-paginacao>
+<footer class="mt-2">
+  <spo-barra-paginacao [larguraPaginacao]="larguraPaginacao" [quantidade]="qtInvestimento" (onPageChange)="executar(recarregarLista($event)) "></spo-barra-paginacao>
+</footer>
