@@ -1,21 +1,22 @@
-<header [ngClass]="disabled ? 'disabled' : ''">
-    <div>
-        <fa-icon [icon]="removerIcon" 
-            class="remover"
-            (click)="disabled ? undefined : onRemover.emit(exercicio)"></fa-icon>
-    </div>
-    <h4>Exercício <span>{{exercicio.anoExercicio}}</span></h4>
-    <h4>Previsto</h4>
-    <h4>Contratado</h4>
-    <!-- <h4>GND</h4> -->
+<header class="d-flex flex-row" [ngClass]="disabled ? 'disabled' : ''">
+  <div class="d-flex align-items-center w-100">
+    <fa-icon
+      class="remover me-2"
+      [icon]="removerIcon" 
+      (click)="disabled ? undefined : onRemover.emit(exercicio)">
+    </fa-icon>
+    <h4 class="m-0">Exercício <span>{{exercicio.anoExercicio}}</span></h4>
+  </div>
 </header>
-<main>
-    <spo-avaliacao-exercicio-fonte [disabled]="disabled" [contratadoEditavel]="contratadoEditavel"
-        *ngFor="let fonte of exercicio.indicadaPor, index as i"
-        [fonteValores]="fonte"
-        [lastElem]="i == exercicio.indicadaPor.length-1"
-        (alterado)="getAlterado($event)"
-        (onRemover)="removerFonte($event)"
-        (onAdd)="exercicio.indicadaPor.push({fonteOrcamentaria: null})"
-        ></spo-avaliacao-exercicio-fonte>
+<main class="d-flex flex-column ms-2">
+  <spo-avaliacao-exercicio-fonte
+    *ngFor="let fonte of exercicio.indicadaPor, index as i"
+    [disabled]="disabled"
+    [contratadoEditavel]="contratadoEditavel"
+    [fonteValores]="fonte"
+    [lastElem]="i == exercicio.indicadaPor.length-1"
+    (alterado)="getAlterado($event)"
+    (onRemover)="removerFonte($event)"
+    (onAdd)="exercicio.indicadaPor.push({fonteOrcamentaria: null})">
+  </spo-avaliacao-exercicio-fonte>
 </main>

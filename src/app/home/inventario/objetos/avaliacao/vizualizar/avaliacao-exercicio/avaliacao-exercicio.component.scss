@@ -1,9 +1,14 @@
 :host {
-
     font-family: var(--fonte-open-sans);
     font-size: 15px;
     display: flex;
     flex-direction: column;
+    background-color: #F7F9F9;
+    padding-left: .5rem;
+    padding-right: 1.5rem;
+    padding-top: 1rem;
+    margin-bottom: 1rem;
+    border-radius: .5rem;
 
     header {
         display: flex;

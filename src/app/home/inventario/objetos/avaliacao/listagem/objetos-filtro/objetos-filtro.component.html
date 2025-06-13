@@ -1,61 +1,77 @@
-<form>
-    <ng-select [items]="unidades"
-            [multiple]="true"
-            placeholder="Unidade Orçamentária"
-            [(ngModel)]="filtro.unidade"
-            [ngModelOptions]="{standalone: true}"
-            [searchFn]="searchUnidade"
-            [clearable]="true"
-            (ngModelChange)="atualizar()"
-        >
-        <ng-template ng-label-tmp let-item="item" let-index="index">
-            {{item.codigo}}
-            <button (click)="filtro.unidade = removerSelecao(filtro.unidade, item); this.atualizar()">
-                <fa-icon class="removerItem" [icon]="removerIcon" [attr.aria-label]="'remover unidade ' + item.codigo"></fa-icon>
-            </button>
-        </ng-template>
-        <ng-template ng-option-tmp let-item="item">
-            {{item.codigo}} - {{item.sigla}}
-        </ng-template>
+<form class="d-flex justify-content-center justify-content-lg-between row">
+  <div class="col-6 col-lg-3">
+    <ng-select
+      class="menor"
+      placeholder="Unidade Orçamentária"
+      [items]="unidades"
+      [multiple]="true"
+      [searchFn]="searchUnidade"
+      [clearable]="true"
+      [ngModelOptions]="{standalone: true}"
+      [(ngModel)]="filtro.unidade"
+      (ngModelChange)="atualizar()"
+    >
+      <ng-template ng-label-tmp let-item="item" let-index="index">
+        {{item.codigo}}
+        <button (click)="filtro.unidade = removerSelecao(filtro.unidade, item); this.atualizar()">
+          <fa-icon class="removerItem" [icon]="removerIcon" [attr.aria-label]="'remover unidade ' + item.codigo"></fa-icon>
+        </button>
+      </ng-template>
+      <ng-template ng-option-tmp let-item="item">
+        {{item.codigo}} - {{item.sigla}}
+      </ng-template>
     </ng-select>
+  </div>
 
-    <ng-select [items]="etapas" class="menor"
-            placeholder="Etapa"
-            [(ngModel)]="filtro.etapa"
-            [ngModelOptions]="{standalone: true}"
-            [clearable]="true"
-            (ngModelChange)="atualizar()"
-            [searchFn]="filtrarSimples"
-        >
-        <ng-template ng-label-tmp let-item="item" let-index="index">
-            {{item.nome}}
-        </ng-template>
-        <ng-template ng-option-tmp let-item="item">
-            {{item.nome}}
-        </ng-template>
+  <div class="col-6 col-lg-3">
+    <ng-select
+      class="menor"
+      placeholder="Etapa"
+      [items]="etapas" class="menor"
+      [clearable]="true"
+      [searchFn]="filtrarSimples"
+      [(ngModel)]="filtro.etapa"
+      [ngModelOptions]="{standalone: true}"
+      (ngModelChange)="atualizar()"
+    >
+      <ng-template ng-label-tmp let-item="item" let-index="index">
+        {{item.nome}}
+      </ng-template>
+      <ng-template ng-option-tmp let-item="item">
+        {{item.nome}}
+      </ng-template>
     </ng-select>
+  </div>
 
-    <ng-select [items]="status" class="menor"
-            placeholder="Status"
-            [(ngModel)]="filtro.status"
-            [ngModelOptions]="{standalone: true}"
-            [clearable]="true"
-            (ngModelChange)="atualizar()"
-            [searchFn]="filtrarSimples"
-        >
-        <ng-template ng-label-tmp let-item="item" let-index="index">
-            {{item.nome}}
-        </ng-template>
-        <ng-template ng-option-tmp let-item="item">
-            {{item.nome}}
-        </ng-template>
+  <div class="col-6 col-lg-3">
+    <ng-select
+      class="menor"
+      placeholder="Status"
+      [items]="status" class="menor"
+      [clearable]="true"
+      [searchFn]="filtrarSimples"
+      [ngModelOptions]="{standalone: true}"
+      [(ngModel)]="filtro.status"
+      (ngModelChange)="atualizar()"
+    >
+      <ng-template ng-label-tmp let-item="item" let-index="index">
+        {{item.nome}}
+      </ng-template>
+      <ng-template ng-option-tmp let-item="item">
+        {{item.nome}}
+      </ng-template>
     </ng-select>
+  </div>
 
-    <ng-select [items]="anos" class="menor"
-            [(ngModel)]="filtro.ano"
-            [ngModelOptions]="{standalone: true}"
-            [clearable]="false"
-            (ngModelChange)="atualizar()"
-        >
+  <div class="col-6 col-lg-3">
+    <ng-select
+      class="menor"
+      [items]="anos"
+      [clearable]="false"
+      [ngModelOptions]="{standalone: true}"
+      [(ngModel)]="filtro.ano"
+      (ngModelChange)="atualizar()"
+    >
     </ng-select>
+  </div>
 </form>

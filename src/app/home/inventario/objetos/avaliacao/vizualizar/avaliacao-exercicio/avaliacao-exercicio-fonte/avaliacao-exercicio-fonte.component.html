@@ -1,32 +1,63 @@
-<form [ngClass]="disabled ? 'disabled' : ''">
-        
+<form class="d-flex flex-column justify-content-between flex-lg-row w-100 mb-4" [ngClass]="disabled ? 'disabled' : ''">
+  <div class="d-flex flex-column col-12 col-lg-4 mt-4 mt-lg-2">
+    <span class="input-label ms-2 mb-2">Fonte Orçamentária</span>
+
+    <div class="d-flex flex-row align-items-center">
+      <div class="text-center col-1">
         <div>
-                <fa-icon *ngIf="lastElem" [icon]="addIcon" class="add" (click)="disabled ? undefined : onAdd.emit()"></fa-icon>
+          <fa-icon *ngIf="lastElem" [icon]="addIcon" class="add" (click)="disabled ? undefined : onAdd.emit()"></fa-icon>
         </div>
         <div>
-                <fa-icon [icon]="removerIcon" class="remover" (click)="disabled ? undefined : onRemover.emit(fonteValores)"></fa-icon>
+          <fa-icon [icon]="removerIcon" class="remover" (click)="disabled ? undefined : onRemover.emit(fonteValores)"></fa-icon>
         </div>
-        <ng-select [(ngModel)]="fonteValores.fonteOrcamentaria" [disabled]="disabled"
-                [ngModelOptions]="{standalone: true}"
-                [items]="optionsFontes"
-                placeholder="Selecionar a fonte orçamentária"
-                bindValue="value"
-                [compareWith]="selecionarFonte"
-                [searchFn]="filtrar"
-                [ngClass]="(checado && !valido) ? 'invalido' : ''"
-                ></ng-select>  
+      </div>
+      
+      <ng-select
+        class="col-11"
+        placeholder="Selecionar a fonte orçamentária"
+        bindValue="value"
+        [items]="optionsFontes"
+        [compareWith]="selecionarFonte"
+        [searchFn]="filtrar"
+        [ngClass]="(checado && !valido) ? 'invalido' : ''"
+        [(ngModel)]="fonteValores.fonteOrcamentaria"
+        [disabled]="disabled"
+        [ngModelOptions]="{standalone: true}">
+      </ng-select>
+    </div>
+  </div>
 
+  <div class="d-flex flex-column col-12 col-lg-3 mt-4 mt-lg-2">
+    <span class="input-label ms-2 mb-2">Previsto</span>
 
-        <input type="text" [(ngModel)]="fonteValores.previsto" [ngModelOptions]="{standalone: true}"
-                prefix="R$ " mask="separator.2" placeholder="R$ " [disabled]="disabled"/>
-        <fa-icon [icon]="limparIcon" class="apagar" (click)="disabled ? undefined : fonteValores.previsto = undefined"></fa-icon>
+    <div class="d-flex flex-row align-items-center">
+      <input
+        type="text"
+        prefix="R$ "
+        mask="separator.2"
+        placeholder="R$ "
+        [(ngModel)]="fonteValores.previsto"
+        [ngModelOptions]="{standalone: true}"
+        [disabled]="disabled"
+      />
+      <fa-icon [icon]="limparIcon" class="apagar" (click)="disabled ? undefined : fonteValores.previsto = undefined"></fa-icon>
+    </div>
+  </div>
 
-        <input type="text" [(ngModel)]="fonteValores.contratado" [ngModelOptions]="{standalone: true}"
-                prefix="R$ " mask="separator.2"  placeholder="R$ " [disabled]="disabled || !contratadoEditavel" />
-        <fa-icon [icon]="limparIcon" class="apagar" (click)="disabled ? undefined : fonteValores.contratado = undefined"></fa-icon>
+  <div class="d-flex flex-column col-12 col-lg-3 mt-4 mt-lg-2">
+    <span class="input-label ms-2 mb-2">Contratado</span>
 
-        <!-- <select [(ngModel)]="fonteValores.gnd" [ngModelOptions]="{standalone: true}" [disabled]="disabled">
-                <option [ngValue]="4">4</option>
-                <option [ngValue]="5">5</option>
-        </select> -->
+    <div class="d-flex flex-row align-items-center">
+      <input
+        type="text"
+        prefix="R$ "
+        mask="separator.2"
+        placeholder="R$ "
+        [(ngModel)]="fonteValores.contratado"
+        [ngModelOptions]="{standalone: true}"
+        [disabled]="disabled || !contratadoEditavel"
+      />
+      <fa-icon [icon]="limparIcon" class="apagar" (click)="disabled ? undefined : fonteValores.contratado = undefined"></fa-icon>
+    </div>
+  </div>
 </form>

@@ -1,10 +1,7 @@
 :host {
-    form {
-        display: flex;
-        justify-content: end;
-        font-size: small;
-    }
+  form {
+    font-size: small;
+  }
 
-    @import '../../../../../../utils/styles/ngFilter.scss';
+  @import '../../../../../../utils/styles/ngFilter.scss';
 }
-

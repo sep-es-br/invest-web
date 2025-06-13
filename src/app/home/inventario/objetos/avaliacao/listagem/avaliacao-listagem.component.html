@@ -1,16 +1,19 @@
 <spo-objeto-filtro (onUpdate)="this.recarregarLista(paginaAtual)"></spo-objeto-filtro>
-<div id="cabecalho">
-    <div id="title">
-        <p>Objetos ({{qtObjetos}})</p>
-        <div id="pesquisa">
-            <fa-icon [icon]="searchIcon"></fa-icon>
-            <input type="text" [formControl]="txtBusca" placeholder="Procurar" class="pesquisa" />
-        </div>
+<header>
+  <div id="title">
+    <h3>Objetos ({{qtObjetos}})</h3>
+    <div id="pesquisa">
+      <fa-icon [icon]="searchIcon"></fa-icon>
+      <input type="text" [formControl]="txtBusca" placeholder="Procurar" class="pesquisa" />
     </div>
-</div>
-<div id="listaDados">
-    <spo-tira-listagem-objetos *ngFor="let objeto of data" [objeto]="objeto" 
-        (doClick)="redirectTo(objeto.id)" [permissao]="pode"></spo-tira-listagem-objetos>
-    
-</div>
+  </div>
+</header>
+<main class="overflow-auto rounded p-4">
+  <spo-tira-listagem-objetos
+    *ngFor="let objeto of data"
+    [permissao]="pode"
+    [objeto]="objeto" 
+    (doClick)="redirectTo(objeto.id)"
+  ></spo-tira-listagem-objetos>
+</main>
 <spo-barra-paginacao [larguraPaginacao]="larguraPaginacao" [quantidade]="qtObjetos" (onPageChange)="recarregarLista($event)"></spo-barra-paginacao>

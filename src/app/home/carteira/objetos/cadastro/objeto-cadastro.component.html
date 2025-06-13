@@ -4,18 +4,18 @@
   </header>
   <main class="w-100">
     <form #cadastroObjeto="ngForm" class="w-100 d-flex flex-column">
-      <div class="d-flex flex-column flex-sm-row align-items-sm-center">
-        <label class="col-12 col-sm-4" for="inGnd">GND:<span class="obrigatorio">*</span></label>
-        <select class="col-12 col-sm-8" id="inGnd" name="gnd" [(ngModel)]="gnd" disabled>
+      <div class="d-flex flex-column flex-md-row align-items-md-center">
+        <label class="col-12 col-md-4" for="inGnd">GND:<span class="obrigatorio">*</span></label>
+        <select class="col-12 col-md-8" id="inGnd" name="gnd" [(ngModel)]="gnd" disabled>
           <option [ngValue]="4">4</option>
           <option [ngValue]="5">5</option>
         </select>
       </div>
 
-      <div class="d-flex flex-column flex-sm-row align-items-sm-center">
-        <label class="col-12 col-sm-4" for="inConta">Tipo da Despesa:<span class="obrigatorio">*</span></label>
+      <div class="d-flex flex-column flex-md-row align-items-md-center">
+        <label class="col-12 col-md-4" for="inConta">Tipo da Despesa:<span class="obrigatorio">*</span></label>
         <select
-          class="col-12 col-sm-8"
+          class="col-12 col-md-8"
           id="inConta"
           name="tipoConta"
           [(ngModel)]="objeto.tipoConta"
@@ -30,10 +30,10 @@
         </select>
       </div>
 
-      <div class="d-flex flex-column flex-sm-row align-items-sm-center">
-        <label class="col-12 col-sm-4" for="inTipo">Tipo de Objeto <span class="obrigatorio">*</span></label>
+      <div class="d-flex flex-column flex-md-row align-items-md-center">
+        <label class="col-12 col-md-4" for="inTipo">Tipo de Objeto <span class="obrigatorio">*</span></label>
         <select
-          class="col-12 col-sm-8"
+          class="col-12 col-md-8"
           id="inTipo"
           name="tipo"
           [(ngModel)]="objeto.tipo"
@@ -47,10 +47,10 @@
         </select>
       </div>
       
-      <div class="d-flex flex-column flex-sm-row align-items-sm-center">
-        <label class="col-12 col-sm-4" for="inNome">Nome <span class="obrigatorio">*</span></label>
+      <div class="d-flex flex-column flex-md-row align-items-md-center">
+        <label class="col-12 col-md-4" for="inNome">Nome <span class="obrigatorio">*</span></label>
         <input
-          class="col-12 col-sm-8"
+          class="col-12 col-md-8"
           type="text"
           id="inNome"
           name="nome" [(ngModel)]="objeto.nome"
@@ -62,10 +62,10 @@
         />
       </div>
 
-      <div class="d-flex flex-column flex-sm-row align-items-sm-center">
-        <label class="col-12 col-sm-4" for="inDescricao">Descrição <span class="obrigatorio">*</span></label>
+      <div class="d-flex flex-column flex-md-row align-items-md-center">
+        <label class="col-12 col-md-4" for="inDescricao">Descrição <span class="obrigatorio">*</span></label>
         <input
-          class="col-12 col-sm-8"
+          class="col-12 col-md-8"
           type="text"
           id="inDescricao"
           name="descricao"
@@ -76,10 +76,10 @@
         />
       </div>
       
-      <div class="d-flex flex-column flex-sm-row align-items-sm-center">
-        <label class="col-12 col-sm-4">Unidade Orçamentária <span class="obrigatorio">*</span></label>
+      <div class="d-flex flex-column flex-md-row align-items-md-center">
+        <label class="col-12 col-md-4">Unidade Orçamentária <span class="obrigatorio">*</span></label>
         <ng-select
-          class="col-12 col-sm-8"
+          class="col-12 col-md-8"
           required
           placeholder="Selecionar a unidade orçamentária"
           bindLabel="label"
@@ -95,10 +95,10 @@
         ></ng-select>
       </div>
       
-      <div class="d-flex flex-column flex-sm-row align-items-sm-center">
-        <label class="col-12 col-sm-4">Plano Orçamentário <span *ngIf="checarCadastrado()" class="obrigatorio">*</span></label>
+      <div class="d-flex flex-column flex-md-row align-items-md-center">
+        <label class="col-12 col-md-4">Plano Orçamentário <span *ngIf="checarCadastrado()" class="obrigatorio">*</span></label>
         <ng-select
-          class="col-12 col-sm-8"
+          class="col-12 col-md-8"
           [(ngModel)]="objeto.conta.planoOrcamentario"
           [items]="opcoesPlanosOrcamentarios"
           [required]="checarCadastrado()"
@@ -112,10 +112,10 @@
         ></ng-select>
       </div>
 
-      <div class="d-flex flex-column flex-sm-row align-items-sm-center">
-        <label class="col-12 col-sm-4" for="inMicroregiao">Microrregião Atendida <span class="obrigatorio">*</span></label>
+      <div class="d-flex flex-column flex-md-row align-items-md-center">
+        <label class="col-12 col-md-4" for="inMicroregiao">Microrregião Atendida <span class="obrigatorio">*</span></label>
         <select
-          class="col-12 col-sm-8"
+          class="col-12 col-md-8"
           id="inMicroregiao"
           name="microregiaoAtendida"
           [(ngModel)]="objeto.microregiaoAtendida"
@@ -127,10 +127,10 @@
         </select>
       </div>
       
-      <div class="d-flex flex-column flex-sm-row align-items-sm-center">
-        <label class="col-12 col-sm-4" for="inAreaTematica">Área Temática <span class="obrigatorio">*</span></label>
+      <div class="d-flex flex-column flex-md-row align-items-md-center">
+        <label class="col-12 col-md-4" for="inAreaTematica">Área Temática <span class="obrigatorio">*</span></label>
         <select
-          class="col-12 col-sm-8"
+          class="col-12 col-md-8"
           id="inAreaTematica"
           name="areaTematica"
           [(ngModel)]="objeto.areaTematica"
@@ -142,10 +142,10 @@
         </select>
       </div>
 
-      <div class="d-flex flex-column flex-sm-row align-items-sm-center">
-        <label class="col-12 col-sm-4" for="inInfoComplementar">Informações Complementares </label>
+      <div class="d-flex flex-column flex-md-row align-items-md-center">
+        <label class="col-12 col-md-4" for="inInfoComplementar">Informações Complementares </label>
         <input
-          class="col-12 col-sm-8"
+          class="col-12 col-md-8"
           type="text"
           id="inInfoComplementar"
           name="infoComplementares"
@@ -155,10 +155,10 @@
         />
       </div>
 
-      <div class="d-flex flex-column flex-sm-row align-items-sm-center">
-        <label class="col-12 col-sm-4" for="inContrato">Contrato ou Convênio</label>
+      <div class="d-flex flex-column flex-md-row align-items-md-center">
+        <label class="col-12 col-md-4" for="inContrato">Contrato ou Convênio</label>
         <input
-          class="col-12 col-sm-8"
+          class="col-12 col-md-8"
           type="text"
           id="inContrato"
           name="contrato"
@@ -170,10 +170,10 @@
         />
       </div>
       
-      <div class="d-flex flex-column flex-sm-row align-items-sm-center">
-        <label class="col-12 col-sm-4">Tipos de Plano(s): <span class="obrigatorio">*</span></label>
+      <div class="d-flex flex-column flex-md-row align-items-md-center">
+        <label class="col-12 col-md-4">Tipos de Plano(s): <span class="obrigatorio">*</span></label>
         <ng-select
-          class="multiple col-12 col-sm-8"
+          class="multiple col-12 col-md-8"
           [(ngModel)]="objeto.planos"
           [ngClass]="(checado && planos.invalid) ? 'invalido' : ''"
           [items]="opcoesTipoPlano" required #planos="ngModel"
@@ -186,10 +186,10 @@
         ></ng-select>
       </div>
       
-      <div class="d-flex flex-column flex-sm-row align-items-sm-center">
-        <label class="col-12 col-sm-4" for="inPossuiOrcamento">Orçamento <span class="obrigatorio">*</span></label>
+      <div class="d-flex flex-column flex-md-row align-items-md-center">
+        <label class="col-12 col-md-4" for="inPossuiOrcamento">Orçamento <span class="obrigatorio">*</span></label>
         <select
-          class="col-12 col-sm-8"
+          class="col-12 col-md-8"
           id="inPossuiOrcamento"
           name="inPossuiOrcamento"
           [(ngModel)]="objeto.possuiOrcamento" 

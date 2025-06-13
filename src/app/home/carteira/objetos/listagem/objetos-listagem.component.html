@@ -23,8 +23,7 @@
     [objeto]="objeto" 
     (doClick)="redirectTo(objeto.id)"
     (doRemover)="removerObjeto($event)"
-  >
-  </spo-tira-listagem-objetos>
+  ></spo-tira-listagem-objetos>
 </main>
 <footer class="mt-2">
   <spo-barra-paginacao [larguraPaginacao]="larguraPaginacao" [quantidade]="qtObjetos" (onPageChange)="recarregarLista($event)"></spo-barra-paginacao>
