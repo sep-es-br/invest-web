@@ -138,9 +138,19 @@ export class GrupoMembroCadastroComponent implements AfterViewInit {
             this.infosService.getPapeis(setor.guid).subscribe(papeisList => {
                 
                 this.grupoService.grupoSession.subscribe(grupo => {
-                    let subList = grupo.membros.map(user => user.papel);
 
-                    this.papeis = [papelTodos, ...papeisList.filter(papel => subList.indexOf(papel.nome) < 0)] 
+                    let subListNome = grupo.membros.map(user => user.papel);
+                    let subListGuid = grupo.membros.filter(p => p.papeis).flatMap(user => user.papeis.map(p => p.guid));
+
+                    this.papeis = [papelTodos, ...papeisList.filter(papel => {
+                        let retorno = subListNome.indexOf(papel.nome) < 0;
+
+                        if(!retorno) {
+                            retorno = subListGuid.indexOf(papel.guid) < 0;
+                        }
+                        
+                        return retorno;
+                    })] 
                     this.cadastroForm.papel = undefined
                 })
 

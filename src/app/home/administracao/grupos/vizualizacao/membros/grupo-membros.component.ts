@@ -77,7 +77,7 @@ export class GrupoMembrosComponent implements AfterViewInit {
                     this.service.getMembros(grupoSession.id).pipe(
                         tap( membros => this.membros = membros )
                     )
-                ).pipe(finalize(() => console.log(this.membros))).subscribe();
+                ).subscribe();
                 
                 
 
