@@ -5,7 +5,6 @@ import { RouterOutlet } from "@angular/router";
 import { IProfile } from "../utils/interfaces/profile.interface";
 import { ProfileService } from "../utils/services/profile.service";
 import { MenuComponent } from "../menu/menu.component";
-import { SwipeDirective } from "../utils/directive/swipe.directive";
 import { HomeRoutingModule } from "./home-routing.module";
 
 @Component({
@@ -13,8 +12,8 @@ import { HomeRoutingModule } from "./home-routing.module";
   templateUrl: 'home.component.html',
   styleUrl: 'home.component.scss',
   standalone: true,
-  imports: [CommonModule, HeaderComponent, RouterOutlet, MenuComponent, SwipeDirective, HomeRoutingModule],
-  hostDirectives: [SwipeDirective]
+  imports: [CommonModule, HeaderComponent, RouterOutlet, MenuComponent, HomeRoutingModule],
+  // hostDirectives: [SwipeDirective]
 })
 export class HomeComponent implements OnInit {
   @ViewChild('divMenu') private divMenuElem : ElementRef;

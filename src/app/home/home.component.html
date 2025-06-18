@@ -1,7 +1,7 @@
 <div #divMenu id="menu">
   <spo-menu (menuButtonClicked)="handleScreenOrMenuClick()"></spo-menu>
 </div>
-<main swipe [next]="ocultarMenu" [previous]="mostrarMenu">
+<main>
   <spo-header [user]="user" [home]="this" (menuButtonClickEvent)="mostrarMenu()">
   </spo-header>
   <div id="conteudo" (click)="handleScreenOrMenuClick()">

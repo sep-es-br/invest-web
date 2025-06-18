@@ -1,47 +1,46 @@
 :host {
+  display: flex;
+  flex-direction: column;
+  // height: calc(100% - 2rem);
+  height: 100%;
+  width: 3rem;
+  align-items: center;
+  background-color: var(--cor-primaria);
+  padding: 1rem;
+  box-shadow: rgba(0, 0, 0, 0.26) 2px 2px 5px 0px;
+
+  #pipLogo {
+    box-sizing: border-box;
+    height: 3.5rem;
     display: flex;
-    flex-direction: column;
-    height: calc(100% - 2rem);
-    width: 3rem;
+    justify-content: center;
     align-items: center;
-    background-color: var(--cor-primaria);
-    padding: 1rem;
-    box-shadow: rgba(0, 0, 0, 0.26) 2px 2px 5px 0px;
 
-    #pipLogo{
-        box-sizing: border-box;
-        height: 3.5rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        img{
-            width: 40px;
-            cursor: pointer;
-            opacity: 60%;
-
-        }
+    img {
+      width: 40px;
+      cursor: pointer;
+      opacity: 60%;
     }
+  }
 
-    @-webkit-keyframes rotating {
-        from{
-            -webkit-transform: rotate(0deg);
-        }
-        to{
-            -webkit-transform: rotate(360deg);
-        }
+  @keyframes rotating {
+    from {
+      -webkit-transform: rotate(0deg);
     }
-
-    div#nav {
-        padding-top: 5rem;
-        color: white;
+    to {
+      -webkit-transform: rotate(360deg);
     }
+  }
 
-    nav {
-        flex-grow: 1;
-        color: var(--cor-primaria);
-        font-family: var(--fonte-open-sans);
-        margin-top: 5rem;
-    }
+  div#nav {
+    padding-top: 5rem;
+    color: white;
+  }
 
+  nav {
+    flex-grow: 1;
+    color: var(--cor-primaria);
+    font-family: var(--fonte-open-sans);
+    margin-top: 5rem;
+  }
 }
-
