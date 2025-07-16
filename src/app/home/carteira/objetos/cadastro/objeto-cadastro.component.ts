@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { AfterViewInit, Component, OnInit, QueryList, ViewChild, ViewChildren } from "@angular/core";
+import { AfterViewInit, Component, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from "@angular/core";
 import { FormsModule, NgForm, NgModel, ReactiveFormsModule } from "@angular/forms";
 import { UnidadeOrcamentariaDTO } from "../../../../utils/models/UnidadeOrcamentariaDTO";
 import { PlanoOrcamentarioDTO } from "../../../../utils/models/PlanoOrcamentarioDTO";
@@ -9,7 +9,7 @@ import { IObjeto } from "../../../../utils/interfaces/IObjeto";
 import { ICusto } from "./exercicio-cadastro.interface";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faFloppyDisk, faPaperPlane, faPlusCircle, faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
-import { finalize, merge, tap } from "rxjs";
+import { filter, finalize, map, merge, switchMap, tap } from "rxjs";
 import { UnidadeOrcamentariaService } from "../../../../utils/services/unidadeOrcamentaria.service";
 import { PlanoOrcamentarioService } from "../../../../utils/services/planoOrcamentario.service";
 import { LocalidadeService } from "../../../../utils/services/localidade.service";
@@ -25,6 +25,8 @@ import { ISelectOpcao } from "../../../../utils/interfaces/selectOption.interfac
 import { NgSelectComponent } from "@ng-select/ng-select";
 import { PermissaoService } from "../../../../utils/services/permissao.service";
 import { ProgressModalComponent } from "../../../../utils/components/progress-modal/progress-modal.component";
+import { PROPOSTA_ATIVA } from "../../../../utils/sessionLocalItems.const";
+import { IProposta } from "../../../../utils/interfaces/proposta.interface";
 
 @Component({
     templateUrl: "./objeto-cadastro.component.html",
@@ -34,7 +36,7 @@ import { ProgressModalComponent } from "../../../../utils/components/progress-mo
         CadastroExercicioComponent, FontAwesomeModule, FormsModule, NgSelectComponent
     ]
 })
-export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
+export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy {
 
     @ViewChildren(CadastroExercicioComponent) cadastroExercicios : QueryList<CadastroExercicioComponent>;
     @ViewChild('cadastroObjeto') cadastroObjeto : NgForm;
@@ -62,6 +64,8 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
 
     podeVerUnidades = false;
 
+    daProposta = false;
+
     carregamento = 0;
 
     gnd : number = 4;
@@ -87,6 +91,10 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
         tipo: "Projeto",
         recursosFinanceiros: [],
         conta: {}
+    }
+
+    ngOnDestroy(): void {
+        sessionStorage.removeItem(PROPOSTA_ATIVA)
     }
 
     ngOnInit(): void {
@@ -140,20 +148,38 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
                 ).pipe(finalize(() => this.carregamento -= 1)).subscribe();
             }
 
+            let proposta: IProposta = JSON.parse(sessionStorage.getItem(PROPOSTA_ATIVA));
+            
+            if(proposta) {
+                this.daProposta = true;
 
-            this.route.params.pipe(tap(params => {
-                let objetoId = params['objetoId'];
-    
-                if(!objetoId) return;
+                this.objeto = {
+                    ...this.objeto,
+                    hashProposta: proposta.syncHash,
+                    descricao: proposta.proposalText,
+                    areaTematica: this.areasTematicas.find(value => value.nome === proposta.areaName),
+                    conta : {
+                        ...this.objeto.conta,
+                        unidadeOrcamentariaImplementadora: this.unidades.find(value => value.codigo === proposta.budgetUnitId)
+                    },
+                    microregiaoAtendida: this.microregioes.find(value => value.nome === proposta.microrregion),
+                    planos: [...this.objeto.planos, this.tiposplano.find(value => value.sigla === 'DA')]
+                    
+                }
+            } else {
                 this.carregamento++;
-                this.objetoService.getById(objetoId).pipe(tap(
-                    obj => {
-    
-                        this.setObjeto(obj)
-    
-                    }
-                )).pipe(finalize(() => this.carregamento -= 1)).subscribe()
-            })).subscribe();
+                this.route.params
+                    .pipe(
+                        map(params => params['objetoId']),
+                        filter(objetoId => !!objetoId), // ignora se undefined ou null
+                        switchMap(objetoId => this.objetoService.getById(objetoId)),
+                        tap(obj => this.setObjeto(obj)),
+                        finalize(() => this.carregamento--)
+                    )
+                    .subscribe();
+            }
+
+            
 
             this.carregamento -= 1;
 

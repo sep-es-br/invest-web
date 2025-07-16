@@ -38,7 +38,7 @@ export class ErrorHandlerService {
     
       const backEndError: IHttpError = error.error;
 
-      const errorCode = backEndError.codigo;
+      const errorCode = error.status;
 
       switch (errorCode) {
         case 403:
@@ -54,7 +54,7 @@ export class ErrorHandlerService {
           this.toastr.warning(backEndError.mensagem);
           break;
         default:
-          this.toastr.error(backEndError.mensagem);
+          this.toastr.error(backEndError?.mensagem ?? `ocorreu um erro desconhecido: ${errorCode}` );
           break;
       }
     

@@ -1,0 +1,95 @@
+@use '../../../../utils/styles/ngFilter.scss';
+
+:host {
+    display: flex;
+    flex-direction: column;
+    padding-block: 1rem;
+    font-family: var(--fonte-open-sans);
+
+    .filtro {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    header {
+        display: flex;
+        align-items: center;
+
+        h3 {
+            color: var(--cinza-escuro);
+        }
+    }
+
+
+    .lista {
+        table {
+            border-collapse: separate;
+            border-spacing: 0 1rem;
+
+            tr {
+                background-color: white;
+                font-size: 0.9rem;
+                
+                td {
+                    padding: 1rem;
+                    
+                    & > * + * {
+                        margin-top: 0.5rem;
+                    }
+
+                    &:first-of-type {
+                        
+                        --border-width: 0.3rem;
+
+                        border-left: solid var(--border-width) var(--cor-primaria);
+                        
+                        border-top-left-radius: var(--border-width);
+                        border-bottom-left-radius: var(--border-width);
+                    }
+
+                    &:not(:first-of-type) {
+                        text-wrap: nowrap;
+                    }
+
+                    > h4 {
+                        color: var(--cor-primaria);
+                    }
+
+                    > p {
+                        margin-left: 1rem;
+                        color: #6E7484;
+                        min-height: 2rem;
+
+                        &.overflow {
+                            display: -webkit-box;
+                            -webkit-box-orient: vertical;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+
+                            &-1 {
+                                @extend .overflow;
+                                max-width: 20rem;
+                                -webkit-line-clamp: 1;
+                                line-clamp: 1;
+                            }
+
+                            &-2 {
+                                @extend .overflow;
+                                -webkit-line-clamp: 2;
+                                line-clamp: 2;
+                            }
+                        }
+                        
+                    }
+                    
+                    fa-icon.criarIcon {
+                        color: var(--cor-primaria);
+                        font-size: large;
+                        cursor: pointer;
+                    }
+
+                }
+            }
+        }
+    }
+}
