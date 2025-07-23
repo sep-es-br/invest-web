@@ -14,10 +14,7 @@
                 [searchFn]="searchOrgao" (ngModelChange)="preencherSetores($event)"
                 placeholder="Selecionar o Orgão"
                 >
-                <ng-template ng-label-tmp let-item="item">
-                    ({{ (item.sigla && item.sigla.length > 0 ) ? item.sigla : ' - ' }}) {{item.nome}}
-                </ng-template>
-                <ng-template ng-option-tmp let-item="item">
+                <ng-template ng-label-tmp ng-option-tmp let-item="item">
                     ({{ (item.sigla && item.sigla.length > 0 ) ? item.sigla : ' - ' }}) {{item.nome}}
                 </ng-template>
             </ng-select>
@@ -43,7 +40,6 @@
                     {{item.agenteNome}} {{item != papelTodos ? '(' + item.nome + ')' : ''}}
                 </ng-template>
 
-                
             </ng-select>
 
         </form>

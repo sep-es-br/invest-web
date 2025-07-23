@@ -6,15 +6,16 @@
         </div>
     </header>
     <main>
-        <form [formGroup]="form">
+        <form>
             <label for="inIcone">Ícone:</label>
-            <spo-seletor-icone id="inIcone" formControlName="icone" />
+            <spo-seletor-icone id="inIcone" [(ngModel)]="grupo.icone" [ngModelOptions]="standaloneModelOpt" />
             <label for="inNome">Nome:</label>
-            <input type="text" id="inNome" formControlName="nome" (blur)="gerarSigla($event)"/>
+            <input type="text" id="inNome" [(ngModel)]="grupo.nome" [ngModelOptions]="standaloneModelOpt" (blur)="gerarSigla($event, siglaModel)"/>
             <label for="inSigla">Sigla:</label>
-            <input type="text" id="inSigla" formControlName="sigla" />
+            <input type="text" id="inSigla" #siglaModel="ngModel"
+                [(ngModel)]="grupo.sigla" [ngModelOptions]="standaloneModelOpt" />
             <label for="inDescricao">Descrição:</label>
-            <textarea rows="5" formControlName="descricao"></textarea>
+            <textarea rows="5" id="inDescricao" [(ngModel)]="grupo.descricao"></textarea>
         </form>
     </main>
     <footer>

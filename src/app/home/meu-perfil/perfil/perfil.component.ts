@@ -62,9 +62,4 @@ export class PerfilComponent implements AfterViewInit{
         }
     }
 
-    // loadUser(){
-        
-    //     this.form.get("inNome").setValue(this.user.name);
-    //     this.form.get("inEmail").setValue(this.user.email);
-    // }
 }

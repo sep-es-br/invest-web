@@ -166,7 +166,8 @@ export class GrupoMembroCadastroComponent implements AfterViewInit {
 
 
     fechar(cadastroForm : ICadastroMembroForm) {
-        this.onClose.emit({...cadastroForm});
+        this.onClose.emit(cadastroForm ? {...cadastroForm} : undefined);
+
         this.cadastroForm.orgao = undefined;
         this.cadastroForm.setor = undefined;
         this.cadastroForm.papel = undefined;
@@ -193,8 +194,9 @@ export class GrupoMembroCadastroComponent implements AfterViewInit {
             || setor.sigla?.toLowerCase().includes(term.toLowerCase());
     }
 
-    searchPapel(term : string, setor : IPapelDTO) : boolean {
-        return setor.nome.toLowerCase().includes(term.toLowerCase())
-            || setor.agenteNome?.toLowerCase().includes(term.toLowerCase());
+    searchPapel(term : string, papel : IPapelDTO) : boolean {
+        return papel === papelTodos
+            || papel.nome.toLowerCase().includes(term.toLowerCase())
+            || papel.agenteNome.toLowerCase().includes(term.toLowerCase());
     }
 }
