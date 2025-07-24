@@ -33,7 +33,7 @@ export class AudienciaPublicaListagemComponent implements OnInit{
     criarIcon = faArrowRight;
     unidades : UnidadeOrcamentariaDTO[];
     areasTematicas : IAreaTematica[];
-    podeVerUnidades = false;
+    podeVerUnidades : boolean = undefined;
     filtro : {
         unidades?: UnidadeOrcamentariaDTO[];
         areaTematica?: IAreaTematica,
@@ -93,6 +93,8 @@ export class AudienciaPublicaListagemComponent implements OnInit{
 
     update(txtSearch?:string) {
         this.carregando = true;
+        if(this.podeVerUnidades == undefined) return;
+        
         this.apSrv.getListagem(
             this.filtro.unidades, 
             this.filtro.areaTematica, 
