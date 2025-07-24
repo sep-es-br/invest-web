@@ -91,12 +91,12 @@ export class AudienciaPublicaListagemComponent implements OnInit{
         ).subscribe();
     }
 
-    update() {
+    update(txtSearch?:string) {
         this.carregando = true;
         this.apSrv.getListagem(
             this.filtro.unidades, 
             this.filtro.areaTematica, 
-            this.filtro.filtroTexto, 
+            txtSearch ?? this.filtro.filtroTexto, 
             this.podeVerUnidades
         ).pipe(
             tap(value => {

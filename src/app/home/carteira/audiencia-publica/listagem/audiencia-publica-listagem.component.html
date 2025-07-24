@@ -34,6 +34,7 @@
     <h3>Propostas ({{qtPropostas}})</h3>
     <spo-campo-pesquisa
         [(ngModel)]="filtro.filtroTexto"
+        (ngModelChange)="update($event)"
         [ngModelOptions]="{standalone: true}"></spo-campo-pesquisa>
         
 </header>
