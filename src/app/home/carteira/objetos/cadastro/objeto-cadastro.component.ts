@@ -9,7 +9,7 @@ import { IObjeto } from "../../../../utils/interfaces/IObjeto";
 import { ICusto } from "./exercicio-cadastro.interface";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faFloppyDisk, faPaperPlane, faPlusCircle, faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
-import { filter, finalize, map, merge, switchMap, tap } from "rxjs";
+import { filter, finalize, forkJoin, map, merge, switchMap, tap } from "rxjs";
 import { UnidadeOrcamentariaService } from "../../../../utils/services/unidadeOrcamentaria.service";
 import { PlanoOrcamentarioService } from "../../../../utils/services/planoOrcamentario.service";
 import { LocalidadeService } from "../../../../utils/services/localidade.service";
@@ -114,77 +114,71 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
         ]
 
         this.carregamento++;
-        merge(
-            this.unidadeService.getFromSigefes().pipe(
-                tap(unidadeList => this.setUnidades(unidadeList))
-            ),
-            this.localidadeService.findAll().pipe(
-                tap(localidadeList => this.setMicrorregioes(localidadeList))
-            ),
-            this.tipoPlanoService.findBy().pipe(
-                tap(tipoPlanoList => this.setTiposPlano(tipoPlanoList as ITipoPlano[]))
-            ),
-            this.areaTematicaService.findAllAreaTematica().pipe(
-                tap(areasTematicas => this.setAreasTematicas(areasTematicas))
-            ),
-            this.planoService.getDoSigefes(null).pipe(
-                tap(planoList => this.setPlanos(planoList))
-            ),
-            this.permissaoService.getPermissao("carteiraobjetos").pipe(
-                tap(permissao => this.podeVerUnidades = permissao.verTodasUnidades)
-            )
-        ).pipe(finalize(() => {
-            
-            if(!this.podeVerUnidades) {
-                
-                this.carregamento++;
-                this.unidadeService.getUnidadeDoUsuario().pipe(
-                    tap(unidades => {
-                        this.setUnidades(unidades);
-                        if(unidades?.length == 1) {
-                            this.objeto.conta.unidadeOrcamentariaImplementadora = unidades[0]
-                        }
-                    })
-                ).pipe(finalize(() => this.carregamento -= 1)).subscribe();
-            }
 
-            let proposta: IProposta = JSON.parse(sessionStorage.getItem(PROPOSTA_ATIVA));
-            
-            if(proposta) {
-                this.daProposta = true;
+        this.permissaoService.getPermissao("carteiraobjetos").pipe(
+            switchMap((permissao) => {
+                this.podeVerUnidades = permissao.verTodasUnidades;
 
-                this.objeto = {
-                    ...this.objeto,
-                    hashProposta: proposta.syncHash,
-                    descricao: proposta.proposalText,
-                    areaTematica: this.areasTematicas.find(value => value.nome === proposta.areaName),
-                    conta : {
-                        ...this.objeto.conta,
-                        unidadeOrcamentariaImplementadora: this.unidades.find(value => value.codigo === proposta.budgetUnitId)
-                    },
-                    microregiaoAtendida: this.microregioes.find(value => value.nome === proposta.microrregion),
-                    planos: [...this.objeto.planos, this.tiposplano.find(value => value.sigla === 'DA')]
-                    
+                return forkJoin({
+                    localidadeList: this.localidadeService.findAll(),
+                    tipoPlanoList: this.tipoPlanoService.findBy(),
+                    areasTematicas: this.areaTematicaService.findAllAreaTematica(),
+                    planoList: this.planoService.getDoSigefes(null),
+                    unidadeList: this.podeVerUnidades
+                                    ? this.unidadeService.getFromSigefes()
+                                    : this.unidadeService.getUnidadeDoUsuario()
+                })
+
+            }),
+            tap(({areasTematicas, localidadeList,planoList,tipoPlanoList,unidadeList}) => {
+                this.setUnidades(unidadeList);
+                this.setMicrorregioes(localidadeList);
+                this.setTiposPlano(tipoPlanoList as ITipoPlano[]);
+                this.setAreasTematicas(areasTematicas);
+                this.setPlanos(planoList);
+
+                if(unidadeList?.length == 1) {
+                    this.objeto.conta.unidadeOrcamentariaImplementadora = unidadeList[0]
                 }
-            } else {
-                this.carregamento++;
-                this.route.params
-                    .pipe(
-                        map(params => params['objetoId']),
-                        filter(objetoId => !!objetoId), // ignora se undefined ou null
-                        switchMap(objetoId => this.objetoService.getById(objetoId)),
-                        tap(obj => this.setObjeto(obj)),
-                        finalize(() => this.carregamento--)
-                    )
-                    .subscribe();
-            }
+                
+                let proposta: IProposta = JSON.parse(sessionStorage.getItem(PROPOSTA_ATIVA));
+                
+                if(proposta) {
+                    this.daProposta = true;
 
-            
+                    this.objeto = {
+                        ...this.objeto,
+                        hashProposta: proposta.syncHash,
+                        descricao: proposta.proposalText,
+                        areaTematica: this.areasTematicas.find(value => value.nome === proposta.areaName),
+                        conta : {
+                            ...this.objeto.conta,
+                            unidadeOrcamentariaImplementadora: this.unidades.find(value => value.codigo === proposta.budgetUnitId)
+                        },
+                        microregiaoAtendida: this.microregioes.find(value => value.nome === proposta.microrregion),
+                        planos: [...(this.objeto.planos ?? []) , this.tiposplano.find(value => value.sigla === 'DA')]
+                        
+                    }
+                } else {
+                    this.route.params
+                        .pipe(
+                            map(params => params['objetoId']),
+                            filter(objetoId => !!objetoId), // ignora se undefined ou null
+                            switchMap(objetoId => {
+                                this.carregamento++;
+                                return this.objetoService.getById(objetoId).pipe(
+                                    tap(obj => this.setObjeto(obj)),
+                                    finalize(() => this.carregamento--)
+                                );
+                            })
+                            
+                        )
+                        .subscribe();
+                }
 
-            this.carregamento -= 1;
-
-
-        })).subscribe();
+            }),
+            finalize(() =>  this.carregamento--)
+        ).subscribe();
 
         
 
