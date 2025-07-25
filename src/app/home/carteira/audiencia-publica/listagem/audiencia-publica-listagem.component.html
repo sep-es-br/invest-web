@@ -1,5 +1,15 @@
 <spo-progress-modal [visivel]="carregando"></spo-progress-modal>
 <div class="filtro">
+    <ng-select [items]="areasTematicas"
+            placeholder="Área Temática"
+            [(ngModel)]="filtro.areaTematica"
+            [ngModelOptions]="{standalone: true}"
+            [searchFn]="searchArea"
+            bindLabel="nome"
+            [clearable]="true"
+            (ngModelChange)="update()"
+        >
+    </ng-select>
     <ng-select [items]="unidades"
             [multiple]="true"
             placeholder="Unidade Orçamentária"
@@ -18,16 +28,6 @@
         <ng-template ng-option-tmp let-item="item">
             {{item.codigo}} - {{item.sigla}}
         </ng-template>
-    </ng-select>
-    <ng-select [items]="areasTematicas"
-            placeholder="Área Temática"
-            [(ngModel)]="filtro.areaTematica"
-            [ngModelOptions]="{standalone: true}"
-            [searchFn]="searchArea"
-            bindLabel="nome"
-            [clearable]="true"
-            (ngModelChange)="update()"
-        >
     </ng-select>
 </div>
 <header>
