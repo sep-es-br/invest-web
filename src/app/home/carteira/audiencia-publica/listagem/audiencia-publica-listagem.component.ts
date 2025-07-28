@@ -71,7 +71,7 @@ export class AudienciaPublicaListagemComponent implements OnInit{
             ];
 
             const unidade$ = this.podeVerUnidades
-            ? this.unidadeService.getAllUnidadesOrcamentarias().pipe(
+            ? this.unidadeService.getFromSigefes().pipe(
                 tap(unidadeList => this.unidades = unidadeList)
                 )
             : this.unidadeService.getUnidadeDoUsuario().pipe(
