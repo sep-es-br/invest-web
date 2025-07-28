@@ -146,17 +146,23 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
                 if(proposta) {
                     this.daProposta = true;
 
-                    this.objeto = {
-                        ...this.objeto,
+                    const planoDA = (tipoPlanoList as ITipoPlano[]).find(value => value.sigla === 'DA');
+
+                    Object.assign(this.objeto, {
                         hashProposta: proposta.syncHash,
                         descricao: proposta.proposalText,
-                        areaTematica: this.areasTematicas.find(value => value.nome === proposta.areaName),
-                        conta : {
-                            ...this.objeto.conta,
-                            unidadeOrcamentariaImplementadora: this.unidades.find(value => value.codigo === proposta.budgetUnitId)
-                        },
-                        microregiaoAtendida: this.microregioes.find(value => value.nome === proposta.microrregion),
-                        planos: [...(this.objeto.planos ?? []) , this.tiposplano.find(value => value.sigla === 'DA')]
+                        areaTematica: areasTematicas.find(value => value.nome === proposta.areaName),
+                        microregiaoAtendida: localidadeList.find(value => value.nome === proposta.microrregion),
+                        planos: [ ...(this.objeto.planos ?? []), ...(planoDA ? [planoDA] : [])]
+                    })
+
+                    Object.assign(this.objeto.conta, {
+                        unidadeOrcamentariaImplementadora: unidadeList.find(value => value.codigo === proposta.budgetUnitId)
+                    })
+
+                    this.objeto = {
+                        ...this.objeto,
+                        
                         
                     }
                 } else {
