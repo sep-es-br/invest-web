@@ -137,6 +137,8 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
                 this.setAreasTematicas(areasTematicas);
                 this.setPlanos(planoList);
 
+                this.objeto.planos = [(tipoPlanoList as ITipoPlano[]).find(value => value.sigla === 'PIP')];
+
                 if(unidadeList?.length == 1) {
                     this.objeto.conta.unidadeOrcamentariaImplementadora = unidadeList[0]
                 }
@@ -160,11 +162,6 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
                         unidadeOrcamentariaImplementadora: unidadeList.find(value => value.codigo === proposta.budgetUnitId)
                     })
 
-                    this.objeto = {
-                        ...this.objeto,
-                        
-                        
-                    }
                 } else {
                     this.route.params
                         .pipe(
@@ -319,12 +316,6 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
 
             }
         )
-
-        this.tipoPlanoService.findBy(undefined, 'PIP').pipe(
-            tap( tipo => {
-                this.objeto.planos = [tipo as ITipoPlano];
-            })
-        ).subscribe()
     }
 
     limparContratado() {
