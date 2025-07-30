@@ -167,7 +167,6 @@ export class GrupoMembroCadastroComponent implements AfterViewInit {
 
     fechar(cadastroForm : ICadastroMembroForm) {
         this.onClose.emit(cadastroForm ? {...cadastroForm} : undefined);
-
         this.cadastroForm.orgao = undefined;
         this.cadastroForm.setor = undefined;
         this.cadastroForm.papel = undefined;
