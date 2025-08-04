@@ -5,8 +5,8 @@ import { IStatus } from "./status.interface";
 
 export interface IObjetoFiltro {
     nome? : string;
-    unidade? : UnidadeOrcamentariaDTO[],
-    plano? : PlanoOrcamentarioDTO[],
+    unidades? : UnidadeOrcamentariaDTO[],
+    planos? : PlanoOrcamentarioDTO[],
     exercicio? : number,
     etapa? : IEtapa,
     status? : IStatus,

@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
-import { FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
+import { FormControl, FormGroup, FormsModule, NgModel, ReactiveFormsModule } from "@angular/forms";
 import { GrupoDTO } from "../../../../utils/models/GrupoDTO";
 import { CommonModule } from "@angular/common";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
@@ -8,28 +8,24 @@ import { SeletorIconeComponent } from "../../../../utils/components/seletor-icon
 
 @Component({
     selector: "spo-grupo-cadastro",
-    standalone: true,
     templateUrl: "./grupo-cadastro.component.html",
     styleUrl: "./grupo-cadastro.component.scss",
-    imports: [CommonModule, ReactiveFormsModule, FontAwesomeModule, SeletorIconeComponent]
+    imports: [CommonModule, ReactiveFormsModule, FormsModule, FontAwesomeModule, SeletorIconeComponent]
 })
-export class GrupoCadastroComponent implements OnChanges {
+export class GrupoCadastroComponent {
 
     @Output() onClose = new EventEmitter<GrupoDTO>();
 
     @ViewChild("principal", {read: ElementRef}) principalRef : ElementRef
 
-    @Input() grupo : GrupoDTO;
+    @Input() grupo : Partial<GrupoDTO> = {
+        icone: 'question_mark'
+    };
+
+    standaloneModelOpt = {standalone: true}
 
     iconSalvar = faFloppyDisk;
     iconFechar = faXmark;
-
-    form = new FormGroup({
-        nome: new FormControl(""),
-        sigla: new FormControl(""),
-        descricao: new FormControl(""),
-        icone: new FormControl("question_mark")
-    })
 
     @HostListener("click", ["$event"])
     clickFora (event : MouseEvent) {
@@ -40,22 +36,8 @@ export class GrupoCadastroComponent implements OnChanges {
         
     }
 
-    ngOnChanges(changes: SimpleChanges): void {
-        let grupo = changes["grupo"].currentValue as GrupoDTO;
-
-        if(grupo) {
-            this.form.controls.nome.setValue(grupo.nome);
-            this.form.controls.sigla.setValue(grupo.sigla);
-            this.form.controls.descricao.setValue(grupo.descricao);
-            this.form.controls.icone.setValue(grupo.icone);
-
-            this.form.markAllAsTouched({emitEvent: false})
-        }
-    }
-
-
-    gerarSigla(event : FocusEvent) {
-        if(this.form.get("sigla").touched) return;
+    gerarSigla(event : FocusEvent, formCtrlSigla : NgModel) {
+        if(formCtrlSigla.touched) return;
 
         const campoNome = event.target as HTMLInputElement;
         const nome = campoNome.value;
@@ -68,7 +50,7 @@ export class GrupoCadastroComponent implements OnChanges {
             }
         })
 
-        this.form.get("sigla").setValue(sigla);
+        this.grupo.sigla = sigla;
     }
 
     fechar() {
@@ -76,18 +58,8 @@ export class GrupoCadastroComponent implements OnChanges {
     }
 
     salvar(){
-        const novoGrupo : GrupoDTO = {
-            id: this.grupo?.id,
-            nome: this.form.get("nome").value,
-            sigla: this.form.get("sigla").value,
-            icone: this.form.get("icone").value,
-            descricao: this.form.get("descricao").value,
-            membros: this.grupo ? this.grupo.membros : [],
-            permissoes: this.grupo ? this.grupo.permissoes : [],
-            podeVerTodasUnidades: false
-        }
-
-        this.onClose.emit(novoGrupo);
+        
+        this.onClose.emit(this.grupo as GrupoDTO);
     }
 
 

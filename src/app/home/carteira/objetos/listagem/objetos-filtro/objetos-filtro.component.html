@@ -1,7 +1,7 @@
 <ng-select [items]="unidades"
             [multiple]="true"
             placeholder="Unidade Orçamentária"
-            [(ngModel)]="filtro.unidade"
+            [(ngModel)]="filtro.unidades"
             [ngModelOptions]="{standalone: true}"
             [disabled]="unidades?.length <= 0"
             [searchFn]="searchUnidade"
@@ -10,7 +10,7 @@
         >
     <ng-template ng-label-tmp let-item="item" let-index="index">
         {{item.codigo}}
-        <button (click)="filtro.unidade = removerSelecao(filtro.unidade, item); this.update()">
+        <button (click)="filtro.unidades = removerSelecao(filtro.unidades, item); this.update()">
             <fa-icon class="removerItem" [icon]="removerIcon" [attr.aria-label]="'remover unidade ' + item.codigo"></fa-icon>
         </button>
     </ng-template>
@@ -22,7 +22,7 @@
 <ng-select [items]="planos"
             [multiple]="true"
             placeholder="Plano Orçamentário"
-            [(ngModel)]="filtro.plano"
+            [(ngModel)]="filtro.planos"
             [ngModelOptions]="{standalone: true}"
             [searchFn]="searchPlano"
             [clearable]="true"
@@ -30,7 +30,7 @@
         >
     <ng-template ng-label-tmp let-item="item" let-index="index">
         {{item.codigo}}
-        <button (click)="filtro.plano = removerSelecao(filtro.plano, item); this.update()">
+        <button (click)="filtro.planos = removerSelecao(filtro.planos, item); this.update()">
             <fa-icon class="removerItem" [icon]="removerIcon" [attr.aria-label]="'remover plano ' + item.codigo"></fa-icon>
         </button>
     </ng-template>

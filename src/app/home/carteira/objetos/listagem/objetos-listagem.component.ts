@@ -7,7 +7,7 @@ import { faFileLines } from "@fortawesome/free-regular-svg-icons";
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { ObjetoTiraDTO } from "../../../../utils/models/ObjetoTiraDTO";
 import { ObjetosService } from "../../../../utils/services/objetos.service";
-import { merge, tap } from "rxjs";
+import { combineLatest, finalize, merge, Observable, take, tap } from "rxjs";
 import { ObjetoFiltro } from "../../../../utils/models/ObjetoFiltro";
 import { TiraObjetoComponent } from "./tira-objetos/tira-objeto.component";
 import { BarraPaginacaoComponent } from "../../../../utils/components/barra-paginacao/barra-paginacao.component";
@@ -16,16 +16,21 @@ import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { PermissaoService } from "../../../../utils/services/permissao.service";
 import { IPodeDTO } from "../../../../utils/models/PodeDto";
+import { ObjetosOrdenacaoComponent } from "./objetos-ordenacao/objetos-ordenacao.component";
+import { IOrdemItem } from "../../../../utils/interfaces/ordem-item.interface";
+import { ProgressModalComponent } from "../../../../utils/components/progress-modal/progress-modal.component";
+import { CampoPesquisaComponent } from "../../../../utils/components/campo-pesquisa/campo-pesquisa.component";
 
 @Component({
-    standalone: true,
     templateUrl: "./objetos-listagem.component.html",
     styleUrl: "./objetos-listagem.component.scss",
     imports: [
-        CommonModule, ObjetosFiltroComponent, FontAwesomeModule, 
-        ReactiveFormsModule, TiraObjetoComponent, BarraPaginacaoComponent,
-        RouterModule
-    ]
+    CommonModule, ObjetosFiltroComponent, FontAwesomeModule,
+    ReactiveFormsModule, TiraObjetoComponent, BarraPaginacaoComponent,
+    RouterModule, ObjetosOrdenacaoComponent,
+    ProgressModalComponent,
+    CampoPesquisaComponent
+]
 })
 export class ObjetosListagemComponent implements AfterViewInit{
 
@@ -33,10 +38,13 @@ export class ObjetosListagemComponent implements AfterViewInit{
     novoObjIcon = faFileLines;
     
     @ViewChild(BarraPaginacaoComponent) barraPaginacaoComponent : BarraPaginacaoComponent;
+    @ViewChild(ObjetosFiltroComponent) filtroComponent : ObjetosFiltroComponent;
+    @ViewChild(ObjetosOrdenacaoComponent) ordenacaoComponent : ObjetosOrdenacaoComponent;
 
     qtObjetos = 0;
 
     filtro : IObjetoFiltro = {};
+    ordem : IOrdemItem[];
 
     objetos : ObjetoTiraDTO[] = [];
 
@@ -49,6 +57,10 @@ export class ObjetosListagemComponent implements AfterViewInit{
 
     paginaAtual = 1;
 
+    lock = true;
+
+    showProgress = false;
+
     constructor(
         private objService : ObjetosService,
         private router : Router,
@@ -59,9 +71,18 @@ export class ObjetosListagemComponent implements AfterViewInit{
 
 
     ngAfterViewInit(): void {   
-        this.txtBusca.valueChanges.pipe(tap(value => {
-            this.recarregarLista(this.paginaAtual)
-        })).subscribe();
+        
+
+        combineLatest([
+            this.filtroComponent.filterChange,
+            this.ordenacaoComponent.onChange
+        ]).pipe(take(1)).subscribe(([filtro, ordem]) => {
+                this.txtBusca.valueChanges.pipe(tap(value => {
+                this.executar(this.recarregarLista(this.paginaAtual)) 
+            })).subscribe();
+            this.executar(this.recarregarLista(this.paginaAtual, filtro, ordem).pipe(finalize(() => this.lock = false)))
+
+        })
 
         this.permissaoService.getPermissao("carteiraobjetos").subscribe(pode => {
             this.pode = pode;
@@ -70,7 +91,9 @@ export class ObjetosListagemComponent implements AfterViewInit{
 
     updateFiltro(novoFiltro : IObjetoFiltro) {
         this.filtro = novoFiltro;
-        this.recarregarLista(this.paginaAtual);
+
+        if(!this.lock)
+           this.executar(this.recarregarLista(this.paginaAtual, novoFiltro));
     }
 
     redirectTo(path : string) {
@@ -83,29 +106,46 @@ export class ObjetosListagemComponent implements AfterViewInit{
         this.objService.removerObjeto(objeto.id).pipe(
             tap(obj => {
                 this.toastr.success("Objeto Removido!");
-                this.recarregarLista(this.paginaAtual);
+                this.executar(this.recarregarLista(this.paginaAtual));
             })
         ).subscribe()
     }
 
-    recarregarLista(novaPagina : number) {
+    setOrdem(novaOrdem : IOrdemItem[]) {
+        this.ordem = novaOrdem;
+
+        if(!this.lock)
+            this.executar(this.recarregarLista(this.paginaAtual, this.filtro, novaOrdem));
+    }
+
+    executar(acao : Observable<any>) {
+        this.showProgress = true;
+
+        acao.pipe(finalize(() => this.showProgress = false)).subscribe()
+    }
+
+    recarregarLista(novaPagina : number, novoFiltro? : IObjetoFiltro,  novaOrdem? : IOrdemItem[]) {
 
         this.paginaAtual = novaPagina;
         
         this.filtro.nome = this.txtBusca.value;
 
+        if(novaOrdem)
+            this.ordem = novaOrdem;
+
+        if(novoFiltro)
+            this.filtro = novoFiltro;
+
         
-        merge(
-            this.objService.getListaTiraObjetos(this.filtro, this.paginaAtual, this.qtPorPagina).pipe(tap(
-                objetos => this.objetos = objetos
-            )),
-            this.objService.getQuantidadeItens(this.filtro).pipe(tap(
-                qtObjetos => {
-                    this.qtObjetos = qtObjetos;
-                    this.barraPaginacaoComponent.updatePaginacao(qtObjetos); 
+        return merge(
+            this.objService.getListaTiraObjetos(this.filtro, this.ordem, this.paginaAtual, this.qtPorPagina).pipe(tap(
+                objetosDataList => {
+                    this.objetos = objetosDataList.data;
+                    this.qtObjetos = objetosDataList.ammount;
+                    this.barraPaginacaoComponent.updatePaginacao(this.qtObjetos);
                 }
             ))
-        ).subscribe();
+        );
     }
 
 

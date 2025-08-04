@@ -9,7 +9,6 @@ import { concat, Observable, tap } from "rxjs";
 import { PermissaoService } from "../../../utils/services/permissao.service";
 
 @Component({
-    standalone: true,
     templateUrl: "./admin-menu.component.html",
     styleUrl: "./admin-menu.component.scss",
     imports: [CommonModule, FontAwesomeModule, ReactiveFormsModule]

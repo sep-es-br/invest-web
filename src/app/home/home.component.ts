@@ -13,7 +13,6 @@ import { PermissaoService } from "../utils/services/permissao.service";
     selector: 'spo-home',
     templateUrl: 'home.component.html',
     styleUrl: 'home.component.scss',
-    standalone: true,
     imports: [CommonModule, HeaderComponent, RouterOutlet, MenuComponent, SwipeDirective, HomeRoutingModule],
     hostDirectives: [SwipeDirective]
 })

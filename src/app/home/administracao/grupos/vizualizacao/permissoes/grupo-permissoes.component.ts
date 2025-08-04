@@ -14,7 +14,6 @@ import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { ToastrService } from "ngx-toastr";
 
 @Component({
-    standalone: true,
     templateUrl: "./grupo-permissoes.component.html",
     styleUrl: "./grupo-permissoes.component.scss",
     imports: [CommonModule, ModuloConfigComponent, FontAwesomeModule, ReactiveFormsModule]
@@ -43,8 +42,6 @@ export class GrupoPermissoesComponent implements OnInit {
             this.grupo = grupo;
 
             if(!grupo) return
-
-            this.verTodasUnidadesFormControl.setValue(grupo.podeVerTodasUnidades);
 
             concat(
                 this.moduloService.findAll().pipe(tap( moduloList => {
@@ -84,7 +81,6 @@ export class GrupoPermissoesComponent implements OnInit {
 
 
         this.grupo.permissoes = permissoes;
-        this.grupo.podeVerTodasUnidades = this.verTodasUnidadesFormControl.value
 
 
         this.grupoService.save(this.grupo).subscribe(grupo => {

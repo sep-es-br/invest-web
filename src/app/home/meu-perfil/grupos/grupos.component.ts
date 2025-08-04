@@ -6,7 +6,6 @@ import { ProfileService } from "../../../utils/services/profile.service";
 import { tap } from "rxjs";
 
 @Component({
-    standalone: true,
     templateUrl: "./grupos.component.html",
     styleUrl: "./grupos.component.scss",
     imports: [CommonModule]

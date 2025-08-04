@@ -9,3 +9,11 @@ export interface ISetorDTO {
     sigla : string;
     orgao: IOrgaoDTO;
 }
+
+export const setorTodos : ISetorDTO = {
+    id: undefined,
+    guid: "todos",
+    nome: "Todos",
+    orgao: undefined,
+    sigla: undefined
+}

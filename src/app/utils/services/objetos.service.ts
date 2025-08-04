@@ -13,6 +13,8 @@ import { IObjeto } from "../interfaces/IObjeto";
 import { ToastrService } from "ngx-toastr";
 import { IStatus } from "../interfaces/status.interface";
 import { IHttpError } from "../interfaces/http-error.interface";
+import { IOrdemItem } from "../interfaces/ordem-item.interface";
+import { IDataList } from "../interfaces/dataList.interface";
 
 @Injectable({providedIn: "root"})
 export class ObjetosService {
@@ -28,44 +30,39 @@ export class ObjetosService {
     }
 
 
-    public getListaTiraObjetos( filtro : IObjetoFiltro, pgAtual : number, tamPg : number ) : Observable<ObjetoTiraDTO[]> {
+    public getListaTiraObjetos( filtro : IObjetoFiltro, ordem : IOrdemItem[], pgAtual : number, tamPg : number ) : Observable<IDataList<ObjetoTiraDTO>> {
 
         let params = this.objetoFilterToParams(filtro)
                         .set("pgAtual", pgAtual)
                         .set("tamPag", tamPg);
         
 
-        return this.http.get<ObjetoTiraDTO[]>(`${this.objetoUrl}/allTira`, { params: params }).pipe(
+        return this.http.post<IDataList<ObjetoTiraDTO>>(`${this.objetoUrl}/allTira`, 
+            { 
+                ...filtro,
+                tamPag: tamPg,
+                pagAtual: pgAtual,
+                ordem: ordem
+            }
+        ).pipe(
             catchError(err => this.errorHandlerService.handleError(err))
         );
     }
 
-    public getListaTiraObjetosEmProcessamento( filtro : IObjetoFiltro, pgAtual : number, tamPg : number ) : Observable<ObjetoTiraDTO[]> {
+    public getListaTiraObjetosEmProcessamento( filtro : IObjetoFiltro, pgAtual : number, tamPg : number ) : Observable<IDataList<ObjetoTiraDTO>> {
 
         let params = this.objetoFilterToParams(filtro)
                         .set("pgAtual", pgAtual)
                         .set("tamPag", tamPg);
         
 
-        return this.http.get<ObjetoTiraDTO[]>(`${this.objetoUrl}/allTiraEmProcessamento`, { params: params }).pipe(
-            catchError(err => this.errorHandlerService.handleError(err))
-        );
-    }
-
-    public getQuantidadeItens( filtro : IObjetoFiltro) : Observable<number> {
-        return this.http.get<number>(`${this.objetoUrl}/count`, {params: this.objetoFilterToParams(filtro)}).pipe(
+        return this.http.get<IDataList<ObjetoTiraDTO>>(`${this.objetoUrl}/allTiraEmProcessamento`, { params: params }).pipe(
             catchError(err => this.errorHandlerService.handleError(err))
         );
     }
 
     public getQuantidadeItensEmProcessamento( filtro : IObjetoFiltro) : Observable<number> {
-        return this.http.get<number>(`${this.objetoUrl}/countEmProcessameto`, {params: this.objetoFilterToParams(filtro)}).pipe(
-            catchError(err => this.errorHandlerService.handleError(err))
-        );
-    }
-
-    public getQuantidadeInvFiltroItens( filtro : InvestimentoFiltro) : Observable<number> {
-        return this.http.get<number>(`${this.objetoUrl}/countInvestimentoFiltro`, {params: this.investimentoFilterToParams(filtro)}).pipe(
+        return this.http.post<number>(`${this.objetoUrl}/countEmProcessameto`, {params: this.objetoFilterToParams(filtro)}).pipe(
             catchError(err => this.errorHandlerService.handleError(err))
         );
     }
@@ -100,11 +97,11 @@ export class ObjetosService {
         if(filtro.status) 
             params = params.set("statusId", filtro.status.id)
 
-        if(filtro.unidade && filtro.unidade.length > 0)
-            params = params.set("unidadeId", JSON.stringify(filtro.unidade.map(u => u.id)))
+        if(filtro.unidades && filtro.unidades.length > 0)
+            params = params.set("unidadeId", JSON.stringify(filtro.unidades.map(u => u.id)))
 
-        if(filtro.plano && filtro.plano.length > 0)
-            params = params.set("idPo", JSON.stringify( filtro.plano.map(p => p.id) ))
+        if(filtro.planos && filtro.planos.length > 0)
+            params = params.set("idPo", JSON.stringify( filtro.planos.map(p => p.id) ))
 
         if(filtro.etapa)
             params = params.set("etapaId", filtro.etapa.id)
@@ -113,37 +110,6 @@ export class ObjetosService {
 
 
         return params.set("ano", filtro.exercicio);
-    }
-
-    public investimentoFilterToParams(filtro : InvestimentoFiltro) : HttpParams {
-        let params : HttpParams = new HttpParams();
-
-        if(filtro.nome)
-            params = params.set("nome", filtro.nome) 
-
-        if(filtro.codUnidade)
-            params = params.set("codUnidade", JSON.stringify(filtro.codUnidade) ) 
-
-        if(filtro.codPO)
-            params = params.set("codPO", JSON.stringify(filtro.codPO)) 
-
-
-        if(filtro.numPag)
-            params = params.set("numPag", filtro.numPag)
-
-        if(filtro.qtPorPag)
-            params = params.set("qtPorPag", filtro.qtPorPag) 
-
-        if(filtro.exercicio)
-            params = params.set("exercicio", filtro.exercicio)
-
-
-        return params
-    }
-
-    public findStatusCadastrados() : Observable<IStatus[]>{
-        return this.http.get<IStatus[]>(`${this.objetoUrl}/statusCadastrado`)
-        .pipe(catchError(err => this.errorHandlerService.handleError(err)))
     }
 
     public removerObjeto(objetoId : string) : Observable<IObjeto> {

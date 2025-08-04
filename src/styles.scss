@@ -1,7 +1,8 @@
+@use 'ngx-toastr/toastr';
+@use '@ng-select/ng-select/scss/default.theme.scss';
+@use './app/utils/styles/UI_Pattern.scss';
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 @import url("https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined");
-@import 'ngx-toastr/toastr';
-@import './app/utils/styles/UI_Pattern.scss';
 
 /* You can add global styles to this file, and also import other style files */
 :root {
@@ -20,7 +21,7 @@
 * {
     margin: 0;
     padding: 0;
-    box-sizing: unset;
+    box-sizing: unset !important;
 }
 
 body, app-root {
@@ -30,4 +31,21 @@ body, app-root {
     background-color: var(--cor-secundaria);
     font-family: var(--fonte-open-sans);
 }
+
+// aparentemente em aguma versão bizarra do Chrome existe um conflito com Open Sans
+// então se faz nescessario forçar o estilo dos icones do google
+.material-symbols-outlined {
+    font-family: 'Material Symbols Outlined';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px; /* Ajuste conforme necessário */
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-smoothing: antialiased;
+  }
 

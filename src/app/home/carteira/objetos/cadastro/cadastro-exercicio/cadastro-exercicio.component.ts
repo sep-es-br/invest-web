@@ -9,7 +9,6 @@ import { ToastrService } from "ngx-toastr";
 
 @Component({
     selector: "spo-cadastro-exercicio",
-    standalone: true,
     templateUrl: "./cadastro-exercicio.component.html",
     styleUrl: "./cadastro-exercicio.component.scss",
     imports: [

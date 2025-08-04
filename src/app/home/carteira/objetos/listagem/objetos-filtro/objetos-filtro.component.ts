@@ -19,11 +19,10 @@ import { faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
 
 @Component({
     selector: "spo-objetos-filtro",
-    standalone: true,
     templateUrl: "./objetos-filtro.component.html",
     styleUrl: "./objetos-filtro.component.scss",
     imports: [
-        CommonModule, DropdownFiltroComponent, NgSelectModule, FormsModule,
+        CommonModule, NgSelectModule, FormsModule,
         FontAwesomeModule
     ]
 })
@@ -118,7 +117,7 @@ export class ObjetosFiltroComponent implements AfterViewInit {
                     .pipe(tap( unidades => {
                         this.unidades = unidades;
                         if(unidades?.length == 1) {
-                            this.filtro.unidade = unidades;
+                            this.filtro.unidades = unidades;
                         }
                     })))
                 }

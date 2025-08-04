@@ -7,7 +7,6 @@ import { NumeroResumidoPipe } from "../../pipes/numero-resumido.pipe";
     selector: 'spo-valor-card',
     templateUrl: './valor-card.component.html',
     styleUrl: './valor-card.component.scss',
-    standalone: true,
     imports: [CommonModule, CustomCurrencyPipe, NumeroResumidoPipe]
 })
 export class ValorCardComponent {

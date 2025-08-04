@@ -5,7 +5,6 @@ import { CommonModule } from "@angular/common";
 
 @Component({
     selector: "spo-multSelect-dropdown-item",
-    standalone: true,
     templateUrl: './multSelect-dropdown-item.component.html',
     styleUrl: "./multSelect-dropdown-item.component.scss",
     imports: [CommonModule, FormsModule],

@@ -5,7 +5,6 @@ import { faAnglesLeft, faAnglesRight, faChevronLeft, faChevronRight } from "@for
 
 @Component({
     selector: 'spo-barra-paginacao',
-    standalone: true,
     templateUrl: './barra-paginacao.component.html',
     styleUrl: './barra-paginacao.component.scss',
     imports: [CommonModule, FontAwesomeModule]

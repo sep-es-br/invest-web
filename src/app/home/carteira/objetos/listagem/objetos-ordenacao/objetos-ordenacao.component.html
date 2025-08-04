@@ -1,0 +1,30 @@
+<form #form="ngForm">
+    <spo-campo-ordenacao campo="apoc.text.clean(nome)" name="nome" [(ngModel)]="filtroOrdem.nome" >
+        Nome
+    </spo-campo-ordenacao>
+    <spo-campo-ordenacao campo="codUnidade" name="codUnidade" [(ngModel)]="filtroOrdem.codUnidade">
+        Código da Unidade
+    </spo-campo-ordenacao>
+    <spo-campo-ordenacao campo="siglaUnidade" name="siglaUnidade" [(ngModel)]="filtroOrdem.siglaUnidade">
+        Sigla da Unidade
+    </spo-campo-ordenacao>
+    <spo-campo-ordenacao campo="codPO" name="codPo" [(ngModel)]="filtroOrdem.codPo">
+        Código P.O.
+    </spo-campo-ordenacao>
+    <spo-campo-ordenacao campo="totalPrevisto" name="previsto" [(ngModel)]="filtroOrdem.previsto">
+        Previsto
+    </spo-campo-ordenacao>
+    <spo-campo-ordenacao campo="totalContratado" name="contratado" [(ngModel)]="filtroOrdem.contratado">
+        Contratado
+    </spo-campo-ordenacao>
+    <spo-campo-ordenacao campo="totalAutorizado" name="autorizado" [(ngModel)]="filtroOrdem.autorizado">
+        Autorizado
+    </spo-campo-ordenacao>
+    <spo-campo-ordenacao campo="totalEmpenhado" name="empenhado" [(ngModel)]="filtroOrdem.empenhado">
+        Empenhado
+    </spo-campo-ordenacao>
+    <spo-campo-ordenacao campo="totalDisponivel" name="dispSReserva" [(ngModel)]="filtroOrdem.dispSReserva">
+        Disp. S/ Reserva
+    </spo-campo-ordenacao>
+    <button class="btn-acao" (click)="limparFiltro()" ><fa-icon [icon]="limparFiltroIcon"></fa-icon></button>
+</form>

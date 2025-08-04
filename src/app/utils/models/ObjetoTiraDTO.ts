@@ -1,11 +1,11 @@
 export class ObjetoTiraDTO {
     id? : string;
     unidadeResponsavel!: string;
-    codPlano : string;
+    codPO : string;
     nome!: string;
     tipo!: string;
     totalPrevisto!: number;
-    totalHomologado!: number;
+    totalContratado!: number;
     totalAutorizado! : number;
     totalEmpenhado: number
     totalDisponivel! : number;

@@ -24,15 +24,15 @@ import { IAreaTematica } from "../../../../utils/interfaces/IAreaTematica";
 import { ISelectOpcao } from "../../../../utils/interfaces/selectOption.interface";
 import { NgSelectComponent } from "@ng-select/ng-select";
 import { PermissaoService } from "../../../../utils/services/permissao.service";
+import { ProgressModalComponent } from "../../../../utils/components/progress-modal/progress-modal.component";
 
 @Component({
-    standalone: true,
     templateUrl: "./objeto-cadastro.component.html",
     styleUrl: "./objeto-cadastro.component.scss",
     imports: [
-    CommonModule, ReactiveFormsModule,
-    CadastroExercicioComponent, FontAwesomeModule, FormsModule, NgSelectComponent
-]
+        CommonModule, ReactiveFormsModule, ProgressModalComponent, 
+        CadastroExercicioComponent, FontAwesomeModule, FormsModule, NgSelectComponent
+    ]
 })
 export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
 
@@ -61,6 +61,8 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
     checado = false;
 
     podeVerUnidades = false;
+
+    carregamento = 0;
 
     gnd : number = 4;
 
@@ -103,6 +105,7 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
             }
         ]
 
+        this.carregamento++;
         merge(
             this.unidadeService.getFromSigefes().pipe(
                 tap(unidadeList => this.setUnidades(unidadeList))
@@ -110,8 +113,8 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
             this.localidadeService.findAll().pipe(
                 tap(localidadeList => this.setMicrorregioes(localidadeList))
             ),
-            this.tipoPlanoService.findAll().pipe(
-                tap(tipoPlanoList => this.setTiposPlano(tipoPlanoList))
+            this.tipoPlanoService.findBy().pipe(
+                tap(tipoPlanoList => this.setTiposPlano(tipoPlanoList as ITipoPlano[]))
             ),
             this.areaTematicaService.findAllAreaTematica().pipe(
                 tap(areasTematicas => this.setAreasTematicas(areasTematicas))
@@ -125,6 +128,8 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
         ).pipe(finalize(() => {
             
             if(!this.podeVerUnidades) {
+                
+                this.carregamento++;
                 this.unidadeService.getUnidadeDoUsuario().pipe(
                     tap(unidades => {
                         this.setUnidades(unidades);
@@ -132,7 +137,7 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
                             this.objeto.conta.unidadeOrcamentariaImplementadora = unidades[0]
                         }
                     })
-                ).subscribe();
+                ).pipe(finalize(() => this.carregamento -= 1)).subscribe();
             }
 
 
@@ -140,18 +145,45 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
                 let objetoId = params['objetoId'];
     
                 if(!objetoId) return;
+                this.carregamento++;
                 this.objetoService.getById(objetoId).pipe(tap(
                     obj => {
     
                         this.setObjeto(obj)
     
                     }
-                )).subscribe()
+                )).pipe(finalize(() => this.carregamento -= 1)).subscribe()
             })).subscribe();
 
+            this.carregamento -= 1;
 
-        })).subscribe()
 
+        })).subscribe();
+
+        
+
+    }
+
+    updateTipoPlano(po : PlanoOrcamentarioDTO) {
+        this.tipoPlanoService.fromSigefes(po.codigo)
+        .subscribe({
+            next: (tiposList) => {
+                this.objeto.planos = tiposList
+
+                this.objeto.planos.forEach(plano => {
+                    if(!plano.id) {
+                        this.tiposplano.push(plano);
+                    }
+
+                    this.opcoesTipoPlano.push({
+                                label: `${plano.nome} - ${plano.sigla}`,
+                                value: plano
+                            })
+
+        
+                });
+            }
+        });
     }
 
     setMicrorregioes(microrregiaoList : LocalidadeDTO[]) {
@@ -264,7 +296,7 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
 
         this.tipoPlanoService.findBy(undefined, 'PIP').pipe(
             tap( tipo => {
-                this.objeto.planos = [tipo];
+                this.objeto.planos = [tipo as ITipoPlano];
             })
         ).subscribe()
     }

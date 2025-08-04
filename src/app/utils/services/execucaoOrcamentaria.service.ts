@@ -17,11 +17,4 @@ export class ExecucaoOrcamentariaService {
     }
 
 
-    public getTotalOrcado(ano : string  ) : Observable<number> {
-        return this.http.get<number>(`${this.execucaoUrl}/totalOrcado`, {params: {
-            ano: ano
-        }}).pipe(
-            catchError(err => this.errorHandlerService.handleError(err))
-        );
-    }
 }
