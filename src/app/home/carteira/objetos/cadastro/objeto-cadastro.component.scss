@@ -50,6 +50,9 @@
                         }
 
                         
+                        &::placeholder, ::placeholder {
+                            color: rgb(99, 139, 189);
+                        }
                     }
                 }
                 

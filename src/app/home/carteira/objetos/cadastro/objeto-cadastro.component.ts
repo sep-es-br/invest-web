@@ -163,22 +163,6 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
                         unidadeOrcamentariaImplementadora: unidadeList.find(value => value.codigo === proposta.budgetUnitId)
                     })
 
-                    // Object.values(this.cadastroObjeto.controls).forEach(control => {
-                    //     control.markAsTouched({onlySelf: true});
-                    //     control.updateValueAndValidity({onlySelf: true});
-                    // })
-
-                    // let exercValidos = true;
-
-                    // this.cadastroExercicios.forEach(
-                    //     exercicio => {
-                    //         if(!exercicio.validar())
-                    //             exercValidos = false
-                    //     }
-                    // )
-
-                    // this.checado = true;
-                    // this.cadastroObjeto.invalid;
 
 
                 } else {
