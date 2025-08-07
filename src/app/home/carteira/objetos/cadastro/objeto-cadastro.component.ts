@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { AfterViewInit, Component, OnInit, QueryList, ViewChild, ViewChildren } from "@angular/core";
+import { AfterViewInit, Component, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from "@angular/core";
 import { FormsModule, NgForm, NgModel, ReactiveFormsModule } from "@angular/forms";
 import { UnidadeOrcamentariaDTO } from "../../../../utils/models/UnidadeOrcamentariaDTO";
 import { PlanoOrcamentarioDTO } from "../../../../utils/models/PlanoOrcamentarioDTO";
@@ -9,7 +9,7 @@ import { IObjeto } from "../../../../utils/interfaces/IObjeto";
 import { ICusto } from "./exercicio-cadastro.interface";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faFloppyDisk, faPaperPlane, faPlusCircle, faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
-import { finalize, merge, tap } from "rxjs";
+import { filter, finalize, forkJoin, map, merge, switchMap, tap } from "rxjs";
 import { UnidadeOrcamentariaService } from "../../../../utils/services/unidadeOrcamentaria.service";
 import { PlanoOrcamentarioService } from "../../../../utils/services/planoOrcamentario.service";
 import { LocalidadeService } from "../../../../utils/services/localidade.service";
@@ -25,6 +25,8 @@ import { ISelectOpcao } from "../../../../utils/interfaces/selectOption.interfac
 import { NgSelectComponent } from "@ng-select/ng-select";
 import { PermissaoService } from "../../../../utils/services/permissao.service";
 import { ProgressModalComponent } from "../../../../utils/components/progress-modal/progress-modal.component";
+import { PROPOSTA_ATIVA } from "../../../../utils/sessionLocalItems.const";
+import { IProposta } from "../../../../utils/interfaces/proposta.interface";
 
 @Component({
     templateUrl: "./objeto-cadastro.component.html",
@@ -34,7 +36,7 @@ import { ProgressModalComponent } from "../../../../utils/components/progress-mo
         CadastroExercicioComponent, FontAwesomeModule, FormsModule, NgSelectComponent
     ]
 })
-export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
+export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy {
 
     @ViewChildren(CadastroExercicioComponent) cadastroExercicios : QueryList<CadastroExercicioComponent>;
     @ViewChild('cadastroObjeto') cadastroObjeto : NgForm;
@@ -62,6 +64,8 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
 
     podeVerUnidades = false;
 
+    daProposta = false;
+
     carregamento = 0;
 
     gnd : number = 4;
@@ -85,8 +89,13 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
     objeto : IObjeto = {
         tipoConta: "Investimento",
         tipo: "Projeto",
+        // hashProposta: 'teste',
         recursosFinanceiros: [],
         conta: {}
+    }
+
+    ngOnDestroy(): void {
+        sessionStorage.removeItem(PROPOSTA_ATIVA)
     }
 
     ngOnInit(): void {
@@ -106,59 +115,76 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
         ]
 
         this.carregamento++;
-        merge(
-            this.unidadeService.getFromSigefes().pipe(
-                tap(unidadeList => this.setUnidades(unidadeList))
-            ),
-            this.localidadeService.findAll().pipe(
-                tap(localidadeList => this.setMicrorregioes(localidadeList))
-            ),
-            this.tipoPlanoService.findBy().pipe(
-                tap(tipoPlanoList => this.setTiposPlano(tipoPlanoList as ITipoPlano[]))
-            ),
-            this.areaTematicaService.findAllAreaTematica().pipe(
-                tap(areasTematicas => this.setAreasTematicas(areasTematicas))
-            ),
-            this.planoService.getDoSigefes(null).pipe(
-                tap(planoList => this.setPlanos(planoList))
-            ),
-            this.permissaoService.getPermissao("carteiraobjetos").pipe(
-                tap(permissao => this.podeVerUnidades = permissao.verTodasUnidades)
-            )
-        ).pipe(finalize(() => {
-            
-            if(!this.podeVerUnidades) {
+
+        this.permissaoService.getPermissao("carteiraobjetos").pipe(
+            switchMap((permissao) => {
+                this.podeVerUnidades = permissao.verTodasUnidades;
+
+                return forkJoin({
+                    localidadeList: this.localidadeService.findAll(),
+                    tipoPlanoList: this.tipoPlanoService.findBy(),
+                    areasTematicas: this.areaTematicaService.findAllAreaTematica(),
+                    planoList: this.planoService.getDoSigefes(null),
+                    unidadeList: this.podeVerUnidades
+                                    ? this.unidadeService.getFromSigefes()
+                                    : this.unidadeService.getUnidadeDoUsuario()
+                })
+
+            }),
+            tap(({areasTematicas, localidadeList,planoList,tipoPlanoList,unidadeList}) => {
+                this.setUnidades(unidadeList);
+                this.setMicrorregioes(localidadeList);
+                this.setTiposPlano(tipoPlanoList as ITipoPlano[]);
+                this.setAreasTematicas(areasTematicas);
+                this.setPlanos(planoList);
+
+                this.objeto.planos = [(tipoPlanoList as ITipoPlano[]).find(value => value.sigla === 'PIP')];
+
+                if(unidadeList?.length == 1) {
+                    this.objeto.conta.unidadeOrcamentariaImplementadora = unidadeList[0]
+                }
                 
-                this.carregamento++;
-                this.unidadeService.getUnidadeDoUsuario().pipe(
-                    tap(unidades => {
-                        this.setUnidades(unidades);
-                        if(unidades?.length == 1) {
-                            this.objeto.conta.unidadeOrcamentariaImplementadora = unidades[0]
-                        }
+                let proposta: IProposta = JSON.parse(sessionStorage.getItem(PROPOSTA_ATIVA));
+                
+                if(proposta) {
+                    this.daProposta = true;
+
+                    const planoDA = (tipoPlanoList as ITipoPlano[]).find(value => value.sigla === 'DA');
+
+                    Object.assign(this.objeto, {
+                        hashProposta: proposta.syncHash,
+                        descricao: proposta.proposalText,
+                        areaTematica: areasTematicas.find(value => value.nome === proposta.areaName),
+                        microregiaoAtendida: localidadeList.find(value => value.nome === proposta.microrregion),
+                        planos: [ ...(this.objeto.planos ?? []), ...(planoDA ? [planoDA] : [])]
                     })
-                ).pipe(finalize(() => this.carregamento -= 1)).subscribe();
-            }
+
+                    Object.assign(this.objeto.conta, {
+                        unidadeOrcamentariaImplementadora: unidadeList.find(value => value.codigo === proposta.budgetUnitId)
+                    })
 
 
-            this.route.params.pipe(tap(params => {
-                let objetoId = params['objetoId'];
-    
-                if(!objetoId) return;
-                this.carregamento++;
-                this.objetoService.getById(objetoId).pipe(tap(
-                    obj => {
-    
-                        this.setObjeto(obj)
-    
-                    }
-                )).pipe(finalize(() => this.carregamento -= 1)).subscribe()
-            })).subscribe();
 
-            this.carregamento -= 1;
+                } else {
+                    this.route.params
+                        .pipe(
+                            map(params => params['objetoId']),
+                            filter(objetoId => !!objetoId), // ignora se undefined ou null
+                            switchMap(objetoId => {
+                                this.carregamento++;
+                                return this.objetoService.getById(objetoId).pipe(
+                                    tap(obj => this.setObjeto(obj)),
+                                    finalize(() => this.carregamento--)
+                                );
+                            })
+                            
+                        )
+                        .subscribe();
+                }
 
-
-        })).subscribe();
+            }),
+            finalize(() =>  this.carregamento--)
+        ).subscribe();
 
         
 
@@ -293,12 +319,6 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit {
 
             }
         )
-
-        this.tipoPlanoService.findBy(undefined, 'PIP').pipe(
-            tap( tipo => {
-                this.objeto.planos = [tipo as ITipoPlano];
-            })
-        ).subscribe()
     }
 
     limparContratado() {

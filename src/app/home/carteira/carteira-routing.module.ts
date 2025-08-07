@@ -2,6 +2,7 @@ import { Route, RouterModule } from "@angular/router";
 import { EmConstrucaoComponent } from "../../em-construcao/em-construcao.component";
 import { NgModule } from "@angular/core";
 import { ObjetosListagemComponent } from "./objetos/listagem/objetos-listagem.component";
+import { AudienciaPublicaListagemComponent } from "./audiencia-publica/listagem/audiencia-publica-listagem.component";
 
 const routes : Route[] = [
     // {
@@ -16,6 +17,10 @@ const routes : Route[] = [
         path: "",
         pathMatch: "full",
         redirectTo: "objetos"
+    },
+    {
+        path: 'audiencia-publica',
+        component: AudienciaPublicaListagemComponent
     }
 ];
 

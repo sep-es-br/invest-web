@@ -35,13 +35,19 @@
             <label for="inDescricao">Descrição <span class="obrigatorio">*</span></label>
             <input type="text" id="inDescricao" name="descricao" [(ngModel)]="objeto.descricao"
                 placeholder="Insira uma descrição" [maxlength]="280" required #descricao="ngModel"
-                [ngClass]="(checado && descricao.invalid) ? 'invalido' : ''">
+                [ngClass]="{
+                    'invalido': (checado && descricao.invalid),
+                    'srcProposta': (!!objeto.hashProposta)
+                }">
             
             <label>Unidade Orçamentária <span class="obrigatorio">*</span></label>
             <ng-select [(ngModel)]="objeto.conta.unidadeOrcamentariaImplementadora" required
-                [ngClass]="(checado && unidade.invalid) ? 'invalido' : ''"
+                [ngClass]="{
+                    'invalido': (checado && unidade.invalid),
+                    'srcProposta': (!!objeto.hashProposta)
+                }"     
                 [items]="opcoesUnidades"
-                [disabled]="this.unidades?.length <= 1"
+                [disabled]="this.unidades?.length == 1"
                 placeholder="Selecionar a unidade orçamentária"
                 bindLabel="label"
                 bindValue="value"
@@ -65,7 +71,10 @@
             
             <label for="inMicroregiao">Microrregião Atendida <span class="obrigatorio">*</span></label>
             <select id="inMicroregiao" name="microregiaoAtendida" [(ngModel)]="objeto.microregiaoAtendida"
-                [ngClass]="(checado && microregiaoAtendida.invalid) ? 'invalido' : ''" required
+                [ngClass]="{
+                    'invalido': (checado && microregiaoAtendida.invalid),
+                    'srcProposta': (!!objeto.hashProposta)
+                }" required
                 #microregiaoAtendida="ngModel">
                 <option [ngValue]="undefined">Selecionar microrregião</option>
                 <option *ngFor="let microregiao of microregioes" [ngValue]="microregiao">{{microregiao.nome}}</option>
@@ -73,8 +82,10 @@
             
             <label for="inAreaTematica">Área Temática <span class="obrigatorio">*</span></label>
             <select id="inAreaTematica" name="areaTematica" [(ngModel)]="objeto.areaTematica"
-                [ngClass]="(checado && areaTematica.invalid) ? 'invalido' : ''" required 
-                #areaTematica="ngModel">
+                [ngClass]="{
+                        'invalido': (checado && areaTematica.invalid),
+                        'srcProposta': (!!objeto.hashProposta)
+                    }" required #areaTematica="ngModel">
                 <option [ngValue]="undefined">Selecionar a área temática</option>
                 <option *ngFor="let area of areasTematicas" [ngValue]="area">{{area.nome}}</option>
             </select>
@@ -92,7 +103,10 @@
             <ng-select [(ngModel)]="objeto.planos"
                 [disabled]="objeto.id && objeto.planos && objeto.planos.length > 0 && !objeto.emEtapa"
                 [clearable]="false"
-                [ngClass]="(checado && planos.invalid) ? 'invalido' : ''"
+                [ngClass]="{
+                        'invalido': (checado && planos.invalid),
+                        'srcProposta': (!!objeto.hashProposta)
+                    }"
                 [items]="opcoesTipoPlano" required #planos="ngModel"
                 [multiple]="true"
                 placeholder="Selecione os tipos de plano"
