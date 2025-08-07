@@ -3,6 +3,7 @@
 
     &:not(.ng-select-multiple){
         height: 32px;
+        box-sizing: border-box;
     }
     
 
@@ -41,6 +42,8 @@
         color: var(--cor-primaria) !important;
         padding-left: 1rem;
         width: unset;
+        min-height: unset !important;
+        height: 32px !important;
 
         .ng-value-container {
             padding-left: unset;
@@ -118,9 +121,12 @@
             border-color: var(--vermelho-padrao);
 
             
-            .ng-placeholder {
-                color: var(--vermelho-padrao);
+            .ng-placeholder, ::placeholder {
+                color: var(--vermelho-padrao) !important;
             }
+
         }
+
+        
     }
 }
