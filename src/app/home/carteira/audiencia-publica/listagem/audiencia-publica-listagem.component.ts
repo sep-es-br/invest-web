@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { AudienciaPublicaService } from "../../../../utils/services/audiencia-publica.service";
 import { NgSelectModule } from "@ng-select/ng-select";
 import { FormsModule } from "@angular/forms";
@@ -20,14 +20,17 @@ import { IProposta } from "../../../../utils/interfaces/proposta.interface";
 import { CampoPesquisaComponent } from "../../../../utils/components/campo-pesquisa/campo-pesquisa.component";
 import { Router } from "@angular/router";
 import { PROPOSTA_ATIVA } from "../../../../utils/sessionLocalItems.const";
+import { BarraPaginacaoComponent } from "../../../../utils/components/barra-paginacao/barra-paginacao.component";
 
 @Component({
     templateUrl: './audiencia-publica-listagem.component.html',
     styleUrl: './audiencia-publica-listagem.component.scss',
-    imports: [CommonModule, NgSelectModule, FormsModule, FontAwesomeModule, ProgressModalComponent, CampoPesquisaComponent]
+    imports: [CommonModule, NgSelectModule, FormsModule, FontAwesomeModule, ProgressModalComponent, CampoPesquisaComponent, BarraPaginacaoComponent]
 })
 export class AudienciaPublicaListagemComponent implements OnInit{
 
+    
+    @ViewChild(BarraPaginacaoComponent) barraPaginacaoComponent : BarraPaginacaoComponent;
 
     removerIcon = faXmarkCircle;
     criarIcon = faArrowRight;
@@ -44,6 +47,7 @@ export class AudienciaPublicaListagemComponent implements OnInit{
 
     qtPropostas = 0;
     listaPropostas : IProposta[] = [];
+    paginaAtual: number = 1;
 
     carregando = false;
 
@@ -87,23 +91,26 @@ export class AudienciaPublicaListagemComponent implements OnInit{
 
             return merge(...consulta);
         }),
-        finalize(() => this.update())
+        finalize(() => this.update(this.paginaAtual))
         ).subscribe();
     }
 
-    update(txtSearch?:string) {
+    update(novaPag: number, txtSearch?:string) {
         this.carregando = true;
+        this.paginaAtual = novaPag;
         if(this.podeVerUnidades == undefined) return;
         
         this.apSrv.getListagem(
             this.filtro.unidades, 
             this.filtro.areaTematica, 
             txtSearch ?? this.filtro.filtroTexto, 
-            this.podeVerUnidades
+            this.podeVerUnidades,
+            novaPag
         ).pipe(
             tap(value => {
                 this.listaPropostas = value.data;
                 this.qtPropostas = value.ammount;
+                this.barraPaginacaoComponent.updatePaginacao(value.ammount);
             }),
             finalize(() => this.carregando = false)
         ).subscribe();
