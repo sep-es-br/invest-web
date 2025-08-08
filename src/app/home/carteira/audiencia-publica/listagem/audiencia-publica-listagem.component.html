@@ -57,7 +57,7 @@
                 <h4>Microrregião</h4>
                 <p>{{proposta.microrregion}}</p>
             </td>
-            <td><fa-icon title="Criar Objeto" role="button"
+            <td><fa-icon *ngIf="permissao.criar" title="Criar Objeto" role="button"
                 class="criarIcon" [icon]="criarIcon" aria-label="Criar Objeto"
                 (click)="criarObjeto(proposta)"></fa-icon></td>
         </tr>
