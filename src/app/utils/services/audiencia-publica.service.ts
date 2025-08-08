@@ -23,10 +23,13 @@ export class AudienciaPublicaService {
         unidades: UnidadeOrcamentariaDTO[],
         areaTematica: IAreaTematica,
         filtroTexto: string,
-        podeVerUnidades: boolean
+        podeVerUnidades: boolean,
+        pag: number
     ) : Observable<IDataList<IProposta>> {
 
-        let params: HttpParams = new HttpParams().append('podeVerUnidades', podeVerUnidades);
+        let params: HttpParams = new HttpParams()
+                .append('podeVerUnidades', podeVerUnidades)
+                .append('pag', pag);
 
         if(unidades && unidades.length > 0)
             params = params.append('unidadeIds', unidades.map(value => value.id).join(';'))
