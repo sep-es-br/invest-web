@@ -21,6 +21,7 @@ import { CampoPesquisaComponent } from "../../../../utils/components/campo-pesqu
 import { Router } from "@angular/router";
 import { PROPOSTA_ATIVA } from "../../../../utils/sessionLocalItems.const";
 import { BarraPaginacaoComponent } from "../../../../utils/components/barra-paginacao/barra-paginacao.component";
+import { IPodeDTO } from "../../../../utils/models/PodeDto";
 
 @Component({
     templateUrl: './audiencia-publica-listagem.component.html',
@@ -36,7 +37,7 @@ export class AudienciaPublicaListagemComponent implements OnInit{
     criarIcon = faArrowRight;
     unidades : UnidadeOrcamentariaDTO[];
     areasTematicas : IAreaTematica[];
-    podeVerUnidades : boolean = undefined;
+    permissao : IPodeDTO = undefined;
     filtro : {
         unidades?: UnidadeOrcamentariaDTO[];
         areaTematica?: IAreaTematica,
@@ -64,9 +65,9 @@ export class AudienciaPublicaListagemComponent implements OnInit{
     ngOnInit(): void {
         
         this.carregando = true;
-        this.permissaoService.getPermissao('carteiraaudiencias').pipe(
+        this.permissaoService.getPermissao("carteiraaudiencia-publica").pipe(
         switchMap(permissao => {
-            this.podeVerUnidades = permissao.verTodasUnidades;
+            this.permissao = permissao;
 
             let consulta: Observable<any>[] = [
                 this.areaTematicaSrv.findAllAreaTematica().pipe(
@@ -74,7 +75,7 @@ export class AudienciaPublicaListagemComponent implements OnInit{
                 )
             ];
 
-            const unidade$ = this.podeVerUnidades
+            const unidade$ = permissao.verTodasUnidades
             ? this.unidadeService.getFromSigefes().pipe(
                 tap(unidadeList => this.unidades = unidadeList)
                 )
@@ -98,13 +99,13 @@ export class AudienciaPublicaListagemComponent implements OnInit{
     update(novaPag: number, txtSearch?:string) {
         this.carregando = true;
         this.paginaAtual = novaPag;
-        if(this.podeVerUnidades == undefined) return;
+        if(this.permissao == undefined) return;
         
         this.apSrv.getListagem(
             this.filtro.unidades, 
             this.filtro.areaTematica, 
             txtSearch ?? this.filtro.filtroTexto, 
-            this.podeVerUnidades,
+            this.permissao.verTodasUnidades,
             novaPag
         ).pipe(
             tap(value => {
