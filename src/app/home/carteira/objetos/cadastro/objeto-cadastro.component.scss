@@ -35,24 +35,18 @@
                 grid-template-rows: repeat(10, 2rem);
                 gap: 1rem;
 
-                --cinza-preenchido: #e1dfdf7d;
-
-                :disabled {
-                    opacity: unset;
-                    background-color: var(--cinza-preenchido);
-                }
 
                 .srcProposta {   
                     &, & ::ng-deep .ng-select-container, & ::ng-deep .ng-select-container {
 
-                        &, & .ng-value{
-                            background-color: var(--cinza-preenchido);
-                        }
+                        // &, & .ng-value{
+                        //     background-color: var(--cinza-preenchido);
+                        // }
 
                         
-                        &::placeholder, ::placeholder {
-                            color: rgb(99, 139, 189);
-                        }
+                        // &::placeholder, ::placeholder {
+                        //     color: rgba(99, 139, 189, 0.514);
+                        // }
                     }
                 }
                 

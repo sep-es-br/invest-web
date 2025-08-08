@@ -89,7 +89,7 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
     objeto : IObjeto = {
         tipoConta: "Investimento",
         tipo: "Projeto",
-        // hashProposta: 'teste',
+        hashProposta: 'teste',
         recursosFinanceiros: [],
         conta: {}
     }

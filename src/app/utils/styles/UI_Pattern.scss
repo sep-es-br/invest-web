@@ -59,14 +59,16 @@ select, input:not(.pesquisa) {
     height: 32px;
     box-sizing: border-box;
 
-    &::placeholder {
-        color: var(--cor-primaria);
+    &::placeholder, &.placeholder {
+        color: rgba(99, 139, 189, 0.514);
     }
+
 
     &:disabled {
         border-color: var(--cor-primaria);
         color: var(--cor-primaria);
-        opacity: 0.7;
+        opacity: unset;
+        background-color: var(--cinza-inativo);
     }
 
 }
