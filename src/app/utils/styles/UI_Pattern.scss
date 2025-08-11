@@ -78,6 +78,13 @@ textarea {
 select, input:not(.pesquisa) {
     @extend  textarea;
     height: 32px;
+
+    &.placeholder {
+        option {
+            color: var(--cor-primaria) !important;
+        }
+    }
+    
 }
 
 .invalido {
