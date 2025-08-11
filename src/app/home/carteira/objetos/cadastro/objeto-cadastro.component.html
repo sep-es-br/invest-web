@@ -33,12 +33,11 @@
                 [ngClass]="(checado && nome.invalid) ? 'invalido' : ''"/>
 
             <label for="inDescricao">Descrição <span class="obrigatorio">*</span></label>
-            <input type="text" id="inDescricao" name="descricao" [(ngModel)]="objeto.descricao"
-                placeholder="Insira uma descrição" [maxlength]="280" required #descricao="ngModel"
-                [ngClass]="{
+            <textarea id="inDescricao" [(ngModel)]="objeto.descricao" placeholder="Insira uma descrição" 
+                 [maxlength]="280" required #descricao="ngModel" name="descricao" [ngClass]="{
                     'invalido': (checado && descricao.invalid),
                     'srcProposta': (!!objeto.hashProposta)
-                }">
+                }" rows="5"></textarea>
             
             <label>Unidade Orçamentária <span class="obrigatorio">*</span></label>
             <ng-select [(ngModel)]="objeto.conta.unidadeOrcamentariaImplementadora" required

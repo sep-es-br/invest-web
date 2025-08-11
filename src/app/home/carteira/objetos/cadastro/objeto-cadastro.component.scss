@@ -32,12 +32,16 @@
                 margin-bottom: 1.5rem;
                 display: grid;
                 grid-template-columns: max-content auto;
-                grid-template-rows: repeat(10, 2rem);
                 gap: 1rem;
 
 
                 .srcProposta {   
                     &, & ::ng-deep .ng-select-container, & ::ng-deep .ng-select-container {
+
+                        &:not(.placeholder) {
+                            color: #013370 !important;
+                        }
+                        
 
                         // &, & .ng-value{
                         //     background-color: var(--cinza-preenchido);
@@ -48,6 +52,8 @@
                         //     color: rgba(99, 139, 189, 0.514);
                         // }
                     }
+
+                    
                 }
                 
             }
