@@ -22,6 +22,9 @@
 
 
     .lista {
+        display: flex;
+        flex-direction: column;
+
         table {
             border-collapse: separate;
             border-spacing: 0 1rem;
