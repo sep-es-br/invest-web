@@ -232,7 +232,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                     }
 
                     this.opcoesTipoPlano.push({
-                                label: `${plano.nome} - ${plano.sigla}`,
+                                label: `${plano.nome.toUpperCase()} - ${plano.sigla}`,
                                 value: plano
                             })
 
@@ -457,7 +457,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
         
         this.opcoesTipoPlano = tipoPlanoList.map(
             tpPlano => { return {
-                    label: `${tpPlano.nome} - ${tpPlano.sigla}`,
+                    label: `${tpPlano.nome.toUpperCase()} - ${tpPlano.sigla}`,
                     value: tpPlano
                 }
 

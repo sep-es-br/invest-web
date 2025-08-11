@@ -23,6 +23,7 @@ export interface IObjeto {
     infoComplementares?: string;
     planos? : ITipoPlano[];
     contrato? : string;
+    hashProposta? : string;
     areaTematica? : IAreaTematica;
     recursosFinanceiros? : ICusto[];
     responsavel? : IProfile;

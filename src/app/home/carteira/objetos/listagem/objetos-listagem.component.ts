@@ -77,7 +77,7 @@ export class ObjetosListagemComponent implements AfterViewInit{
             this.filtroComponent.filterChange,
             this.ordenacaoComponent.onChange
         ]).pipe(take(1)).subscribe(([filtro, ordem]) => {
-                this.txtBusca.valueChanges.pipe(tap(value => {
+            this.txtBusca.valueChanges.pipe(tap(value => {
                 this.executar(this.recarregarLista(this.paginaAtual)) 
             })).subscribe();
             this.executar(this.recarregarLista(this.paginaAtual, filtro, ordem).pipe(finalize(() => this.lock = false)))

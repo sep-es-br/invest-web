@@ -1,0 +1,1 @@
+export const PROPOSTA_ATIVA = 'propostaAtiva'
