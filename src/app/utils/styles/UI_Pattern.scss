@@ -48,7 +48,7 @@ label {
     }
 }
 
-select, input:not(.pesquisa) {
+textarea {
     border: var(--cor-primaria) solid 1px;
     border-radius: 4px;
     color: var(--cor-primaria);
@@ -56,19 +56,28 @@ select, input:not(.pesquisa) {
     font-size: small;
     outline: none;
     padding-left: 1rem;
-    height: 32px;
     box-sizing: border-box;
+    resize: none;
+    padding-top: 0.5rem;
 
-    &::placeholder {
-        color: var(--cor-primaria);
+    &::placeholder, &.placeholder {
+        padding-top: 0.5rem;
+        color: rgba(99, 139, 189, 0.514) !important;
     }
+
 
     &:disabled {
         border-color: var(--cor-primaria);
         color: var(--cor-primaria);
-        opacity: 0.7;
+        opacity: unset;
+        background-color: var(--cinza-inativo);
     }
 
+}
+
+select, input:not(.pesquisa) {
+    @extend  textarea;
+    height: 32px;
 }
 
 .invalido {
