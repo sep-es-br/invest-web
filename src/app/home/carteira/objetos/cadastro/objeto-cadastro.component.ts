@@ -346,11 +346,15 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
 
             if(!this.salvarDebounce) {
                 this.salvarDebounce = true;
+                this.carregamento++;
                 this.objetoService.salvarObjeto(this.objeto).pipe(
                     tap(() => {
                         this.toastr.success("Objeto Salvo");
                         this.router.navigate(['../'], {relativeTo: this.route})
-                    }), finalize(() => this.salvarDebounce = false)
+                    }), finalize(() => {
+                        this.carregamento--;
+                        this.salvarDebounce = false
+                    })
     
                 ).subscribe();
             }

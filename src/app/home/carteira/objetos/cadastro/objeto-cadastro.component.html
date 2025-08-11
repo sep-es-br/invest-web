@@ -33,12 +33,11 @@
                 [ngClass]="(checado && nome.invalid) ? 'invalido' : ''"/>
 
             <label for="inDescricao">Descrição <span class="obrigatorio">*</span></label>
-            <input type="text" id="inDescricao" name="descricao" [(ngModel)]="objeto.descricao"
-                placeholder="Insira uma descrição" [maxlength]="280" required #descricao="ngModel"
-                [ngClass]="{
+            <textarea id="inDescricao" [(ngModel)]="objeto.descricao" placeholder="Insira uma descrição" 
+                 [maxlength]="280" required #descricao="ngModel" name="descricao" [ngClass]="{
                     'invalido': (checado && descricao.invalid),
                     'srcProposta': (!!objeto.hashProposta)
-                }">
+                }" rows="5"></textarea>
             
             <label>Unidade Orçamentária <span class="obrigatorio">*</span></label>
             <ng-select [(ngModel)]="objeto.conta.unidadeOrcamentariaImplementadora" required
@@ -73,7 +72,8 @@
             <select id="inMicroregiao" name="microregiaoAtendida" [(ngModel)]="objeto.microregiaoAtendida"
                 [ngClass]="{
                     'invalido': (checado && microregiaoAtendida.invalid),
-                    'srcProposta': (!!objeto.hashProposta)
+                    'srcProposta': (!!objeto.hashProposta), 
+                    'placeholder': !objeto.microregiaoAtendida
                 }" required
                 #microregiaoAtendida="ngModel">
                 <option [ngValue]="undefined">Selecionar microrregião</option>
@@ -84,7 +84,8 @@
             <select id="inAreaTematica" name="areaTematica" [(ngModel)]="objeto.areaTematica"
                 [ngClass]="{
                         'invalido': (checado && areaTematica.invalid),
-                        'srcProposta': (!!objeto.hashProposta)
+                        'srcProposta': (!!objeto.hashProposta), 
+                        'placeholder': !objeto.areaTematica
                     }" required #areaTematica="ngModel">
                 <option [ngValue]="undefined">Selecionar a área temática</option>
                 <option *ngFor="let area of areasTematicas" [ngValue]="area">{{area.nome}}</option>
@@ -119,7 +120,10 @@
             
             <label for="inPossuiOrcamento">Orçamento <span class="obrigatorio">*</span></label>
             <select id="inPossuiOrcamento" name="inPossuiOrcamento" [(ngModel)]="objeto.possuiOrcamento" 
-                [ngClass]="(checado && possuiOrcamento.invalid) ? 'invalido' : ''" required  #possuiOrcamento="ngModel">
+                [ngClass]="{ 
+                    'invalido': (checado && possuiOrcamento.invalid), 
+                    'placeholder': !objeto.possuiOrcamento
+                }" required  #possuiOrcamento="ngModel">
                 <option [ngValue]="undefined">Selecionar se dispõe de orçamento</option>
                 <option value="total">Já dispõe, totalmente</option>
                 <option value="parcial">Já dispõe, parcialmente (indicar no campo Informações Complementares)</option>
