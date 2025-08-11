@@ -4,5 +4,10 @@
     "search.exclude": {
         "**/node_modules": false,
         "**/node_moduless": true
-    }
+    },
+    "cssVariables.lookupFiles": [
+        "node_modules/common-ui/dist/CommonUIVariable.css",
+        "src/styles.scss"
+    ]
+
 }
