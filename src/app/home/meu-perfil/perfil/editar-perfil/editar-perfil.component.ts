@@ -1,7 +1,7 @@
 import { CommonModule } from "@angular/common";
-import { AfterViewInit, Component } from "@angular/core";
+import { AfterViewInit, Component, effect } from "@angular/core";
 import { FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
-import { Observable, ReplaySubject } from "rxjs";
+import { map, Observable, ReplaySubject, switchMap } from "rxjs";
 import { IProfile } from "../../../../utils/interfaces/profile.interface";
 import { DataUtilService } from "../../../../utils/services/data-util.service";
 import { ProfileService } from "../../../../utils/services/profile.service";
@@ -10,6 +10,7 @@ import { faFloppyDisk, faWrench } from "@fortawesome/free-solid-svg-icons";
 import { Router, RouterModule } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { IPapelDTO } from "../../../../utils/models/PapelDto";
+import { ErrorHandlerService } from "../../../../utils/services/error-handler.service";
 
 @Component({
     selector: 'spo-meuperfil-perfil-editar',
@@ -38,12 +39,11 @@ export class EditarPerfilComponent implements AfterViewInit{
 
     ngAfterViewInit(): void {
         
-        this.profileService.getUserWithAvatar().subscribe(user => {
-            
-            this.user = user;
+        effect(() => {
+            this.user = this.profileService.sessionProfile$();
             this.loadUser();
-            
         })
+
 
         this.dataUtilService.editModeListener.next(true);
 
@@ -58,54 +58,35 @@ export class EditarPerfilComponent implements AfterViewInit{
     }
 
     getPapelUser() : IPapelDTO{
-        if(this.user.papeis){
-            if(this.user.papeis.length === 1)
-                return this.user.papeis[0]
-            else
-                return this.user.papeis.find(p => p.prioritario)
-        } else {
-            return {
-                id: undefined,
-                nome: this.user.papel,
-                agenteNome: undefined,
-                agenteSub: undefined,
-                guid: undefined,
-                prioritario: undefined,
-                setor: this.user.setor
-            }
-        }
+        
+        if(this.user.papeis?.length === 1)
+            return this.user.papeis[0]
+        else
+            return this.user.papeis?.find(p => p.prioritario)
     }
 
     salvarUser() {
+        const { inNome, inNomeCompleto, inEmail, inTelefone } = this.form.value;
 
-        this.profileService.getAvatarFromLoggedSub().subscribe(avatar => {
-            this.user = {
-                name: this.form.get("inNome").value,
-                nomeCompleto: this.form.get("inNomeCompleto").value,
-                email: this.form.get("inEmail").value,
-                telefone: this.form.get("inTelefone").value,
-                papel: this.user.papel,
-                id: this.user.id,
-                imgPerfil: avatar,
-                role: this.user.role,
-                sub: this.user.sub,
-                token: this.user.token,
-                setor: this.user.setor,
-                papeis: this.user.papeis
-                                
-            }
-    
-            this.profileService.salvarUsuario(this.user).subscribe(novoUser => {
+        const newUser = {
+                    ...this.user,
+                    name: inNome,
+                    nomeCompleto: inNomeCompleto,
+                    email: inEmail,
+                    telefone: inTelefone
+                }
+
+        this.profileService.salvarUsuario(newUser).subscribe({
+            next: novoUser => {
                 if(novoUser) {
-                    this.profileService.userListener.next(novoUser);
+                    this.profileService.sessionProfile$.set(novoUser);
                     this.toastr.success("Usuario salvo")
                     this.router.navigateByUrl("/home/meuperfil/detalhe");
                 } else {
                     this.toastr.error("Erro ao salvar usuario");
                 }
-            });
-    })
-
+            }
+        });
         
 
     }

@@ -1,6 +1,7 @@
-import { Injectable } from "@angular/core";
+import { Injectable, signal } from "@angular/core";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 import { BehaviorSubject, Subject } from "rxjs";
+import { IItemMenu } from "../IItemMenu";
 
 @Injectable({providedIn: "root"})
 export class DataUtilService {
@@ -9,6 +10,7 @@ export class DataUtilService {
     public editModeListener = new Subject<boolean>();
     public titleInfo : {[index:string] : string} = {};
     public headerUpdate = new Subject<any>();
+    public menuItemnsSignal = signal<IItemMenu[]>([]);
     
     public readonly obsNomeTela = new BehaviorSubject(null);
     

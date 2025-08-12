@@ -31,7 +31,7 @@ export class PerfilComponent implements AfterViewInit{
 
     ngAfterViewInit(): void {
         
-        this.profileService.getUserWithAvatar().subscribe(user => {
+        this.profileService.getUser().subscribe(user => {
             
             this.user = user;
             // this.loadUser();

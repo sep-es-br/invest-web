@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from "@angular/core";
+import { Component, effect, ElementRef, HostListener, Input, OnInit, Signal, ViewChild } from "@angular/core";
 import { BreadCrumbComponent } from "./breadcrumb/breadcrumb.component";
 import { ActivatedRoute, NavigationEnd, Router, RouterLink } from "@angular/router";
 import { breadCrumbNames } from "./breadcrumb/breadCrumb-data";
@@ -16,6 +16,7 @@ import { ObjetoFiltro } from "../utils/models/ObjetoFiltro";
 import { IFiltro } from "../home/inventario/objetos/avaliacao/listagem/objetos-filtro/objetos-filtro.component";
 import { EtapaService } from "../utils/services/etapa.service";
 import { IObjetoFiltro } from "../utils/interfaces/objetoFiltro.interface";
+import { IAvatar } from "../utils/interfaces/avatar.interface";
 
 @Component({
     selector: 'spo-header',
@@ -32,6 +33,8 @@ export class HeaderComponent implements OnInit {
     iniciais : string | undefined = 'DG';
     userImage : SafeResourceUrl;
 
+    userSignal : Signal<IProfile>;
+
     debounceMenu = false;
     
     qtObjetos = 0;
@@ -42,26 +45,15 @@ export class HeaderComponent implements OnInit {
 
     @Input() home : HomeComponent;
 
-    @Input() user : IProfile;
-
     private concat$ : Observable<any>;
 
     constructor(private route : ActivatedRoute, private router : Router, private dataUtilService : DataUtilService,
-        private objetoService: ObjetosService, private permissaoService : PermissaoService, private etapaService : EtapaService) {
+        private objetoService: ObjetosService, private permissaoService : PermissaoService, private etapaService : EtapaService,
+        private profileSrv : ProfileService
+    ) {
         this.dataUtilService.headerUpdate.subscribe(value => this.updateTitle())
         
-        this.router.events.subscribe(event => {
-            if (event instanceof NavigationEnd) {
-                this.updateTitle();
-            }
-        })
-
-        let filtro : InvestimentoFiltro = {
-            exercicio: 2024,
-            nome: "",
-            numPag: 1,
-            qtPorPag: 15
-        }
+        this.userSignal = this.profileSrv.sessionProfile$;
 
         this.etapaService.getDoUsuario().pipe(
             tap(etapa => {
@@ -79,12 +71,19 @@ export class HeaderComponent implements OnInit {
         ).subscribe();
         
         
-        
-        this.concat$ = concat(
+        concat(
             this.permissaoService.usuarioTemAcesso("administracao").pipe(tap(temAcesso => {
                 this.permissaoAdm = temAcesso
             }))
-        );
+        ).subscribe();
+
+        effect(() => {
+            if(this.userSignal()?.imgPerfil){
+                this.userImage = this.dataUtilService.imageFromBase64(this.userSignal().imgPerfil.blob);
+            } else {
+                this.iniciais = this.userSignal()?.nomeCompleto.split(' ').map(n => n[0]).slice(0,2).join('').toUpperCase();
+            }
+        });
 
     }
 
@@ -111,12 +110,6 @@ export class HeaderComponent implements OnInit {
             this.title = this.dataUtilService.titleInfo[activeRouter.routeConfig.path.slice(1)]
         }
 
-        // this.dataUtilService.obsNomeTela.subscribe(nomeTela => {
-        //     if(nomeTela)
-        //         this.title = nomeTela;
-        //     else
-        //         this.title = breadCrumbNames[String(pathName)] ?  : String(pathName) ;
-        // })
     }
 
     @HostListener('document:click', ['$event'])
@@ -159,17 +152,7 @@ export class HeaderComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.concat$.subscribe();
-
-        this.iniciais = this.user.nomeCompleto.split(' ').map(n => n[0]).slice(0,2).join('').toUpperCase();
-    }
-
-    updateUserInfo(){
-        if(this.user.imgPerfil){
-            this.userImage = this.dataUtilService.imageFromBase64(this.user.imgPerfil.blob);
-        } else {
-            this.iniciais = this.user.nomeCompleto.split(' ').map(n => n[0]).slice(0,2).join('').toUpperCase();
-        }
+        
     }
 
 }

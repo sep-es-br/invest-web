@@ -2,7 +2,7 @@ import {inject, Injectable} from '@angular/core';
 import {Router} from '@angular/router';
 import {HttpErrorResponse} from '@angular/common/http';
 import { IHttpError } from '../interfaces/http-error.interface';
-import { EMPTY, Observable, throwError } from 'rxjs';
+import { EMPTY, Observable, of, throwError } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 
 
@@ -34,7 +34,7 @@ export class ErrorHandlerService {
    *
    * @param {HttpErrorResponse} error - O erro fornecido pelo seletor do operador RxJS `catchError`.
    */
-  public handleError(error: HttpErrorResponse): Observable<never> {
+  public handleError(error: HttpErrorResponse): Observable<any> {
     
       const backEndError: IHttpError = error.error;
 
@@ -59,6 +59,6 @@ export class ErrorHandlerService {
       }
     
 
-    return EMPTY;
+    return of(undefined);
   }
 }
