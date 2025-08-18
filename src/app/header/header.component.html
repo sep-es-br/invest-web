@@ -15,7 +15,7 @@
             <ng-template #iniciaisElem>{{iniciais}}</ng-template> 
         </div>
         <div id="userData">
-            <p>{{user.name}}</p>
+            <p>{{userSignal()?.name}}</p>
         </div>
         <div #menuUser [ngClass]="'menuUser ' + (showMenuUser ? 'mostrar' : '')">
             <div (click)="redirectTo('home/meuperfil')">Meu Perfil</div>
