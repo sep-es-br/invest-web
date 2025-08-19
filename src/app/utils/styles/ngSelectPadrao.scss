@@ -50,7 +50,7 @@
         }
 
         .ng-placeholder {
-            color: var(--cor-primaria) !important;
+            color: rgba(99, 139, 189, 0.514) !important;
         }
 
         .ng-clear-wrapper {
@@ -103,8 +103,8 @@
     &.ng-select-disabled {
 
         .ng-select-container {
-            opacity: 0.7;
-            background-color: unset;
+            opacity: unset;
+            background-color: var(--cinza-inativo);
 
             .ng-value .ng-value-icon {
                 display: none !important;

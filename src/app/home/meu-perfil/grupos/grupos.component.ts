@@ -18,7 +18,7 @@ export class MeuPerfilGruposComponent {
         private grupoService : GrupoService, 
         private profileService : ProfileService
     ){
-        this.profileService.getUserWithAvatar().pipe(tap(
+        this.profileService.getUser().pipe(tap(
             user => {
                 this.grupoService.findByUsuario(user.id).pipe(tap(
                     grupos => {

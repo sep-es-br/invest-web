@@ -85,7 +85,6 @@ export class GrupoPermissoesComponent implements OnInit {
 
         this.grupoService.save(this.grupo).subscribe(grupo => {
             this.grupoService.grupoSession.next(grupo);
-            this.permissaoService.updateMenuSignal.next(null);
             this.toastr.success("Grupo Salvo!!");
         })
 

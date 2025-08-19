@@ -202,7 +202,7 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
                     }
 
                     this.opcoesTipoPlano.push({
-                                label: `${plano.nome} - ${plano.sigla}`,
+                                label: `${plano.nome.toUpperCase()} - ${plano.sigla}`,
                                 value: plano
                             })
 
@@ -266,7 +266,7 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
 
         this.opcoesPlanosOrcamentarios = planoList.map(
             plano => { return {
-                label: plano.codigo + ' - ' + plano.nome,
+                label: plano.codigo + ' - ' + plano.nome.toUpperCase(),
                 value: plano
             }}
         )
@@ -313,7 +313,7 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
 
         this.opcoesTipoPlano = tipoPlanoList.map(
             tpPlano => { return {
-                    label: `${tpPlano.nome} - ${tpPlano.sigla}`,
+                    label: `${tpPlano.nome.toUpperCase()} - ${tpPlano.sigla}`,
                     value: tpPlano
                 }
 
@@ -346,11 +346,15 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
 
             if(!this.salvarDebounce) {
                 this.salvarDebounce = true;
+                this.carregamento++;
                 this.objetoService.salvarObjeto(this.objeto).pipe(
                     tap(() => {
                         this.toastr.success("Objeto Salvo");
                         this.router.navigate(['../'], {relativeTo: this.route})
-                    }), finalize(() => this.salvarDebounce = false)
+                    }), finalize(() => {
+                        this.carregamento--;
+                        this.salvarDebounce = false
+                    })
     
                 ).subscribe();
             }

@@ -1,0 +1,18 @@
+import { ActivatedRouteSnapshot, MaybeAsync, RedirectCommand, Resolve, RouterStateSnapshot } from "@angular/router";
+import { IProfile } from "../interfaces/profile.interface";
+import { ProfileService } from "../services/profile.service";
+import { tap } from "rxjs";
+import { Injectable } from "@angular/core";
+
+@Injectable({providedIn: 'root'})
+export class UserResolver implements Resolve<any> {
+    constructor(
+        private profileSrv : ProfileService
+    ){}
+    
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+        return this.profileSrv.getUser().pipe(
+            tap(user => {this.profileSrv.sessionProfile$.set(user)})
+        );
+    }
+}
