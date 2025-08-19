@@ -78,8 +78,10 @@ textarea {
 select, input:not(.pesquisa) {
     @extend  textarea;
     height: 32px;
+    padding-top: unset;
 
-    &.placeholder {
+    &.placeholder, &::placeholder {
+        padding-top: unset;
         option {
             color: var(--cor-primaria) !important;
         }
