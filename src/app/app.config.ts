@@ -9,6 +9,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideToastr } from 'ngx-toastr';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
+import { provideEnvironmentNgxCurrency } from 'ngx-currency';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -16,6 +17,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes), 
     provideHttpClient(withInterceptors([authInterceptor])),
     provideEnvironmentNgxMask(),
+    provideEnvironmentNgxCurrency({prefix: 'R$ ', thousands: '.', decimal: ',', precision: 2, align: 'left'}),
     provideAnimationsAsync(),
     providePrimeNG({
       theme: {
