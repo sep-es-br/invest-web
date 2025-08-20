@@ -18,11 +18,11 @@
 
 
         <input type="text" [(ngModel)]="fonteValores.previsto" [ngModelOptions]="{standalone: true}"
-                prefix="R$ " mask="separator.2" placeholder="R$ " [disabled]="disabled"/>
+                placeholder="R$ " [disabled]="disabled" currencyMask/>
         <fa-icon [icon]="limparIcon" class="apagar" (click)="disabled ? undefined : fonteValores.previsto = undefined"></fa-icon>
 
         <input type="text" [(ngModel)]="fonteValores.contratado" [ngModelOptions]="{standalone: true}"
-                prefix="R$ " mask="separator.2"  placeholder="R$ " [disabled]="disabled || !contratadoEditavel" />
+                placeholder="R$ " [disabled]="disabled || !contratadoEditavel" currencyMask/>
         <fa-icon [icon]="limparIcon" class="apagar" (click)="disabled ? undefined : fonteValores.contratado = undefined"></fa-icon>
 
         <!-- <select [(ngModel)]="fonteValores.gnd" [ngModelOptions]="{standalone: true}" [disabled]="disabled">

@@ -10,13 +10,14 @@ import { FonteOrcamentariaDTO } from "../../../../../../../utils/models/FonteOrc
 import { FonteOrcamentariaService } from "../../../../../../../utils/services/fonteOrcamentaria.service";
 import { NgSelectComponent } from "@ng-select/ng-select";
 import { ISelectOpcao } from "../../../../../../../utils/interfaces/selectOption.interface";
+import { NgxCurrencyDirective } from "ngx-currency";
 
 @Component({
     selector: "spo-avaliacao-exercicio-fonte",
     templateUrl: "./avaliacao-exercicio-fonte.component.html",
     styleUrl: "./avaliacao-exercicio-fonte.component.scss",
     imports: [
-        CommonModule, NgxMaskDirective, FontAwesomeModule, ReactiveFormsModule,
+        CommonModule, NgxCurrencyDirective, FontAwesomeModule, ReactiveFormsModule,
         FormsModule, NgSelectComponent
     ],
     providers: [provideNgxMask()]
