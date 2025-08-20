@@ -7,7 +7,7 @@ export interface IApontamento {
     id? : string;
     timestamp? : string;
     texto : string;
-    etapa? : IEtapa;
+    etapa? : string;
     campo : ICampo;
     usuario? : IProfile;
     grupo? : GrupoDTO;

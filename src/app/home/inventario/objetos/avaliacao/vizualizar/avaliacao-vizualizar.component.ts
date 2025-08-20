@@ -513,7 +513,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                         this.objetoService.getById(objetoId).pipe(
                             tap(objeto => {
                                 
-                                this.fluxoService.findWithEtapa(objeto.emEtapa.etapa.id).pipe(
+                                this.fluxoService.findWithEtapa(objeto.emEtapa.etapa).pipe(
                                     tap(fluxo => this.setFluxo(fluxo)),
                                     finalize(() => this.setObjeto(objeto))
                                 ).subscribe()
