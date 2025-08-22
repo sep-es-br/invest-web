@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { catchError, Observable } from "rxjs";
+import { catchError, Observable, of } from "rxjs";
 import { environment } from "../../../environments/environment";
 import { PlanoOrcamentarioDTO } from "../models/PlanoOrcamentarioDTO";
 import { UnidadeOrcamentariaDTO } from "../models/UnidadeOrcamentariaDTO";
@@ -33,7 +33,10 @@ export class UnidadeOrcamentariaService {
 
     public getFromSigefes () : Observable<UnidadeOrcamentariaDTO[]> {
         return this.http.get<UnidadeOrcamentariaDTO[]>(`${this.unidadeUrl}/doSigefes`)
-        .pipe(catchError(err => this.errorHandlerService.handleError(err)));
+        .pipe(catchError(err => {
+            this.errorHandlerService.handleError(err);
+            return of([])
+        }));
     }
 
 

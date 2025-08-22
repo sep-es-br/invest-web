@@ -23,10 +23,7 @@ export class FluxoCadastroComponent implements AfterViewInit {
         standalone: true
     }
 
-    fluxo : IFluxo = {
-        nome: "",
-        etapas: []
-    };
+    fluxo : IFluxo = {} as IFluxo;
 
     gruposList : GrupoDTO[];
 

@@ -345,7 +345,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
         let posInicial = -20;
         this.fluxo.etapas.forEach((etapa, i) => {
             let pos = (i * posStep) + 50;
-            if(etapa.id == this.objeto.emEtapa.etapa.id){
+            if(etapa.etapaId == this.objeto.emEtapa.etapa.etapaId){
                 this.etapasStatus.push({
                     etapa: etapa,
                     status: 1,
@@ -513,7 +513,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                         this.objetoService.getById(objetoId).pipe(
                             tap(objeto => {
                                 
-                                this.fluxoService.findWithEtapa(objeto.emEtapa.etapa).pipe(
+                                this.fluxoService.findWithEtapa(objeto.emEtapa.etapa.etapaId).pipe(
                                     tap(fluxo => this.setFluxo(fluxo)),
                                     finalize(() => this.setObjeto(objeto))
                                 ).subscribe()

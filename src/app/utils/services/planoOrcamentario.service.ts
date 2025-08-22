@@ -3,7 +3,7 @@ import { PlanoOrcamentarioDTO } from "../models/PlanoOrcamentarioDTO";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { environment } from "../../../environments/environment";
-import { catchError } from "rxjs";
+import { catchError, of } from "rxjs";
 import { ErrorHandlerService } from "./error-handler.service";
 import { Router } from "@angular/router";
 import { UnidadeOrcamentariaDTO } from "../models/UnidadeOrcamentariaDTO";
@@ -33,7 +33,11 @@ export class PlanoOrcamentarioService {
             params = params.set("codigo", unidade.codigo)
 
         return this.http.get<PlanoOrcamentarioDTO[]>(`${this.planoApi}/doSigefes`, {params: params})
-        .pipe(catchError(err => this.errorHandlerService.handleError(err)));
+        .pipe(catchError(err => {
+            this.errorHandlerService.handleError(err);
+
+            return of([]);
+        }));
     }
 
 }
