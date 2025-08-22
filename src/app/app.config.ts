@@ -31,6 +31,6 @@ export const appConfig: ApplicationConfig = {
       positionClass: 'toast-top-center',
       preventDuplicates:true,
       resetTimeoutOnDuplicate: true
-    })
+    }), { provide: ErrorHandler, useClass: GlobalErrorHandler }
   ]
 };
