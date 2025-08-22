@@ -192,7 +192,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
         let executarAcaoDto : IExecutarAcao;
      
         executarAcaoDto = {
-            acao: this.acaoDoModal,
+            acaoId: this.acaoDoModal.acaoId,
             apontamentos: novosApontamentos,
             objeto: objetoFinal
         }
@@ -558,7 +558,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
             let objetoFinal : IObjeto = this.gerarObjetoFinal()
 
             let executarAcaoDto : IExecutarAcao = {
-                acao: acao,
+                acaoId: acao.acaoId,
                 apontamentos: [],
                 objeto: objetoFinal
             }

@@ -4,7 +4,7 @@ import { IObjeto } from "./IObjeto";
 import { IParecer } from "./parecer.interface";
 
 interface IExecutarBase {
-    acao : IAcao,    
+    acaoId : string,    
     objeto : IObjeto
 }
 
