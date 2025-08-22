@@ -4,6 +4,7 @@ import { IFonteExercicio } from "../../fonte-exercicio.interface";
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { FonteOrcamentariaDTO } from "../../../../../../utils/models/FonteOrcamentariaDTO";
 import { NgxMaskDirective, provideNgxMask } from "ngx-mask";
+import { NgxCurrencyDirective, provideEnvironmentNgxCurrency } from 'ngx-currency'
 import { debounceTime, tap } from "rxjs";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faMinusCircle, faPlusCircle, faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
@@ -18,10 +19,9 @@ import { NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent 
     templateUrl: "./cadastro-exercicio-fonte.component.html",
     styleUrl: "./cadastro-exercicio-fonte.component.scss",
     imports: [
-        CommonModule, FormsModule, NgxMaskDirective, FontAwesomeModule,
+        CommonModule, FormsModule, NgxCurrencyDirective , FontAwesomeModule,
         NgSelectComponent
-    ],
-    providers: [provideNgxMask()]
+    ]
 })
 export class CadastroExercicioFonteComponent implements OnInit {
 

@@ -44,7 +44,7 @@ export class MeuPerfilComponent implements AfterViewInit{
 
     ngAfterViewInit(): void {
         
-        this.profileService.getUserWithAvatar().subscribe(user => {
+        this.profileService.getUser().subscribe(user => {
             
             this.user = user;
             this.loadUser();
@@ -116,7 +116,7 @@ export class MeuPerfilComponent implements AfterViewInit{
     salvarUser() {
         this.profileService.salvarUsuario(this.user).subscribe(user => {
             if(user){
-                this.profileService.userListener.next(this.user)
+                this.profileService.sessionProfile$.set(this.user)
                 this.toastr.success("Usuário salvo com sucesso");
             } else
                 this.toastr.error("erro ao salvar usuario");

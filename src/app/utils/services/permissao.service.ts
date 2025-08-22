@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { environment } from "../../../environments/environment";
-import { catchError, first, firstValueFrom, Observable, retry, Subject } from "rxjs";
+import { catchError, first, firstValueFrom, Observable, of, retry, Subject } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { ErrorHandlerService } from "./error-handler.service";
 import { IPodeDTO } from "../models/PodeDto";
@@ -10,7 +10,6 @@ import { IItemMenu } from "../IItemMenu";
 export class PermissaoService {
     
     private readonly permissaoUrl = `${environment.apiUrl}/permissao`;
-    public readonly updateMenuSignal = new Subject<any>();
 
     constructor(
         private http : HttpClient,
@@ -37,7 +36,10 @@ export class PermissaoService {
 
     public buildMenu() : Observable<IItemMenu[]> {
         return this.http.get<IItemMenu[]>(`${this.permissaoUrl}/buildMenu`)
-        .pipe(catchError(err => this.errorHendler.handleError(err)))
+        .pipe(catchError(err => {
+            return this.errorHendler.handleError(err)
+            
+        }))
     }
 
     public async isGestorMaster() : Promise<boolean> {

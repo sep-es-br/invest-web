@@ -134,7 +134,9 @@ export class InvestimentosComponent implements AfterViewInit {
                 filtro.podeVerUnidades
             )
             .pipe(tap(totais => {
-                            
+                
+                if(!totais) return;
+
                 this.totalPrevisto = totais.previsto;
                 this.totalHomologado = totais.contratado;
                 this.totalOrcado = totais.orcado;

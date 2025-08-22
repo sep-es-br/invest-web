@@ -1,4 +1,4 @@
-import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig, ErrorHandler, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { routes } from './app.routes';
@@ -9,6 +9,8 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideToastr } from 'ngx-toastr';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
+import { provideEnvironmentNgxCurrency } from 'ngx-currency';
+import { GlobalErrorHandler } from './utils/global-error-handler';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -16,6 +18,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes), 
     provideHttpClient(withInterceptors([authInterceptor])),
     provideEnvironmentNgxMask(),
+    provideEnvironmentNgxCurrency({prefix: 'R$ ', thousands: '.', decimal: ',', precision: 2, align: 'left'}),
     provideAnimationsAsync(),
     providePrimeNG({
       theme: {
@@ -28,6 +31,6 @@ export const appConfig: ApplicationConfig = {
       positionClass: 'toast-top-center',
       preventDuplicates:true,
       resetTimeoutOnDuplicate: true
-    })
+    }), { provide: ErrorHandler, useClass: GlobalErrorHandler }
   ]
 };

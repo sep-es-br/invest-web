@@ -3,6 +3,7 @@
 
     &:not(.ng-select-multiple){
         height: 32px;
+        box-sizing: border-box;
     }
     
 
@@ -41,13 +42,15 @@
         color: var(--cor-primaria) !important;
         padding-left: 1rem;
         width: unset;
+        min-height: unset !important;
+        height: 32px !important;
 
         .ng-value-container {
             padding-left: unset;
         }
 
         .ng-placeholder {
-            color: var(--cor-primaria) !important;
+            color: rgba(99, 139, 189, 0.514) !important;
         }
 
         .ng-clear-wrapper {
@@ -100,8 +103,8 @@
     &.ng-select-disabled {
 
         .ng-select-container {
-            opacity: 0.7;
-            background-color: unset;
+            opacity: unset;
+            background-color: var(--cinza-inativo);
 
             .ng-value .ng-value-icon {
                 display: none !important;
@@ -118,9 +121,12 @@
             border-color: var(--vermelho-padrao);
 
             
-            .ng-placeholder {
-                color: var(--vermelho-padrao);
+            .ng-placeholder, ::placeholder {
+                color: var(--vermelho-padrao) !important;
             }
+
         }
+
+        
     }
 }

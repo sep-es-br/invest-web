@@ -3,13 +3,14 @@ ng-select {
     max-width: 20rem;
     box-sizing: border-box;
 
-    button {
+    button, .removerItem {
         background-color: unset;
         border: unset;
         margin-left: 0.5rem;
-        .removerItem {
-            color: var(--cor-primaria);
-        }
+        
+    }
+    fa-icon.removerItem {
+        color: var(--cor-primaria);
     }
 
 

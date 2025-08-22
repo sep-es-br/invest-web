@@ -19,7 +19,7 @@ export class LoginComponent  {
   }
 
   login(){
-  this.authenticationService.acessoCidadaoSignIn();
+    this.authenticationService.acessoCidadaoSignIn();
   }
 
 }
