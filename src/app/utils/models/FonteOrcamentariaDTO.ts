@@ -1,5 +1,5 @@
 export class FonteOrcamentariaDTO {
-    id? : string;
+    id? : number;
     nome: string;
     codigo: string;
 }

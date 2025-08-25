@@ -8,7 +8,7 @@
     </button>
 </header>
 <main>
-    <div class="grupoItem" *ngFor="let grupo of grupos" (click)="navegar(grupo.id, $event)">
+    <div class="grupoItem" *ngFor="let grupo of grupos" (click)="navegar(grupo.id.toString(), $event)">
         <div class="cabecalho">
             <div class="icone">
                 <span class="material-symbols-outlined">{{grupo.icone}}</span>

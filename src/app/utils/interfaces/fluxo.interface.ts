@@ -1,7 +1,7 @@
 import { IEtapa } from "./etapa.interface";
 
 export interface IFluxo {
-    id? : string,
+    id? : number,
     nome : string,
     etapas : IEtapa[]
 }

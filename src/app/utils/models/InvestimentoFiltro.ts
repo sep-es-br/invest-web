@@ -1,11 +1,11 @@
 export class InvestimentoFiltro {
-    nome? : string | null ;
-    codUnidade? : string[] | null;
-    codPO? : string[] | null;
-    idFonte? : string | null; 
-    exercicio?: number | null;
+    nome? : string ;
+    codUnidade? : number[] ;
+    codPO? : string[] ;
+    idFonte? : number ; 
+    exercicio?: number ;
     gnd? : number;
     verUnidades?: boolean;
-    numPag?: number | null;
-    qtPorPag?: number | null;
+    numPag?: number ;
+    qtPorPag?: number ;
 }

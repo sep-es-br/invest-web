@@ -7,7 +7,7 @@ import { IFuncao } from "./funcao.interface";
 
 export interface IProfile {
     token: string;
-    id: string | null;
+    id: number;
     imgPerfil: IAvatar;
     name: string;
     nomeCompleto: string;

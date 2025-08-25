@@ -1,4 +1,4 @@
 export interface IAplicarStatus {
-    objetoId : string,
+    objetoId : number,
     status : string
 }

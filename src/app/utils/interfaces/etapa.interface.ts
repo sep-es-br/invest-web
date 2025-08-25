@@ -3,7 +3,7 @@ import { GrupoDTO } from "../models/GrupoDTO";
 import { IAcao } from "./acao.interface";
 
 export interface IEtapa {
-    id?: string,
+    id?: number,
     ordem? : number,
     nome : string,
     etapaId : string,

@@ -1,7 +1,7 @@
 export interface IDadoDetalhado {
-    idUnidade : string;
+    idUnidade : number;
     unidadeResponsavel : string;
-    idPO : string;
+    idPO : number;
     codPO : string;
     nomePO : string;
     projEstrategico: boolean;
@@ -12,7 +12,7 @@ export interface IDadoDetalhado {
 }
 
 interface IDadosValores {
-    idFonte: string;
+    idFonte: number;
     nomeFonte: string;
     valorPrevisto: number;
     valorContratado: number;

@@ -1,5 +1,5 @@
 export interface ICampo {
-    id? : string;
+    id? : number;
     campoId : string;
     nome : string;
 }

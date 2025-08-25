@@ -20,7 +20,7 @@ export class ModuloConfigComponent implements AfterViewInit {
     @Input() grupo : GrupoDTO;
     @Input() modulo : IModuloDTO;
 
-    permissaoId : string = null;
+    permissaoId : number = null;
 
 
     form = new FormGroup({

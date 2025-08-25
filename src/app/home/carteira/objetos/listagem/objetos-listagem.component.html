@@ -13,7 +13,7 @@
     (onChange)="setOrdem($event)"></spo-objetos-ordenacao>
 <main>
     <spo-tira-listagem-objetos *ngFor="let objeto of objetos" [objeto]="objeto" 
-        (doClick)="redirectTo(objeto.id)" (doRemover)="removerObjeto($event)" [permissao]="pode"></spo-tira-listagem-objetos>
+        (doClick)="redirectTo(objeto.id.toString())" (doRemover)="removerObjeto($event)" [permissao]="pode"></spo-tira-listagem-objetos>
 </main>
 <footer>
     <spo-barra-paginacao [larguraPaginacao]="larguraPaginacao" [quantidade]="qtObjetos" (onPageChange)="executar(recarregarLista($event))"></spo-barra-paginacao>

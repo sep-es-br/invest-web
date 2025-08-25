@@ -59,7 +59,7 @@ export class ObjetosVizualizarComponent implements AfterViewInit {
                     tap(obj => {
                         this.objeto = obj
 
-                        let nome = `${obj.conta.unidadeOrcamentariaImplementadora.sigla} - Objeto - ${obj.id.split(':')[2]}`;
+                        let nome = `${obj.conta.unidadeOrcamentariaImplementadora.sigla} - Objeto - ${obj.id}`;
 
                         this.dataUtil.setTitleInfo('objetoId', nome);
 

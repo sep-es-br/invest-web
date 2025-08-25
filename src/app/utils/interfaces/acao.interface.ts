@@ -1,7 +1,7 @@
 export interface IAcao {
-    id: string,
+    id: number,
     nome: string,
-    proxEtapaId: string,
+    proxEtapaId: number,
     positivo : Boolean, 
     acaoId : string
 

@@ -1,7 +1,7 @@
 import { IVinculadaPor } from "./IVinculadaPor";
 
 export interface IExecucaoOrcamentaria {
-    id : string,
+    id : number,
     anoExercicio : number,
     vinculadaPor : IVinculadaPor[]
 }

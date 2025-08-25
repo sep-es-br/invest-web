@@ -1,5 +1,5 @@
 export interface ITipoPlano {
-    id?: string;
+    id?: number;
     nome: string;
     sigla: string;
 
