@@ -1,7 +1,7 @@
 import { ISetorDTO } from "./SetorDTO"
 
 export interface IOrgaoDTO {
-    id : string,
+    id : number,
     guid : string,
     sigla : string,
     nome : string

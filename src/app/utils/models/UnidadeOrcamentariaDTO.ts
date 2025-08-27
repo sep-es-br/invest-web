@@ -1,5 +1,5 @@
 export class UnidadeOrcamentariaDTO {
-    id: string;
+    id: number;
     guid: string;
     codigo : string;
     nome: string;

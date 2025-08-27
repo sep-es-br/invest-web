@@ -51,7 +51,7 @@ export class GrupoService {
         .pipe(catchError(err => this.errorHandler.handleError(err)));
     }
 
-    public findById(idGrupo : string) {
+    public findById(idGrupo : number) {
         return this.http.get<GrupoDTO>(`${this.grupoUrl}`, {params: {grupoId: idGrupo}})
             .pipe(catchError(err => {
                 let backendError = err.error as IHttpError;
@@ -67,7 +67,7 @@ export class GrupoService {
             }), catchError(err => this.errorHandler.handleError(err)))
     }
 
-    public findByUsuario(idUsuario : string) : Observable<GrupoDTO[]> {
+    public findByUsuario(idUsuario : number) : Observable<GrupoDTO[]> {
         return this.http.get<GrupoDTO[]>(`${this.grupoUrl}/byUsuario`, {params: {usuarioId: idUsuario}})
             .pipe(catchError(err => this.errorHandler.handleError(err)))
     }
@@ -78,7 +78,7 @@ export class GrupoService {
         )
     }
 
-    public getMembros(grupoId : string) : Observable<IMembroGrupo[]> {
+    public getMembros(grupoId : number) : Observable<IMembroGrupo[]> {
         return this.http.get<IMembroGrupo[]>(`${this.grupoUrl}/membros`, {params: {  grupoId: grupoId }})
         .pipe(catchError(err => this.errorHandler.handleError(err)))
     }
@@ -89,19 +89,19 @@ export class GrupoService {
         )
     }
 
-    public remover(idGrupo : string) : Observable<GrupoDTO> {
+    public remover(idGrupo : number) : Observable<GrupoDTO> {
         return this.http.delete<GrupoDTO>(`${this.grupoUrl}/`, {params: {
             idGrupo: idGrupo
         }}).pipe(catchError(err => this.errorHandler.handleError(err)));
     }
 
-    public quantidadeMembros(idGrupo : string) : Observable<number> {
+    public quantidadeMembros(idGrupo : number) : Observable<number> {
         return this.http.get<number>(`${this.grupoUrl}/quantidadeMembros`, {params: {
             grupoId: idGrupo
         }}).pipe(catchError(err => this.errorHandler.handleError(err)));
     }
 
-    public removerMembro(idGrupo : string, idMembro : string) : Observable<GrupoDTO> {
+    public removerMembro(idGrupo : number, idMembro : number) : Observable<GrupoDTO> {
         return this.http.delete<GrupoDTO>(`${this.grupoUrl}/membro`, {params: {
             idGrupo: idGrupo, idMembro: idMembro
         }}).pipe(catchError(err => this.errorHandler.handleError(err)));

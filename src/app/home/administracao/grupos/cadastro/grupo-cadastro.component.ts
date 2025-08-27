@@ -12,15 +12,13 @@ import { SeletorIconeComponent } from "../../../../utils/components/seletor-icon
     styleUrl: "./grupo-cadastro.component.scss",
     imports: [CommonModule, ReactiveFormsModule, FormsModule, FontAwesomeModule, SeletorIconeComponent]
 })
-export class GrupoCadastroComponent {
+export class GrupoCadastroComponent implements OnInit {
 
     @Output() onClose = new EventEmitter<GrupoDTO>();
 
     @ViewChild("principal", {read: ElementRef}) principalRef : ElementRef
 
-    @Input() grupo : Partial<GrupoDTO> = {
-        icone: 'question_mark'
-    };
+    @Input() grupo : Partial<GrupoDTO>;
 
     standaloneModelOpt = {standalone: true}
 
@@ -34,6 +32,12 @@ export class GrupoCadastroComponent {
             this.fechar()
         }
         
+    }
+
+    ngOnInit(): void {
+        if (!this.grupo) {
+            this.grupo = { icone: 'question_mark' };
+        }
     }
 
     gerarSigla(event : FocusEvent, formCtrlSigla : NgModel) {

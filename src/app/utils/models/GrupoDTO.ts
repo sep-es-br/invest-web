@@ -5,7 +5,7 @@ import { IPodeDTO } from "./PodeDto";
 import { ISetorDTO } from "./SetorDTO";
 
 export interface GrupoDTO {
-    id? : string;
+    id? : number;
     icone : string;
     sigla : string;
     nome : string;

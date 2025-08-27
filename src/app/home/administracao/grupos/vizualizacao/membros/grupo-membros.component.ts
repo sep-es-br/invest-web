@@ -111,7 +111,7 @@ export class GrupoMembrosComponent implements AfterViewInit {
         this.subAberto = subMenuIndex;
     }
 
-    removerMembro(membroId : string){
+    removerMembro(membroId : number){
        this.service.removerMembro(this.grupo.id, membroId).subscribe(grupo => {
             this.service.grupoSession.next(grupo);
             this.subAberto = -1;

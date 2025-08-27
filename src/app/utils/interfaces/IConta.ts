@@ -4,7 +4,7 @@ import { IExecucaoOrcamentaria } from "./IExecucaoOrcamentaria"
 import { IObjeto } from "./IObjeto"
 
 export interface IConta {
-    id? : string,
+    id? : number,
     status? : string,
     nome? : string,
     planoOrcamentario? : PlanoOrcamentarioDTO,

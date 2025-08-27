@@ -61,7 +61,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
         conta: {}
     }
 
-    userId : string;
+    userId : number;
 
     EtapaEnum = EtapaEnum;
 
@@ -513,7 +513,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                         this.objetoService.getById(objetoId).pipe(
                             tap(objeto => {
                                 
-                                this.fluxoService.findWithEtapa(objeto.emEtapa.etapa.id).pipe(
+                                this.fluxoService.findWithEtapa(objeto.emEtapa.etapa.etapaId).pipe(
                                     tap(fluxo => this.setFluxo(fluxo)),
                                     finalize(() => this.setObjeto(objeto))
                                 ).subscribe()

@@ -3,6 +3,9 @@ import { IApontamento } from "../interfaces/apontamento.interface";
 import { IEtapa } from "../interfaces/etapa.interface";
 import { BehaviorSubject, first } from "rxjs";
 import { IObjeto } from "../interfaces/IObjeto";
+import { IProfile } from "../interfaces/profile.interface";
+import { GrupoDTO } from "../models/GrupoDTO";
+import { ICampo } from "../interfaces/campo.interface";
 
 @Injectable({providedIn: "root"})
 export class ApontamentoService {
@@ -13,66 +16,30 @@ export class ApontamentoService {
                 campoId: 'objetoNome',
                 nome: "Nome"
             },
-            etapa: undefined,
             grupo: {
-                id: '4:fc383081-d980-4806-96e4-58de1e63bb34:10416',
-                descricao: undefined,
-                icone: undefined,
-                membros: undefined,
-                nome: undefined,
-                permissoes: undefined,
-                podeVerTodasUnidades: undefined,
-                sigla: undefined
-            },
+                id: 2
+            } as GrupoDTO,
             texto: "Apontamento no nome",
             timestamp: new Date('12/01/2024').toISOString(),
             usuario: {
-                nomeCompleto: 'Usuario Teste',
-                email: undefined,
-                id: undefined,
-                imgPerfil: undefined,
-                name: undefined,
-                papel: undefined,
-                role: undefined,
-                setor: undefined,
-                sub: undefined,
-                telefone: undefined,
-                token: undefined
-            }
+                nomeCompleto: 'Usuario Teste'
+            } as  IProfile
 
-        }, {
+        } as IApontamento, {
             campo: {
                 campoId: 'objetoNome',
                 nome: "Nome"
-            },
-            etapa: undefined,
+            } as ICampo,
             grupo: {
-                id: '4:fc383081-d980-4806-96e4-58de1e63bb34:10416',
-                descricao: undefined,
-                icone: undefined,
-                membros: undefined,
-                nome: undefined,
-                permissoes: undefined,
-                podeVerTodasUnidades: undefined,
-                sigla: undefined
-            },
+                id: 1
+            } as GrupoDTO,
             texto: "Apontamento no nome mais recente",
             timestamp: new Date('12/05/2024').toISOString(),
             usuario: {
                 nomeCompleto: 'Usuario Teste',
-                email: undefined,
-                id: undefined,
-                imgPerfil: undefined,
-                name: undefined,
-                papel: undefined,
-                role: undefined,
-                setor: undefined,
-                sub: undefined,
-                telefone: undefined,
-                token: undefined
-            }
+            } as IProfile
 
-        }
+        } as IApontamento
     ];
 
 

@@ -15,7 +15,7 @@
             <input type="text" id="inSigla" #siglaModel="ngModel"
                 [(ngModel)]="grupo.sigla" [ngModelOptions]="standaloneModelOpt" />
             <label for="inDescricao">Descrição:</label>
-            <textarea rows="5" id="inDescricao" [(ngModel)]="grupo.descricao"></textarea>
+            <textarea rows="5" id="inDescricao" [(ngModel)]="grupo.descricao" [ngModelOptions]="standaloneModelOpt"></textarea>
         </form>
     </main>
     <footer>
