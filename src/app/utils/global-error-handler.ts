@@ -1,4 +1,4 @@
-import { ErrorHandler, Injectable } from "@angular/core";
+import { ErrorHandler, Injectable, Injector } from "@angular/core";
 import { IHttpError } from "./interfaces/http-error.interface";
 import { Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
@@ -7,15 +7,22 @@ import { HttpErrorResponse } from "@angular/common/http";
 
 @Injectable()
 export class GlobalErrorHandler extends ErrorHandler {
-    
-
+  
   constructor(
-    private router:Router, 
-    private toastr:ToastrService
+    private injector : Injector
   ){
     super();
 
   }
+
+  private get router() : Router {
+    return this.injector.get(Router)
+  }
+
+  private get toastr() : ToastrService {
+    return this.injector.get(ToastrService);
+  }
+
 
   mensagemDebounce = false;
 
