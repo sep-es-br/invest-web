@@ -4,7 +4,7 @@ import { IEtapa } from "./etapa.interface";
 import { IProfile } from "./profile.interface";
 
 export interface IApontamento {
-    id? : string;
+    id? : number;
     timestamp? : string;
     texto : string;
     etapa? : IEtapa;

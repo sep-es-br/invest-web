@@ -54,7 +54,7 @@ export class InfosService {
     }
 
     public getCardTotais(
-        nome : string, idUo : string[], idPo : string[], idFonte : string, ano : number, gnd : number,
+        nome : string, idUo : number[], idPo : number[], idFonte : number, ano : number, gnd : number,
         podeVerUnidades : boolean
     ) : Observable<ICardsTotaisDto> {
 

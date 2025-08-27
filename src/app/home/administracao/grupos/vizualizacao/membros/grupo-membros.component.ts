@@ -77,7 +77,7 @@ export class GrupoMembrosComponent implements AfterViewInit {
                     this.service.getMembros(grupoSession.id).pipe(
                         tap( membros => this.membros = membros )
                     )
-                ).pipe(finalize(() => console.log(this.membros))).subscribe();
+                ).subscribe();
                 
                 
 
@@ -111,7 +111,7 @@ export class GrupoMembrosComponent implements AfterViewInit {
         this.subAberto = subMenuIndex;
     }
 
-    removerMembro(membroId : string){
+    removerMembro(membroId : number){
        this.service.removerMembro(this.grupo.id, membroId).subscribe(grupo => {
             this.service.grupoSession.next(grupo);
             this.subAberto = -1;

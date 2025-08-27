@@ -15,7 +15,7 @@ export class TipoPlanoService {
         private errorHandlerService : ErrorHandlerService
     ){}
 
-    public findBy(id? : string, sigla? : string) : Observable<ITipoPlano | ITipoPlano[]> {
+    public findBy(id? : number, sigla? : string) : Observable<ITipoPlano | ITipoPlano[]> {
 
         let params = new HttpParams();
 

@@ -1,7 +1,7 @@
 import { FonteOrcamentariaDTO } from "../models/FonteOrcamentariaDTO"
 
 export interface IVinculadaPor {
-    id : string,
+    id : number,
     fonteOrcamentaria : FonteOrcamentariaDTO,
     autorizado : number,
     dispSemReserva : number,

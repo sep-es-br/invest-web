@@ -1,5 +1,5 @@
 export interface IMembroGrupo {
-    id : string,
+    id : number,
     icone : string,
     nomeCompleto : string,
     papel : string,

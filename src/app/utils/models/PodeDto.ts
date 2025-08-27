@@ -1,7 +1,7 @@
 import { IModuloDTO } from "./ModuloDto"
 
 export interface IPodeDTO {
-    id : string,
+    id : number,
     modulo : IModuloDTO,
     listar : boolean,
     visualizar : boolean,

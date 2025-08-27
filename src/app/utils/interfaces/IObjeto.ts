@@ -12,7 +12,7 @@ import { IParecer } from "./parecer.interface";
 import { IProfile } from "./profile.interface";
 
 export interface IObjeto {
-    id?: string;
+    id?: number;
     tipoConta?: string;
     tipo?: string;
     nome?: string;

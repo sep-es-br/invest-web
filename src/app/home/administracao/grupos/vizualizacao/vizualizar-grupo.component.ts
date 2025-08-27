@@ -32,7 +32,7 @@ export class VizualizarGrupoComponent implements OnInit, OnDestroy{
         private route: ActivatedRoute, private dataUtil : DataUtilService
     ){}
 
-    carregarGrupo(grupoId : string) {
+    carregarGrupo(grupoId : number) {
         this.grupoService.findById(grupoId).subscribe(grupo => {
             // this.grupo = grupo;            
             // this.dataUtil.setTitleInfo('grupo', grupo.sigla)

@@ -72,7 +72,7 @@ export class ObjetosService {
             .pipe(catchError(err => this.errorHandlerService.handleError(err)));
     }
 
-    public getById(id : string) : Observable<IObjeto> {
+    public getById(id : number) : Observable<IObjeto> {
         return this.http.get<IObjeto>(`${this.objetoUrl}/byId`, { params: { id: id } })
         .pipe(catchError((err) => {
                 let mensagemErro : IHttpError = err.error    
@@ -101,7 +101,7 @@ export class ObjetosService {
             params = params.set("unidadeId", JSON.stringify(filtro.unidades.map(u => u.id)))
 
         if(filtro.planos && filtro.planos.length > 0)
-            params = params.set("idPo", JSON.stringify( filtro.planos.map(p => p.id) ))
+            params = params.set("idPo", JSON.stringify( filtro.planos.map(p => p.id < 0 ? 'S.PO' : p.id) ))
 
         if(filtro.etapa)
             params = params.set("etapaId", filtro.etapa.id)
@@ -112,7 +112,7 @@ export class ObjetosService {
         return params.set("ano", filtro.exercicio);
     }
 
-    public removerObjeto(objetoId : string) : Observable<IObjeto> {
+    public removerObjeto(objetoId : number) : Observable<IObjeto> {
         return this.http.delete<IObjeto>(`${this.objetoUrl}`, { params: {
             objetoId: objetoId
         }}).pipe(

@@ -16,7 +16,7 @@ export class PermissaoService {
         private errorHendler : ErrorHandlerService
     ) {}
 
-    public findByModuloGrupo(moduloId : string, grupoId : string) : Observable<IPodeDTO> {
+    public findByModuloGrupo(moduloId : number, grupoId : number) : Observable<IPodeDTO> {
         return this.http.get<IPodeDTO>(`${this.permissaoUrl}/byModuloGrupo`, {params: {
             idModulo: moduloId, idGrupo: grupoId
         }}).pipe(catchError(err => this.errorHendler.handleError(err)))

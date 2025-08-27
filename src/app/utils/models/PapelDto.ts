@@ -1,7 +1,7 @@
 import { ISetorDTO } from "./SetorDTO"
 
 export interface IPapelDTO {
-    id : string,
+    id : number,
     guid : string,
     nome : string,
     agenteSub : string,

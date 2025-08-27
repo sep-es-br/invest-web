@@ -32,7 +32,7 @@ export class ProfileService {
     );
   }
 
-  public getUser(userId?: string): Observable<IProfile> {
+  public getUser(userId?: number): Observable<IProfile> {
     const id = userId ?? this.sessionProfile$()?.id;
     const url = id ? `${this._url}/${id}` : this._url;
 
@@ -47,7 +47,7 @@ export class ProfileService {
     )
   }
   
-  public findByGrupo(grupoId : string): Observable<IProfile[]> {
+  public findByGrupo(grupoId : number): Observable<IProfile[]> {
 
     return this.http.get<IProfile[]>(`${this._url}/byGrupo`, {params: {
       grupoId: grupoId

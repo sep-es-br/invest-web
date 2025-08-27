@@ -1,4 +1,4 @@
 export interface IFuncao {
-    id: string,
+    id: number,
     nome: string
 }

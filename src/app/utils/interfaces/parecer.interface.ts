@@ -6,7 +6,7 @@ export const parecerPadrao : IParecer = {
 }
 
 export interface IParecer {
-    id? : string
+    id? : number
     feitoPor?: IProfile,
     doGrupo? : GrupoDTO,
     timestamp? : string,

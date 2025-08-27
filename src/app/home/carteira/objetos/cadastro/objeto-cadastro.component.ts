@@ -220,7 +220,7 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
         this.objeto = objeto;
 
        
-        let nome = `${objeto.conta.unidadeOrcamentariaImplementadora.sigla} - Objeto - ${objeto.id.split(':')[2]}`;
+        let nome = `${objeto.conta.unidadeOrcamentariaImplementadora.sigla} - Objeto - ${objeto.id}`;
 
         this.dataUtil.setTitleInfo('objetoId', nome);
 
@@ -264,7 +264,7 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
         this.planosOrcamentario = planoList;
         this.filtrarPlanos("");
 
-        this.opcoesPlanosOrcamentarios = planoList.map(
+        this.opcoesPlanosOrcamentarios = planoList?.map(
             plano => { return {
                 label: plano.codigo + ' - ' + plano.nome.toUpperCase(),
                 value: plano
@@ -274,7 +274,7 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
 
 
         // em teoria não seria nescessario essa linha, mas o select ta bugado, então...
-        this.objeto.conta.planoOrcamentario = this.opcoesPlanosOrcamentarios.find(opt => this.selecionarPlanoOrcamentario(opt, this.objeto.conta.planoOrcamentario) )?.value
+        this.objeto.conta.planoOrcamentario = this.opcoesPlanosOrcamentarios?.find(opt => this.selecionarPlanoOrcamentario(opt, this.objeto.conta.planoOrcamentario) )?.value
         
     }
 
@@ -283,7 +283,7 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
     }
 
     filtrarPlanos(filtro : string) {
-        this.planosFiltrados = this.planosOrcamentario.filter(plano => plano.nome.toUpperCase().includes(filtro.toUpperCase()) || plano.codigo.includes(filtro)); 
+        this.planosFiltrados = this.planosOrcamentario?.filter(plano => plano.nome.toUpperCase().includes(filtro.toUpperCase()) || plano.codigo.includes(filtro)); 
     }
 
     selecionarUnidade(option : ISelectOpcao<UnidadeOrcamentariaDTO>, model : UnidadeOrcamentariaDTO) : boolean {

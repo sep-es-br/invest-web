@@ -3,7 +3,7 @@ import { IOrgaoDTO } from "./OrgaoDTO";
 import { UnidadeOrcamentariaDTO } from "./UnidadeOrcamentariaDTO";
 
 export interface ISetorDTO {
-    id : string;
+    id : number;
     guid : string;
     nome : string;
     sigla : string;

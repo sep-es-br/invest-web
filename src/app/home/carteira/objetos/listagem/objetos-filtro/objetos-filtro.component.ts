@@ -43,7 +43,7 @@ export class ObjetosFiltroComponent implements AfterViewInit {
     planoSemPlano : PlanoOrcamentarioDTO = {
         nome: 'Sem P.O.',
         codigo: 'S.PO',
-        id: 'S.PO'
+        id: -1
     }
 
     podeVerUnidades = false;

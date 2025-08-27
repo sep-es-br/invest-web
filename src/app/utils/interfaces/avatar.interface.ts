@@ -1,5 +1,5 @@
 export interface IAvatar{
-    id: string,
+    id: number,
     blob: string
 
 }
