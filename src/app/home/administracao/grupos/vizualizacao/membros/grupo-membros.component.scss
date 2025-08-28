@@ -108,7 +108,11 @@
 
                 img.avatar {
                     width: 30px;
+                    height: 30px;
+                    object-fit: cover;
+                    object-position: top;
                     border-radius: 30px;
+
                 }
 
                 .menuOpcoes{
