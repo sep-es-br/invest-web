@@ -91,10 +91,6 @@ select, input:not(.pesquisa) {
 
 .invalido {
     border-color: var(--vermelho-padrao) !important;
-    color: var(--vermelho-padrao) !important;
 
-    &::placeholder {
-        color: var(--vermelho-padrao) !important;
-    }
 }
 
