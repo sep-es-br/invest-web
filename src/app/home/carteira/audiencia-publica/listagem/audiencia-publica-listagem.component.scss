@@ -1,15 +1,8 @@
-@use '../../../../utils/styles/ngFilter.scss';
-
 :host {
     display: flex;
     flex-direction: column;
     padding-block: 1rem;
     font-family: var(--fonte-open-sans);
-
-    .filtro {
-        display: flex;
-        justify-content: flex-end;
-    }
 
     header {
         display: flex;

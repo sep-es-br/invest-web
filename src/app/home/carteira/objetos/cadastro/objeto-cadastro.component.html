@@ -72,7 +72,6 @@
             <select id="inMicroregiao" name="microregiaoAtendida" [(ngModel)]="objeto.microregiaoAtendida"
                 [ngClass]="{
                     'invalido': (checado && microregiaoAtendida.invalid),
-                    'srcProposta': (!!objeto.hashProposta), 
                     'placeholder': !objeto.microregiaoAtendida
                 }" required
                 #microregiaoAtendida="ngModel">
@@ -84,7 +83,6 @@
             <select id="inAreaTematica" name="areaTematica" [(ngModel)]="objeto.areaTematica"
                 [ngClass]="{
                         'invalido': (checado && areaTematica.invalid),
-                        'srcProposta': (!!objeto.hashProposta), 
                         'placeholder': !objeto.areaTematica
                     }" required #areaTematica="ngModel">
                 <option [ngValue]="undefined">Selecionar a área temática</option>

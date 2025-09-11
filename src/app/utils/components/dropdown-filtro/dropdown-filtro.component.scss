@@ -16,7 +16,7 @@
             flex-grow: 1;
             overflow: hidden;
 
-            ::ng-deep *[display] {
+            *[display] {
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
@@ -34,7 +34,7 @@
         }
     }
 
-    ::ng-deep #itemList {
+    #itemList {
         position: absolute;
         display: none;
         top: calc(100% + 0.3rem) ;

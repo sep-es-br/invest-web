@@ -1,4 +1,4 @@
-@use "../../../../../../utils/styles/ngSelectPadrao.scss";
+
 :host{
 
     display: flex;
@@ -67,9 +67,6 @@
             outline: none;
             width: 10rem;
 
-            &::placeholder {
-                color: var(--cor-primaria);
-            }
 
         }
 

@@ -46,10 +46,6 @@
             resize: none;
             padding: 4px;
 
-            &::placeholder {
-                color: var(--cor-primaria);
-                font-family: var(--fonte-open-sans);
-            }
         }
 
         &.aberto {

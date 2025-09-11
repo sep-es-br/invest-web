@@ -21,9 +21,7 @@ export const appConfig: ApplicationConfig = {
     provideEnvironmentNgxCurrency({prefix: 'R$ ', thousands: '.', decimal: ',', precision: 2, align: 'left'}),
     provideAnimationsAsync(),
     providePrimeNG({
-      theme: {
-        preset: Aura
-      }
+      theme: { preset: Aura }
     }),
     provideToastr({
       disableTimeOut: 'extendedTimeOut',

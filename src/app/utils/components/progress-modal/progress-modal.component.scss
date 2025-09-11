@@ -17,9 +17,9 @@
             left: calc(50% - 25px);
         }
 
-        ::ng-deep .p-progress-spinner-circle {
-            stroke: var(--cor-primaria) !important;
-            animation: p-progress-spinner-dash 1.5s ease-in-out infinite !important;
+        .p-progress-spinner-circle {
+            stroke: var(--cor-primaria);
+            animation: p-progress-spinner-dash 1.5s ease-in-out infinite ;
         }
 
         &.oculto {

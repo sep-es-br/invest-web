@@ -21,7 +21,7 @@
             overflow-wrap: break-word;
             text-overflow: ellipsis;
 
-            ::ng-deep *[display] {
+            *[display] {
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
@@ -39,7 +39,7 @@
         }
     }
 
-    ::ng-deep #itemList {
+    #itemList {
         position: absolute;
         display: none;
         flex-direction: column;

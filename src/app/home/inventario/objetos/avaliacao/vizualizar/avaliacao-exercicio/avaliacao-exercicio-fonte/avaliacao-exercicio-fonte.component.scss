@@ -1,4 +1,4 @@
-@use "../../../../../../../utils/styles/ngSelectPadrao.scss";
+@use "../../../../../../../../assets/styles/ngSelectPadrao.scss";
 :host{
 
     display: flex;
@@ -31,7 +31,7 @@
             width: 5rem !important;
         }
 
-        ::ng-deep .ng-select {
+        .ng-select {
                 
             flex-grow: 1;
             .ng-select-container {
