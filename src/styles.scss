@@ -26,6 +26,26 @@
 
 }
 
+.overflow {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    &-1 {
+        @extend .overflow;
+        max-width: 20rem;
+        -webkit-line-clamp: 1;
+        line-clamp: 1;
+    }
+
+    &-2 {
+        @extend .overflow;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+    }
+}
+
 
 
 body, app-root {

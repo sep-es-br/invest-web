@@ -1,0 +1,54 @@
+spo-tira-lista {
+
+    font-size: small;
+
+    table {
+        border-spacing: 0 1rem;
+        border-collapse: separate;
+        tr {
+            cursor: pointer;
+
+            td {
+                vertical-align: middle;
+                text-align: center;
+                padding: 1rem !important;
+                background-color: white;
+
+                .title {
+                    text-wrap: nowrap;
+                }
+
+                .value {
+                    span {
+                        width: 100%;
+                        overflow: hidden;
+                    }
+                }
+
+                &:first-of-type {
+                    border-left: 3px solid var(--cor-primaria);
+                    border-bottom-left-radius: 5px;
+                    border-top-left-radius: 5px;
+                }
+
+                fa-icon {
+                    color: var(--cor-primaria);
+                }
+            }
+
+            fa-icon.toggler {
+                padding-inline: 0.3rem;
+                svg {
+                    transform: rotate(0deg);
+                    transition: transform 0.3s ease-in-out;   
+                }
+            }
+
+            &.aberto fa-icon.toggler svg {
+                transform: rotate(90deg);
+            }
+
+        }
+    }
+    
+}

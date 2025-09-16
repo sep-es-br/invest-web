@@ -6,7 +6,7 @@ import { InvestimentosService } from "../../../utils/services/investimentos.serv
 import { TiraInvestimentoComponent } from "../../../utils/components/tira-investimento/tira-investimento.component";
 import { InvestimentoFiltro } from "../../../utils/models/InvestimentoFiltro";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { faMagnifyingGlass, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { ValorCardComponent } from "../../../utils/components/valor-card/valor-card.component";
 import { CustoService } from "../../../utils/services/custo.service";
 import { BarraPaginacaoComponent } from "../../../utils/components/barra-paginacao/barra-paginacao.component";
@@ -21,6 +21,7 @@ import { ProgressModalComponent } from "../../../utils/components/progress-modal
 import { InvestimentoOrdenacaoComponent } from "./investimento-ordenacao/investimento-ordenacao.component";
 import { IOrdemItem } from "../../../utils/interfaces/ordem-item.interface";
 import { CampoPesquisaComponent } from "../../../utils/components/campo-pesquisa/campo-pesquisa.component";
+import { TiraListaComponent, TiraListaConfig } from "../../../utils/components/tira-lista/tira-lista.component";
 
 @Component({
     selector: 'spo-investimentos',
@@ -28,7 +29,7 @@ import { CampoPesquisaComponent } from "../../../utils/components/campo-pesquisa
     styleUrl: './investimentos.component.scss',
     imports: [
     CommonModule, TiraInvestimentoComponent, ProgressSpinnerModule,
-    ReactiveFormsModule, InvestimentoFiltroComponent,
+    ReactiveFormsModule, InvestimentoFiltroComponent, TiraListaComponent,
     FontAwesomeModule, ValorCardComponent, BarraPaginacaoComponent,
     ProgressModalComponent,
     InvestimentoOrdenacaoComponent,
@@ -39,9 +40,48 @@ export class InvestimentosComponent implements AfterViewInit {
 
     searchIcon = faMagnifyingGlass;
 
+
     @ViewChild(InvestimentoFiltroComponent) filtroComponent! : InvestimentoFiltroComponent;
     @ViewChild(BarraPaginacaoComponent) barraPaginacaoComponent : BarraPaginacaoComponent;
     @ViewChild(InvestimentoOrdenacaoComponent) ordenacaoComponent : InvestimentoOrdenacaoComponent;
+
+    listaConfig : TiraListaConfig[] = [
+        new TiraListaConfig({
+            titulo: 'placeholder',
+            tipo: "toggle"
+        }),
+        new TiraListaConfig({ titulo: "Investimento", caminhoValor: "nome", tipo: "propLongo" }),
+        new TiraListaConfig({ titulo: "Unidade", caminhoValor: "" }),
+        new TiraListaConfig({ titulo: "Código P.O", caminhoValor: "" }),
+        new TiraListaConfig({ titulo: "Previsto", caminhoValor: "" }),
+        new TiraListaConfig({ titulo: "Contratado", caminhoValor: "" }),
+        new TiraListaConfig({ titulo: "Autorizado", caminhoValor: "" }),
+        new TiraListaConfig({ titulo: "Empenhado", caminhoValor: "" }),
+        new TiraListaConfig({ titulo: "Disp. S/ Reserva", caminhoValor: "" }),
+        new TiraListaConfig({ 
+            titulo: 'placeholder', 
+            tipo:"acao",
+            opcoes: [
+                {
+                    icon: faTrashCan,
+                    label: 'Remover',
+                    acao: (evt) => {}
+                }
+            ]
+        })
+    ]
+
+
+    // [
+//   "Investimento",
+//   "Unidade",
+//   "Código P.O",
+//   "Previsto",
+//   "Contratado",
+//   "Autorizado",
+//   "Empenhado",
+//   "Disp. S/ Reserva"
+// ]
 
     totalPrevisto : number = 0;
     totalHomologado : number = 0;

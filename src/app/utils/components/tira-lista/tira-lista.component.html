@@ -1,1 +1,49 @@
-<p>tira-lista works!</p>
+
+<table>
+    <ng-container *ngFor="let item of lista; index as i">
+        <tr [ngClass]="{'aberto': estados[i]}" (click)="estados[i] = !estados[i]">
+            <td *ngFor="let col of config" [ngSwitch]="col.tipo" [style.width]="col.largura">
+                <ng-container *ngSwitchCase="'toggle'">
+                    <fa-icon [icon]="toggleSeta" class="toggler" ></fa-icon>
+                </ng-container>
+                <ng-container *ngSwitchCase="'propriedade'">
+                    <div>
+                        <div class="title">
+                            {{col.titulo}}
+                        </div>
+                        <div class="value">
+                            {{col.getValue(item)}}
+                        </div>
+                    </div>
+                </ng-container>
+                <ng-container *ngSwitchCase="'propLongo'">
+                    <div>
+                        <div class="title" [style.text-align]="'start'" >
+                            {{col.titulo}}
+                        </div>
+                        <div class="value" [style.text-align]="'start'" [style.height]="'2lh'">
+                            <span class="overflow-2" [title]="col.getValue(item)">{{col.getValue(item)}}</span>
+                        </div>
+                    </div>
+                </ng-container>
+                <ng-container *ngSwitchCase="'acao'">
+                    <div class="acao-wrapper">
+                        <fa-icon [icon]="acoesIcon"></fa-icon>
+                    </div>
+                </ng-container>
+                <ng-container *ngSwitchDefault>
+                    {{col.titulo}}
+                </ng-container>
+            </td>
+        </tr>
+        <tr *ngIf="details?.length > 0" >
+            <td [colSpan]="config.length">
+                <ng-container *ngTemplateOutlet="details[i]; context: {$implicit: item, index: i} ">
+
+                </ng-container>
+            </td>
+        </tr>
+        
+    </ng-container>
+    
+</table>

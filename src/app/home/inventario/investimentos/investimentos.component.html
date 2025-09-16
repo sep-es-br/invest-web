@@ -67,6 +67,7 @@
 <spo-investimento-ordenacao 
     (onChange)="this.setOrdem($event)"></spo-investimento-ordenacao>
 <div id="listaDados" class="displayLista">
-    <spo-tira-investimento *ngFor="let inv of data" [investimento]="inv"></spo-tira-investimento>
+    <!-- <spo-tira-investimento *ngFor="let inv of data" [investimento]="inv"></spo-tira-investimento> -->
+     <spo-tira-lista [lista]="data" [config]="listaConfig" ></spo-tira-lista>
 </div>
 <spo-barra-paginacao [larguraPaginacao]="larguraPaginacao" [quantidade]="qtInvestimento" (onPageChange)="executar(recarregarLista($event)) "></spo-barra-paginacao>
