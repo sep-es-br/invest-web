@@ -1,5 +1,4 @@
 import { AfterViewInit, Component, EventEmitter, Output } from "@angular/core";
-import { DropdownFiltroComponent } from "../../../../../utils/components/dropdown-filtro/dropdown-filtro.component";
 import { IObjetoFiltro } from "../../../../../utils/interfaces/objetoFiltro.interface";
 import { UnidadeOrcamentariaDTO } from "../../../../../utils/models/UnidadeOrcamentariaDTO";
 import { UnidadeOrcamentariaService } from "../../../../../utils/services/unidadeOrcamentaria.service";
@@ -9,7 +8,6 @@ import { PlanoOrcamentarioDTO } from "../../../../../utils/models/PlanoOrcamenta
 import { InfosService } from "../../../../../utils/services/infos.service";
 import { PlanoOrcamentarioService } from "../../../../../utils/services/planoOrcamentario.service";
 import { PermissaoService } from "../../../../../utils/services/permissao.service";
-import { ObjetosService } from "../../../../../utils/services/objetos.service";
 import { IStatus } from "../../../../../utils/interfaces/status.interface";
 import { StatusService } from "../../../../../utils/services/status.service";
 import { NgSelectModule } from "@ng-select/ng-select";
