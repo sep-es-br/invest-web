@@ -2,10 +2,12 @@
 <table>
     <ng-container *ngFor="let item of lista; index as i">
         <tr [ngClass]="{'aberto': estados[i]}" (click)="estados[i] = !estados[i]">
-            <td *ngFor="let col of config" [ngSwitch]="col.tipo" [style.width]="col.largura">
-                <ng-container *ngSwitchCase="'toggle'">
+            <td *ngIf="details">
+                <ng-container>
                     <fa-icon [icon]="toggleSeta" class="toggler" ></fa-icon>
                 </ng-container>
+            </td>
+            <td *ngFor="let col of config" [ngSwitch]="col.tipo" [style.width]="col.largura">
                 <ng-container *ngSwitchCase="'propriedade'">
                     <div>
                         <div class="title">
@@ -26,6 +28,16 @@
                         </div>
                     </div>
                 </ng-container>
+                <ng-container *ngSwitchCase="'propDinheiro'">
+                    <div>
+                        <div class="title">
+                            {{col.titulo}}
+                        </div>
+                        <div class="value">
+                            <span [title]="col.getValue(item) | customCurrency">R$ {{col.getValue(item) | numeroResumido}}</span>
+                        </div>
+                    </div>
+                </ng-container>
                 <ng-container *ngSwitchCase="'acao'">
                     <div class="acao-wrapper">
                         <fa-icon [icon]="acoesIcon"></fa-icon>
@@ -36,14 +48,15 @@
                 </ng-container>
             </td>
         </tr>
-        <tr *ngIf="details?.length > 0" >
+        <tr class="detail" *ngIf="details" >
             <td [colSpan]="config.length">
-                <ng-container *ngTemplateOutlet="details[i]; context: {$implicit: item, index: i} ">
-
+                <ng-container *ngTemplateOutlet="details; context: {$implicit: item, index: i} ">
+                    
                 </ng-container>
             </td>
         </tr>
         
     </ng-container>
+    <div [style.display]="'none'"><ng-content></ng-content></div>
     
 </table>

@@ -5,7 +5,7 @@ spo-tira-lista {
     table {
         border-spacing: 0 1rem;
         border-collapse: separate;
-        tr {
+        tr:not(.detail) {
             cursor: pointer;
 
             td {

@@ -1,27 +1,33 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { CommonModule } from '@angular/common';
-import { Component, HostBinding, Input, OnChanges, QueryList, SimpleChanges, TemplateRef, ViewChildren, ViewEncapsulation } from '@angular/core';
+import { AfterContentInit, Component, ContentChild, HostBinding, Input, OnChanges, QueryList, SimpleChanges, TemplateRef, ViewChildren, ViewEncapsulation } from '@angular/core';
 import { FontAwesomeModule, IconDefinition } from '@fortawesome/angular-fontawesome';
 import { faAngleRight, faEllipsis } from '@fortawesome/free-solid-svg-icons';
+import { CustomCurrencyPipe } from '../../pipes/customCurrency.pipe';
+import { NumeroResumidoPipe } from '../../pipes/numero-resumido.pipe';
 
 @Component({
   selector: 'spo-tira-lista',
-  imports: [CommonModule, FontAwesomeModule],
+  imports: [CommonModule, FontAwesomeModule, CustomCurrencyPipe, NumeroResumidoPipe],
   templateUrl: './tira-lista.component.html',
   styleUrl: './tira-lista.component.scss',
   encapsulation: ViewEncapsulation.None
 })
-export class TiraListaComponent implements OnChanges{
+export class TiraListaComponent<T> implements OnChanges, AfterContentInit{
     
-    @ViewChildren('detail', {read: TemplateRef}) details = QueryList<TemplateRef<any>>
+    @ContentChild('details', {read: TemplateRef}) details: TemplateRef<{$implicit: T, index: number}>;
 
-    @Input() lista : any[];
+    @Input() lista : T[];
     @Input() config : TiraListaConfig[];
 
     estados: boolean[] = [];
   
     toggleSeta = faAngleRight;
     acoesIcon = faEllipsis;
+
+    ngAfterContentInit(): void {
+      console.log(this.details);
+    }
 
     ngOnChanges(changes: SimpleChanges): void {
         this.estados = new Array<boolean>((changes['lista']?.currentValue?.length ?? 0));

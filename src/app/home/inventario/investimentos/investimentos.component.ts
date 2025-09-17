@@ -46,20 +46,15 @@ export class InvestimentosComponent implements AfterViewInit {
     @ViewChild(InvestimentoOrdenacaoComponent) ordenacaoComponent : InvestimentoOrdenacaoComponent;
 
     listaConfig : TiraListaConfig[] = [
-        new TiraListaConfig({
-            titulo: 'placeholder',
-            tipo: "toggle"
-        }),
         new TiraListaConfig({ titulo: "Investimento", caminhoValor: "nome", tipo: "propLongo" }),
-        new TiraListaConfig({ titulo: "Unidade", caminhoValor: "" }),
-        new TiraListaConfig({ titulo: "Código P.O", caminhoValor: "" }),
-        new TiraListaConfig({ titulo: "Previsto", caminhoValor: "" }),
-        new TiraListaConfig({ titulo: "Contratado", caminhoValor: "" }),
-        new TiraListaConfig({ titulo: "Autorizado", caminhoValor: "" }),
-        new TiraListaConfig({ titulo: "Empenhado", caminhoValor: "" }),
-        new TiraListaConfig({ titulo: "Disp. S/ Reserva", caminhoValor: "" }),
+        new TiraListaConfig({ titulo: "Unidade", caminhoValor: "unidadeOrcamentaria" }),
+        new TiraListaConfig({ titulo: "Código P.O", caminhoValor: "codPO" }),
+        new TiraListaConfig({ titulo: "Previsto", caminhoValor: "totalPrevisto", tipo: "propDinheiro" }),
+        new TiraListaConfig({ titulo: "Contratado", caminhoValor: "totalContratado", tipo: "propDinheiro" }),
+        new TiraListaConfig({ titulo: "Autorizado", caminhoValor: "totalAutorizado", tipo: "propDinheiro" }),
+        new TiraListaConfig({ titulo: "Empenhado", caminhoValor: "totalEmpenhado", tipo: "propDinheiro" }),
+        new TiraListaConfig({ titulo: "Disp. S/ Reserva", caminhoValor: "totalDisponivel", tipo: "propDinheiro" }),
         new TiraListaConfig({ 
-            titulo: 'placeholder', 
             tipo:"acao",
             opcoes: [
                 {
@@ -71,17 +66,26 @@ export class InvestimentosComponent implements AfterViewInit {
         })
     ]
 
-
-    // [
-//   "Investimento",
-//   "Unidade",
-//   "Código P.O",
-//   "Previsto",
-//   "Contratado",
-//   "Autorizado",
-//   "Empenhado",
-//   "Disp. S/ Reserva"
-// ]
+    listaObjConfig : TiraListaConfig[] = [
+        new TiraListaConfig({ titulo: "Objeto", caminhoValor: "nome", tipo: "propLongo" }),
+        new TiraListaConfig({ titulo: "Status", caminhoValor: "status" }),
+        new TiraListaConfig({ titulo: "Tipo", caminhoValor: "tipo" }),
+        new TiraListaConfig({ titulo: "Previsto", caminhoValor: "totalPrevisto", tipo: "propDinheiro" }),
+        new TiraListaConfig({ titulo: "Contratado", caminhoValor: "totalContratado", tipo: "propDinheiro" }),
+        new TiraListaConfig({ titulo: "Autorizado", caminhoValor: "totalAutorizado", tipo: "propDinheiro" }),
+        new TiraListaConfig({ titulo: "Empenhado", caminhoValor: "totalEmpenhado", tipo: "propDinheiro" }),
+        new TiraListaConfig({ titulo: "Disp. S/ Reserva", caminhoValor: "totalDisponivel", tipo: "propDinheiro" }),
+        new TiraListaConfig({ 
+            tipo:"acao",
+            opcoes: [
+                {
+                    icon: faTrashCan,
+                    label: 'Remover',
+                    acao: (evt) => {}
+                }
+            ]
+        })
+    ]
 
     totalPrevisto : number = 0;
     totalHomologado : number = 0;
