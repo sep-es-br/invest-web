@@ -1,20 +1,27 @@
 
 <table>
+
+
     <ng-container *ngFor="let item of lista; index as i">
-        <tr [ngClass]="{'aberto': estados[i]}" (click)="estados[i] = !estados[i]">
-            <td *ngIf="details">
-                <ng-container>
-                    <fa-icon [icon]="toggleSeta" class="toggler" ></fa-icon>
-                </ng-container>
+        <ng-container *ngTemplateOutlet="linhaTemplate; context: {$implicit: item, nivel: 0, index: i}" ></ng-container>
+    </ng-container>
+    <!-- *ngFor="let item of lista; index as i" [item]="item" [config]="config" -->
+    
+    <ng-template #linhaTemplate let-item let-nivel="nivel" let-index="index">
+        <tr [ngClass]="{'aberto': item.aberto}" (click)="item.aberto = !item.aberto">
+            <td class="dummy" *ngFor="let _ of [].constructor(nivel)"></td>
+            <td class="toggler" *ngIf="item.filhos">
+                <fa-icon [icon]="toggleSeta" ></fa-icon>
+                {{Object.keys(item)}}
             </td>
-            <td *ngFor="let col of config" [ngSwitch]="col.tipo" [style.width]="col.largura">
+            <!-- <td *ngFor="let col of item.config " [ngSwitch]="col.tipo" [style.width]="col.largura">
                 <ng-container *ngSwitchCase="'propriedade'">
                     <div>
                         <div class="title">
                             {{col.titulo}}
                         </div>
                         <div class="value">
-                            {{col.getValue(item)}}
+                            {{item.getValue(col)}}
                         </div>
                     </div>
                 </ng-container>
@@ -24,7 +31,7 @@
                             {{col.titulo}}
                         </div>
                         <div class="value" [style.text-align]="'start'" [style.height]="'2lh'">
-                            <span class="overflow-2" [title]="col.getValue(item)">{{col.getValue(item)}}</span>
+                            <span class="overflow-2" [title]="item.getValue(col)">{{item.getValue(col)}}</span>
                         </div>
                     </div>
                 </ng-container>
@@ -34,7 +41,7 @@
                             {{col.titulo}}
                         </div>
                         <div class="value">
-                            <span [title]="col.getValue(item) | customCurrency">R$ {{col.getValue(item) | numeroResumido}}</span>
+                            <span [title]="item.getValue(col) | customCurrency">R$ {{item.getValue(col) | numeroResumido}}</span>
                         </div>
                     </div>
                 </ng-container>
@@ -46,17 +53,14 @@
                 <ng-container *ngSwitchDefault>
                     {{col.titulo}}
                 </ng-container>
-            </td>
+            </td> -->
         </tr>
-        <tr class="detail" *ngIf="details" >
-            <td [colSpan]="config.length">
-                <ng-container *ngTemplateOutlet="details; context: {$implicit: item, index: i} ">
-                    
-                </ng-container>
-            </td>
-        </tr>
-        
-    </ng-container>
-    <div [style.display]="'none'"><ng-content></ng-content></div>
-    
+        <!-- <ng-container [ngClass]="{visible: itemConfig.aberto}" *ngIf="getConfigChildren(itemConfig)">
+            <ng-container *ngFor="let child of getConfigChildren(itemConfig).getValue(item)">
+                {{child.nome}}
+                 <ng-container *ngTemplateOutlet="linhaTemplate; context: {$implicit: child, nivel: (nivel + 1), index: index, config: getConfigChildren(itemConfig).childrenConfig}" ></ng-container> 
+            </ng-container>
+        </ng-container> -->
+    </ng-template>
 </table>
+

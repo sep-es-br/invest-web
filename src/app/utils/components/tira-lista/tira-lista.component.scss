@@ -5,6 +5,7 @@ spo-tira-lista {
     table {
         border-spacing: 0 1rem;
         border-collapse: separate;
+        width: 100%;
         tr:not(.detail) {
             cursor: pointer;
 
@@ -25,7 +26,7 @@ spo-tira-lista {
                     }
                 }
 
-                &:first-of-type {
+                &:not(.dummy):first-of-type {
                     border-left: 3px solid var(--cor-primaria);
                     border-bottom-left-radius: 5px;
                     border-top-left-radius: 5px;
@@ -36,15 +37,14 @@ spo-tira-lista {
                 }
             }
 
-            fa-icon.toggler {
-                padding-inline: 0.3rem;
+            .toggler fa-icon {
                 svg {
                     transform: rotate(0deg);
                     transition: transform 0.3s ease-in-out;   
                 }
             }
 
-            &.aberto fa-icon.toggler svg {
+            &.aberto .toggler fa-icon svg {
                 transform: rotate(90deg);
             }
 

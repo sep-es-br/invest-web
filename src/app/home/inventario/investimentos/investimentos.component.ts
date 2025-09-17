@@ -21,7 +21,8 @@ import { ProgressModalComponent } from "../../../utils/components/progress-modal
 import { InvestimentoOrdenacaoComponent } from "./investimento-ordenacao/investimento-ordenacao.component";
 import { IOrdemItem } from "../../../utils/interfaces/ordem-item.interface";
 import { CampoPesquisaComponent } from "../../../utils/components/campo-pesquisa/campo-pesquisa.component";
-import { TiraListaComponent, TiraListaConfig } from "../../../utils/components/tira-lista/tira-lista.component";
+import { TiraListaComponent } from "../../../utils/components/tira-lista/tira-lista.component";
+import { TiraListaCol, TiraRecord } from "../../../utils/components/tira-lista/TiraListaConfig";
 
 @Component({
     selector: 'spo-investimentos',
@@ -45,47 +46,6 @@ export class InvestimentosComponent implements AfterViewInit {
     @ViewChild(BarraPaginacaoComponent) barraPaginacaoComponent : BarraPaginacaoComponent;
     @ViewChild(InvestimentoOrdenacaoComponent) ordenacaoComponent : InvestimentoOrdenacaoComponent;
 
-    listaConfig : TiraListaConfig[] = [
-        new TiraListaConfig({ titulo: "Investimento", caminhoValor: "nome", tipo: "propLongo" }),
-        new TiraListaConfig({ titulo: "Unidade", caminhoValor: "unidadeOrcamentaria" }),
-        new TiraListaConfig({ titulo: "Código P.O", caminhoValor: "codPO" }),
-        new TiraListaConfig({ titulo: "Previsto", caminhoValor: "totalPrevisto", tipo: "propDinheiro" }),
-        new TiraListaConfig({ titulo: "Contratado", caminhoValor: "totalContratado", tipo: "propDinheiro" }),
-        new TiraListaConfig({ titulo: "Autorizado", caminhoValor: "totalAutorizado", tipo: "propDinheiro" }),
-        new TiraListaConfig({ titulo: "Empenhado", caminhoValor: "totalEmpenhado", tipo: "propDinheiro" }),
-        new TiraListaConfig({ titulo: "Disp. S/ Reserva", caminhoValor: "totalDisponivel", tipo: "propDinheiro" }),
-        new TiraListaConfig({ 
-            tipo:"acao",
-            opcoes: [
-                {
-                    icon: faTrashCan,
-                    label: 'Remover',
-                    acao: (evt) => {}
-                }
-            ]
-        })
-    ]
-
-    listaObjConfig : TiraListaConfig[] = [
-        new TiraListaConfig({ titulo: "Objeto", caminhoValor: "nome", tipo: "propLongo" }),
-        new TiraListaConfig({ titulo: "Status", caminhoValor: "status" }),
-        new TiraListaConfig({ titulo: "Tipo", caminhoValor: "tipo" }),
-        new TiraListaConfig({ titulo: "Previsto", caminhoValor: "totalPrevisto", tipo: "propDinheiro" }),
-        new TiraListaConfig({ titulo: "Contratado", caminhoValor: "totalContratado", tipo: "propDinheiro" }),
-        new TiraListaConfig({ titulo: "Autorizado", caminhoValor: "totalAutorizado", tipo: "propDinheiro" }),
-        new TiraListaConfig({ titulo: "Empenhado", caminhoValor: "totalEmpenhado", tipo: "propDinheiro" }),
-        new TiraListaConfig({ titulo: "Disp. S/ Reserva", caminhoValor: "totalDisponivel", tipo: "propDinheiro" }),
-        new TiraListaConfig({ 
-            tipo:"acao",
-            opcoes: [
-                {
-                    icon: faTrashCan,
-                    label: 'Remover',
-                    acao: (evt) => {}
-                }
-            ]
-        })
-    ]
 
     totalPrevisto : number = 0;
     totalHomologado : number = 0;
@@ -117,6 +77,55 @@ export class InvestimentosComponent implements AfterViewInit {
     }
 
     lock = true;
+
+    get dataRecord() : TiraRecord[] {
+        return this.data.map(d => ({
+            dado: d,
+            config: [
+                new TiraListaCol({ titulo: "Investimento", caminhoValor: "nome", tipo: "propLongo" }),
+                new TiraListaCol({ titulo: "Unidade", caminhoValor: "unidadeOrcamentaria", largura: '7.5rem' }),
+                new TiraListaCol({ titulo: "Código P.O", caminhoValor: "codPO" }),
+                new TiraListaCol({ titulo: "Previsto", caminhoValor: "totalPrevisto", tipo: "propDinheiro" }),
+                new TiraListaCol({ titulo: "Contratado", caminhoValor: "totalContratado", tipo: "propDinheiro" }),
+                new TiraListaCol({ titulo: "Autorizado", caminhoValor: "totalAutorizado", tipo: "propDinheiro" }),
+                new TiraListaCol({ titulo: "Empenhado", caminhoValor: "totalEmpenhado", tipo: "propDinheiro" }),
+                new TiraListaCol({ titulo: "Disp. S/ Reserva", caminhoValor: "totalDisponivel", tipo: "propDinheiro" }),
+                new TiraListaCol({ 
+                    tipo:"acao",
+                    opcoes: [
+                        {
+                            icon: faTrashCan,
+                            label: 'Remover',
+                            acao: (evt) => {}
+                        }
+                    ]
+                })
+            ],
+            filhos: d.objetos.map(obj => ({
+                dado: obj,
+                config: [
+                    new TiraListaCol({ titulo: "Objeto", caminhoValor: "nome", tipo: "propLongo" }),
+                    new TiraListaCol({ titulo: "Status", caminhoValor: "status" }),
+                    new TiraListaCol({ titulo: "Tipo", caminhoValor: "tipo" }),
+                    new TiraListaCol({ titulo: "Previsto", caminhoValor: "totalPrevisto", tipo: "propDinheiro" }),
+                    new TiraListaCol({ titulo: "Contratado", caminhoValor: "totalContratado", tipo: "propDinheiro" }),
+                    new TiraListaCol({ titulo: "Autorizado", caminhoValor: "totalAutorizado", tipo: "propDinheiro" }),
+                    new TiraListaCol({ titulo: "Empenhado", caminhoValor: "totalEmpenhado", tipo: "propDinheiro" }),
+                    new TiraListaCol({ titulo: "Disp. S/ Reserva", caminhoValor: "totalDisponivel", tipo: "propDinheiro" }),
+                    new TiraListaCol({ 
+                        tipo:"acao",
+                        opcoes: [
+                            {
+                                icon: faTrashCan,
+                                label: 'Remover',
+                                acao: (evt) => {}
+                            }
+                        ]
+                    })
+                ]
+            } as TiraRecord))
+        } as TiraRecord))
+    }
 
     ngAfterViewInit(): void {
         
