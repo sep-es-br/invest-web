@@ -17,16 +17,29 @@ import { IFiltro } from "../home/inventario/objetos/avaliacao/listagem/objetos-f
 import { EtapaService } from "../utils/services/etapa.service";
 import { IObjetoFiltro } from "../utils/interfaces/objetoFiltro.interface";
 import { IAvatar } from "../utils/interfaces/avatar.interface";
+import { animate, style, transition, trigger } from "@angular/animations";
 
 @Component({
     selector: 'spo-header',
     templateUrl: 'header.component.html',
     styleUrl: 'header.component.scss',
-    imports: [CommonModule, BreadCrumbComponent]
+    imports: [CommonModule, BreadCrumbComponent],
+    animations: [
+        trigger('openClose', [
+            transition(':enter', [
+                style({height: '0'}),
+                animate('300ms ease-in', style({height: '*'}))
+            ]),
+            transition(':leave', [
+                style({height: '*'}),
+                animate('300ms ease-out', style({height: '0'}))
+            ])
+        ])
+    ]
 })
 export class HeaderComponent implements OnInit {
 
-    @ViewChild('menuUser') private menuUserElem? : ElementRef;
+    @ViewChild('menuUser') private menuUserElem? : ElementRef<HTMLElement>;
 
     title = '';
     userName : string | undefined = 'Diego Gaede'
@@ -119,24 +132,12 @@ export class HeaderComponent implements OnInit {
             return
         }
 
-        this.toggleMenuUser(false);
+        if(!this.menuUserElem.nativeElement.contains(event.target as HTMLElement))
+            this.showMenuUser = false;
 
         this.debounceMenu = false
     }
 
-    toggleMenuUser(newState : boolean){
-        let menuUser = this.menuUserElem.nativeElement as HTMLDivElement;
-        
-        this.debounceMenu = true
-
-        if(newState) {
-            menuUser.style.height = `${menuUser.scrollHeight}px`;
-        } else {
-            menuUser.style.height = '0'
-        }
-
-        this.showMenuUser = newState
-    }
 
     redirectTo(url : string){
         this.router.navigateByUrl(url);
