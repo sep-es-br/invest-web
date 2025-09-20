@@ -1,39 +1,64 @@
 import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
 
-export class TiraRecord {
-    dado: any;
-    config: TiraListaCol[];
-    aberto: boolean;
-    filhos: TiraRecord[]
+export const LARGURA_FUNC = "2rem";
+export const LARGURA_ACAO = "5rem";
 
-    constructor(init: Partial<TiraRecord>) {
+export class TiraRecord<T> {
+    dado: T;
+    config: TiraListaCol<T>[];
+    aberto: boolean = false;
+    filhos: TiraRecord<any>[]
+
+    console = console;
+
+    constructor(init: Partial<TiraRecord<T>>) {
         Object.assign(this, init);
     }
     
-    getValue(colConfig: TiraListaCol) {
+    getValue(colConfig: TiraListaCol<T>) {
         let out = this.dado;
       
         for(let loc of colConfig.caminhoValor.split('.')) {
             out = out?.[loc]
         }
 
-        return out;
+        return out ?? colConfig.valorDefault;
     }
 }
 
-export class TiraListaCol {
+export class TiraListaCol<T> {
     titulo: string;
     caminhoValor: string;
-    largura:string = "fit-content";
-    tipo: "propriedade" | "propLongo" | "propDinheiro" | "toggle" | 'acao' = "propriedade"
+    private _largura:string;
+    tipo: "propriedade" | "propLongo" | "propDinheiro" | 'acao' | 'botao' = "propriedade"
     opcoes: {
       icon?: IconDefinition, 
       label: string,
-      acao: (evt:any) => void
+      tipo? : 'positivo' | 'negativo';
+      acao: (evt:MouseEvent, data: T) => void
     }[];
+    valorDefault?: any;
 
-    constructor(init: Partial<TiraListaCol>) {
-      Object.assign(this, init);
+    constructor(init: Partial<TiraListaCol<T>>) {
+        Object.assign(this, init);
+    }
+
+    get largura() {
+        if(this._largura) return this._largura;
+
+        switch(this.tipo) {
+            case 'acao':
+                return LARGURA_ACAO;
+            case 'botao':
+                return 'min-content';
+            default: return '1fr';
+        }
+    }
+
+    set largura(vlr: string) {
+        this._largura = vlr;
     }
 
 }
+
+export const DEFAULT_OPENCLOSE_ACTION = (item) => item.aberto = !item.aberto;

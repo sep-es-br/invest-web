@@ -55,7 +55,7 @@ textarea {
     font-family: var(--fonte-open-sans);
     font-size: small;
     outline: none;
-    padding-left: 1rem;
+    padding-left: 1rem !important;
     box-sizing: border-box;
     resize: none;
     padding-top: 0.5rem;

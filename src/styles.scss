@@ -22,6 +22,7 @@
         margin: 0;
         padding: 0;
         box-sizing: unset;
+        font-family: var(--fonte-open-sans);
     }
 
 }
@@ -53,7 +54,6 @@ body, app-root {
     max-width: 100vw;
     min-height: 100vh;
     background-color: var(--cor-secundaria);
-    font-family: var(--fonte-open-sans);
 }
 
 // aparentemente em aguma versão bizarra do Chrome existe um conflito com Open Sans

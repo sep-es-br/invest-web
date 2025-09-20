@@ -22,11 +22,16 @@ import { Router } from "@angular/router";
 import { PROPOSTA_ATIVA } from "../../../../utils/sessionLocalItems.const";
 import { BarraPaginacaoComponent } from "../../../../utils/components/barra-paginacao/barra-paginacao.component";
 import { IPodeDTO } from "../../../../utils/models/PodeDto";
+import { TiraListaComponent } from "../../../../utils/components/tira-lista/tira-lista.component";
+import { TiraListaCol, TiraRecord } from "../../../../utils/components/tira-lista/TiraListaConfig";
 
 @Component({
     templateUrl: './audiencia-publica-listagem.component.html',
     styleUrl: './audiencia-publica-listagem.component.scss',
-    imports: [CommonModule, NgSelectModule, FormsModule, FontAwesomeModule, ProgressModalComponent, CampoPesquisaComponent, BarraPaginacaoComponent]
+    imports: [
+        CommonModule, NgSelectModule, FormsModule, TiraListaComponent,
+        FontAwesomeModule, ProgressModalComponent, 
+        CampoPesquisaComponent, BarraPaginacaoComponent]
 })
 export class AudienciaPublicaListagemComponent implements OnInit{
 
@@ -48,6 +53,7 @@ export class AudienciaPublicaListagemComponent implements OnInit{
 
     qtPropostas = 0;
     listaPropostas : IProposta[] = [];
+    propostaLista: TiraRecord<IProposta>[] = [];
     paginaAtual: number = 1;
 
     carregando = false;
@@ -108,10 +114,50 @@ export class AudienciaPublicaListagemComponent implements OnInit{
             this.permissao.verTodasUnidades,
             novaPag
         ).pipe(
-            tap(value => {
-                this.listaPropostas = value.data;
-                this.qtPropostas = value.ammount;
-                this.barraPaginacaoComponent.updatePaginacao(value.ammount);
+            tap(({data, ammount}) => {
+                this.listaPropostas = data;
+                this.propostaLista = data
+                    .map(prop => ({...prop, label: `(${prop.budgetUnitId}) ${prop.budgetUnitName}`}))
+                    .map(proposta => new TiraRecord<IProposta>({
+                        dado: proposta,
+                        config: [
+                            new TiraListaCol<IProposta>({
+                                titulo: 'Proposta',
+                                caminhoValor: 'proposalText',
+                                tipo: 'propLongo',
+                                largura: '5fr'
+                            }), 
+                            new TiraListaCol<IProposta>({   
+                                titulo: 'Área Temática',
+                                caminhoValor: 'areaName',
+                                largura: '2fr'
+                            }),
+                            new TiraListaCol<IProposta>({
+                                titulo: 'Unidade Orçamentária',
+                                caminhoValor: 'label',
+                                tipo: 'propLongo'
+                            }),
+                            new TiraListaCol<IProposta>({
+                                titulo: 'Microrregião',
+                                caminhoValor: 'microrregion'
+                            }),
+                            new TiraListaCol<IProposta>({
+                                tipo: 'botao',
+                                opcoes: [
+                                    {
+                                        label: 'Criar Objeto',
+                                        icon: faArrowRight,
+                                        acao: (evt, data) => {
+                                            this.criarObjeto(data)
+                                        },
+                                    }
+                                ] 
+                            })
+
+                        ]
+                    }))
+                this.qtPropostas = ammount;
+                this.barraPaginacaoComponent.updatePaginacao(ammount);
             }),
             finalize(() => this.carregando = false)
         ).subscribe();

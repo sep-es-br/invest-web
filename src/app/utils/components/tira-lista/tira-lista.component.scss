@@ -1,40 +1,160 @@
 spo-tira-lista {
 
     font-size: small;
+    position: relative;
 
-    table {
+    .clicavel {
+        cursor: pointer;
+    }
+
+    .table {
         border-spacing: 0 1rem;
         border-collapse: separate;
         width: 100%;
-        tr:not(.detail) {
-            cursor: pointer;
+        display: flex;
+        flex-direction: column;
 
-            td {
-                vertical-align: middle;
-                text-align: center;
-                padding: 1rem !important;
+        .filhos .tr:not(.detail) {
+
+            &:first-of-type {
+                margin-top: 1rem;
+            }
+        }
+
+        .tr:not(.detail) {
+            display: grid;
+            grid-template-rows: 1fr;
+            margin-top: 1rem;
+
+            &:first-of-type {
+                margin-top: unset;
+            }
+
+            .td:not(.dummy) {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+
                 background-color: white;
+                padding: 0 0 0 1rem;
+
+                &:not(.toggler) {
+                    padding: 1rem !important;
+                }
 
                 .title {
                     text-wrap: nowrap;
+                    color: var(--cor-primaria);
                 }
 
+
                 .value {
+                    color: #6E7484;
                     span {
                         width: 100%;
                         overflow: hidden;
                     }
                 }
 
-                &:not(.dummy):first-of-type {
-                    border-left: 3px solid var(--cor-primaria);
-                    border-bottom-left-radius: 5px;
-                    border-top-left-radius: 5px;
+                .botoes-wrapper {
+                    display: flex;
+                    justify-content: flex-end;
+                    align-items: center;
+                    height: 100%;
+                    width: 100%;
+                    color: var(--cor-primaria);
+                    font-size: large;
                 }
 
-                fa-icon {
+                &.longo {
+                    align-items: flex-start;
+                }
+
+                &.primeiro {
+                    border-left: 0.3rem solid var(--cor-primaria);
+                    border-bottom-left-radius: 0.3rem;
+                    border-top-left-radius: 0.3rem;
+                }
+
+            }
+
+            .acao-wrapper {
+
+                position: relative;
+
+                fa-icon.btnMenu {
                     color: var(--cor-primaria);
                 }
+
+                menu.opcao-menu {
+                    text-wrap: nowrap;
+                    overflow: hidden;
+                    display: flex;
+                    flex-direction: column;
+                    background-color: white;
+                    border: solid lightgray 1px;
+                    z-index: 99;
+                    position: absolute;
+                    top: 100%;
+                    right: 0;
+                    border-radius: 5px;
+                    
+
+                    li {
+                        padding: 0.5rem 1rem;
+                        list-style: none;
+                        display: grid;
+                        vertical-align: middle;
+                        grid-template-columns: 20px 1fr;
+                        color: var(--cor-primaria);
+
+                        icon-wrapper {
+                            fa-icon {
+                                font-size: medium;
+                            }
+                        }
+
+                        span.label  {
+                            font-weight: bold;
+                        }
+
+                        &:hover {
+                            background-color: var(--cor-primaria);
+                            color: white;
+                        }
+                        
+                        &.pos {
+
+                            color: var(--verde-padrao);
+                            background-color: white;
+                            
+                            &:hover {
+                                background-color: var(--verde-padrao);
+                                color: white;
+                            }
+                        }
+                        
+                        &.neg {
+
+                            color: var(--vermelho-padrao);
+                            background-color: white;
+
+                            &:hover {
+                                background-color: var(--vermelho-padrao);
+                                color: white;
+                            }
+
+                            
+                        }
+                        
+
+                    }
+                }
+
+                
+                
+
             }
 
             .toggler fa-icon {

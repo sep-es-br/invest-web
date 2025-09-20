@@ -3,33 +3,28 @@ import { AfterViewInit, Component, ViewChild } from "@angular/core";
 import { InvestimentoFiltroComponent } from "./investimento-filtro/investimento-filtro.component";
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { InvestimentosService } from "../../../utils/services/investimentos.service";
-import { TiraInvestimentoComponent } from "../../../utils/components/tira-investimento/tira-investimento.component";
-import { InvestimentoFiltro } from "../../../utils/models/InvestimentoFiltro";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faMagnifyingGlass, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { ValorCardComponent } from "../../../utils/components/valor-card/valor-card.component";
-import { CustoService } from "../../../utils/services/custo.service";
 import { BarraPaginacaoComponent } from "../../../utils/components/barra-paginacao/barra-paginacao.component";
-import { ExecucaoOrcamentariaService } from "../../../utils/services/execucaoOrcamentaria.service";
 import { combineLatest, concat, finalize, merge, Observable, take, tap } from "rxjs";
 import { InfosService } from "../../../utils/services/infos.service";
 import { IFiltroInvestimento } from "./investimento-filtro/IFiltroInvestimento";
 import { InvestimentoTiraDTO } from "../../../utils/models/InvestimentoTiraDTO";
-import { ContaService } from "../../../utils/services/conta.service";
 import { ProgressSpinnerModule } from "primeng/progressspinner";
 import { ProgressModalComponent } from "../../../utils/components/progress-modal/progress-modal.component";
 import { InvestimentoOrdenacaoComponent } from "./investimento-ordenacao/investimento-ordenacao.component";
 import { IOrdemItem } from "../../../utils/interfaces/ordem-item.interface";
 import { CampoPesquisaComponent } from "../../../utils/components/campo-pesquisa/campo-pesquisa.component";
 import { TiraListaComponent } from "../../../utils/components/tira-lista/tira-lista.component";
-import { TiraListaCol, TiraRecord } from "../../../utils/components/tira-lista/TiraListaConfig";
+import { DEFAULT_OPENCLOSE_ACTION, TiraListaCol, TiraRecord } from "../../../utils/components/tira-lista/TiraListaConfig";
 
 @Component({
     selector: 'spo-investimentos',
     templateUrl: './investimentos.component.html',
     styleUrl: './investimentos.component.scss',
     imports: [
-    CommonModule, TiraInvestimentoComponent, ProgressSpinnerModule,
+    CommonModule, ProgressSpinnerModule,
     ReactiveFormsModule, InvestimentoFiltroComponent, TiraListaComponent,
     FontAwesomeModule, ValorCardComponent, BarraPaginacaoComponent,
     ProgressModalComponent,
@@ -62,12 +57,15 @@ export class InvestimentosComponent implements AfterViewInit {
     txtBusca = new FormControl('');
 
     data : InvestimentoTiraDTO[] = [];
+    dataRecord : TiraRecord<InvestimentoTiraDTO>[];
 
     qtInvestimento = 0;
     larguraPaginacao = 7;
     qtPorPagina = 15;
 
     showProgress = false;
+
+    clickFunc = DEFAULT_OPENCLOSE_ACTION;
 
     constructor( 
         private service: InvestimentosService,
@@ -78,53 +76,33 @@ export class InvestimentosComponent implements AfterViewInit {
 
     lock = true;
 
-    get dataRecord() : TiraRecord[] {
-        return this.data.map(d => ({
+    gerarRecord(data: InvestimentoTiraDTO[]) : TiraRecord<InvestimentoTiraDTO>[] {
+        return data.map(d => new TiraRecord({
             dado: d,
             config: [
-                new TiraListaCol({ titulo: "Investimento", caminhoValor: "nome", tipo: "propLongo" }),
-                new TiraListaCol({ titulo: "Unidade", caminhoValor: "unidadeOrcamentaria", largura: '7.5rem' }),
+                new TiraListaCol({ titulo: "Investimento", caminhoValor: "nome", tipo: "propLongo", largura: "5fr" }),
+                new TiraListaCol({ titulo: "Unidade", caminhoValor: "unidadeOrcamentaria" }),
                 new TiraListaCol({ titulo: "Código P.O", caminhoValor: "codPO" }),
                 new TiraListaCol({ titulo: "Previsto", caminhoValor: "totalPrevisto", tipo: "propDinheiro" }),
                 new TiraListaCol({ titulo: "Contratado", caminhoValor: "totalContratado", tipo: "propDinheiro" }),
                 new TiraListaCol({ titulo: "Autorizado", caminhoValor: "totalAutorizado", tipo: "propDinheiro" }),
                 new TiraListaCol({ titulo: "Empenhado", caminhoValor: "totalEmpenhado", tipo: "propDinheiro" }),
                 new TiraListaCol({ titulo: "Disp. S/ Reserva", caminhoValor: "totalDisponivel", tipo: "propDinheiro" }),
-                new TiraListaCol({ 
-                    tipo:"acao",
-                    opcoes: [
-                        {
-                            icon: faTrashCan,
-                            label: 'Remover',
-                            acao: (evt) => {}
-                        }
-                    ]
-                })
             ],
-            filhos: d.objetos.map(obj => ({
+            filhos: d.objetos.map(obj => new TiraRecord({
                 dado: obj,
                 config: [
-                    new TiraListaCol({ titulo: "Objeto", caminhoValor: "nome", tipo: "propLongo" }),
+                    new TiraListaCol({ titulo: "Objeto", caminhoValor: "nome", tipo: "propLongo", largura: '5fr' }),
                     new TiraListaCol({ titulo: "Status", caminhoValor: "status" }),
                     new TiraListaCol({ titulo: "Tipo", caminhoValor: "tipo" }),
                     new TiraListaCol({ titulo: "Previsto", caminhoValor: "totalPrevisto", tipo: "propDinheiro" }),
                     new TiraListaCol({ titulo: "Contratado", caminhoValor: "totalContratado", tipo: "propDinheiro" }),
                     new TiraListaCol({ titulo: "Autorizado", caminhoValor: "totalAutorizado", tipo: "propDinheiro" }),
                     new TiraListaCol({ titulo: "Empenhado", caminhoValor: "totalEmpenhado", tipo: "propDinheiro" }),
-                    new TiraListaCol({ titulo: "Disp. S/ Reserva", caminhoValor: "totalDisponivel", tipo: "propDinheiro" }),
-                    new TiraListaCol({ 
-                        tipo:"acao",
-                        opcoes: [
-                            {
-                                icon: faTrashCan,
-                                label: 'Remover',
-                                acao: (evt) => {}
-                            }
-                        ]
-                    })
+                    new TiraListaCol({ titulo: "Disp. S/ Reserva", caminhoValor: "totalDisponivel", tipo: "propDinheiro" })
                 ]
-            } as TiraRecord))
-        } as TiraRecord))
+            }))
+        }))
     }
 
     ngAfterViewInit(): void {
@@ -223,7 +201,7 @@ export class InvestimentosComponent implements AfterViewInit {
          return merge(
             this.service.getListaTiraInvestimentos(this.filtro, this.ordem)
             .pipe(tap(invs => {
-                this.data = invs.data;
+                this.dataRecord = this.gerarRecord(invs.data);
                 this.qtInvestimento = invs.ammount;
                 this.barraPaginacaoComponent.updatePaginacao(invs.ammount);
             }))
