@@ -1,15 +1,13 @@
 import { CommonModule } from "@angular/common";
-import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, ViewChild } from "@angular/core";
 import { ObjetosFiltroComponent } from "./objetos-filtro/objetos-filtro.component";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { faMagnifyingGlass, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { faFileLines } from "@fortawesome/free-regular-svg-icons";
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { ObjetoTiraDTO } from "../../../../utils/models/ObjetoTiraDTO";
 import { ObjetosService } from "../../../../utils/services/objetos.service";
 import { combineLatest, finalize, merge, Observable, take, tap } from "rxjs";
-import { ObjetoFiltro } from "../../../../utils/models/ObjetoFiltro";
-import { TiraObjetoComponent } from "./tira-objetos/tira-objeto.component";
 import { BarraPaginacaoComponent } from "../../../../utils/components/barra-paginacao/barra-paginacao.component";
 import { IObjetoFiltro } from "../../../../utils/interfaces/objetoFiltro.interface";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
@@ -20,14 +18,16 @@ import { ObjetosOrdenacaoComponent } from "./objetos-ordenacao/objetos-ordenacao
 import { IOrdemItem } from "../../../../utils/interfaces/ordem-item.interface";
 import { ProgressModalComponent } from "../../../../utils/components/progress-modal/progress-modal.component";
 import { CampoPesquisaComponent } from "../../../../utils/components/campo-pesquisa/campo-pesquisa.component";
+import { TiraListaComponent } from "../../../../utils/components/tira-lista/tira-lista.component";
+import { TiraListaCol, TiraRecord } from "../../../../utils/components/tira-lista/TiraListaConfig";
 
 @Component({
     templateUrl: "./objetos-listagem.component.html",
     styleUrl: "./objetos-listagem.component.scss",
     imports: [
     CommonModule, ObjetosFiltroComponent, FontAwesomeModule,
-    ReactiveFormsModule, TiraObjetoComponent, BarraPaginacaoComponent,
-    RouterModule, ObjetosOrdenacaoComponent,
+    ReactiveFormsModule, BarraPaginacaoComponent,
+    RouterModule, ObjetosOrdenacaoComponent, TiraListaComponent,
     ProgressModalComponent,
     CampoPesquisaComponent
 ]
@@ -46,7 +46,7 @@ export class ObjetosListagemComponent implements AfterViewInit{
     filtro : IObjetoFiltro = {};
     ordem : IOrdemItem[];
 
-    objetos : ObjetoTiraDTO[] = [];
+    objetosLista : TiraRecord<ObjetoTiraDTO>[];
 
     txtBusca = new FormControl("");
 
@@ -124,6 +124,12 @@ export class ObjetosListagemComponent implements AfterViewInit{
         acao.pipe(finalize(() => this.showProgress = false)).subscribe()
     }
 
+    clickFunc = (item: TiraRecord<ObjetoTiraDTO>) => {
+        if(!this.pode.visualizar) return;
+
+        this.redirectTo(item.dado.id.toString());
+    }
+
     recarregarLista(novaPagina : number, novoFiltro? : IObjetoFiltro,  novaOrdem? : IOrdemItem[]) {
 
         this.paginaAtual = novaPagina;
@@ -139,10 +145,38 @@ export class ObjetosListagemComponent implements AfterViewInit{
         
         return merge(
             this.objService.getListaTiraObjetos(this.filtro, this.ordem, this.paginaAtual, this.qtPorPagina).pipe(tap(
-                objetosDataList => {
-                    this.objetos = objetosDataList.data;
-                    this.qtObjetos = objetosDataList.ammount;
-                    this.barraPaginacaoComponent.updatePaginacao(this.qtObjetos);
+                ({data, ammount}) => {
+
+                    let config = [
+                            new TiraListaCol({ titulo: "Objeto", caminhoValor: 'nome', tipo: 'propLongo', largura: '5fr' }),
+                            new TiraListaCol({ titulo: "Tipo", caminhoValor: 'tipo' }),
+                            new TiraListaCol({ titulo: "Unidade", caminhoValor: 'unidadeResponsavel' }),
+                            new TiraListaCol({ titulo: "Código P.O.", caminhoValor: 'codPO', valorDefault: 'Sem P.O' }),
+                            new TiraListaCol({ titulo: "Previsto", caminhoValor: 'totalPrevisto', tipo: "propDinheiro" }),
+                            new TiraListaCol({ titulo: "Contratado", caminhoValor: 'totalContratado', tipo: "propDinheiro" }),
+                            new TiraListaCol({ titulo: "Autorizado", caminhoValor: 'totalAutorizado', tipo: "propDinheiro" }),
+                            new TiraListaCol({ titulo: "Empenhado", caminhoValor: 'totalEmpenhado', tipo: "propDinheiro" }),
+                            new TiraListaCol({ titulo: "Disp. S/ Reserva", caminhoValor: 'totalDisponivel', tipo: "propDinheiro" }),
+                            new TiraListaCol({ titulo: "Status", caminhoValor: 'status'})
+                        ]
+                    if(this.pode.excluir)
+                        config.push(
+                            new TiraListaCol<ObjetoTiraDTO>({ tipo: 'acao', opcoes: [
+                                {
+                                    label: 'Remover',
+                                    icon: faTrash,
+                                    tipo: 'negativo',
+                                    acao: (evt, data) => this.removerObjeto(data)
+                                }
+                            ] })
+                        )
+
+                    this.objetosLista = data.map(obj => new TiraRecord<ObjetoTiraDTO> ({
+                        dado: obj,
+                        config: config
+                    }));
+                    this.qtObjetos = ammount;
+                    this.barraPaginacaoComponent.updatePaginacao(ammount);
                 }
             ))
         );

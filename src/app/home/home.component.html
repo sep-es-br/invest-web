@@ -2,7 +2,7 @@
     <spo-menu [itensMenu]="menuItemsSignal()"></spo-menu>
 </div>
 <main swipe [next]="ocultarMenu" [previous]="mostrarMenu">
-    <spo-header [home]="this"></spo-header>
+    <spo-header [home]="this" [qtObjetos]="objsNoFluxo"></spo-header>
     <div id="conteudo">
         <router-outlet></router-outlet>
     </div>

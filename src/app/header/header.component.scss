@@ -121,7 +121,6 @@
             min-width: 10rem;
             flex-direction: column;
             z-index: 100;
-            height: 0;
             transition: height 0.3s ease;
             width: 100%;
             background-color: white;
@@ -146,11 +145,7 @@
             }
     
         }
-    
-        .menuUser.mostrar {
-            height: auto;
-        }
-    
+        
     }
     
 }

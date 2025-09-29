@@ -1,1 +1,76 @@
-<p>tira-lista works!</p>
+
+<div class="table">
+
+
+    <ng-container *ngFor="let item of lista">
+        <ng-container *ngTemplateOutlet="linhaTemplate; context: {$implicit: item, nivel: 0}" ></ng-container>
+    </ng-container>
+    <!-- *ngFor="let item of lista; index as i" [item]="item" [config]="config" -->
+    <!-- tipo: "propriedade" | "propLongo" | "propDinheiro" | "toggle" | 'acao' -->
+    <ng-template #linhaTemplate let-item let-nivel="nivel">
+        <div class="tr" [ngClass]="{'aberto': item.aberto, 'clicavel': !!clickFunc}" (click)="clickFunc ? abrirItem(item, $event) : undefined" [style.grid-template-columns]="getLarguras(item.config, nivel, item.filhos)">
+            <div class="td dummy" *ngFor="let _ of [].constructor(nivel)"></div>
+            <div class="td toggler " *ngIf="item.filhos" [ngClass]="{'primeiro': item.filhos}">
+                <fa-icon [icon]="toggleSeta" ></fa-icon>
+            </div>
+                       
+            <div class="td" [ngClass]="{'primeiro': (!item.filhos && i === 0), 'longo': (col.tipo === 'propLongo')}" *ngFor="let col of item.config; index as i" [ngSwitch]="col.tipo" >
+
+                <ng-container *ngSwitchCase="'propriedade'">
+                    
+                    <div class="title">
+                        {{col.titulo}}
+                    </div>
+                    <div class="value">
+                        {{item.getValue(col)}}
+                    </div>
+                    
+                </ng-container>
+                <ng-container *ngSwitchCase="'propLongo'">
+
+                        <div class="title" [style.text-align]="'start'" >
+                            {{col.titulo}}
+                        </div>
+                        <div class="value" [style.text-align]="'start'" [style.height]="'2lh'">
+                            <span class="overflow-2" [title]="item.getValue(col)">{{item.getValue(col)}}</span>
+                        </div>
+
+                </ng-container>
+                <ng-container *ngSwitchCase="'propDinheiro'">
+                        <div class="title">
+                            {{col.titulo}}
+                        </div>
+                        <div class="value">
+                            <span [title]="item.getValue(col) | customCurrency">R$ {{item.getValue(col) | numeroResumido}}</span>
+                        </div>
+                </ng-container>
+                <ng-container *ngSwitchCase="'acao'">
+                    <div class="acao-wrapper">
+                        <fa-icon #btnAcaoElem [icon]="acoesIcon" class="btnMenu" (click)="menuItem = item" role="button" tabindex="0"></fa-icon>
+                        <menu class="opcao-menu" *ngIf="menuItem === item" @openClose>
+                            <li *ngFor="let itemMenu of col.opcoes"
+                                class="opcao-item" [ngClass]="{'pos': (itemMenu.tipo === 'positivo'), 'neg': (itemMenu.tipo === 'negativo'), 'clicavel': !!itemMenu.acao}"
+                                (click)="itemMenu.acao ? itemMenu.acao($event, item.dado) : undefined">
+                                <span class="icon-wrapper"><fa-icon [icon]="itemMenu.icon" *ngIf="itemMenu.icon"></fa-icon></span>
+                                <span class="label">{{itemMenu.label}}</span>
+                            </li>
+                        </menu>
+                    </div>
+                </ng-container>
+                <ng-container >
+                    <div class="botoes-wrapper">
+                        <fa-icon *ngFor="let btn of col.opcoes" [ngClass]="{'clicavel': !!btn.acao}" role="button" tabindex="0"
+                                [icon]="btn.icon" [title]="btn.label" (click)="btn.acao ? btn.acao($event, item.dado) : undefined"></fa-icon>
+                    </div>
+                </ng-container>
+                
+            </div>
+        </div>
+        <div *ngIf="item.aberto" class="filhos" @openClose>
+            <ng-container *ngFor="let child of item.filhos">
+                 <ng-container *ngTemplateOutlet="linhaTemplate; context: {$implicit: child, nivel: (nivel + 1)}" ></ng-container> 
+            </ng-container>
+        </div> 
+    </ng-template>
+</div>
+

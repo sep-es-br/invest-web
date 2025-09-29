@@ -17,16 +17,29 @@ import { IFiltro } from "../home/inventario/objetos/avaliacao/listagem/objetos-f
 import { EtapaService } from "../utils/services/etapa.service";
 import { IObjetoFiltro } from "../utils/interfaces/objetoFiltro.interface";
 import { IAvatar } from "../utils/interfaces/avatar.interface";
+import { animate, style, transition, trigger } from "@angular/animations";
 
 @Component({
     selector: 'spo-header',
     templateUrl: 'header.component.html',
     styleUrl: 'header.component.scss',
-    imports: [CommonModule, BreadCrumbComponent]
+    imports: [CommonModule, BreadCrumbComponent],
+    animations: [
+        trigger('openClose', [
+            transition(':enter', [
+                style({height: '0'}),
+                animate('300ms ease-in', style({height: '*'}))
+            ]),
+            transition(':leave', [
+                style({height: '*'}),
+                animate('300ms ease-out', style({height: '0'}))
+            ])
+        ])
+    ]
 })
 export class HeaderComponent implements OnInit {
 
-    @ViewChild('menuUser') private menuUserElem? : ElementRef;
+    @ViewChild('menuUser') private menuUserElem? : ElementRef<HTMLElement>;
 
     title = '';
     userName : string | undefined = 'Diego Gaede'
@@ -37,39 +50,20 @@ export class HeaderComponent implements OnInit {
 
     debounceMenu = false;
     
-    qtObjetos = 0;
-
     showMenuUser : boolean = false;
 
     permissaoAdm = false;
 
     @Input() home : HomeComponent;
-
-    private concat$ : Observable<any>;
+    @Input() qtObjetos : number;
 
     constructor(private route : ActivatedRoute, private router : Router, private dataUtilService : DataUtilService,
-        private objetoService: ObjetosService, private permissaoService : PermissaoService, private etapaService : EtapaService,
+        private permissaoService : PermissaoService, private etapaService : EtapaService,
         private profileSrv : ProfileService
     ) {
         this.dataUtilService.headerUpdate.subscribe(value => this.updateTitle())
         
         this.userSignal = this.profileSrv.sessionProfile$;
-
-        this.etapaService.getDoUsuario().pipe(
-            tap(etapa => {
-                if(etapa) {
-                    let objFiltro : IObjetoFiltro = {
-                        etapa: etapa,
-                        exercicio: new Date().getFullYear()
-                    }
-
-                    objetoService.getQuantidadeItensEmProcessamento(objFiltro).pipe(
-                        tap(qt => this.qtObjetos = qt)
-                    ).subscribe()
-                }
-            })
-        ).subscribe();
-        
         
         concat(
             this.permissaoService.usuarioTemAcesso("administracao").pipe(tap(temAcesso => {
@@ -119,24 +113,12 @@ export class HeaderComponent implements OnInit {
             return
         }
 
-        this.toggleMenuUser(false);
+        if(!this.menuUserElem.nativeElement.contains(event.target as HTMLElement))
+            this.showMenuUser = false;
 
         this.debounceMenu = false
     }
 
-    toggleMenuUser(newState : boolean){
-        let menuUser = this.menuUserElem.nativeElement as HTMLDivElement;
-        
-        this.debounceMenu = true
-
-        if(newState) {
-            menuUser.style.height = `${menuUser.scrollHeight}px`;
-        } else {
-            menuUser.style.height = '0'
-        }
-
-        this.showMenuUser = newState
-    }
 
     redirectTo(url : string){
         this.router.navigateByUrl(url);
