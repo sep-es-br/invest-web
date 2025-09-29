@@ -25,9 +25,11 @@ export class HomeComponent implements OnInit{
 
     menuItemsSignal : Signal<IItemMenu[]>;
 
+    objsNoFluxo : number;
+
     constructor(
-        private readonly profile: ProfileService,
-        private dataUtilSrv : DataUtilService
+        private dataUtilSrv : DataUtilService,
+        private activatedRouter : ActivatedRoute
     ){
         this.menuItemsSignal = this.dataUtilSrv.menuItemnsSignal;
     }
@@ -48,6 +50,10 @@ export class HomeComponent implements OnInit{
 
     ngOnInit(): void {
         
+        this.activatedRouter.data.subscribe(({qtNoFluxo}) => {
+            this.objsNoFluxo = qtNoFluxo
+        });
+
     }
 
 

@@ -50,39 +50,20 @@ export class HeaderComponent implements OnInit {
 
     debounceMenu = false;
     
-    qtObjetos = 0;
-
     showMenuUser : boolean = false;
 
     permissaoAdm = false;
 
     @Input() home : HomeComponent;
-
-    private concat$ : Observable<any>;
+    @Input() qtObjetos : number;
 
     constructor(private route : ActivatedRoute, private router : Router, private dataUtilService : DataUtilService,
-        private objetoService: ObjetosService, private permissaoService : PermissaoService, private etapaService : EtapaService,
+        private permissaoService : PermissaoService, private etapaService : EtapaService,
         private profileSrv : ProfileService
     ) {
         this.dataUtilService.headerUpdate.subscribe(value => this.updateTitle())
         
         this.userSignal = this.profileSrv.sessionProfile$;
-
-        this.etapaService.getDoUsuario().pipe(
-            tap(etapa => {
-                if(etapa) {
-                    let objFiltro : IObjetoFiltro = {
-                        etapa: etapa,
-                        exercicio: new Date().getFullYear()
-                    }
-
-                    objetoService.getQuantidadeItensEmProcessamento(objFiltro).pipe(
-                        tap(qt => this.qtObjetos = qt)
-                    ).subscribe()
-                }
-            })
-        ).subscribe();
-        
         
         concat(
             this.permissaoService.usuarioTemAcesso("administracao").pipe(tap(temAcesso => {

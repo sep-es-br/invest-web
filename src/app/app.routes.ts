@@ -5,6 +5,7 @@ import { AuthRedirectComponent } from './auth-redirect/auth-redirect.component';
 import { authGuard } from './utils/guard/auth.guard';
 import { MenuResolver } from './utils/resolver/menu.resolver';
 import { UserResolver } from './utils/resolver/user.resolver';
+import { objetosNoFluxoResolver } from './utils/resolver/objetos-no-fluxo.resolver';
 
 export const routes: Routes = [
     {
@@ -12,7 +13,7 @@ export const routes: Routes = [
       path: 'home',
       component: HomeComponent,
       canActivateChild: [authGuard],
-      resolve: {menuItem: MenuResolver, user: UserResolver},
+      resolve: {menuItem: MenuResolver, user: UserResolver, qtNoFluxo: objetosNoFluxoResolver},
       runGuardsAndResolvers: "always",
       loadChildren: () => import('./home/home-routing.module').then(m => m.HomeRoutingModule)
     }, 
