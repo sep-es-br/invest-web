@@ -57,7 +57,7 @@
                 grid-template-columns: 15rem auto;
                 gap: 1rem;
 
-                @import '../../../../../../utils/styles/ngSelectPadrao.scss';
+                @import '../../../../../../../assets/styles/ngSelectPadrao.scss';
 
                 label {
                     color: var(--cor-primaria);

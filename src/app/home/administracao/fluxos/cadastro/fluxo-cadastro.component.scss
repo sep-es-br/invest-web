@@ -37,10 +37,6 @@
                     border: 1px var(--cor-primaria) solid;
                     border-radius: 4px;
                     padding: 4px;
-
-                    &::placeholder {
-                        color: var(--cor-primaria);
-                    }
                 }
             }
 
@@ -99,9 +95,6 @@
                                     outline: none;
                                 }
                                 
-                                &::placeholder {
-                                    color: var(--cor-primaria);
-                                }
                             }
 
                             &:first-of-type {

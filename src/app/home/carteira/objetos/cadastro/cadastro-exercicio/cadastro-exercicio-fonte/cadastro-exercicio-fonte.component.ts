@@ -9,10 +9,8 @@ import { debounceTime, tap } from "rxjs";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faMinusCircle, faPlusCircle, faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
 import { FonteOrcamentariaService } from "../../../../../../utils/services/fonteOrcamentaria.service";
-import { DropdownFiltroComponent } from "../../../../../../utils/components/dropdown-com-filtro/dropdown-com-filtro.component";
-import { OpcaoItemComponent } from "../../../../../../utils/components/dropdown-com-filtro/opcao-item.component";
 import { ISelectOpcao } from "../../../../../../utils/interfaces/selectOption.interface";
-import { NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent } from "@ng-select/ng-select";
+import { NgSelectComponent } from "@ng-select/ng-select";
 
 @Component({
     selector: "spo-cadastro-exercicio-fonte",

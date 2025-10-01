@@ -1,4 +1,4 @@
-<spo-objeto-filtro (onUpdate)="this.recarregarLista(paginaAtual)"></spo-objeto-filtro>
+<spo-objeto-filtro (onUpdate)="this.recarregarLista(paginaAtual)" class="filtro"></spo-objeto-filtro>
 <div id="cabecalho">
     <div id="title">
         <p>Objetos ({{qtObjetos}})</p>
@@ -6,8 +6,6 @@
     </div>
 </div>
 <div id="listaDados">
-    <spo-tira-listagem-objetos *ngFor="let objeto of data" [objeto]="objeto" 
-        (doClick)="redirectTo(objeto.id.toString())" [permissao]="pode"></spo-tira-listagem-objetos>
-    
+    <spo-tira-lista [lista]="objetosLista" [clickFunc]="clickFunc"></spo-tira-lista>
 </div>
 <spo-barra-paginacao [larguraPaginacao]="larguraPaginacao" [quantidade]="qtObjetos" (onPageChange)="recarregarLista($event)"></spo-barra-paginacao>

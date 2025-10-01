@@ -39,28 +39,6 @@
         
 </header>
 <div class="lista">
-    <table>
-        <tr *ngFor="let proposta of listaPropostas">
-            <td>
-                <h4>Proposta</h4>
-                <p class="overflow-2" title="{{proposta.proposalText}}">{{proposta.proposalText}}</p>
-            </td>
-            <td>
-                <h4>Área Temática</h4>
-                <p>{{proposta.areaName}}</p>
-            </td>
-            <td>
-                <h4>Unidade Orçamentária</h4>
-                <p class="overflow-1">({{proposta.budgetUnitId}}) {{proposta.budgetUnitName}}</p>
-            </td>
-            <td>
-                <h4>Microrregião</h4>
-                <p>{{proposta.microrregion}}</p>
-            </td>
-            <td><fa-icon *ngIf="permissao.criar" title="Criar Objeto" role="button"
-                class="criarIcon" [icon]="criarIcon" aria-label="Criar Objeto"
-                (click)="criarObjeto(proposta)"></fa-icon></td>
-        </tr>
-    </table>
-     <spo-barra-paginacao [larguraPaginacao]="7" [quantidade]="qtPropostas" (onPageChange)="update($event)"></spo-barra-paginacao>
+    <spo-tira-lista [lista]="propostaLista"></spo-tira-lista>
+    <spo-barra-paginacao [larguraPaginacao]="7" [quantidade]="qtPropostas" (onPageChange)="update($event)"></spo-barra-paginacao>
 </div>

@@ -1,8 +1,9 @@
-@use 'ngx-toastr/toastr';
-@use '@ng-select/ng-select/scss/default.theme.scss';
-@use './app/utils/styles/UI_Pattern.scss';
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 @import url("https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined");
+@import 'ngx-toastr/toastr';
+@import '@ng-select/ng-select/scss/default.theme';
+@import "../src/assets/styles/UI_Pattern.scss";
+@import "../src/assets/styles/ngSelectPadrao.scss";
 
 /* You can add global styles to this file, and also import other style files */
 :root {
@@ -17,20 +18,42 @@
     --verde-padrao: #17c653;
     --vermelho-padrao: #f8285a;
 
+    *, ::before, ::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: unset;
+        font-family: var(--fonte-open-sans);
+    }
+
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: unset !important;
+.overflow {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    &-1 {
+        @extend .overflow;
+        max-width: 20rem;
+        -webkit-line-clamp: 1;
+        line-clamp: 1;
+    }
+
+    &-2 {
+        @extend .overflow;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+    }
 }
+
+
 
 body, app-root {
     display: block;
     max-width: 100vw;
     min-height: 100vh;
     background-color: var(--cor-secundaria);
-    font-family: var(--fonte-open-sans);
 }
 
 // aparentemente em aguma versão bizarra do Chrome existe um conflito com Open Sans

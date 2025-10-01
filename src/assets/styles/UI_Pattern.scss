@@ -55,14 +55,14 @@ textarea {
     font-family: var(--fonte-open-sans);
     font-size: small;
     outline: none;
-    padding-left: 1rem;
+    padding-left: 1rem !important;
     box-sizing: border-box;
     resize: none;
     padding-top: 0.5rem;
 
     &::placeholder, &.placeholder {
         padding-top: 0.5rem;
-        color: rgba(99, 139, 189, 0.514) !important;
+        color: rgba(99, 139, 189, 0.514);
     }
 
 
@@ -83,14 +83,18 @@ select, input:not(.pesquisa) {
     &.placeholder, &::placeholder {
         padding-top: unset;
         option {
-            color: var(--cor-primaria) !important;
+            color: var(--cor-primaria);
         }
     }
     
 }
 
 .invalido {
-    border-color: var(--vermelho-padrao) !important;
+    border-color: var(--vermelho-padrao);
+    color: var(--vermelho-padrao);
 
+    &::placeholder {
+        color: var(--vermelho-padrao);
+    }
 }
 

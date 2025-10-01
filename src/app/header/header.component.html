@@ -9,7 +9,7 @@
                 <div *ngIf="qtObjetos > 0">{{qtObjetos}}</div>
             </div>
         </div>
-    <div id="userInfo" (click)="toggleMenuUser(!this.showMenuUser)">
+    <div id="userInfo" (click)="showMenuUser = !showMenuUser">
         <div #userImg id="userImg">
             <img [src]="userImage" *ngIf="userImage; else iniciaisElem" />
             <ng-template #iniciaisElem>{{iniciais}}</ng-template> 
@@ -17,7 +17,7 @@
         <div id="userData">
             <p>{{userSignal()?.name}}</p>
         </div>
-        <div #menuUser [ngClass]="'menuUser ' + (showMenuUser ? 'mostrar' : '')">
+        <div #menuUser class="menuUser" *ngIf="showMenuUser" @openClose>
             <div (click)="redirectTo('home/meuperfil')">Meu Perfil</div>
             <div *ngIf="permissaoAdm" (click)="redirectTo('home/administracao')">Administração</div>
             <div (click)="logout()">Sair</div>

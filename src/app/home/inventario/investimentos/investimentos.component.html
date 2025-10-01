@@ -56,17 +56,11 @@
         <spo-campo-pesquisa [formControl]="txtBusca"></spo-campo-pesquisa>
     </div>
     <div id="acoes">
-        <!-- <div id="display-grade" class="botaoAcao">
-            <img src="assets/img/grid-layout.svg" width="20px">
-        </div> -->
-        <!-- <div id="display-lista" class="botaoAcao ativo">
-            <img src="assets/img/align-left-branco.svg" width="20px">
-        </div> -->
     </div>
 </div>
 <spo-investimento-ordenacao 
     (onChange)="this.setOrdem($event)"></spo-investimento-ordenacao>
 <div id="listaDados" class="displayLista">
-    <spo-tira-investimento *ngFor="let inv of data" [investimento]="inv"></spo-tira-investimento>
+     <spo-tira-lista [lista]="dataRecord" [clickFunc]="clickFunc" ></spo-tira-lista>
 </div>
 <spo-barra-paginacao [larguraPaginacao]="larguraPaginacao" [quantidade]="qtInvestimento" (onPageChange)="executar(recarregarLista($event)) "></spo-barra-paginacao>

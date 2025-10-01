@@ -9,7 +9,7 @@ import { ToSiglaPipe } from "../../../../utils/pipes/toSigla.pipe";
     selector: 'spo-tira-dado-detalhado ',
     templateUrl: "./tira-dado-detalhado.component.html",
     styleUrls: [
-        '../../../../utils/styles/tira-base.scss', './tira-dado-detalhado.component.scss'
+        '../../../../../assets/styles/tira-base.scss', './tira-dado-detalhado.component.scss'
     ],
     imports: [CommonModule, CustomCurrencyPipe, NumeroResumidoPipe, ToSiglaPipe]
 })

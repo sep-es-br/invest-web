@@ -10,7 +10,7 @@ import { IDadoConsolidado } from "../../../../utils/interfaces/dado-consolidado.
     selector: 'spo-tira-dado-detalhado ',
     templateUrl: "./tira-dado-consolidado.component.html",
     styleUrls: [
-        '../../../../utils/styles/tira-base.scss', './tira-dado-consolidado.component.scss'
+        '../../../../../assets/styles/tira-base.scss', './tira-dado-consolidado.component.scss'
     ],
     imports: [CommonModule, CustomCurrencyPipe, NumeroResumidoPipe]
 })

@@ -11,7 +11,6 @@ import { UnidadeOrcamentariaService } from "../../../../utils/services/unidadeOr
 import { FonteOrcamentariaDTO } from "../../../../utils/models/FonteOrcamentariaDTO";
 import { FonteOrcamentariaService } from "../../../../utils/services/fonteOrcamentaria.service";
 import { finalize, merge, Observable, tap } from "rxjs";
-import { IDropdownFiltroItem, DropdownFiltroComponent } from "../../../../utils/components/dropdown-filtro/dropdown-filtro.component";
 import { IFiltroInvestimento } from "./IFiltroInvestimento";
 import { ShortStringPipe } from "../../../../utils/pipes/shortString.pipe";
 import { PermissaoService } from "../../../../utils/services/permissao.service";
@@ -33,8 +32,6 @@ export class InvestimentoFiltroComponent implements AfterViewInit{
     removerIcon = faXmarkCircle;
 
     @Output() public filterChange = new EventEmitter<IFiltroInvestimento>();
-
-    @ViewChild("dropdownAno", {read: DropdownFiltroComponent}) dropdownAnoComponent : DropdownFiltroComponent;
     
     anos : number[];
     planos : PlanoOrcamentarioDTO[];
