@@ -36,19 +36,24 @@ export class GlobalErrorHandler extends ErrorHandler {
 
         switch (errorCode) {
             case 403:
-            this.toastr.error(backEndError.mensagem)
+              this.toastr.error(backEndError.mensagem)
             break;
             case 401:
-            this.toastr.error(backEndError.erros[0], backEndError.mensagem)
-            sessionStorage.removeItem('token');
-            this.router.navigateByUrl('login');
+              this.toastr.error(backEndError.erros[0], backEndError.mensagem)
+              sessionStorage.removeItem('token');
+              this.router.navigateByUrl('login');
             break;
             
             case 501:
-            this.toastr.warning(backEndError.mensagem);
+              this.toastr.warning(backEndError.mensagem);
             break;
             default:
-            this.toastr.error(backEndError?.mensagem ?? `ocorreu um erro desconhecido: ${errorCode}` );
+              if(backEndError?.mensagem){
+                this.toastr.error(backEndError?.mensagem);
+              } else {
+                console.error(`ocorreu um erro desconhecido: ${error}`)
+              }
+            
             break;
         }
         console.error(error);
