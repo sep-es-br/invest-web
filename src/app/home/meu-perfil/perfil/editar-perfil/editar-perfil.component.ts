@@ -25,10 +25,10 @@ export class EditarPerfilComponent implements AfterViewInit{
     user : IProfile;
 
     form = new FormGroup({
-        inNome: new FormControl(''),
-        inNomeCompleto: new FormControl(''),
-        inEmail: new FormControl(''),
-        inTelefone: new FormControl('')
+        nome: new FormControl(''),
+        nomeCompleto: new FormControl(''),
+        email: new FormControl(''),
+        telefone: new FormControl('')
     });
 
     constructor(private dataUtilService : DataUtilService,
@@ -51,10 +51,15 @@ export class EditarPerfilComponent implements AfterViewInit{
 
     loadUser(){
         
-        this.form.get("inNome").setValue(this.user.name);
-        this.form.get("inNomeCompleto").setValue(this.user.nomeCompleto);
-        this.form.get("inEmail").setValue(this.user.email);
-        this.form.get("inTelefone").setValue(this.user.telefone);
+        const {name, nomeCompleto, email, telefone} = this.profileService.sessionProfile$();
+
+        this.form.patchValue({
+            nome: name,
+            nomeCompleto,
+            email,
+            telefone
+        })
+
     }
 
     getPapelUser() : IPapelDTO{
@@ -66,17 +71,16 @@ export class EditarPerfilComponent implements AfterViewInit{
     }
 
     salvarUser() {
-        const { inNome, inNomeCompleto, inEmail, inTelefone } = this.form.value;
 
-        const newUser = {
-                    ...this.user,
-                    name: inNome,
-                    nomeCompleto: inNomeCompleto,
-                    email: inEmail,
-                    telefone: inTelefone
-                }
+        const {sub, imgPerfil} = this.profileService.sessionProfile$();
 
-        this.profileService.salvarUsuario(newUser).subscribe({
+        const salvarUsuarioForm = {
+            ...this.form.value,
+            sub,
+            avatar: imgPerfil?.blob
+        }
+
+        this.profileService.salvarUsuario(salvarUsuarioForm).subscribe({
             next: novoUser => {
                 if(novoUser) {
                     this.profileService.sessionProfile$.set(novoUser);

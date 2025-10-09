@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { AfterViewInit, Component } from "@angular/core";
+import { AfterViewInit, Component, Signal, WritableSignal } from "@angular/core";
 import { FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { IProfile } from "../../utils/interfaces/profile.interface";
 import { Observable } from "rxjs/internal/Observable";
@@ -12,6 +12,7 @@ import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faPencil, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { ToastrService } from "ngx-toastr";
 import { IPapelDTO } from "../../utils/models/PapelDto";
+import { AVATAR_PLACEHOLDER_URL } from "../../utils/sessionLocalItems.const";
 
 @Component({
     selector: 'spo-meu-perfil',
@@ -21,7 +22,6 @@ import { IPapelDTO } from "../../utils/models/PapelDto";
 })
 export class MeuPerfilComponent implements AfterViewInit{
 
-    avatarPlaceHolderUrl = 'assets/img/placeholderUserM.webp';
     avatarUser : any | null = null;
 
     faEditarImg = faPencil;
@@ -30,6 +30,7 @@ export class MeuPerfilComponent implements AfterViewInit{
     editarImg : boolean;
 
     user : IProfile;
+    userSignal : WritableSignal<IProfile>;
 
     form = new FormGroup({
         avatar: new FormControl(null),
@@ -39,27 +40,28 @@ export class MeuPerfilComponent implements AfterViewInit{
 
     constructor(private dataUtilService : DataUtilService,
             private profileService : ProfileService,
-            private toastr : ToastrService
+            private toastr : ToastrService,
+            private route : ActivatedRoute
     ){}
 
     ngAfterViewInit(): void {
         
-        this.profileService.getUser().subscribe(user => {
-            
-            this.user = user;
-            this.loadUser();
-            
+        this.userSignal = this.profileService.displayUser$;
+
+        this.route.data.subscribe(({user} : {user: IProfile}) => {
+            this.userSignal.set(user);
         })
 
         this.dataUtilService.editModeListener.subscribe(mode => this.editarImg = mode)
 
     }
 
-    loadUser(){
+    get imgAvatar() {
+        const {imgPerfil} = this.userSignal();
 
-        if(this.user.imgPerfil && this.user.imgPerfil.blob !== "")
-            this.avatarUser = this.dataUtilService.imageFromBase64(String(this.user.imgPerfil.blob));
-        
+        return (imgPerfil && imgPerfil.blob !== '') 
+            ? this.dataUtilService.imageFromBase64(String(imgPerfil.blob)) 
+            : AVATAR_PLACEHOLDER_URL;
     }
 
     removerImg() {
