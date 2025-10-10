@@ -15,3 +15,7 @@ export function cleanApoc(input: string): string {
     // 6. Remove espaços nas bordas
     .trim();
 }
+
+export const isMobile = () => {
+  return screen.width <= 940;
+}
