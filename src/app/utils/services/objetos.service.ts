@@ -15,6 +15,7 @@ import { IStatus } from "../interfaces/status.interface";
 import { IHttpError } from "../interfaces/http-error.interface";
 import { IOrdemItem } from "../interfaces/ordem-item.interface";
 import { IDataList } from "../interfaces/dataList.interface";
+import { IObjetoDetail } from "../interfaces/objetoDetail.interface";
 
 @Injectable({providedIn: "root"})
 export class ObjetosService {
@@ -67,13 +68,13 @@ export class ObjetosService {
         );
     }
 
-    public salvarObjeto(objeto : IObjeto) : Observable<any> {
+    public salvarObjeto(objeto : IObjetoDetail) : Observable<any> {
         return this.http.post(`${this.objetoUrl}`, objeto)
             .pipe(catchError(err => this.errorHandlerService.handleError(err)));
     }
 
-    public getById(id : number) : Observable<IObjeto> {
-        return this.http.get<IObjeto>(`${this.objetoUrl}/byId`, { params: { id: id } })
+    public getById(id : number) : Observable<IObjetoDetail> {
+        return this.http.get<IObjetoDetail>(`${this.objetoUrl}/byId`, { params: { id: id } })
         .pipe(catchError((err) => {
                 let mensagemErro : IHttpError = err.error    
 

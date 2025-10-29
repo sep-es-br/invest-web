@@ -12,7 +12,7 @@
             </select>
 
             <label for="inConta">Tipo da Despesa:<span class="obrigatorio">*</span></label>
-            <select id="inConta" name="tipoConta" [(ngModel)]="objeto.tipoConta" required disabled
+            <select id="inConta" name="tipoConta" [(ngModel)]="objeto.tipoInvestimento" required disabled
                 [ngClass]="(checado && tipoConta.invalid) ? 'invalido' : ''" #tipoConta="ngModel" >
                 <option [ngValue]="undefined" disabled>Selecionar o tipo da despesa</option>
                 <option value="Investimento">Investimento</option>
@@ -20,8 +20,8 @@
             </select>
 
             <label for="inTipo">Tipo de Objeto <span class="obrigatorio">*</span></label>
-            <select id="inTipo" name="tipo" [(ngModel)]="objeto.tipo" required disabled
-                [ngClass]="(checado && !objeto.tipo) ? 'invalido' : ''">
+            <select id="inTipo" name="tipo" [(ngModel)]="objeto.tipoObjeto" required disabled
+                [ngClass]="(checado && !objeto.tipoObjeto) ? 'invalido' : ''">
                 <option [ngValue]="undefined" disabled>Selecionar o tipo de objeto</option>
                 <option ngValue="Projeto">Projeto</option>
                 <option ngValue="Entrega">Entrega</option>
@@ -40,7 +40,7 @@
                 }" rows="5"></textarea>
             
             <label>Unidade Orçamentária <span class="obrigatorio">*</span></label>
-            <ng-select [(ngModel)]="objeto.conta.unidadeOrcamentariaImplementadora" required
+            <ng-select [(ngModel)]="unidadeOrcamentaria" required
                 [ngClass]="{
                     'invalido': (checado && unidade.invalid),
                     'srcProposta': (!!objeto.hashProposta)
@@ -56,7 +56,7 @@
                 ></ng-select>            
            
             <label>Plano Orçamentário <span *ngIf="checarCadastrado()" class="obrigatorio">*</span></label>
-            <ng-select [(ngModel)]="objeto.conta.planoOrcamentario"
+            <ng-select [(ngModel)]="planosOrcamentario"
                 (ngModelChange)="updateTipoPlano($event)"
                 [items]="opcoesPlanosOrcamentarios" [required]="checarCadastrado()"
                 placeholder="Selecionar plano orçamentário"
@@ -69,10 +69,10 @@
 
             
             <label for="inMicroregiao">Microrregião Atendida <span class="obrigatorio">*</span></label>
-            <select id="inMicroregiao" name="microregiaoAtendida" [(ngModel)]="objeto.microregiaoAtendida"
+            <select id="inMicroregiao" name="microregiaoAtendida" [(ngModel)]="microrregiao"
                 [ngClass]="{
                     'invalido': (checado && microregiaoAtendida.invalid),
-                    'placeholder': !objeto.microregiaoAtendida
+                    'placeholder': !microrregiao
                 }" required
                 #microregiaoAtendida="ngModel">
                 <option [ngValue]="undefined">Selecionar microrregião</option>
@@ -80,10 +80,10 @@
             </select>
             
             <label for="inAreaTematica">Área Temática <span class="obrigatorio">*</span></label>
-            <select id="inAreaTematica" name="areaTematica" [(ngModel)]="objeto.areaTematica"
+            <select id="inAreaTematica" name="areaTematica" [(ngModel)]="areaTematica"
                 [ngClass]="{
                         'invalido': (checado && areaTematica.invalid),
-                        'placeholder': !objeto.areaTematica
+                        'placeholder': !areaTematica
                     }" required #areaTematica="ngModel">
                 <option [ngValue]="undefined">Selecionar a área temática</option>
                 <option *ngFor="let area of areasTematicas" [ngValue]="area">{{area.nome}}</option>
@@ -91,7 +91,7 @@
 
             <label for="inInfoComplementar">Informações Complementares </label>
             <input type="text" id="inInfoComplementar" name="infoComplementares" [maxlength]="280"
-                [(ngModel)]="objeto.infoComplementares" placeholder="Insira as Informações Complementares">
+                [(ngModel)]="objeto.infoComplementar" placeholder="Insira as Informações Complementares">
 
             <label for="inContrato">Contrato ou Convênio</label>
             <input type="text" id="inContrato" name="contrato" [maxlength]="140" #contrato="ngModel"
@@ -99,8 +99,8 @@
                 [(ngModel)]="objeto.contrato" placeholder="Insira o código ou número do contrato ou convênio">
             
             <label>Tipos de Plano(s): <span class="obrigatorio">*</span></label>
-            <ng-select [(ngModel)]="objeto.planos"
-                [disabled]="objeto.id && objeto.planos && objeto.planos.length > 0 && !objeto.emEtapa"
+            <ng-select [(ngModel)]="objeto.tiposPlano"
+                [disabled]="objeto.id && objeto.tiposPlano && objeto.tiposPlano.length > 0 && !objeto.emEtapa"
                 [clearable]="false"
                 [ngClass]="{
                         'invalido': (checado && planos.invalid),
@@ -136,8 +136,8 @@
             </header>
             <spo-cadastro-exercicio [contratadoEditavel]="objeto.contrato && objeto.contrato.length > 0"
                 [exercicio]="exercicio" 
-                *ngFor="let exercicio of objeto.recursosFinanceiros, index as i"
-                [lastElem]="i === objeto.recursosFinanceiros.length-1"
+                *ngFor="let exercicio of recursosFinanceiros, index as i"
+                [lastElem]="i === recursosFinanceiros.length-1"
                 (onRemover)="removerExercicio($event)"></spo-cadastro-exercicio>
         </div>
         <div class="acoes">

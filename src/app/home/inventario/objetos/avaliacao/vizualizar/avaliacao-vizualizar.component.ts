@@ -18,6 +18,7 @@ import { LocalidadeDTO } from "../../../../../utils/models/LocalidadeDTO";
 import { PlanoOrcamentarioDTO } from "../../../../../utils/models/PlanoOrcamentarioDTO";
 import { UnidadeOrcamentariaDTO } from "../../../../../utils/models/UnidadeOrcamentariaDTO";
 import { ICusto } from "./exercicio-cadastro.interface";
+import { ICusto as Custo } from "../../../../../utils/interfaces/objetoDetail.interface";
 import { UnidadeOrcamentariaService } from "../../../../../utils/services/unidadeOrcamentaria.service";
 import { AreaTematicaService } from "../../../../../utils/services/areaTematica.service";
 import { LocalidadeService } from "../../../../../utils/services/localidade.service";
@@ -39,6 +40,11 @@ import { IParecer, parecerPadrao } from "../../../../../utils/interfaces/parecer
 import { EtapaEnum } from "../../../../../utils/enum/etapa.enum";
 import { PermissaoService } from "../../../../../utils/services/permissao.service";
 import { ProgressModalComponent } from "../../../../../utils/components/progress-modal/progress-modal.component";
+import { IObjetoDetail } from "../../../../../utils/interfaces/objetoDetail.interface";
+import { ApontamentoService } from "../../../../../utils/services/apontamento.service";
+import { FonteOrcamentariaService } from "../../../../../utils/services/fonteOrcamentaria.service";
+import { IVinculadaPor } from "../../../../../utils/interfaces/IVinculadaPor";
+import { IFonteExercicio } from "./fonte-exercicio.interface";
 
 @Component({
     templateUrl: "./avaliacao-vizualizar.component.html",
@@ -54,12 +60,16 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
 
     @ViewChildren(AvaliacaoExercicioComponent) cadastroExercicios : QueryList<AvaliacaoExercicioComponent>;
 
-    objeto : IObjeto = {
-        tipoConta: "Investimento",
-        tipo: "Projeto",
-        recursosFinanceiros: [],
-        conta: {}
-    }
+    objeto : IObjetoDetail = {
+        tipoInvestimento: "Investimento",
+        tipoObjeto: "Projeto",
+    } as IObjetoDetail;
+    apontamentos : IApontamento[];
+    microregiao : LocalidadeDTO;
+    areaTematica : IAreaTematica;
+    planoOrcamentario : PlanoOrcamentarioDTO;
+    unidadeOrcamentaria : UnidadeOrcamentariaDTO;
+    recursosFinanceiros : ICusto[] = [];
 
     userId : number;
 
@@ -149,7 +159,9 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
         private tipoPlanoService : TipoPlanoService,
         private areaTematicaService : AreaTematicaService,
         private acaoService : AcaoService,
-        private permissaoService : PermissaoService
+        private permissaoService : PermissaoService,
+        private apontamentoSrv : ApontamentoService,
+        private fonteSrv : FonteOrcamentariaService
     ){
         
     }
@@ -171,7 +183,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
     }
 
     removerApontamento(apontamentoRemovido: IApontamento) {
-        this.objeto.apontamentos = this.objeto.apontamentos.filter(a => a !== apontamentoRemovido);
+        this.apontamentos = this.apontamentos.filter(a => a !== apontamentoRemovido);
     }
 
     salvarFeedBack(novosApontamentos : IApontamento[]){
@@ -187,7 +199,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                }
         }
 
-        let objetoFinal : IObjeto = this.gerarObjetoFinal()
+        let objetoFinal : IObjetoDetail = this.gerarObjetoFinal()
         
         let executarAcaoDto : IExecutarAcao;
      
@@ -224,9 +236,9 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
         this.tipoPlanoService.fromSigefes(po.codigo)
         .pipe(finalize(() => this.carregamento--)).subscribe({
             next: (tiposList) => {
-                this.objeto.planos = tiposList
+                this.objeto.tiposPlano = tiposList
 
-                this.objeto.planos.forEach(plano => {
+                this.objeto.tiposPlano.forEach(plano => {
                     if(!plano.id) {
                         this.tiposplano.push(plano);
                     }
@@ -246,7 +258,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
 
         let valido = true;
 
-        this.objeto.apontamentos.forEach(apontamento => {
+        this.apontamentos.forEach(apontamento => {
             let preenchido = apontamento.campo
                           && apontamento.texto 
                           && apontamento.texto !== '';
@@ -283,20 +295,48 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
     }
 
 
-    setObjeto(objeto : IObjeto) {
+    setObjeto(objeto : IObjetoDetail) {
         this.objeto = objeto;
 
         
         this.dataUtil.setTitleInfo("objetoId", this.objeto.nome);
     
-        this.objeto.microregiaoAtendida = this.objeto.microregiaoAtendida ? 
-                                            this.microregioes.find(value => value.id == this.objeto.microregiaoAtendida.id)
+        this.microregiao = this.objeto.microrregiaoId ? 
+                                            this.microregioes.find(value => value.id == this.objeto.microrregiaoId)
                                             : undefined;
 
         
-        objeto.planos = this.tiposplano.filter(tipoItem => objeto.planos.map( objTipoPlano => objTipoPlano.id).includes(tipoItem.id));
+        objeto.tiposPlano = this.tiposplano.filter(tipoItem => objeto.tiposPlano.map( objTipoPlano => objTipoPlano.id).includes(tipoItem.id));
 
-        this.objeto.areaTematica = this.areasTematicas.find(area => objeto.areaTematica?.id == area.id)
+        this.areaTematica = this.areasTematicas.find(area => objeto.idArea == area.id);
+        this.planoOrcamentario = this.opcoesPlanosOrcamentarios.find(po => po.value?.codigo === objeto.codPlano)?.value;
+        this.unidadeOrcamentaria = this.opcoesUnidades.find(optUo => optUo.value?.codigo === this.objeto.codUnidade)?.value;
+        Object.entries(objeto.custos).forEach(([anoStr, fontes]) => {
+            const _fontes = [] as IFonteExercicio[];
+
+            Object.entries(fontes).forEach(([codFonte, valores] : [string, Custo]) => {
+                this.fonteSrv.findByCodigo(codFonte).subscribe(fonte => {
+                    _fontes.push({
+                        fonteOrcamentaria: fonte,
+                        previsto: valores.previsto,
+                        contratado: valores.contratado
+                    })
+                })
+            })
+
+            this.recursosFinanceiros.push({
+                anoExercicio: Number(anoStr),
+                indicadaPor: _fontes
+            })
+        })
+
+        this.carregamento++;
+        this.apontamentoSrv.findByObjeto(objeto.id)
+        .pipe(finalize(() => this.carregamento--))
+        .subscribe({
+            next: (apontamentos) => this.apontamentos = apontamentos
+        })
+
 
         this.carregamento++;
         this.usuarioService.getUser().pipe(
@@ -313,7 +353,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
 
         this.acaoDoModal = objeto.emEtapa.etapa.acoes.find(acao => acao.positivo !== undefined && !acao.positivo);
         this.recarregarFluxo();
-        this.feedback = this.objeto.apontamentos
+        this.feedback = [...this.apontamentos]
               
         this.acoesNegativas = this.objeto.emEtapa.etapa.acoes.filter(a => a.positivo !== undefined && !a.positivo);
         this.acoesPositivas = this.objeto.emEtapa.etapa.acoes.filter(a => a.positivo !== undefined && a.positivo);
@@ -405,7 +445,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
 
     setAreasTematicas (areaList : IAreaTematica[]) {
         this.areasTematicas = areaList;
-        this.objeto.areaTematica = this.areasTematicas.find(area => this.objeto.areaTematica?.id == area.id);
+        this.areaTematica = this.areasTematicas.find(area => this.objeto.idArea == area.id);
     }
 
     setPlanos (planoList : PlanoOrcamentarioDTO[]) {
@@ -417,7 +457,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
         )   
 
         // em teoria não seria nescessario essa linha, mas o select ta bugado, então...
-        this.objeto.conta.planoOrcamentario = this.opcoesPlanosOrcamentarios.find(opt => this.selecionarPlanoOrcamentario(opt, this.objeto.conta.planoOrcamentario) )?.value
+        this.planoOrcamentario = this.opcoesPlanosOrcamentarios.find(opt => opt.value?.codigo === this.objeto.codPlano)?.value
         
     }
 
@@ -443,7 +483,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
         })
 
         // em teoria não seria nescessario essa linha, mas o select ta bugado, então...
-        this.objeto.conta.unidadeOrcamentariaImplementadora = this.opcoesUnidades.find(opt => this.selecionarUnidade(opt, this.objeto.conta.unidadeOrcamentariaImplementadora) )?.value
+        this.unidadeOrcamentaria = this.opcoesUnidades.find(opt => opt.value?.codigo === this.objeto.codUnidade )?.value
     }
 
     filtrar(term : string, item : ISelectOpcao<any>) : boolean {
@@ -453,7 +493,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
     setTiposPlano(tipoPlanoList : ITipoPlano[]) {
         this.tiposplano = tipoPlanoList;
 
-        this.objeto.planos = this.tiposplano.filter(tipoItem => this.objeto.planos?.map( objTipoPlano => objTipoPlano.id).includes(tipoItem.id));
+        this.objeto.tiposPlano = this.tiposplano.filter(tipoItem => this.objeto.tiposPlano?.map( objTipoPlano => objTipoPlano.id).includes(tipoItem.id));
         
         this.opcoesTipoPlano = tipoPlanoList.map(
             tpPlano => { return {
@@ -468,8 +508,8 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
     setMicrorregioes(localidadeList : LocalidadeDTO[]){
         this.microregioes = localidadeList;
 
-        this.objeto.microregiaoAtendida = this.objeto.microregiaoAtendida ? 
-                                        this.microregioes.find(value => value.id == this.objeto.microregiaoAtendida?.id)
+        this.microregiao = this.objeto.microrregiaoId ? 
+                                        this.microregioes.find(value => value.id == this.objeto.microrregiaoId)
                                         : null;
 
     }
@@ -555,7 +595,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
             this.toastr.error("Favor preeencher os campos obrigatórios");
             this.acaoDebounce = false;
         } else {
-            let objetoFinal : IObjeto = this.gerarObjetoFinal()
+            let objetoFinal : IObjetoDetail = this.gerarObjetoFinal()
 
             let executarAcaoDto : IExecutarAcao = {
                 acao: acao,
@@ -607,39 +647,62 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
 
     validarForm() : boolean {
 
-        let valido = !!this.objeto.tipo
-                && !!this.objeto.tipoConta 
+        let valido = !!this.objeto.tipoObjeto
+                && !!this.objeto.tipoInvestimento
                 && !!this.objeto.nome 
                 && !!this.objeto.descricao 
-                && !!this.objeto.conta.unidadeOrcamentariaImplementadora
-                && !!this.objeto.microregiaoAtendida
-                && !!this.objeto.planos 
-                && this.objeto.planos.length > 0
+                && !!this.unidadeOrcamentaria
+                && !!this.microregiao
+                && !!this.objeto.tiposPlano 
+                && this.objeto.tiposPlano.length > 0
                 && !!this.objeto.possuiOrcamento;
 
         if(this.checarEtapaEnum(EtapaEnum.CADASTRO_PO)) {
             valido = valido 
-                && !!this.objeto.conta.planoOrcamentario
+                && !!this.planoOrcamentario
         }
 
         return valido;
     }
 
-    gerarObjetoFinal() : IObjeto {
+    gerarObjetoFinal() : IObjetoDetail {
         
+        Object.assign(this.objeto, {
+            ...this.objeto,
+            codPlano: this.planoOrcamentario.codigo,
+            nomePlano: this.planoOrcamentario.nome,
+            codUnidade: this.unidadeOrcamentaria.codigo,
+            siglaUnidade: this.unidadeOrcamentaria.sigla,
+            idArea: this.areaTematica.id,
+            nomeArea: this.areaTematica.nome,
+            microrregiaoId: this.microregiao.id,
+            microrregiaoNome: this.microregiao.nome,
+            custos: this.objeto.custos ?? {}
+        })
 
-        this.objeto.recursosFinanceiros.forEach(r => r.indicadaPor.forEach(i => i.gnd = this.gnd))
+        this.recursosFinanceiros.forEach(recurso => {
+            const fontes = {};
+
+            recurso.indicadaPor.forEach(ip => {
+                const {fonteOrcamentaria, previsto, contratado} = ip;
+                
+                fontes[fonteOrcamentaria.codigo] = {previsto, contratado} as Custo
+            })
+
+            this.objeto.custos[recurso.anoExercicio] = fontes;
+
+        })
 
         return this.objeto;
     }
     
     removerExercicio(exerc : ICusto) {
-        this.objeto.recursosFinanceiros = this.objeto.recursosFinanceiros.filter(exercicio => exercicio !== exerc );
+        this.recursosFinanceiros = this.recursosFinanceiros.filter(exercicio => exercicio !== exerc );
     }
 
     addExercicio() {
-        this.objeto.recursosFinanceiros.push({
-            anoExercicio: this.objeto.recursosFinanceiros.length > 0 ? this.objeto.recursosFinanceiros[this.objeto.recursosFinanceiros.length-1].anoExercicio + 1 : new Date().getFullYear(),
+        this.recursosFinanceiros.push({
+            anoExercicio: this.recursosFinanceiros.length > 0 ? this.recursosFinanceiros[this.recursosFinanceiros.length-1].anoExercicio + 1 : new Date().getFullYear(),
             indicadaPor: [{fonteOrcamentaria: null, gnd: 4}],
             
         })

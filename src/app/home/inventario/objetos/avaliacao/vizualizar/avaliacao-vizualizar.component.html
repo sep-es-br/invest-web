@@ -40,16 +40,16 @@
             </select>
 
             <label for="inConta">Tipo da Despesa:<span class="obrigatorio">*</span></label>
-            <select id="inConta" name="tipoConta" [(ngModel)]="objeto.tipoConta" 
-                [ngClass]="(checado && !objeto.tipoConta) ? 'invalido' : ''" disabled>
+            <select id="inConta" name="tipoConta" [(ngModel)]="objeto.tipoInvestimento" 
+                [ngClass]="(checado && !objeto.tipoInvestimento) ? 'invalido' : ''" disabled>
                 <option [ngValue]="undefined" disabled>Selecionar o tipo da despesa</option>
                 <option value="Investimento">Investimento</option>
                 <option value="Custeio">Outras Desp. Correntes</option>
             </select>
 
             <label for="inTipo">Tipo de Objeto <span class="obrigatorio">*</span></label>
-            <select id="inTipo" name="tipo" [(ngModel)]="objeto.tipo" disabled
-                [ngClass]="(checado && !objeto.tipo) ? 'invalido' : ''">
+            <select id="inTipo" name="tipo" [(ngModel)]="objeto.tipoObjeto" disabled
+                [ngClass]="(checado && !objeto.tipoObjeto) ? 'invalido' : ''">
                 <option [ngValue]="undefined">Selecionar o tipo de objeto</option>
                 <option ngValue="Projeto">Projeto</option>
                 <option ngValue="Entrega">Entrega</option>
@@ -66,7 +66,7 @@
                 [ngClass]="(checado && descricao.invalid) ? 'invalido' : ''" [disabled]="!executaAcao">
             
             <label>Unidade Orçamentária <span class="obrigatorio">*</span></label>
-            <ng-select [(ngModel)]="objeto.conta.unidadeOrcamentariaImplementadora"
+            <ng-select [(ngModel)]="unidadeOrcamentaria"
                 [ngClass]="(checado && unidade.invalid) ? 'invalido' : ''" [disabled]="!executaAcao"
                 [items]="opcoesUnidades" name="unidade" [disabled]="opcoesUnidades?.length <= 1  || !executaAcao"
                 placeholder="Selecionar a unidade orçamentária"
@@ -78,7 +78,7 @@
                 ></ng-select>            
            
             <label>Plano Orçamentário <span *ngIf="checarEtapaEnum(EtapaEnum.CADASTRO_PO)" class="obrigatorio">*</span></label>
-            <ng-select [(ngModel)]="objeto.conta.planoOrcamentario" name="planoOrcamentario"
+            <ng-select [(ngModel)]="planosOrcamentario" name="planoOrcamentario"
                 [items]="opcoesPlanosOrcamentarios" [disabled]="!executaAcao"
                 (ngModelChange)="updateTipoPlano($event)"
                 placeholder="Selecionar plano orçamentário"
@@ -92,7 +92,7 @@
 
             
             <label for="inMicroregiao">Microrregião Atendida <span class="obrigatorio">*</span></label>
-            <select id="inMicroregiao" [(ngModel)]="objeto.microregiaoAtendida" required #microregiaoAtendida="ngModel"
+            <select id="inMicroregiao" [(ngModel)]="microregiao" required #microregiaoAtendida="ngModel"
                 [disabled]="!executaAcao"
                 [ngClass]="(checado && microregiaoAtendida.invalid) ? 'invalido' : ''" name="microregiaoAtendida">
                 <option [ngValue]="undefined">Selecionar microrregião</option>
@@ -100,7 +100,7 @@
             </select>
             
             <label for="inAreaTematica">Área Temática <span class="obrigatorio">*</span></label>
-            <select id="inAreaTematica" [(ngModel)]="objeto.areaTematica" [ngClass]="(checado && areaTematica.invalid) ? 'invalido' : ''"
+            <select id="inAreaTematica" [(ngModel)]="areaTematica" [ngClass]="(checado && areaTematica.invalid) ? 'invalido' : ''"
                 name="areaTematica" #areaTematica="ngModel" required [disabled]="!executaAcao">
                 <option [ngValue]="undefined">Selecionar a área temática</option>
                 <option *ngFor="let area of areasTematicas" [ngValue]="area">{{area.nome}}</option>
@@ -108,7 +108,7 @@
 
             <label for="inInfoComplementar">Informações Complementares </label>
             <input type="text" id="inInfoComplementar" name="infoComplementares" [maxlength]="280" #infoComplementares="ngModel"
-                [(ngModel)]="objeto.infoComplementares" placeholder="Insira as Informações Complementares" [disabled]="!executaAcao">
+                [(ngModel)]="objeto.infoComplementar" placeholder="Insira as Informações Complementares" [disabled]="!executaAcao">
 
             <label for="inContrato">Contrato ou Convênio</label>
             <input type="text" id="inContrato" name="contrato" [maxlength]="140" #contrato="ngModel"
@@ -117,7 +117,7 @@
                 [disabled]="!executaAcao">
             
             <label>Tipos de Plano(s): <span class="obrigatorio">*</span></label>
-            <ng-select [(ngModel)]="objeto.planos" [ngModel]="checado && (planos.invalid || objeto.planos?.length === 0) "
+            <ng-select [(ngModel)]="objeto.tiposPlano" [ngModel]="checado && (planos.invalid || objeto.tiposPlano?.length === 0) "
                 [items]="opcoesTipoPlano" 
                 
                 
@@ -151,8 +151,8 @@
             </header>
             <spo-avaliacao-exercicio [disabled]="!executaAcao"
                 [exercicio]="exercicio" [contratadoEditavel]="!!objeto.contrato"
-                *ngFor="let exercicio of objeto.recursosFinanceiros, index as i"
-                [lastElem]="i === objeto.recursosFinanceiros.length-1"
+                *ngFor="let exercicio of recursosFinanceiros, index as i"
+                [lastElem]="i === recursosFinanceiros.length-1"
                 (onRemover)="removerExercicio($event)"></spo-avaliacao-exercicio>
         </div>
         <div class="acoes" *ngIf="executaAcao">
@@ -178,15 +178,8 @@
         </div>
     </main>
 </main>
-<spo-modal-apontamento [ngClass]="exibirModal ? '' : 'esconder-elem'" [apontamentos]="objeto.apontamentos" [acao]="acaoDoModal" 
+<spo-modal-apontamento [ngClass]="exibirModal ? '' : 'esconder-elem'" [apontamentos]="apontamentos" [acao]="acaoDoModal" 
     (onFechar)="fecharModal()" (onSalvar)="salvarFeedBack($event)" [userId]="userId" [isGestorMaster]="isGestorMaster" ></spo-modal-apontamento>
-<!-- <spo-fazer-parecer-modal [ngClass]="exibirFazerParecer ? '' : 'esconder-elem'" [parecer]="parecer" [acao]="acaoDoModal" 
-    (onClose)="fecharFazerParecer($event)"></spo-fazer-parecer-modal> -->
 
-<!-- <spo-visualizar-parecer *ngIf="checarEtapaEnum(EtapaEnum.ANALISE_TECNICA); else modalApontamento" [ngClass]="exibirVerParecer ? '' : 'esconder-elem'" [parecer]="feedbackAsParecer()" 
-    (onClose)="this.exibirVerParecer = false"></spo-visualizar-parecer> -->
-
-<!-- <ng-template #modalApontamento> -->
     <spo-vizualizar-apontamento  [ngClass]="exibirFeedback ? '' : 'esconder-elem'" [apontamentos]="feedbackAsIApontamento()"
         (onClose)="this.exibirFeedback = false"></spo-vizualizar-apontamento>
-<!-- </ng-template> -->

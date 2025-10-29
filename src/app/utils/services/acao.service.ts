@@ -5,6 +5,7 @@ import { ErrorHandlerService } from "./error-handler.service";
 import { IExecutarAcao } from "../interfaces/executar-acao.interface";
 import { catchError, Observable } from "rxjs";
 import { IObjeto } from "../interfaces/IObjeto";
+import { IObjetoDetail } from "../interfaces/objetoDetail.interface";
 
 @Injectable({providedIn: "root"})
 export class AcaoService {
@@ -16,8 +17,8 @@ export class AcaoService {
         private errorHandler : ErrorHandlerService
     ){}
 
-    public executarAcao(executarAcaoDto : IExecutarAcao) : Observable<IObjeto> {
-        return this.http.post<IObjeto>(`${this.acaoUrl}/executarAcao`, executarAcaoDto)
+    public executarAcao(executarAcaoDto : IExecutarAcao) : Observable<IObjetoDetail> {
+        return this.http.post<IObjetoDetail>(`${this.acaoUrl}/executarAcao`, executarAcaoDto)
         .pipe(catchError(err => this.errorHandler.handleError(err)));
     }
 

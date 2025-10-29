@@ -7,7 +7,7 @@ import { concat, finalize, merge, tap } from "rxjs";
 import { DataUtilService } from "../../../../utils/services/data-util.service";
 import { FonteOrcamentariaDTO } from "../../../../utils/models/FonteOrcamentariaDTO";
 import { IFonteExercicio } from "../cadastro/fonte-exercicio.interface";
-import { ICusto } from "../cadastro/exercicio-cadastro.interface";
+// import { ICusto } from "../cadastro/exercicio-cadastro.interface";
 import { CustomCurrencyPipe } from "../../../../utils/pipes/customCurrency.pipe";
 import { NumeroResumidoPipe } from "../../../../utils/pipes/numero-resumido.pipe";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
@@ -15,6 +15,9 @@ import { faPencil } from "@fortawesome/free-solid-svg-icons";
 import { PermissaoService } from "../../../../utils/services/permissao.service";
 import { IPodeDTO } from "../../../../utils/models/PodeDto";
 import { ProgressModalComponent } from "../../../../utils/components/progress-modal/progress-modal.component";
+import { ICusto, IObjetoDetail } from "../../../../utils/interfaces/objetoDetail.interface";
+import { cleanApoc } from "../../../../utils/funcoes-util";
+import { FonteOrcamentariaService } from "../../../../utils/services/fonteOrcamentaria.service";
 
 @Component({
     templateUrl: "./objetos-vizualizar.component.html",
@@ -27,7 +30,7 @@ import { ProgressModalComponent } from "../../../../utils/components/progress-mo
 })
 export class ObjetosVizualizarComponent implements AfterViewInit {
 
-    objeto : IObjeto;
+    objeto : IObjetoDetail;
 
     editIcon = faPencil;
 
@@ -38,8 +41,7 @@ export class ObjetosVizualizarComponent implements AfterViewInit {
         label : string,
         nome: string,
         previsto: number,
-        contratado : number,
-        gnd? : number
+        contratado : number
     }[] = [];
 
     carregando = true;
@@ -49,7 +51,8 @@ export class ObjetosVizualizarComponent implements AfterViewInit {
         private route : ActivatedRoute,
         private router : Router,
         private dataUtil: DataUtilService,
-        private permissaoService : PermissaoService
+        private permissaoService : PermissaoService,
+        private fonteSrv : FonteOrcamentariaService
     ){
         
         this.route.params.subscribe(params => {
@@ -59,33 +62,34 @@ export class ObjetosVizualizarComponent implements AfterViewInit {
                     tap(obj => {
                         this.objeto = obj
 
-                        let nome = `${obj.conta.unidadeOrcamentariaImplementadora.sigla} - Objeto - ${obj.id}`;
+                        let nome = `${obj.siglaUnidade} - Objeto - ${obj.id}`;
 
                         this.dataUtil.setTitleInfo('objetoId', nome);
-
-
-                        obj.recursosFinanceiros.sort(this.ordenarRecursosFinanceiro).forEach(custo => {
+                        
+                        for(const [ano, fontes] of Object.entries(obj.custos).sort(this.ordenarRecursosFinanceiro)){
                             this.linhas.push({
                                 nivel: 0,
                                 label: 'Exercicio',
-                                nome: `${custo.anoExercicio}`,
-                                previsto: this.somarValoresPrevisto(custo.indicadaPor),
-                                contratado: this.somarValoresContratado(custo.indicadaPor)
+                                nome: `${ano}`,
+                                previsto: this.somarValoresPrevisto(fontes),
+                                contratado: this.somarValoresContratado(fontes)
                             })
 
-                            custo.indicadaPor.sort(this.ordenarFontes).forEach(fonte => {
-                                this.linhas.push({
-                                    nivel: 1,
-                                    label: 'Fonte:',
-                                    nome: `${fonte.fonteOrcamentaria.nome}`,
-                                    previsto: fonte.previsto,
-                                    contratado: fonte.contratado,
-                                    gnd: fonte.gnd
-                                })
-                            })
-                        })
+                            for(const [fonte, valores] of Object.entries(fontes).sort(this.ordenarFontes)) {
 
+                                this.fonteSrv.findByCodigo(fonte).subscribe(fonteObj => {
+                                    this.linhas.push({
+                                        nivel: 1,
+                                        label: 'Fonte:',
+                                        nome: `${fonteObj.nome}`,
+                                        previsto: valores.previsto,
+                                        contratado: valores.contratado
+                                    })
+                                });
 
+                                
+                            }
+                        }
 
                     })
                 )
@@ -102,32 +106,32 @@ export class ObjetosVizualizarComponent implements AfterViewInit {
         this.router.navigate(['edit'], {relativeTo: this.route});
     }
 
-    somarValoresPrevisto(fontes : IFonteExercicio[]) {
+    somarValoresPrevisto(fontes : Record<string, ICusto>) {
         let total = 0;
 
-        for(let fonte of fontes){
-            total += fonte.previsto;
+        for(let valores of Object.values(fontes) ){
+            total += valores.previsto;
         }
 
         return total;
     }
 
-    somarValoresContratado(fontes : IFonteExercicio[]) {
+    somarValoresContratado(fontes : Record<string, ICusto>) {
         let total = 0;
 
-        for(let fonte of fontes){
-            total += fonte.contratado;
+        for(let valores of Object.values(fontes) ){
+            total += valores.contratado;
         }
 
         return total;
     }
 
-    ordenarRecursosFinanceiro(custo1 : ICusto, custo2 : ICusto) : number {
-        return custo1.anoExercicio - custo2.anoExercicio;
+    ordenarRecursosFinanceiro([ano1, fontes1] : [string, Record<string, ICusto>], [ano2, fontes2] : [string, Record<string, ICusto>]) : number {
+        return Number(ano1) - Number(ano2);
     }
 
-    ordenarFontes(fonte1 : IFonteExercicio, fonte2 : IFonteExercicio) : number {
-        return fonte1.fonteOrcamentaria.nome.localeCompare(fonte2.fonteOrcamentaria.nome);
+    ordenarFontes([fonte1, val1] : [string, ICusto], [fonte2, val2] : [string, ICusto]) : number {
+        return cleanApoc(fonte1).localeCompare(cleanApoc(fonte2));
     }
 
 }
