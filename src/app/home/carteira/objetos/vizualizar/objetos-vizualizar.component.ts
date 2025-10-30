@@ -3,7 +3,7 @@ import { AfterViewInit, Component } from "@angular/core";
 import { IObjeto } from "../../../../utils/interfaces/IObjeto";
 import { ObjetosService } from "../../../../utils/services/objetos.service";
 import { ActivatedRoute, Router } from "@angular/router";
-import { concat, finalize, merge, tap } from "rxjs";
+import { catchError, concat, finalize, firstValueFrom, forkJoin, map, merge, mergeMap, Observable, of, skipWhile, tap } from "rxjs";
 import { DataUtilService } from "../../../../utils/services/data-util.service";
 import { FonteOrcamentariaDTO } from "../../../../utils/models/FonteOrcamentariaDTO";
 import { IFonteExercicio } from "../cadastro/fonte-exercicio.interface";
@@ -54,48 +54,61 @@ export class ObjetosVizualizarComponent implements AfterViewInit {
         private permissaoService : PermissaoService,
         private fonteSrv : FonteOrcamentariaService
     ){
+
         
-        this.route.params.subscribe(params => {
+        
+        this.route.params.pipe(
+            skipWhile((paramMap) => !('objetoId' in paramMap) ),
+            mergeMap(({objetoId}) => this.objetoService.getById(objetoId).pipe(finalize(() => this.carregando = false))),
+        ).subscribe(obj => {
+            this.objeto = obj
+
+            let nome = `${obj.siglaUnidade} - Objeto - ${obj.id}`;
+
+            this.dataUtil.setTitleInfo('objetoId', nome);
+
+            const fonteMapRequest : Record<string, Observable<FonteOrcamentariaDTO>> = {};
+
+            Object.values(obj.custos)
+                    .flatMap((custo) => Object.keys(custo))
+                    .map(codFont => fonteMapRequest[codFont] = this.fonteSrv.findByCodigo(codFont).pipe(
+                        catchError(err => {
+                            console.log(err);
+                            return of({nome: '[ERROR]'} as FonteOrcamentariaDTO);
+                        })));
             
-            merge(
-                this.objetoService.getById(params['objetoId']).pipe(
-                    tap(obj => {
-                        this.objeto = obj
+            forkJoin(fonteMapRequest).subscribe(fontMap => {
+                for(const [ano, fontes] of Object.entries(obj.custos).sort(this.ordenarRecursosFinanceiro)){
+                this.linhas.push({
+                    nivel: 0,
+                    label: 'Exercicio',
+                    nome: `${ano}`,
+                    previsto: this.somarValoresPrevisto(fontes),
+                    contratado: this.somarValoresContratado(fontes)
+                })
 
-                        let nome = `${obj.siglaUnidade} - Objeto - ${obj.id}`;
+                for(const [fonte, valores] of Object.entries(fontes).sort(this.ordenarFontes)) {
 
-                        this.dataUtil.setTitleInfo('objetoId', nome);
-                        
-                        for(const [ano, fontes] of Object.entries(obj.custos).sort(this.ordenarRecursosFinanceiro)){
-                            this.linhas.push({
-                                nivel: 0,
-                                label: 'Exercicio',
-                                nome: `${ano}`,
-                                previsto: this.somarValoresPrevisto(fontes),
-                                contratado: this.somarValoresContratado(fontes)
-                            })
-
-                            for(const [fonte, valores] of Object.entries(fontes).sort(this.ordenarFontes)) {
-
-                                this.fonteSrv.findByCodigo(fonte).subscribe(fonteObj => {
-                                    this.linhas.push({
-                                        nivel: 1,
-                                        label: 'Fonte:',
-                                        nome: `${fonteObj.nome}`,
-                                        previsto: valores.previsto,
-                                        contratado: valores.contratado
-                                    })
-                                });
-
-                                
-                            }
-                        }
-
+                    this.linhas.push({
+                        nivel: 1,
+                        label: 'Fonte:',
+                        nome: fontMap[fonte].nome,
+                        previsto: valores.previsto,
+                        contratado: valores.contratado
                     })
-                )
-            ).pipe(finalize(() => this.carregando = false)).subscribe();
+
+                    
+                }
+            }
+            })
+            
+
         })
 
+    }
+
+    async consultarCodigoFonte(codFonte: string){
+        return await firstValueFrom(this.fonteSrv.findByCodigo(codFonte)); 
     }
 
     ngAfterViewInit(): void {

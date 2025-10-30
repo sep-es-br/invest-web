@@ -45,9 +45,9 @@
                         </div>
                 </ng-container>
                 <ng-container *ngSwitchCase="'acao'">
-                    <div class="acao-wrapper">
+                    <div class="acao-wrapper" #acaoWrapper>
                         <fa-icon #btnAcaoElem [icon]="acoesIcon" class="btnMenu" (click)="menuItem = item" role="button" tabindex="0"></fa-icon>
-                        <menu class="opcao-menu" *ngIf="menuItem === item" @openClose>
+                        <menu class="opcao-menu" *ngIf="menuItem === item" @openClose [overlay]="acaoWrapper">
                             <li *ngFor="let itemMenu of col.opcoes"
                                 class="opcao-item" [ngClass]="{'pos': (itemMenu.tipo === 'positivo'), 'neg': (itemMenu.tipo === 'negativo'), 'clicavel': !!itemMenu.acao}"
                                 (click)="itemMenu.acao ? itemMenu.acao($event, item.dado) : undefined">
@@ -57,7 +57,7 @@
                         </menu>
                     </div>
                 </ng-container>
-                <ng-container >
+                <ng-container *ngSwitchCase="'botao'"> 
                     <div class="botoes-wrapper">
                         <fa-icon *ngFor="let btn of col.opcoes" [ngClass]="{'clicavel': !!btn.acao}" role="button" tabindex="0"
                                 [icon]="btn.icon" [title]="btn.label" (click)="btn.acao ? btn.acao($event, item.dado) : undefined"></fa-icon>
