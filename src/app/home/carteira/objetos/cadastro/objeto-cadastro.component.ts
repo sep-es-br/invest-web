@@ -5,9 +5,7 @@ import { UnidadeOrcamentariaDTO } from "../../../../utils/models/UnidadeOrcament
 import { PlanoOrcamentarioDTO } from "../../../../utils/models/PlanoOrcamentarioDTO";
 import { LocalidadeDTO } from "../../../../utils/models/LocalidadeDTO";
 import { CadastroExercicioComponent } from "./cadastro-exercicio/cadastro-exercicio.component";
-import { IObjeto } from "../../../../utils/interfaces/IObjeto";
 import { ICusto } from "./exercicio-cadastro.interface";
-import { ICusto as Custo } from "../../../../utils/interfaces/objetoDetail.interface"
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faFloppyDisk, faPaperPlane, faPlusCircle, faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
 import { filter, finalize, forkJoin, map, merge, switchMap, tap } from "rxjs";
@@ -31,6 +29,7 @@ import { IProposta } from "../../../../utils/interfaces/proposta.interface";
 import { IObjetoDetail } from "../../../../utils/interfaces/objetoDetail.interface";
 import { FonteOrcamentariaService } from "../../../../utils/services/fonteOrcamentaria.service";
 import { IFonteExercicio } from "./fonte-exercicio.interface";
+import { IObjetoCadastroForm, ICusto as CadastroCusto, IValoresFonte as CadastroValoresFonte } from "../../../../utils/interfaces/objeto-cadastro-form.interface";
 
 @Component({
     templateUrl: "./objeto-cadastro.component.html",
@@ -368,36 +367,40 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
             this.toastr.error("Favor preeencher os campos obrigatórios");
         } else {
             
-            Object.assign(this.objeto, {
-                ...this.objeto,
-                codPlano: this.planoOrcamentario.codigo,
-                nomePlano: this.planoOrcamentario.nome,
-                codUnidade: this.unidadeOrcamentaria.codigo,
-                siglaUnidade: this.unidadeOrcamentaria.sigla,
-                idArea: this.areaTematica.id,
-                nomeArea: this.areaTematica.nome,
-                microrregiaoId: this.microrregiao.id,
-                microrregiaoNome: this.microrregiao.nome,
-                custos: this.objeto.custos ?? {}
-            })
-    
-            this.recursosFinanceiros.forEach(recurso => {
-                const fontes = {};
-    
-                recurso.indicadaPor.forEach(ip => {
-                    const {fonteOrcamentaria, previsto, contratado} = ip;
-                    
-                    fontes[fonteOrcamentaria.codigo] = {previsto, contratado} as Custo
-                })
-    
-                this.objeto.custos[recurso.anoExercicio] = fontes;
-    
-            })
+            let objetoForm : IObjetoCadastroForm = {
+                id: this.objeto.id,
+                tipoConta: this.objeto.tipoInvestimento,
+                tipo: this.objeto.tipoObjeto,
+                areaTematicaId: this.areaTematica.id,
+                contrato: this.objeto.contrato,
+                descricao: this.objeto.descricao,
+                hashProposta: this.objeto.hashProposta,
+                infoComplementares: this.objeto.infoComplementar,
+                microregiaoId: this.microrregiao.id,
+                nome: this.objeto.nome,
+                planoOrcamentario: this.planoOrcamentario,
+                planos: this.objeto.tiposPlano,
+                possuiOrcamento: this.objeto.possuiOrcamento,
+                unidadeOrcamentaria: this.unidadeOrcamentaria,
+                recursos: this.recursosFinanceiros.map(
+                    custo => ({
+                        ano: custo.anoExercicio,
+                        valoresFontes: custo.indicadaPor.map(
+                            indiPor => ({
+                                fonte: indiPor.fonteOrcamentaria,
+                                contratado: indiPor.contratado,
+                                previsto: indiPor.previsto
+                            } as CadastroValoresFonte)
+                        )
+                    })
+                )  
+            };
+            
 
             if(!this.salvarDebounce) {
                 this.salvarDebounce = true;
                 this.carregamento++;
-                this.objetoService.salvarObjeto(this.objeto).pipe(
+                this.objetoService.salvarObjeto(objetoForm).pipe(
                     tap(() => {
                         this.toastr.success("Objeto Salvo");
                         this.router.navigate(['../'], {relativeTo: this.route})

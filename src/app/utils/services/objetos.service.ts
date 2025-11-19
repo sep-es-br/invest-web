@@ -16,6 +16,7 @@ import { IHttpError } from "../interfaces/http-error.interface";
 import { IOrdemItem } from "../interfaces/ordem-item.interface";
 import { IDataList } from "../interfaces/dataList.interface";
 import { IObjetoDetail } from "../interfaces/objetoDetail.interface";
+import { IObjetoCadastroForm } from "../interfaces/objeto-cadastro-form.interface";
 
 @Injectable({providedIn: "root"})
 export class ObjetosService {
@@ -68,7 +69,7 @@ export class ObjetosService {
         );
     }
 
-    public salvarObjeto(objeto : IObjetoDetail) : Observable<any> {
+    public salvarObjeto(objeto : IObjetoCadastroForm) : Observable<any> {
         return this.http.post(`${this.objetoUrl}`, objeto)
             .pipe(catchError(err => this.errorHandlerService.handleError(err)));
     }
