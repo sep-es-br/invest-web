@@ -108,6 +108,7 @@ export class HeaderComponent implements OnInit {
 
     @HostListener('document:click', ['$event'])
     documentClick(event: MouseEvent) {
+        if(!this.menuUserElem) return;
         if(this.debounceMenu){ 
             this.debounceMenu = false;
             return
