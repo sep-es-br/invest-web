@@ -80,13 +80,13 @@
             </select>
             
             <label for="inAreaTematica">Área Temática <span class="obrigatorio">*</span></label>
-            <select id="inAreaTematica" name="areaTematica" [(ngModel)]="areaTematica"
+            <select id="inAreaTematica" name="areaTematica" [(ngModel)]="objeto.idArea"
                 [ngClass]="{
                         'invalido': (checado && areaTematica.invalid),
                         'placeholder': !areaTematica
                     }" required #areaTematica="ngModel">
                 <option [ngValue]="undefined">Selecionar a área temática</option>
-                <option *ngFor="let area of areasTematicas" [ngValue]="area">{{area.nome}}</option>
+                <option *ngFor="let area of areasTematicas" [ngValue]="area.id">{{area.nome}}</option>
             </select>
 
             <label for="inInfoComplementar">Informações Complementares </label>

@@ -92,18 +92,18 @@
 
             
             <label for="inMicroregiao">Microrregião Atendida <span class="obrigatorio">*</span></label>
-            <select id="inMicroregiao" [(ngModel)]="microregiao" required #microregiaoAtendida="ngModel"
+            <select id="inMicroregiao" [(ngModel)]="objeto.microrregiaoId" required #microregiaoAtendida="ngModel"
                 [disabled]="!executaAcao"
                 [ngClass]="(checado && microregiaoAtendida.invalid) ? 'invalido' : ''" name="microregiaoAtendida">
                 <option [ngValue]="undefined">Selecionar microrregião</option>
-                <option *ngFor="let microregiao of microregioes" [ngValue]="microregiao">{{microregiao.nome}}</option>
+                <option *ngFor="let microregiao of microregioes" [ngValue]="microregiao.id">{{microregiao.nome}}</option>
             </select>
             
             <label for="inAreaTematica">Área Temática <span class="obrigatorio">*</span></label>
-            <select id="inAreaTematica" [(ngModel)]="areaTematica" [ngClass]="(checado && areaTematica.invalid) ? 'invalido' : ''"
+            <select id="inAreaTematica" [(ngModel)]="objeto.idArea" [ngClass]="(checado && areaTematica.invalid) ? 'invalido' : ''"
                 name="areaTematica" #areaTematica="ngModel" required [disabled]="!executaAcao">
                 <option [ngValue]="undefined">Selecionar a área temática</option>
-                <option *ngFor="let area of areasTematicas" [ngValue]="area">{{area.nome}}</option>
+                <option *ngFor="let area of areasTematicas" [ngValue]="area.id">{{area.nome}}</option>
             </select>
 
             <label for="inInfoComplementar">Informações Complementares </label>

@@ -3,7 +3,7 @@ import { HttpClient, HttpErrorResponse, HttpParams, HttpStatusCode } from "@angu
 import { environment } from "../../../environments/environment";
 import { Observable } from "rxjs/internal/Observable";
 import { ObjetoFiltro } from "../models/ObjetoFiltro";
-import { catchError, EMPTY, empty, EmptyError } from "rxjs";
+import { catchError, EMPTY, empty, EmptyError, map, of, switchMap, throwError } from "rxjs";
 import { ErrorHandlerService } from "./error-handler.service";
 import { InvestimentoFiltro } from "../models/InvestimentoFiltro";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -71,7 +71,10 @@ export class ObjetosService {
 
     public salvarObjeto(objeto : IObjetoCadastroForm) : Observable<any> {
         return this.http.post(`${this.objetoUrl}`, objeto)
-            .pipe(catchError(err => this.errorHandlerService.handleError(err)));
+            .pipe(
+                catchError(err => this.errorHandlerService.handleError(err)),
+                switchMap(obj => ("error" in obj) ? throwError(() => obj.error) : of(obj))
+            );
     }
 
     public getById(id : number) : Observable<IObjetoDetail> {

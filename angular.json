@@ -68,7 +68,8 @@
               "buildTarget": "spo-web:build:production"
             },
             "development": {
-              "buildTarget": "spo-web:build:development"
+              "buildTarget": "spo-web:build:development",
+              "port": 4200
             }
           },
           "defaultConfiguration": "development"

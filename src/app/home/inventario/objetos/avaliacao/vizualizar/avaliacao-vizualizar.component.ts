@@ -45,6 +45,7 @@ import { ApontamentoService } from "../../../../../utils/services/apontamento.se
 import { FonteOrcamentariaService } from "../../../../../utils/services/fonteOrcamentaria.service";
 import { IVinculadaPor } from "../../../../../utils/interfaces/IVinculadaPor";
 import { IFonteExercicio } from "./fonte-exercicio.interface";
+import { IObjetoCadastroForm, ICusto as CadastroCusto, IValoresFonte as CadastroValoresFonte } from "../../../../../utils/interfaces/objeto-cadastro-form.interface";
 
 @Component({
     templateUrl: "./avaliacao-vizualizar.component.html",
@@ -199,7 +200,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                }
         }
 
-        let objetoFinal : IObjetoDetail = this.gerarObjetoFinal()
+        let objetoFinal : IObjetoCadastroForm = this.gerarObjetoFinal()
         
         let executarAcaoDto : IExecutarAcao;
      
@@ -311,6 +312,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
         this.areaTematica = this.areasTematicas.find(area => objeto.idArea == area.id);
         this.planoOrcamentario = this.opcoesPlanosOrcamentarios.find(po => po.value?.codigo === objeto.codPlano)?.value;
         this.unidadeOrcamentaria = this.opcoesUnidades.find(optUo => optUo.value?.codigo === this.objeto.codUnidade)?.value;
+        this.recursosFinanceiros = [];
         Object.entries(objeto.custos).forEach(([anoStr, fontes]) => {
             const _fontes = [] as IFonteExercicio[];
 
@@ -334,7 +336,11 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
         this.apontamentoSrv.findByObjeto(objeto.id)
         .pipe(finalize(() => this.carregamento--))
         .subscribe({
-            next: (apontamentos) => this.apontamentos = apontamentos
+            next: (apontamentos) => {
+                this.apontamentos = apontamentos;
+                
+                this.feedback = [...this.apontamentos];
+            }
         })
 
 
@@ -353,7 +359,6 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
 
         this.acaoDoModal = objeto.emEtapa.etapa.acoes.find(acao => acao.positivo !== undefined && !acao.positivo);
         this.recarregarFluxo();
-        this.feedback = [...this.apontamentos]
               
         this.acoesNegativas = this.objeto.emEtapa.etapa.acoes.filter(a => a.positivo !== undefined && !a.positivo);
         this.acoesPositivas = this.objeto.emEtapa.etapa.acoes.filter(a => a.positivo !== undefined && a.positivo);
@@ -595,7 +600,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
             this.toastr.error("Favor preeencher os campos obrigatórios");
             this.acaoDebounce = false;
         } else {
-            let objetoFinal : IObjetoDetail = this.gerarObjetoFinal()
+            let objetoFinal : IObjetoCadastroForm = this.gerarObjetoFinal()
 
             let executarAcaoDto : IExecutarAcao = {
                 acao: acao,
@@ -665,35 +670,39 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
         return valido;
     }
 
-    gerarObjetoFinal() : IObjetoDetail {
+    gerarObjetoFinal() : IObjetoCadastroForm {
         
-        Object.assign(this.objeto, {
-            ...this.objeto,
-            codPlano: this.planoOrcamentario.codigo,
-            nomePlano: this.planoOrcamentario.nome,
-            codUnidade: this.unidadeOrcamentaria.codigo,
-            siglaUnidade: this.unidadeOrcamentaria.sigla,
-            idArea: this.areaTematica.id,
-            nomeArea: this.areaTematica.nome,
-            microrregiaoId: this.microregiao.id,
-            microrregiaoNome: this.microregiao.nome,
-            custos: this.objeto.custos ?? {}
-        })
-
-        this.recursosFinanceiros.forEach(recurso => {
-            const fontes = {};
-
-            recurso.indicadaPor.forEach(ip => {
-                const {fonteOrcamentaria, previsto, contratado} = ip;
-                
-                fontes[fonteOrcamentaria.codigo] = {previsto, contratado} as Custo
-            })
-
-            this.objeto.custos[recurso.anoExercicio] = fontes;
-
-        })
-
-        return this.objeto;
+        
+        let objetoForm : IObjetoCadastroForm = {
+            id: this.objeto.id,
+            tipoConta: this.objeto.tipoInvestimento,
+            tipo: this.objeto.tipoObjeto,
+            areaTematicaId: this.objeto.idArea,
+            contrato: this.objeto.contrato,
+            descricao: this.objeto.descricao,
+            hashProposta: this.objeto.hashProposta,
+            infoComplementares: this.objeto.infoComplementar,
+            microregiaoId: this.objeto.microrregiaoId,
+            nome: this.objeto.nome,
+            planoOrcamentario: this.planoOrcamentario,
+            planos: this.objeto.tiposPlano,
+            possuiOrcamento: this.objeto.possuiOrcamento,
+            unidadeOrcamentaria: this.unidadeOrcamentaria,
+            recursos: this.recursosFinanceiros.map(
+                custo => ({
+                    ano: custo.anoExercicio,
+                    valoresFontes: custo.indicadaPor.map(
+                        indiPor => ({
+                            fonte: indiPor.fonteOrcamentaria,
+                            contratado: indiPor.contratado,
+                            previsto: indiPor.previsto
+                        } as CadastroValoresFonte)
+                    )
+                })
+            )  
+        };
+                    
+        return objetoForm;
     }
     
     removerExercicio(exerc : ICusto) {

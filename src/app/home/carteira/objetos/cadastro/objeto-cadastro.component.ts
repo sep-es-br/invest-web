@@ -371,7 +371,7 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
                 id: this.objeto.id,
                 tipoConta: this.objeto.tipoInvestimento,
                 tipo: this.objeto.tipoObjeto,
-                areaTematicaId: this.areaTematica.id,
+                areaTematicaId: this.objeto.idArea,
                 contrato: this.objeto.contrato,
                 descricao: this.objeto.descricao,
                 hashProposta: this.objeto.hashProposta,
