@@ -105,7 +105,13 @@ export class HeaderComponent implements OnInit {
 
     @HostListener('document:click', ['$event'])
     documentClick(event: MouseEvent) {
-        if(this.menuUserElem && !this.menuUserElem.nativeElement.contains(event.target as HTMLElement))
+        if(!this.menuUserElem) return;
+        if(this.debounceMenu){ 
+            this.debounceMenu = false;
+            return
+        }
+
+        if(!this.menuUserElem.nativeElement.contains(event.target as HTMLElement))
             this.showMenuUser = false;
     }
 
