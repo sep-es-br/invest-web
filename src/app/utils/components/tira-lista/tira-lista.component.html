@@ -40,7 +40,7 @@
                         <div class="title">
                             {{col.titulo}}
                         </div>
-                        <div class="value">
+                        <div class="value no-wrap">
                             <span [title]="item.getValue(col) | customCurrency">R$ {{item.getValue(col) | numeroResumido}}</span>
                         </div>
                 </ng-container>

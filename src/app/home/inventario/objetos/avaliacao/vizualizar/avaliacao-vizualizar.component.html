@@ -78,7 +78,7 @@
                 ></ng-select>            
            
             <label>Plano Orçamentário <span *ngIf="checarEtapaEnum(EtapaEnum.CADASTRO_PO)" class="obrigatorio">*</span></label>
-            <ng-select [(ngModel)]="planosOrcamentario" name="planoOrcamentario"
+            <ng-select [(ngModel)]="planoOrcamentario" name="planoOrcamentario"
                 [items]="opcoesPlanosOrcamentarios" [disabled]="!executaAcao"
                 (ngModelChange)="updateTipoPlano($event)"
                 placeholder="Selecionar plano orçamentário"
@@ -86,8 +86,8 @@
                 bindValue="value"
                 [compareWith]="selecionarPlanoOrcamentario"
                 [searchFn]="filtrar"
-                [required]="checarEtapaEnum(EtapaEnum.CADASTRO_PO)" #planoOrcamentario="ngModel"
-                [ngClass]="(checado && planoOrcamentario.invalid) ? 'invalido' : ''"
+                [required]="checarEtapaEnum(EtapaEnum.CADASTRO_PO)" #inPlanoOrcamentario="ngModel"
+                [ngClass]="(checado && inPlanoOrcamentario.invalid) ? 'invalido' : ''"
                 ></ng-select>
 
             

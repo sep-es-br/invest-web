@@ -2,6 +2,7 @@ ng-select {
     min-width: 20rem;
     max-width: 20rem;
     box-sizing: border-box;
+    height: 32px;
 
     button, .removerItem {
         background-color: unset;
@@ -84,6 +85,7 @@ ng-select {
             .ng-value-container {
     
                 .ng-placeholder {
+                    top: unset !important;
                     position: unset !important;
                     color: var(--cor-primaria);
                 }
