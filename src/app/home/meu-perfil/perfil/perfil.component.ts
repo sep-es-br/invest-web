@@ -34,7 +34,6 @@ export class PerfilComponent implements AfterViewInit{
         this.profileService.getUser().subscribe(user => {
             
             this.user = user;
-            // this.loadUser();
         });
 
         this.dataUtilService.editModeListener.next(false);

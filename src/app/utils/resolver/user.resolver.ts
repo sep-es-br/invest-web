@@ -5,7 +5,7 @@ import { firstValueFrom, tap } from "rxjs";
 import { Injectable } from "@angular/core";
 
 @Injectable({providedIn: 'root'})
-export class UserResolver implements Resolve<any> {
+export class UserResolver implements Resolve<IProfile> {
     constructor(
         private profileSrv : ProfileService
     ){}

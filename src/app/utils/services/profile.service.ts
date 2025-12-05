@@ -18,6 +18,7 @@ export class ProfileService {
   private _urlSignin = `${environment.apiUrl}/signin`;
   private _url = `${environment.apiUrl}/usuario`;
   public sessionProfile$ = signal<IProfile>(undefined);
+  public displayUser$ = signal<IProfile>(undefined);
 
 
   constructor(
@@ -41,7 +42,7 @@ export class ProfileService {
     );
   }
 
-  public salvarUsuario(usuario: IProfile) : Observable<IProfile> {
+  public salvarUsuario(usuario: any) : Observable<IProfile> {
     return this.http.put<IProfile>(this._url, usuario).pipe(
       catchError(err => this.errorHandlerService.handleError(err))
     )

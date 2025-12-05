@@ -28,6 +28,7 @@ export class GlobalErrorHandler extends ErrorHandler {
 
     override handleError(error: any): void {
 
+        console.error(error);
         if(!(error instanceof HttpErrorResponse)) super.handleError(error);
 
         const backEndError: IHttpError = error.error;
@@ -56,7 +57,6 @@ export class GlobalErrorHandler extends ErrorHandler {
             
             break;
         }
-        console.error(error);
     }
 
 

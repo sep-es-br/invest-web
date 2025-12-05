@@ -3,6 +3,7 @@ import { InventarioComponent } from "./inventario/inventario.component";
 import { NgModule } from "@angular/core";
 import { MeuPerfilComponent } from "./meu-perfil/meu-perfil.component";
 import { InicioComponent } from "./inicio/inicio.component";
+import { UserResolver } from "../utils/resolver/user.resolver";
 
 const routes : Route[] = [
      {
@@ -15,6 +16,8 @@ const routes : Route[] = [
     },{
         path: "meuperfil",
         component: MeuPerfilComponent,
+        resolve: { user: UserResolver },
+        runGuardsAndResolvers: 'always',
         loadChildren: () => import('./meu-perfil/meu-perfil-routing.module').then( m => m.UsuarioRoutingModule)
     },{
         path: "administracao",
