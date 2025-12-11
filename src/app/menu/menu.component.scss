@@ -7,6 +7,8 @@
     background-color: var(--cor-primaria);
     padding: 1rem;
     box-shadow: rgba(0, 0, 0, 0.26) 2px 2px 5px 0px;
+    position: relative;
+    z-index: 100;
 
     #pipLogo{
         box-sizing: border-box;

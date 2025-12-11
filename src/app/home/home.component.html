@@ -1,8 +1,12 @@
-<div #divMenu id="menu">
-    <spo-menu [itensMenu]="menuItemsSignal()"></spo-menu>
-</div>
-<main swipe [next]="ocultarMenu" [previous]="mostrarMenu">
-    <spo-header [home]="this" [qtObjetos]="objsNoFluxo"></spo-header>
+@if (!isMobile || exibirMenu) {
+    <div class="menu-wrapper" @openClose [@.disabled]="loaded">
+        <div id="menu">
+            <spo-menu [itensMenu]="menuItemsSignal()"></spo-menu>
+        </div>
+    </div>
+}
+<main>
+    <spo-header (onMenuClick)="exibirMenu = !exibirMenu" [qtObjetos]="objsNoFluxo" [permissaoAdm]="temAcessoAdm"></spo-header>
     <div id="conteudo">
         <router-outlet></router-outlet>
     </div>

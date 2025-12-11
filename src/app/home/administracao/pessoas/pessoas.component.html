@@ -1,0 +1,7 @@
+<spo-progress-modal [visivel]="showProgress"></spo-progress-modal>
+<header>
+  <p>Pessoas ({{qtPessoas}})</p>
+  <spo-campo-pesquisa [(ngModel)]="termo" [ngModelOptions]="{standalone: true}" (ngModelChange)="searchObs$.next({term: $event, pg: 0})"></spo-campo-pesquisa>
+</header>
+<spo-tira-lista [lista]="pessoasList" [clickFunc]="clickFunc"></spo-tira-lista>
+<spo-barra-paginacao [quantidade]="qtPessoas" (onPageChange)="searchObs$.next({term: this.termo, pg: $event})"></spo-barra-paginacao>

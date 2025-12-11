@@ -33,7 +33,6 @@ function reRouteTo(path : string) : UrlTree {
 
 function checarLogin() : boolean{
   const storageToken = sessionStorage.getItem('token');
-  const storageUserInfo = sessionStorage.getItem('user-profile');
 
-  return !!storageToken && !!storageUserInfo;
+  return !!storageToken;
 }

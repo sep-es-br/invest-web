@@ -1,15 +1,16 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { CommonModule } from '@angular/common';
-import { AfterContentInit, Component, ContentChild, ElementRef, HostBinding, Input, OnChanges, QueryList, SimpleChanges, TemplateRef, ViewChildren, ViewEncapsulation, HostListener, Output, EventEmitter } from '@angular/core';
+import { AfterContentInit, Component, ContentChild, ElementRef, HostBinding, Input, OnChanges, QueryList, SimpleChanges, TemplateRef, ViewChildren, ViewEncapsulation, HostListener, Output, EventEmitter, ViewChild } from '@angular/core';
 import { FaIconComponent, FontAwesomeModule, IconDefinition } from '@fortawesome/angular-fontawesome';
 import { faAngleRight, faEllipsis } from '@fortawesome/free-solid-svg-icons';
 import { CustomCurrencyPipe } from '../../pipes/customCurrency.pipe';
 import { NumeroResumidoPipe } from '../../pipes/numero-resumido.pipe';
 import { LARGURA_FUNC, TiraListaCol, TiraRecord } from './TiraListaConfig';
+import { OverlayDirective } from "../../directive/overflow.directive";
 
 @Component({
   selector: 'spo-tira-lista',
-  imports: [CommonModule, FontAwesomeModule, CustomCurrencyPipe, NumeroResumidoPipe],
+  imports: [CommonModule, FontAwesomeModule, CustomCurrencyPipe, NumeroResumidoPipe, OverlayDirective],
   templateUrl: './tira-lista.component.html',
   styleUrl: './tira-lista.component.scss',
   encapsulation: ViewEncapsulation.None,

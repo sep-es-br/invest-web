@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation } from "@angular/core";
 import { IFonteExercicio } from "../../fonte-exercicio.interface";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { NgxMaskDirective, provideNgxMask } from "ngx-mask";

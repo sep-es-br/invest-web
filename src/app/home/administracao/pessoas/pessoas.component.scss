@@ -1,0 +1,16 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    padding-block: 1rem;
+    gap: 1rem;
+
+    header {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        p {
+            font-weight: bold;
+        }
+    }
+}

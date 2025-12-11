@@ -59,6 +59,6 @@ export class ErrorHandlerService {
       }
     
 
-    return of(undefined);
+    return of({error: error});
   }
 }

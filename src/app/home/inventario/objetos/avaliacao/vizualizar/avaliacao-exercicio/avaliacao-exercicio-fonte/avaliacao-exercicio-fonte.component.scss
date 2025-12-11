@@ -1,5 +1,5 @@
 @use "../../../../../../../../assets/styles/ngSelectPadrao.scss";
-:host{
+:host {
 
     display: flex;
     flex-grow: 1;
@@ -31,11 +31,11 @@
             width: 5rem !important;
         }
 
-        .ng-select {
+        .ng-select ::ng-deep {
                 
             flex-grow: 1;
             .ng-select-container {
-                border-color: transparent transparent var(--cor-primaria) transparent;
+                border-color: transparent transparent var(--cor-primaria) transparent !important;
                 color: var(--cor-primaria);
                 padding-left: unset;
                 box-sizing: border-box !important;

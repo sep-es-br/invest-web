@@ -3,7 +3,7 @@ import { HttpClient, HttpErrorResponse, HttpParams, HttpStatusCode } from "@angu
 import { environment } from "../../../environments/environment";
 import { Observable } from "rxjs/internal/Observable";
 import { ObjetoFiltro } from "../models/ObjetoFiltro";
-import { catchError, EMPTY, empty, EmptyError } from "rxjs";
+import { catchError, EMPTY, empty, EmptyError, map, of, switchMap, throwError } from "rxjs";
 import { ErrorHandlerService } from "./error-handler.service";
 import { InvestimentoFiltro } from "../models/InvestimentoFiltro";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -15,6 +15,8 @@ import { IStatus } from "../interfaces/status.interface";
 import { IHttpError } from "../interfaces/http-error.interface";
 import { IOrdemItem } from "../interfaces/ordem-item.interface";
 import { IDataList } from "../interfaces/dataList.interface";
+import { IObjetoDetail } from "../interfaces/objetoDetail.interface";
+import { IObjetoCadastroForm } from "../interfaces/objeto-cadastro-form.interface";
 
 @Injectable({providedIn: "root"})
 export class ObjetosService {
@@ -67,13 +69,16 @@ export class ObjetosService {
         );
     }
 
-    public salvarObjeto(objeto : IObjeto) : Observable<any> {
+    public salvarObjeto(objeto : IObjetoCadastroForm) : Observable<any> {
         return this.http.post(`${this.objetoUrl}`, objeto)
-            .pipe(catchError(err => this.errorHandlerService.handleError(err)));
+            .pipe(
+                catchError(err => this.errorHandlerService.handleError(err)),
+                switchMap(obj => ("error" in obj) ? throwError(() => obj.error) : of(obj))
+            );
     }
 
-    public getById(id : number) : Observable<IObjeto> {
-        return this.http.get<IObjeto>(`${this.objetoUrl}/byId`, { params: { id: id } })
+    public getById(id : number) : Observable<IObjetoDetail> {
+        return this.http.get<IObjetoDetail>(`${this.objetoUrl}/byId`, { params: { id: id } })
         .pipe(catchError((err) => {
                 let mensagemErro : IHttpError = err.error    
 

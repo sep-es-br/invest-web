@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, ElementRef, OnInit, Signal, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, OnInit, Signal, ViewChild } from "@angular/core";
 import { HeaderComponent } from "../header/header.component";
 import { ActivatedRoute, RouterModule, RouterOutlet } from "@angular/router";
 import { IProfile } from "../utils/interfaces/profile.interface";
@@ -11,21 +11,37 @@ import { PermissaoService } from "../utils/services/permissao.service";
 import { IItemMenu } from "../utils/IItemMenu";
 import { DataUtilService } from "../utils/services/data-util.service";
 import { of } from "rxjs";
+import { animate, style, transition, trigger } from "@angular/animations";
+import { isMobile } from "../utils/funcoes-util";
 
 @Component({
     selector: 'spo-home',
     templateUrl: 'home.component.html',
     styleUrl: 'home.component.scss',
     imports: [CommonModule, HeaderComponent, RouterOutlet, MenuComponent, SwipeDirective, HomeRoutingModule],
-    hostDirectives: [SwipeDirective]
+    hostDirectives: [SwipeDirective],
+    animations: [
+        trigger('openClose', [
+            transition(':enter', [
+                style({'width': '0'}),
+                animate('500ms ease-in', style({'width': '*'}))
+            ]),
+            transition(':leave', [
+                style({'width': '*'}),
+                animate('500ms ease-out', style({'width': '0'}))
+            ])
+        ])
+    ]
 })
-export class HomeComponent implements OnInit{
+export class HomeComponent implements OnInit, AfterViewInit{
     
-    @ViewChild('divMenu') private divMenuElem : ElementRef;
-
     menuItemsSignal : Signal<IItemMenu[]>;
 
     objsNoFluxo : number;
+    temAcessoAdm : boolean;
+    exibirMenu = false;
+    isMobile = isMobile();
+    loaded = true;
 
     constructor(
         private dataUtilSrv : DataUtilService,
@@ -35,26 +51,27 @@ export class HomeComponent implements OnInit{
     }
 
     mostrarMenu = () => {
-        if(screen.width > 940) return;
+        if(isMobile()) return;
 
-        let divElem = this.divMenuElem.nativeElement as HTMLDivElement;
-
-        divElem.style.transform = `translateX(0)`;
+        this.exibirMenu = true;
     }
     ocultarMenu = () =>  {
-        if(screen.width > 940) return;
+        if(!isMobile()) return;
 
-        this.divMenuElem.nativeElement.style.transform = '';
-
+        this.exibirMenu = false;
     }
 
     ngOnInit(): void {
         
-        this.activatedRouter.data.subscribe(({qtNoFluxo}) => {
+        this.activatedRouter.data.subscribe(({qtNoFluxo, temAcessoAdm}) => {
             this.objsNoFluxo = qtNoFluxo
+            this.temAcessoAdm = temAcessoAdm;
         });
 
     }
 
+    ngAfterViewInit(): void {
+        setTimeout(() => this.loaded = false, 500);
+    }
 
 }
