@@ -19,7 +19,7 @@ export class ApontamentoService {
         private http : HttpClient,
         private errorHandler : ErrorHandlerService
     ){}
-
+ 
     public findByObjeto(objId : number) : Observable<IApontamento[]>{
 
         return this.http.get<IApontamento[]>(`${this._url}/byObjeto/${objId}`).pipe(

@@ -16,6 +16,10 @@
                        
             <div class="td" [ngClass]="{'primeiro': (!item.filhos && i === 0), 'longo': (col.tipo === 'propLongo')}" *ngFor="let col of item.config; index as i" [ngSwitch]="col.tipo" >
 
+                <ng-container *ngSwitchCase="'avatar'">
+                    <img [src]="item.getValue(col)" />
+                </ng-container>
+
                 <ng-container *ngSwitchCase="'propriedade'">
                     
                     <div class="title">
@@ -59,7 +63,8 @@
                 </ng-container>
                 <ng-container *ngSwitchCase="'botao'"> 
                     <div class="botoes-wrapper">
-                        <fa-icon *ngFor="let btn of col.opcoes" [ngClass]="{'clicavel': !!btn.acao}" role="button" tabindex="0"
+                        <fa-icon *ngFor="let btn of col.opcoes" 
+                        [ngClass]="{'clicavel': !!btn.acao, 'negativo': btn.tipo === 'negativo', 'positivo': btn.tipo === 'positivo'}" role="button" tabindex="0"
                                 [icon]="btn.icon" [title]="btn.label" (click)="btn.acao ? btn.acao($event, item.dado) : undefined"></fa-icon>
                     </div>
                 </ng-container>

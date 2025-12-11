@@ -30,7 +30,7 @@ export class TiraListaCol<T> {
     titulo: string;
     caminhoValor: string;
     private _largura:string;
-    tipo: "propriedade" | "propLongo" | "propDinheiro" | 'acao' | 'botao' = "propriedade"
+    tipo: "propriedade" | "propLongo" | "propDinheiro" | 'acao' | 'botao' | 'avatar' = "propriedade"
     opcoes: {
       icon?: IconDefinition, 
       label: string,
@@ -50,6 +50,7 @@ export class TiraListaCol<T> {
             case 'acao':
                 return LARGURA_ACAO;
             case 'botao':
+            case 'avatar':
                 return 'min-content';
             default: return '1fr';
         }

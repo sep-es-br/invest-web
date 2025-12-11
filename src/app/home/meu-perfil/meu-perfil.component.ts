@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { AfterViewInit, Component, Signal, WritableSignal } from "@angular/core";
+import { AfterViewInit, Component, signal, Signal, WritableSignal } from "@angular/core";
 import { FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { IProfile } from "../../utils/interfaces/profile.interface";
 import { Observable } from "rxjs/internal/Observable";
@@ -13,6 +13,7 @@ import { faPencil, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { ToastrService } from "ngx-toastr";
 import { IPapelDTO } from "../../utils/models/PapelDto";
 import { AVATAR_PLACEHOLDER_URL } from "../../utils/sessionLocalItems.const";
+import { map, switchMap, take } from "rxjs";
 
 @Component({
     selector: 'spo-meu-perfil',
@@ -29,8 +30,7 @@ export class MeuPerfilComponent implements AfterViewInit{
     
     editarImg : boolean;
 
-    user : IProfile;
-    userSignal : WritableSignal<IProfile>;
+    userSignal : WritableSignal<IProfile> = signal<IProfile>(undefined);
 
     form = new FormGroup({
         avatar: new FormControl(null),
@@ -48,11 +48,19 @@ export class MeuPerfilComponent implements AfterViewInit{
         
         this.userSignal = this.profileService.displayUser$;
 
-        this.route.data.subscribe(({user} : {user: IProfile}) => {
-            this.userSignal.set(user);
-        })
+        this.route.paramMap.pipe(
+            take(1),
+            switchMap((pmap) => {
+                return  pmap.has('id') 
+                        ? this.profileService.getUser(Number(pmap.get('id')))
+                        : this.route.data.pipe(take(1), map(({user}) => user as IProfile))
+            })
+        ).subscribe(user => {
+            setTimeout(() => this.userSignal.set(user));
+            this.dataUtilService.setTitleInfo('id', user.name);
+        });
 
-        this.dataUtilService.editModeListener.subscribe(mode => this.editarImg = mode)
+        this.dataUtilService.editModeListener.subscribe(mode => setTimeout(() => this.editarImg = mode) )
 
     }
 
@@ -66,7 +74,7 @@ export class MeuPerfilComponent implements AfterViewInit{
 
     removerImg() {
         this.avatarUser = null;
-        this.user.imgPerfil = null;
+        this.userSignal().imgPerfil = null;
 
         this.salvarUser()
 
@@ -80,10 +88,10 @@ export class MeuPerfilComponent implements AfterViewInit{
          this.convertFile(file).subscribe(base64 => {
             this.avatarUser = this.dataUtilService.imageFromBase64(base64);
 
-            if(this.user.imgPerfil) {
-                this.user.imgPerfil.blob = base64
+            if(this.userSignal().imgPerfil) {
+                this.userSignal().imgPerfil.blob = base64
             } else {
-                this.user.imgPerfil = {
+                this.userSignal().imgPerfil = {
                     id: null,
                     blob: base64
                 }
@@ -95,30 +103,30 @@ export class MeuPerfilComponent implements AfterViewInit{
     }
         
     getPapelUser() : IPapelDTO{
-        if(!this.user) return undefined;
+        if(!this.userSignal()) return undefined;
 
-        if(this.user.papeis){
-            if(this.user.papeis.length === 1)
-                return this.user.papeis[0]
-            else
-                return this.user.papeis.find(p => p.prioritario)
+        if(this.userSignal().papeis){
+            
+            let prioritario = this.userSignal().papeis.find(p => p.prioritario);
+            
+            return prioritario ?? this.userSignal().papeis[0]
         } else {
             return {
                 id: undefined,
-                nome: this.user.papel,
+                nome: this.userSignal().papel,
                 agenteNome: undefined,
                 agenteSub: undefined,
                 guid: undefined,
                 prioritario: undefined,
-                setor: this.user.setor
+                setor: this.userSignal().setor
             }
         }
     }
 
     salvarUser() {
-        this.profileService.salvarUsuario(this.user).subscribe(user => {
+        this.profileService.salvarUsuario(this.userSignal()).subscribe(user => {
             if(user){
-                this.profileService.sessionProfile$.set(this.user)
+                this.profileService.sessionProfile$.set(this.userSignal())
                 this.toastr.success("Usuário salvo com sucesso");
             } else
                 this.toastr.error("erro ao salvar usuario");

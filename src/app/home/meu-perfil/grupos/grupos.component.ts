@@ -18,15 +18,15 @@ export class MeuPerfilGruposComponent {
         private grupoService : GrupoService, 
         private profileService : ProfileService
     ){
-        this.profileService.getUser().pipe(tap(
-            user => {
-                this.grupoService.findByUsuario(user.id).pipe(tap(
-                    grupos => {
-                        this.grupos = grupos
-                    }
-                )).subscribe();
+
+
+        
+        this.grupoService.findByUsuario(this.profileService.displayUser$().id).pipe(tap(
+            grupos => {
+                this.grupos = grupos
             }
         )).subscribe();
+     
     }
 
 
