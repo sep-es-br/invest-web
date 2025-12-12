@@ -5,3 +5,15 @@
 </header>
 <spo-tira-lista [lista]="pessoasList" [clickFunc]="clickFunc"></spo-tira-lista>
 <spo-barra-paginacao [quantidade]="qtPessoas" (onPageChange)="searchObs$.next({term: this.termo, pg: $event})"></spo-barra-paginacao>
+<div class="confirmacao" overlay *ngIf="removerUser">
+  <header>
+    Confirmação
+  </header>
+  <main>
+    Deseja mesmo remover {{removerUser.nome}} da {{removerUser.orgao}}?
+  </main>
+  <footer>
+    <button class="btn neutro" (click)="removerUser = undefined">Não</button>
+    <button class="btn negativo" (click)="removerUsuario(removerUser.id)" >Sim</button>
+  </footer>
+</div>

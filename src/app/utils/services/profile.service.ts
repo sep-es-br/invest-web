@@ -64,6 +64,12 @@ export class ProfileService {
       catchError(err => this.errorHandlerService.handleError(err))
     )
   }
+
+  public removerAgente(id : number) : Observable<IProfile> {
+    return this.http.delete<IProfile>(`${this._url}/${id}`).pipe(
+      catchError(err => this.errorHandlerService.handleError(err))
+    )
+  }
   
   public findByGrupo(grupoId : number): Observable<IProfile[]> {
 
@@ -86,4 +92,5 @@ export class ProfileService {
     
 
   }
+
 }

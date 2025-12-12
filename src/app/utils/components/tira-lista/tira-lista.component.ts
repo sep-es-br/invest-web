@@ -6,7 +6,7 @@ import { faAngleRight, faEllipsis } from '@fortawesome/free-solid-svg-icons';
 import { CustomCurrencyPipe } from '../../pipes/customCurrency.pipe';
 import { NumeroResumidoPipe } from '../../pipes/numero-resumido.pipe';
 import { LARGURA_FUNC, TiraListaCol, TiraRecord } from './TiraListaConfig';
-import { OverlayDirective } from "../../directive/overflow.directive";
+import { OverlayDirective } from "../../directive/overlay.directive";
 
 @Component({
   selector: 'spo-tira-lista',
@@ -40,6 +40,7 @@ import { OverlayDirective } from "../../directive/overflow.directive";
 export class TiraListaComponent<T> {
     
     @ViewChildren('btnAcaoElem', {read: ElementRef}) btnsAcaoElem : QueryList<ElementRef<Element>>
+    @ViewChildren('acao', {read: ElementRef}) AcaoElem : QueryList<ElementRef<Element>>
 
     @Input() lista : TiraRecord<T>[];
     @Input() clickFunc : (item: TiraRecord<T>) => void;
@@ -85,14 +86,19 @@ export class TiraListaComponent<T> {
 
     abrirItem(item: TiraRecord<T>, evt: MouseEvent) {
 
-      if(this.btnsAcaoElem.map(elemRef => elemRef.nativeElement).some(elem => elem.contains(evt.target as Element)))
+      if(
+        this.btnsAcaoElem.map(elemRef => elemRef.nativeElement).some(elem => elem.contains(evt.target as Element))
+        || this.AcaoElem.map(elemRef => elemRef.nativeElement).some(elem => elem.contains(evt.target as Element))
+      )
         return;
+     
 
       this.clickFunc(item);
 
       
 
     }
+
 
 }
 

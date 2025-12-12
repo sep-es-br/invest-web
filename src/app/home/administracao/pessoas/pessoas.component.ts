@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TiraListaComponent } from "../../../utils/components/tira-lista/tira-lista.component";
 import { ProfileService } from '../../../utils/services/profile.service';
 import { ProgressModalComponent } from "../../../utils/components/progress-modal/progress-modal.component";
-import { BehaviorSubject, debounceTime, finalize, Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, catchError, debounceTime, finalize, Subject, takeUntil } from 'rxjs';
 import { IUsuarioResponse } from '../../../utils/interfaces/usuarioResponse.interface';
 import { TiraListaCol, TiraRecord } from '../../../utils/components/tira-lista/TiraListaConfig';
 import { faEye, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -14,12 +14,14 @@ import { BarraPaginacaoComponent } from "../../../utils/components/barra-paginac
 import { ActivatedRoute, Router } from '@angular/router';
 import { PermissaoService } from '../../../utils/services/permissao.service';
 import { IPodeDTO } from '../../../utils/models/PodeDto';
+import { OverlayDirective } from "../../../utils/directive/overlay.directive";
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-pessoas',
   templateUrl: './pessoas.component.html',
   styleUrls: ['./pessoas.component.scss'],
-  imports: [TiraListaComponent, ProgressModalComponent, FormsModule, CampoPesquisaComponent, BarraPaginacaoComponent]
+  imports: [CommonModule, TiraListaComponent, ProgressModalComponent, FormsModule, CampoPesquisaComponent, BarraPaginacaoComponent, OverlayDirective]
 })
 export class PessoasComponent implements OnInit, OnDestroy {
 
@@ -32,7 +34,9 @@ export class PessoasComponent implements OnInit, OnDestroy {
 
   searchObs$ = new Subject<{term: string, pg: number}>();
   $destroy = new Subject<void>();
-  permissao : IPodeDTO
+  permissao : IPodeDTO;
+
+  removerUser: IUsuarioResponse = undefined;
 
   constructor(
     private usuarioSrv: ProfileService,
@@ -92,11 +96,10 @@ export class PessoasComponent implements OnInit, OnDestroy {
       if(this.permissao.excluir) {
         opcoes.push(
           {icon: faTrash, label: 'Remover', tipo: 'negativo', acao: (evt, data) => {
-            console.log('remover ' + data.id)
+            this.removerUser = data
           }}
         )
       }
-
 
       config.push(new TiraListaCol<IUsuarioResponse>({tipo: 'botao', opcoes: opcoes})) 
     }
@@ -116,5 +119,20 @@ export class PessoasComponent implements OnInit, OnDestroy {
   clickFunc = (item: TiraRecord<IUsuarioResponse>) => {
         this.navegarParaPessoa(item.dado.id);
     }
+
+    removerUsuario(idUser: number){
+      this.showProgress = true;
+      this.usuarioSrv.removerAgente(idUser).pipe(
+        catchError((err) => {
+          this.showProgress = false;
+          return err;
+        })
+      ).subscribe(() => {
+        this.removerUser = undefined;
+        this.doSearch();
+        
+      });
+    }
+
 
 }

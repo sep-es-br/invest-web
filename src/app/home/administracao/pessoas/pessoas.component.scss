@@ -13,4 +13,21 @@
             font-weight: bold;
         }
     }
+
+}
+.confirmacao {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    header {
+        font-weight: bold;
+    }
+
+    footer {
+        display: flex;
+        justify-content: space-around;
+    }
 }
