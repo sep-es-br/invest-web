@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { AfterViewInit, Component, EventEmitter, Input, Output } from "@angular/core";
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from "@angular/core";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faAnglesLeft, faAnglesRight, faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 
@@ -9,7 +9,7 @@ import { faAnglesLeft, faAnglesRight, faChevronLeft, faChevronRight } from "@for
     styleUrl: './barra-paginacao.component.scss',
     imports: [CommonModule, FontAwesomeModule]
 })
-export class BarraPaginacaoComponent implements AfterViewInit {
+export class BarraPaginacaoComponent implements AfterViewInit, OnChanges {
     
     inicioIcon = faAnglesLeft;
     anteriorIcon = faChevronLeft;
@@ -28,6 +28,12 @@ export class BarraPaginacaoComponent implements AfterViewInit {
 
     ngAfterViewInit(): void {
         this.updatePaginacao();
+    }
+
+    ngOnChanges({quantidade}: SimpleChanges): void {
+        if(quantidade.currentValue !== quantidade.previousValue){
+            this.updatePaginacao();
+        }
     }
 
     updatePaginacao(quantidade? : number){
