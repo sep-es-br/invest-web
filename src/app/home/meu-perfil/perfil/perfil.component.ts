@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { AfterViewInit, Component } from "@angular/core";
+import { AfterViewInit, Component, signal, WritableSignal } from "@angular/core";
 import { FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { Observable, ReplaySubject } from "rxjs";
 import { IProfile } from "../../../utils/interfaces/profile.interface";
@@ -23,41 +23,41 @@ export class PerfilComponent implements AfterViewInit{
     avatarPlaceHolderUrl = 'assets/img/placeholderUserM.webp';
     avatarUser : any | null = null;
 
-    user : IProfile ;
+    userSignal : WritableSignal<IProfile> = signal(undefined) ;
+
+    editavel = false;
 
     constructor(private dataUtilService : DataUtilService,
             private profileService : ProfileService
     ){}
 
     ngAfterViewInit(): void {
-        
-        this.profileService.getUser().subscribe(user => {
-            
-            this.user = user;
-            // this.loadUser();
-        });
+        setTimeout(() => this.userSignal = this.profileService.displayUser$); 
 
         this.dataUtilService.editModeListener.next(false);
+
+        this.editavel = this.profileService.displayUser$().sub === this.profileService.sessionProfile$().sub;
 
     }
     
     getPapelUser() : IPapelDTO{
-        if(!this.user) return undefined;
+        if(!this.userSignal()) return undefined;
 
-        if(this.user.papeis){
-            if(this.user.papeis.length === 1)
-                return this.user.papeis[0]
-            else
-                return this.user.papeis.find(p => p.prioritario)
+        if(this.userSignal().papeis){
+            
+            let prioritario = this.userSignal().papeis.find(p => p.prioritario);
+
+            return prioritario ?? this.userSignal().papeis[0]
+            
         } else {
             return {
                 id: undefined,
-                nome: this.user.papel,
+                nome: this.userSignal().papel,
                 agenteNome: undefined,
                 agenteSub: undefined,
                 guid: undefined,
                 prioritario: undefined,
-                setor: this.user.setor
+                setor: this.userSignal().setor
             }
         }
     }

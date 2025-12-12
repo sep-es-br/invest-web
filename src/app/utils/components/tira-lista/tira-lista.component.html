@@ -16,6 +16,10 @@
                        
             <div class="td" [ngClass]="{'primeiro': (!item.filhos && i === 0), 'longo': (col.tipo === 'propLongo')}" *ngFor="let col of item.config; index as i" [ngSwitch]="col.tipo" >
 
+                <ng-container *ngSwitchCase="'avatar'">
+                    <img [src]="item.getValue(col)" />
+                </ng-container>
+
                 <ng-container *ngSwitchCase="'propriedade'">
                     
                     <div class="title">
@@ -40,14 +44,14 @@
                         <div class="title">
                             {{col.titulo}}
                         </div>
-                        <div class="value">
+                        <div class="value no-wrap">
                             <span [title]="item.getValue(col) | customCurrency">R$ {{item.getValue(col) | numeroResumido}}</span>
                         </div>
                 </ng-container>
                 <ng-container *ngSwitchCase="'acao'">
-                    <div class="acao-wrapper">
+                    <div class="acao-wrapper" #acaoWrapper>
                         <fa-icon #btnAcaoElem [icon]="acoesIcon" class="btnMenu" (click)="menuItem = item" role="button" tabindex="0"></fa-icon>
-                        <menu class="opcao-menu" *ngIf="menuItem === item" @openClose>
+                        <menu class="opcao-menu" *ngIf="menuItem === item" @openClose [overlay]="acaoWrapper">
                             <li *ngFor="let itemMenu of col.opcoes"
                                 class="opcao-item" [ngClass]="{'pos': (itemMenu.tipo === 'positivo'), 'neg': (itemMenu.tipo === 'negativo'), 'clicavel': !!itemMenu.acao}"
                                 (click)="itemMenu.acao ? itemMenu.acao($event, item.dado) : undefined">
@@ -57,9 +61,10 @@
                         </menu>
                     </div>
                 </ng-container>
-                <ng-container >
+                <ng-container *ngSwitchCase="'botao'"> 
                     <div class="botoes-wrapper">
-                        <fa-icon *ngFor="let btn of col.opcoes" [ngClass]="{'clicavel': !!btn.acao}" role="button" tabindex="0"
+                        <fa-icon *ngFor="let btn of col.opcoes" #acao
+                        [ngClass]="{'clicavel': !!btn.acao, 'negativo': btn.tipo === 'negativo', 'positivo': btn.tipo === 'positivo'}" role="button" tabindex="0"
                                 [icon]="btn.icon" [title]="btn.label" (click)="btn.acao ? btn.acao($event, item.dado) : undefined"></fa-icon>
                     </div>
                 </ng-container>

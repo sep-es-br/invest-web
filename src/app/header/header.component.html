@@ -1,4 +1,8 @@
 <div id="content">
+    
+    @if (isMobile) {
+        <button class="btn neutro menuBtn" (click)="onMenuClick.emit($event)"><fa-icon [icon]="menuIcon"></fa-icon></button>
+    }    
     <div id="titleMain">
         <p id="title">{{title}}</p>
         <p id="breadcrumb"><spo-breadcrumb></spo-breadcrumb></p>

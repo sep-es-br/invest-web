@@ -1,19 +1,19 @@
 <div id="titulo">
     <p>Perfil</p>
-    <button  routerLink="/home/meuperfil/detalhe/editar" ><fa-icon [icon]="faEditIcon"></fa-icon> Editar</button>
+    <button *ngIf="this.editavel"  routerLink="/home/meuperfil/detalhe/editar" ><fa-icon [icon]="faEditIcon"></fa-icon> Editar</button>
 </div>
 <div id="infos">
     <div class="label">Nome</div>
-    <div class="campo">{{user?.name}}</div>
+    <div class="campo">{{userSignal()?.name}}</div>
 
     <div class="label">Nome Completo</div>
-    <div class="campo">{{user?.nomeCompleto}}</div>
+    <div class="campo">{{userSignal()?.nomeCompleto}}</div>
 
     <div class="label">E-mail Principal</div>
-    <div class="campo">{{user?.email}}</div>
+    <div class="campo">{{userSignal()?.email}}</div>
 
     <div class="label">Contato</div>
-    <div class="campo">{{user?.telefone}}</div>
+    <div class="campo">{{userSignal()?.telefone}}</div>
 
     <div class="label">Orgão</div>
     <div class="campo">{{getPapelUser()?.setor?.orgao?.sigla}} - {{getPapelUser()?.setor?.orgao?.nome}}</div>

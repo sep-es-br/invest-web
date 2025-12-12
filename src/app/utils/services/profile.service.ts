@@ -1,5 +1,5 @@
 import {Injectable, signal} from '@angular/core';
-import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams} from '@angular/common/http';
 
 import {BehaviorSubject, Observable, of, Subject, throwError} from 'rxjs';
 import { environment } from '../../../environments/environment';
@@ -9,6 +9,8 @@ import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { IAvatar } from '../interfaces/avatar.interface';
 import { Router } from '@angular/router';
 import { IPapelDTO } from '../models/PapelDto';
+import { IUsuarioResponse } from '../interfaces/usuarioResponse.interface';
+import { IDataList } from '../interfaces/dataList.interface';
 
 
 @Injectable({
@@ -18,6 +20,7 @@ export class ProfileService {
   private _urlSignin = `${environment.apiUrl}/signin`;
   private _url = `${environment.apiUrl}/usuario`;
   public sessionProfile$ = signal<IProfile>(undefined);
+  public displayUser$ = signal<IProfile>(undefined);
 
 
   constructor(
@@ -33,16 +36,37 @@ export class ProfileService {
   }
 
   public getUser(userId?: number): Observable<IProfile> {
-    const id = userId ?? this.sessionProfile$()?.id;
-    const url = id ? `${this._url}/${id}` : this._url;
+    const id = userId ?? -1;
+    const url = `${this._url}/${id}`;
 
     return this.http.get<IProfile>(url).pipe(
       catchError(err => this.errorHandlerService.handleError(err))
     );
   }
 
-  public salvarUsuario(usuario: IProfile) : Observable<IProfile> {
+  public getAllUser(pageNumber: number, pageSize: number, termo?: string): Observable<IDataList<IUsuarioResponse>> {
+    
+    let params = new HttpParams()
+        .set('pageNumber', pageNumber)
+        .set('pageSize', pageSize);
+
+    if(termo) {
+      params = params.set('term', termo);
+    }
+    
+    return this.http.get<IDataList<IUsuarioResponse>>(this._url, {params: params}).pipe(
+      catchError(err => this.errorHandlerService.handleError(err))
+    );
+  }
+
+  public salvarUsuario(usuario: any) : Observable<IProfile> {
     return this.http.put<IProfile>(this._url, usuario).pipe(
+      catchError(err => this.errorHandlerService.handleError(err))
+    )
+  }
+
+  public removerAgente(id : number) : Observable<IProfile> {
+    return this.http.delete<IProfile>(`${this._url}/${id}`).pipe(
       catchError(err => this.errorHandlerService.handleError(err))
     )
   }
@@ -68,4 +92,5 @@ export class ProfileService {
     
 
   }
+
 }

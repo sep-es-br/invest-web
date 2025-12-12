@@ -1,23 +1,23 @@
-<div id="resumo">
+<div id="resumo" *ngIf="userSignal()">
     <main>
         <div id="imgControl">
-            <img [src]="avatarUser != null ? avatarUser : avatarPlaceHolderUrl" />
+            <img [src]="imgAvatar" />
             <label for="inAlterar"><div class="imgBtn btnEditar" *ngIf="editarImg"><fa-icon [icon]="faEditarImg"></fa-icon></div></label>
             <div class="imgBtn btnRemover" *ngIf="editarImg" (click)="removerImg()"><fa-icon [icon]="faRemover"></fa-icon></div>
             <input *ngIf="editarImg" type="file" id="inAlterar" (change)="alterarImg($event)" />
         </div>
         <div id="infos">
-            <h1>{{user?.name}}</h1>
-            <h2>{{user?.nomeCompleto}}</h2>
+            <h1>{{userSignal()?.name}}</h1>
+            <h2>{{userSignal()?.nomeCompleto}}</h2>
             <p>{{getPapelUser()?.setor?.sigla}} - {{getPapelUser()?.setor?.nome}} </p>
             <p>{{getPapelUser()?.setor?.orgao.sigla}} - {{getPapelUser()?.setor?.orgao?.nome}}</p>
         </div>
     </main>
     <nav>
-        <div ngClass="opcMenu" routerLink="/home/meuperfil/detalhe" routerLinkActive="ativo">Perfil</div>
-        <div ngClass="opcMenu" routerLink="/home/meuperfil/grupos" routerLinkActive="ativo">Grupos</div>
+        <div ngClass="opcMenu" routerLink="./detalhe" routerLinkActive="ativo">Perfil</div>
+        <div ngClass="opcMenu" routerLink="./grupos" routerLinkActive="ativo">Grupos</div>
     </nav>
 </div>
-<div id="detalhes">
+<div id="detalhes" *ngIf="userSignal()">
     <router-outlet></router-outlet>
 </div>

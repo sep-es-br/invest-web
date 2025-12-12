@@ -5,7 +5,6 @@ import { UnidadeOrcamentariaDTO } from "../../../../utils/models/UnidadeOrcament
 import { PlanoOrcamentarioDTO } from "../../../../utils/models/PlanoOrcamentarioDTO";
 import { LocalidadeDTO } from "../../../../utils/models/LocalidadeDTO";
 import { CadastroExercicioComponent } from "./cadastro-exercicio/cadastro-exercicio.component";
-import { IObjeto } from "../../../../utils/interfaces/IObjeto";
 import { ICusto } from "./exercicio-cadastro.interface";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faFloppyDisk, faPaperPlane, faPlusCircle, faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
@@ -27,6 +26,10 @@ import { PermissaoService } from "../../../../utils/services/permissao.service";
 import { ProgressModalComponent } from "../../../../utils/components/progress-modal/progress-modal.component";
 import { PROPOSTA_ATIVA } from "../../../../utils/sessionLocalItems.const";
 import { IProposta } from "../../../../utils/interfaces/proposta.interface";
+import { IObjetoDetail } from "../../../../utils/interfaces/objetoDetail.interface";
+import { FonteOrcamentariaService } from "../../../../utils/services/fonteOrcamentaria.service";
+import { IFonteExercicio } from "./fonte-exercicio.interface";
+import { IObjetoCadastroForm, ICusto as CadastroCusto, IValoresFonte as CadastroValoresFonte } from "../../../../utils/interfaces/objeto-cadastro-form.interface";
 
 @Component({
     templateUrl: "./objeto-cadastro.component.html",
@@ -45,6 +48,7 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
     limparIcon = faXmarkCircle;
     salvarIcon = faFloppyDisk;
     enviarIcon = faPaperPlane;
+
 
 
     opcoesUnidades : ISelectOpcao<UnidadeOrcamentariaDTO>[];
@@ -81,18 +85,22 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
         private dataUtil: DataUtilService,
         private tipoPlanoService : TipoPlanoService,
         private areaTematicaService : AreaTematicaService,
-        private permissaoService : PermissaoService
+        private permissaoService : PermissaoService,
+        private fonteSrv : FonteOrcamentariaService
     ) {}
 
     @ViewChild('inNome') inNome: NgModel;
 
-    objeto : IObjeto = {
-        tipoConta: "Investimento",
-        tipo: "Projeto",
-        // hashProposta: 'teste',
-        recursosFinanceiros: [],
-        conta: {}
-    }
+    objeto : IObjetoDetail = {
+        tipoInvestimento: "Investimento",
+        tipoObjeto: "Projeto"
+    } as IObjetoDetail
+
+    recursosFinanceiros : ICusto[] = [];
+    planoOrcamentario : PlanoOrcamentarioDTO;
+    unidadeOrcamentaria : UnidadeOrcamentariaDTO;
+    areaTematica : IAreaTematica;
+    microrregiao : LocalidadeDTO;
 
     ngOnDestroy(): void {
         sessionStorage.removeItem(PROPOSTA_ATIVA)
@@ -100,7 +108,7 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
 
     ngOnInit(): void {
 
-        this.objeto.recursosFinanceiros = [
+        this.recursosFinanceiros = [
             {
                 anoExercicio: new Date().getFullYear(),
                 indicadaPor : [
@@ -138,10 +146,10 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
                 this.setAreasTematicas(areasTematicas);
                 this.setPlanos(planoList);
 
-                this.objeto.planos = [(tipoPlanoList as ITipoPlano[]).find(value => value.sigla === 'PIP')];
+                this.objeto.tiposPlano = [(tipoPlanoList as ITipoPlano[]).find(value => value.sigla === 'PIP')];
 
                 if(unidadeList?.length == 1) {
-                    this.objeto.conta.unidadeOrcamentariaImplementadora = unidadeList[0]
+                    this.unidadeOrcamentaria = unidadeList[0]
                 }
                 
                 let proposta: IProposta = JSON.parse(sessionStorage.getItem(PROPOSTA_ATIVA));
@@ -154,16 +162,12 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
                     Object.assign(this.objeto, {
                         hashProposta: proposta.syncHash,
                         descricao: proposta.proposalText,
-                        areaTematica: areasTematicas.find(value => value.nome === proposta.areaName),
-                        microregiaoAtendida: localidadeList.find(value => value.nome === proposta.microrregion),
-                        planos: [ ...(this.objeto.planos ?? []), ...(planoDA ? [planoDA] : [])]
+                        tiposplano: [ ...(this.objeto.tiposPlano ?? []), ...(planoDA ? [planoDA] : [])]
                     })
-
-                    Object.assign(this.objeto.conta, {
-                        unidadeOrcamentariaImplementadora: unidadeList.find(value => value.codigo === proposta.budgetUnitId)
-                    })
-
-
+                    
+                    this.areaTematica = areasTematicas.find(value => value.nome === proposta.areaName),
+                    this.microrregiao = localidadeList.find(value => value.nome === proposta.microrregion),
+                    this.unidadeOrcamentaria = unidadeList.find(value => value.codigo === proposta.budgetUnitId)
 
                 } else {
                     this.route.params
@@ -194,9 +198,9 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
         this.tipoPlanoService.fromSigefes(po.codigo)
         .subscribe({
             next: (tiposList) => {
-                this.objeto.planos = tiposList
+                this.objeto.tiposPlano = tiposList
 
-                this.objeto.planos.forEach(plano => {
+                this.objeto.tiposPlano.forEach(plano => {
                     if(!plano.id) {
                         this.tiposplano.push(plano);
                     }
@@ -216,23 +220,44 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
         this.microregioes = microrregiaoList;
     }
 
-    setObjeto(objeto : IObjeto) {
+    setObjeto(objeto : IObjetoDetail) {
         this.objeto = objeto;
 
        
-        let nome = `${objeto.conta.unidadeOrcamentariaImplementadora.sigla} - Objeto - ${objeto.id}`;
+        let nome = `${objeto.codUnidade} - Objeto - ${objeto.id}`;
 
         this.dataUtil.setTitleInfo('objetoId', nome);
 
-        this.objeto.microregiaoAtendida = this.objeto.microregiaoAtendida ? 
-            this.microregioes.find(value => value.id == this.objeto.microregiaoAtendida.id)
-            : undefined
+        this.microrregiao = this.objeto.microrregiaoId ? 
+            this.microregioes.find(value => value.id == this.objeto.microrregiaoId)
+            : undefined;
+        this.areaTematica = this.areasTematicas.find(area => objeto.idArea == area.id);
 
-        this.objeto.conta.planoOrcamentario = this.planosOrcamentario.find(plano => plano.codigo == objeto.conta.planoOrcamentario?.codigo)
+        this.planoOrcamentario = this.planosOrcamentario.find(plano => plano.codigo == objeto.codPlano);
+        this.unidadeOrcamentaria = this.unidades.find(unidade => unidade.codigo === objeto.codUnidade);
         
-        this.objeto.planos = this.tiposplano.filter(tipoItem => objeto.planos.map( objTipoPlano => objTipoPlano.id).includes(tipoItem.id));
+        this.objeto.tiposPlano = this.tiposplano.filter(tipoItem => objeto.tiposPlano.map( objTipoPlano => objTipoPlano.id).includes(tipoItem.id));
         
-        this.objeto.areaTematica = this.areasTematicas.find(area => objeto.areaTematica?.id == area.id)
+        Object.entries(objeto.custos).forEach(([anoStr, fontes]) => {
+            const _fontes = [] as IFonteExercicio[];
+            
+            Object.entries(fontes).forEach(([codFonte, valores]) => {
+                const { previsto, contratado } = valores;
+                this.fonteSrv.findByCodigo(codFonte).subscribe(fonte => {
+                    _fontes.push({
+                        fonteOrcamentaria: fonte,
+                        previsto,
+                        contratado
+                    } as IFonteExercicio)
+                })
+            })
+
+            this.recursosFinanceiros.push({
+                anoExercicio: Number(anoStr),
+                indicadaPor: _fontes
+            })
+        })
+
 
     }
 
@@ -274,7 +299,7 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
 
 
         // em teoria não seria nescessario essa linha, mas o select ta bugado, então...
-        this.objeto.conta.planoOrcamentario = this.opcoesPlanosOrcamentarios?.find(opt => this.selecionarPlanoOrcamentario(opt, this.objeto.conta.planoOrcamentario) )?.value
+        this.planoOrcamentario = this.opcoesPlanosOrcamentarios?.find(opt => opt.value?.codigo === this.objeto.codPlano )?.value
         
     }
 
@@ -301,7 +326,7 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
         })
 
         // em teoria não seria nescessario essa linha, mas o select ta bugado, então...
-        this.objeto.conta.unidadeOrcamentariaImplementadora = this.opcoesUnidades?.find(opt => this.selecionarUnidade(opt, this.objeto.conta.unidadeOrcamentariaImplementadora) )?.value
+        this.unidadeOrcamentaria = this.opcoesUnidades?.find(opt => opt.value?.codigo === this.objeto.codUnidade )?.value
     }
 
     filtrarUnidades(filtro : string) {
@@ -342,12 +367,40 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
             this.toastr.error("Favor preeencher os campos obrigatórios");
         } else {
             
-            this.objeto.recursosFinanceiros.forEach(r => r.indicadaPor.forEach(i => i.gnd = this.gnd))
+            let objetoForm : IObjetoCadastroForm = {
+                id: this.objeto.id,
+                tipoConta: this.objeto.tipoInvestimento,
+                tipo: this.objeto.tipoObjeto,
+                areaTematicaId: this.objeto.idArea,
+                contrato: this.objeto.contrato,
+                descricao: this.objeto.descricao,
+                hashProposta: this.objeto.hashProposta,
+                infoComplementares: this.objeto.infoComplementar,
+                microregiaoId: this.microrregiao.id,
+                nome: this.objeto.nome,
+                planoOrcamentario: this.planoOrcamentario,
+                planos: this.objeto.tiposPlano,
+                possuiOrcamento: this.objeto.possuiOrcamento,
+                unidadeOrcamentaria: this.unidadeOrcamentaria,
+                recursos: this.recursosFinanceiros.map(
+                    custo => ({
+                        ano: custo.anoExercicio,
+                        valoresFontes: custo.indicadaPor.map(
+                            indiPor => ({
+                                fonte: indiPor.fonteOrcamentaria,
+                                contratado: indiPor.contratado,
+                                previsto: indiPor.previsto
+                            } as CadastroValoresFonte)
+                        )
+                    })
+                )  
+            };
+            
 
             if(!this.salvarDebounce) {
                 this.salvarDebounce = true;
                 this.carregamento++;
-                this.objetoService.salvarObjeto(this.objeto).pipe(
+                this.objetoService.salvarObjeto(objetoForm).pipe(
                     tap(() => {
                         this.toastr.success("Objeto Salvo");
                         this.router.navigate(['../'], {relativeTo: this.route})
@@ -366,12 +419,12 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
     }
 
     removerExercicio(exerc : ICusto) {
-        this.objeto.recursosFinanceiros = this.objeto.recursosFinanceiros.filter(exercicio => exercicio !== exerc );
+        this.recursosFinanceiros = this.recursosFinanceiros.filter(exercicio => exercicio !== exerc );
     }
     
     addExercicio() {
-        this.objeto.recursosFinanceiros.push({
-            anoExercicio: this.objeto.recursosFinanceiros.length > 0 ? this.objeto.recursosFinanceiros[this.objeto.recursosFinanceiros.length-1].anoExercicio + 1 : new Date().getFullYear(),
+        this.recursosFinanceiros.push({
+            anoExercicio: this.recursosFinanceiros.length > 0 ? this.recursosFinanceiros[this.recursosFinanceiros.length-1].anoExercicio + 1 : new Date().getFullYear(),
             indicadaPor: [{fonteOrcamentaria: null, gnd: 4}]
         })
     }

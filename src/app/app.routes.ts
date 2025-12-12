@@ -6,6 +6,7 @@ import { authGuard } from './utils/guard/auth.guard';
 import { MenuResolver } from './utils/resolver/menu.resolver';
 import { UserResolver } from './utils/resolver/user.resolver';
 import { objetosNoFluxoResolver } from './utils/resolver/objetos-no-fluxo.resolver';
+import { TemAcessoResolver } from './utils/resolver/tem-acesso.resolver';
 
 export const routes: Routes = [
     {
@@ -13,7 +14,15 @@ export const routes: Routes = [
       path: 'home',
       component: HomeComponent,
       canActivateChild: [authGuard],
-      resolve: {menuItem: MenuResolver, user: UserResolver, qtNoFluxo: objetosNoFluxoResolver},
+      resolve: {
+        menuItem: MenuResolver, 
+        user: UserResolver, 
+        qtNoFluxo: objetosNoFluxoResolver, 
+        temAcessoAdm: TemAcessoResolver
+      },
+      data: { 
+        pathId: "administracao"
+      },
       runGuardsAndResolvers: "always",
       loadChildren: () => import('./home/home-routing.module').then(m => m.HomeRoutingModule)
     }, 

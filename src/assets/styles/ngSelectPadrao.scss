@@ -8,29 +8,36 @@
     
 
     &.ng-select-multiple {
-        .ng-select-container .ng-value-container {
-            .ng-value {
-                display: flex;
-                flex-direction: row-reverse;
-                padding: 4px;
-                border-radius: 1.5rem  ;
-                background-color: white;
-                border: var(--cor-primaria) solid 1px;
-                color: var(--cor-primaria) ;
-                align-items: center;
-
-                .ng-value-icon.left {
-                    margin-left: 4px;
-                    border: none;
-                    color: white ;
-                    background-color: var(--vermelho-padrao);
-                    box-sizing: border-box;
-                    height: 1rem;
-                    width: 1rem;
-                    border-radius: 1rem;
+        .ng-select-container {
+            height: unset;
+            .ng-value-container {
+                padding-block: 0.3rem;
+                gap: 5px;
+                .ng-value {
                     display: flex;
-                    justify-content: center;
+                    flex-direction: row-reverse;
+                    padding: 4px;
+                    border-radius: 1.5rem  ;
+                    background-color: white;
+                    border: var(--cor-primaria) solid 1px;
+                    color: var(--cor-primaria) ;
                     align-items: center;
+                    margin-bottom: unset;
+                    margin-right: unset;
+
+                    .ng-value-icon.left {
+                        margin-left: 4px;
+                        border: none;
+                        color: white ;
+                        background-color: var(--vermelho-padrao);
+                        box-sizing: border-box;
+                        height: 1rem;
+                        width: 1rem;
+                        border-radius: 1rem;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                    }
                 }
             }
         }

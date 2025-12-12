@@ -1,21 +1,23 @@
 .btn {
 
     padding: 8px;
-    margin-left: 1rem;
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     
     &.positivo {
+        @extend .btn;
         background-color: var(--verde-padrao);
     }
 
     &.negativo {
+        @extend .btn;
         background-color: var(--vermelho-padrao);
     }
 
     &.neutro {
+        @extend .btn;
         background-color: var(--cinza-claro);
     }
 
@@ -48,7 +50,7 @@ label {
     }
 }
 
-textarea {
+inputBase {
     border: var(--cor-primaria) solid 1px;
     border-radius: 4px;
     color: var(--cor-primaria);
@@ -72,11 +74,19 @@ textarea {
         opacity: unset;
         background-color: var(--cinza-inativo);
     }
+}
 
+textarea {
+    @extend inputBase;
+    padding-block: 0.5rem !important;
+
+    &::placeholder, &.placeholder {
+        padding-top: unset;
+    }
 }
 
 select, input:not(.pesquisa) {
-    @extend  textarea;
+    @extend  inputBase;
     height: 32px;
     padding-top: unset;
 
@@ -85,6 +95,10 @@ select, input:not(.pesquisa) {
         option {
             color: var(--cor-primaria);
         }
+    }
+
+    option {
+        color: var(--cor-primaria)
     }
     
 }
