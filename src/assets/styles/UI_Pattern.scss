@@ -8,14 +8,17 @@
     cursor: pointer;
     
     &.positivo {
+        @extend .btn;
         background-color: var(--verde-padrao);
     }
 
     &.negativo {
+        @extend .btn;
         background-color: var(--vermelho-padrao);
     }
 
     &.neutro {
+        @extend .btn;
         background-color: var(--cinza-claro);
     }
 
