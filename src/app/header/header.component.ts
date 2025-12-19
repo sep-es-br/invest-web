@@ -108,10 +108,6 @@ export class HeaderComponent implements OnInit {
 
         if(!this.menuUserElem) return;
         
-        if(this.debounceMenu){ 
-            this.debounceMenu = false;
-            return
-        }
 
         if(!this.menuUserElem.nativeElement.contains(event.target as HTMLElement))
             this.showMenuUser = false;
