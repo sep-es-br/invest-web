@@ -37,7 +37,7 @@ export class CampoPesquisaComponent implements ControlValueAccessor {
 
 
     writeValue(obj: any): void {
-        this.txtBusca = String(obj);
+        this.txtBusca = obj && String(obj);
         
     }
 

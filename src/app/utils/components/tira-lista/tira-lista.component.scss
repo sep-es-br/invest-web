@@ -93,6 +93,10 @@ spo-tira-lista {
                     color: var(--cor-primaria);
                 }
 
+                fa-icon.negativo {
+                    color: var(--vermelho-padrao)
+                }
+
                 menu.opcao-menu {
                     text-wrap: nowrap;
                     overflow: hidden;

@@ -59,7 +59,11 @@
                 </ng-container>
                 <ng-container *ngSwitchCase="'botao'"> 
                     <div class="botoes-wrapper">
-                        <fa-icon *ngFor="let btn of col.opcoes" [ngClass]="{'clicavel': !!btn.acao}" role="button" tabindex="0"
+                        <fa-icon *ngFor="let btn of col.opcoes" [ngClass]="{
+                            'clicavel': !!btn.acao, 
+                            'negativo': btn.tipo === 'negativo', 
+                            'positivo': btn.tipo === 'positivo'
+                            }" role="button" tabindex="0"
                                 [icon]="btn.icon" [title]="btn.label" (click)="btn.acao ? btn.acao($event, item.dado) : undefined"></fa-icon>
                     </div>
                 </ng-container>

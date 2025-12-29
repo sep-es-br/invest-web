@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
 import { TiraListaComponent } from "../../../utils/components/tira-lista/tira-lista.component";
 import { TiraListaCol, TiraRecord } from '../../../utils/components/tira-lista/TiraListaConfig';
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { InvestimentosService } from '../../../utils/services/investimentos.service';
 import { ProgressModalComponent } from "../../../utils/components/progress-modal/progress-modal.component";
 import { finalize, switchMap } from 'rxjs';
@@ -79,6 +79,14 @@ export class InvestimentosComponent implements OnInit {
               new TiraListaCol({ titulo: "Autorizado", caminhoValor: "totalAutorizado", tipo: "propDinheiro" }),
               new TiraListaCol({ titulo: "Empenhado", caminhoValor: "totalEmpenhado", tipo: "propDinheiro" }),
               new TiraListaCol({ titulo: "Disp. S/ Reserva", caminhoValor: "totalDisponivel", tipo: "propDinheiro" }),
+              new TiraListaCol({ tipo: 'botao', opcoes: [
+                {
+                  label: 'Remover',
+                  icon: faTrash,
+                  tipo: 'negativo',
+                  acao: (evt, data) => alert(data.id)
+                }
+              ] })
           ]
       }))
   }
