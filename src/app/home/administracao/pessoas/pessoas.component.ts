@@ -30,7 +30,7 @@ export class PessoasComponent implements OnInit, OnDestroy {
   showProgress = false;
   termo : string;
   pgSize = 15;
-  pgNumber = 0;
+  pgNumber = 1;
 
   searchObs$ = new Subject<{term: string, pg: number}>();
   $destroy = new Subject<void>();
@@ -65,7 +65,7 @@ export class PessoasComponent implements OnInit, OnDestroy {
     this.pgNumber = pgNumber ?? this.pgNumber;
 
     this.showProgress = true;
-    this.usuarioSrv.getAllUser(this.pgNumber, this.pgSize, this.termo)
+    this.usuarioSrv.getAllUser(this.pgNumber - 1, this.pgSize, this.termo)
     .pipe(finalize(() => this.showProgress = false))
     .subscribe({
       next: (value) => {
