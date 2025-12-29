@@ -129,6 +129,7 @@ export class PessoasComponent implements OnInit, OnDestroy {
         })
       ).subscribe(() => {
         this.removerUser = undefined;
+        this.termo = undefined;
         this.doSearch();
         
       });
