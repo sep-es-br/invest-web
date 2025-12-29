@@ -56,7 +56,7 @@ export class InvestimentosComponent implements OnInit {
 
     this.carregando = true
     
-    this.permissaoSrv.getPermissao('carteirainvestimento')
+    this.permissaoSrv.getPermissao('carteirainvestimentos')
     .pipe(switchMap(({ verTodasUnidades }) => this.investimentoSrv.getLista(term, verTodasUnidades, pagNum - 1, 15)))
     .pipe(finalize(() => this.carregando = false))
     .subscribe(dados => {

@@ -5,6 +5,7 @@ import { ObjetosListagemComponent } from "./objetos/listagem/objetos-listagem.co
 import { AudienciaPublicaListagemComponent } from "./audiencia-publica/listagem/audiencia-publica-listagem.component";
 import { InvestimentosComponent } from "./investimentos/investimentos.component";
 import { InvestimentoCadastroComponent } from "./investimentos/investimento-cadastro/investimento-cadastro.component";
+import { InvestimentoDetailComponent } from "./investimentos/investimento-detail/investimento-detail.component";
 
 const routes : Route[] = [
     {
@@ -17,7 +18,7 @@ const routes : Route[] = [
             },
             {
                 path: ':id',
-                component: InvestimentoCadastroComponent
+                component: InvestimentoDetailComponent
             }
         ]
     },

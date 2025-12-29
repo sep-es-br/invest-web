@@ -36,4 +36,9 @@ export class PlanoOrcamentarioService {
         .pipe(catchError(err => this.errorHandlerService.handleError(err)));
     }
 
+    public getByCodigo (codigo: string) : Observable<PlanoOrcamentarioDTO> {
+        return this.http.get<PlanoOrcamentarioDTO>(`${this.planoApi}/byCodigo/${codigo}`)
+        .pipe(catchError(err => this.errorHandlerService.handleError(err)))
+    }
+
 }

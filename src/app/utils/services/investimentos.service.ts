@@ -9,6 +9,7 @@ import { InvestimentoTiraDTO } from "../models/InvestimentoTiraDTO";
 import { IDataList } from "../interfaces/dataList.interface";
 import { IOrdemItem } from "../interfaces/ordem-item.interface";
 import { IContaLista } from "../interfaces/conta-lista.interface";
+import { IContaDetail } from "../interfaces/conta-detail.interface";
 
 @Injectable({providedIn: "root"})
 export class InvestimentosService {
@@ -50,6 +51,11 @@ export class InvestimentosService {
         .pipe(
             catchError(err => this.errorHandlerService.handleError(err))
         )
+    }
+
+    public getDetail(id: number) : Observable<IContaDetail> {
+        return this.http.get<IContaDetail>(`${this.investimentoUrl}/${id}`)
+        .pipe(catchError(err => this.errorHandlerService.handleError(err)))
     }
     
     public filterToParams(filtro : InvestimentoFiltro) : HttpParams {
