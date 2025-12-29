@@ -8,6 +8,7 @@ import { Router } from "@angular/router";
 import { InvestimentoTiraDTO } from "../models/InvestimentoTiraDTO";
 import { IDataList } from "../interfaces/dataList.interface";
 import { IOrdemItem } from "../interfaces/ordem-item.interface";
+import { IContaLista } from "../interfaces/conta-lista.interface";
 
 @Injectable({providedIn: "root"})
 export class InvestimentosService {
@@ -30,6 +31,25 @@ export class InvestimentosService {
             }).pipe(
                 catchError(err => this.errorHandlerService.handleError(err))
             );
+    }
+
+    public getLista(
+        term: string,
+        podeVerUnidades: boolean,
+        numPag: number,
+        tamPag: number
+    ) : Observable<IDataList<IContaLista>> {
+        let params = {
+            numPag,
+            tamPag,
+            podeVerUnidades,
+            ...(term && {term})   
+        }
+
+        return this.http.get<IDataList<IContaLista>>(`${this.investimentoUrl}`, { params })
+        .pipe(
+            catchError(err => this.errorHandlerService.handleError(err))
+        )
     }
     
     public filterToParams(filtro : InvestimentoFiltro) : HttpParams {

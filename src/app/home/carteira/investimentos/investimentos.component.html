@@ -1,8 +1,12 @@
+<spo-progress-modal [visivel]="carregando"></spo-progress-modal>
 <header>
-  <p>Investimentos (123)</p>
-  <spo-campo-pesquisa></spo-campo-pesquisa>
+  <p>Investimentos ({{qtInvestimentos}})</p>
+  <spo-campo-pesquisa [(ngModel)]="term" [ngModelOptions]="{standalone: true}" (keydown.enter)="recarregarLista()"></spo-campo-pesquisa>
   <button class="add-conta btn-acao"><fa-icon [icon]="faIconPlus"></fa-icon></button> 
 </header>
 <main>
-  <spo-tira-lista [lista]="investimentos"></spo-tira-lista>
+  <spo-tira-lista [lista]="investimentos" [clickFunc]="abrirInvestimento"></spo-tira-lista>
 </main>
+<footer>
+  <spo-barra-paginacao [quantidade]="qtInvestimentos" (onPageChange)="recarregarLista(undefined, $event)" ></spo-barra-paginacao>
+</footer>

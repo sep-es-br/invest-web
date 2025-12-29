@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-investimento-cadastro',
@@ -6,6 +6,12 @@ import { Component } from '@angular/core';
   templateUrl: './investimento-cadastro.component.html',
   styleUrl: './investimento-cadastro.component.scss'
 })
-export class InvestimentoCadastroComponent {
+export class InvestimentoCadastroComponent implements OnInit {
+
+  
+
+  ngOnInit(): void {
+    
+  }
 
 }
