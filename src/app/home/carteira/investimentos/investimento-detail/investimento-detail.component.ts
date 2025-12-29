@@ -1,13 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { InvestimentosService } from '../../../../utils/services/investimentos.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { finalize, forkJoin, map, of, Subject, switchMap, take, takeUntil } from 'rxjs';
 import { IContaDetail, IObjetoTiraSimples } from '../../../../utils/interfaces/conta-detail.interface';
 import { CommonModule } from '@angular/common';
 import { ProgressModalComponent } from "../../../../utils/components/progress-modal/progress-modal.component";
 import { PermissaoService } from '../../../../utils/services/permissao.service';
 import { IPodeDTO } from '../../../../utils/models/PodeDto';
-import { faPencil, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faPencil, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 import { UnidadeOrcamentariaDTO } from '../../../../utils/models/UnidadeOrcamentariaDTO';
 import { PlanoOrcamentarioDTO } from '../../../../utils/models/PlanoOrcamentarioDTO';
@@ -45,7 +45,8 @@ export class InvestimentoDetailComponent implements OnInit, OnDestroy {
     private permissaoSrv: PermissaoService,
     private unidadeSrv: UnidadeOrcamentariaService,
     private planoSrv: PlanoOrcamentarioService,
-    private dataUtil: DataUtilService
+    private dataUtil: DataUtilService,
+    private router: Router
   ){}
 
   ngOnInit(): void {
@@ -90,6 +91,15 @@ export class InvestimentoDetailComponent implements OnInit, OnDestroy {
             } ),
              new TiraListaCol<IObjetoTiraSimples>({
               titulo: 'Contratado', caminhoValor: 'contratado', tipo: 'propDinheiro'
+            } ),
+             new TiraListaCol<IObjetoTiraSimples>({
+              tipo: 'botao', opcoes: [
+                {
+                  icon: faEye, 
+                  label: 'Vizualizar', 
+                  acao: (evt, data) => this.router.navigate(['../../objetos', data.id], {relativeTo: this.activatedRoute}) 
+                }
+                ]
             } )]
           })  
         )
