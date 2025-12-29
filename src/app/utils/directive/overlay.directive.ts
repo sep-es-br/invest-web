@@ -25,14 +25,6 @@ export class OverlayDirective implements AfterViewInit, OnDestroy {
 
     ngOnDestroy() {
         if(this.overlayEl) {
-            const host = this.hostRef.nativeElement;
-
-            if (this.originalNextSibling) {
-                this.renderer.insertBefore(this.originalParent, host, this.originalNextSibling);
-            } else {
-                this.renderer.appendChild(this.originalParent, host);
-            }
-
             // remover overlay
             this.renderer.removeChild(document.body, this.overlayEl);
         }
