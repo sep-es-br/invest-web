@@ -84,7 +84,15 @@ export class InvestimentosComponent implements OnInit {
                   label: 'Remover',
                   icon: faTrash,
                   tipo: 'negativo',
-                  acao: (evt, data) => alert(data.id)
+                  acao: (evt, data, index) => {
+                    this.carregando = true;
+                    this.investimentoSrv.delete(data.id)
+                    .pipe(finalize(() => this.carregando = false))
+                    .subscribe(() => {
+                      this.recarregarLista();
+                    });
+
+                  }
                 }
               ] })
           ]

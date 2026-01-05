@@ -6,6 +6,7 @@ import { AudienciaPublicaListagemComponent } from "./audiencia-publica/listagem/
 import { InvestimentosComponent } from "./investimentos/investimentos.component";
 import { InvestimentoCadastroComponent } from "./investimentos/investimento-cadastro/investimento-cadastro.component";
 import { InvestimentoDetailComponent } from "./investimentos/investimento-detail/investimento-detail.component";
+import { ObjetoCadastroComponent } from "./objetos/cadastro/objeto-cadastro.component";
 
 const routes : Route[] = [
     {
@@ -18,7 +19,31 @@ const routes : Route[] = [
             },
             {
                 path: ':id',
-                component: InvestimentoDetailComponent
+                children: [
+                    {
+                        path: '',
+                        pathMatch: 'full',
+                        component: InvestimentoDetailComponent,
+                    }, 
+                    {
+                        path: 'editar',
+                        children: [
+                            {
+                                path: '',
+                                pathMatch: 'full',
+                                component: InvestimentoCadastroComponent
+                            },
+                            {
+                                path: 'objeto',
+                                component: ObjetoCadastroComponent
+                            }
+                        ]
+
+
+
+                        
+                    }
+                ]
             }
         ]
     },

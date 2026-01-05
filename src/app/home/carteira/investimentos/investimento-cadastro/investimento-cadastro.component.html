@@ -1,1 +1,83 @@
-<p>investimento-cadastro works!</p>
+<spo-progress-modal [visivel]="carregamento"></spo-progress-modal>
+<div id="content">
+    <header>
+        @if(!novo) {
+            Editar
+        }@else {
+            Novo
+        }
+    </header>
+    <main>
+        <form [formGroup]="form">
+            <label for="inConta">Tipo:<span class="obrigatorio">*</span></label>
+            <select id="inConta" formControlName="tipo"
+                [ngClass]="(checado && form.controls['tipo'].invalid) ? 'invalido' : ''" >
+                <option [ngValue]="undefined" disabled>Selecionar o tipo da despesa</option>
+                <option value="Investimento">Investimento</option>
+                <option value="Custeio">Outras Desp. Correntes</option>
+            </select>
+
+            <label for="inNome">Nome <span class="obrigatorio">*</span></label>
+            <input type="text" id="inNome" formControlName="nome"
+                placeholder="Insira um nome" 
+                [ngClass]="(checado && form.controls['nome'].invalid) ? 'invalido' : ''"/>
+
+            <label for="inDescricao">Descrição <span class="obrigatorio">*</span></label>
+            <textarea id="inDescricao" placeholder="Insira uma descrição" 
+                 formControlName="descricao" [ngClass]="{
+                    'invalido': (checado &&  form.controls['descricao'].invalid)
+                }" rows="5"></textarea>
+            
+            <label>Unidade Orçamentária <span class="obrigatorio">*</span></label>
+            <ng-select required
+                [ngClass]="{
+                    'invalido': (checado && form.controls['codUnidade'].invalid)
+                }"     
+                [items]="listUnidades"
+                [disabled]="this.listUnidades?.length == 1"
+                placeholder="Selecionar a unidade orçamentária"
+                bindValue="codigo"
+                [searchFn]="filtrarUnidades"
+                formControlName="codUnidade" 
+                >
+                <ng-template ng-label-tmp let-item="item">
+                    {{item?.codigo}} - {{item?.sigla}}
+                </ng-template>
+
+                <ng-template ng-option-tmp let-unidade="item">
+                    {{unidade.codigo}} - {{unidade.sigla}}
+                </ng-template>
+            </ng-select>            
+           
+            <label>Plano Orçamentário <span class="obrigatorio">*</span></label>
+            <ng-select 
+                [items]="listPlanosOrcamentarios" placeholder="Selecionar plano orçamentário"
+                 [ngClass]="(checado && form.controls['codPO'].invalid) ? 'invalido' : ''"
+                bindValue="codigo" 
+                [searchFn]="filtrarPlanoOrcamentario"
+                formControlName="codPO"
+                >
+                <ng-template ng-option-tmp let-plano="item">
+                    {{plano.codigo}} - {{plano.nome}}
+                </ng-template>
+                <ng-template ng-label-tmp let-item="item">
+                    {{item.codigo}} - {{item.nome}}
+                </ng-template>
+            
+            </ng-select>
+        </form>
+        
+        <div class="objetos">
+            <header>
+                <h4>Objetos</h4>
+                <fa-icon [icon]="addIcon" (click)="addObjeto()" ></fa-icon>
+            </header>
+            <spo-tira-lista [lista]="listObjetos"></spo-tira-lista>
+        </div>
+        <div class="acoes">
+            <button (click)="salvar()" class="btn positivo" >
+                <fa-icon [icon]="salvarIcon"></fa-icon> SALVAR 
+            </button>
+        </div>
+    </main>
+</div>

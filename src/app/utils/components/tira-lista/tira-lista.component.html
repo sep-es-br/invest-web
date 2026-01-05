@@ -2,12 +2,12 @@
 <div class="table">
 
 
-    <ng-container *ngFor="let item of lista">
-        <ng-container *ngTemplateOutlet="linhaTemplate; context: {$implicit: item, nivel: 0}" ></ng-container>
+    <ng-container *ngFor="let item of lista, index as i">
+        <ng-container *ngTemplateOutlet="linhaTemplate; context: {$implicit: item, nivel: 0, index: i}" ></ng-container>
     </ng-container>
     <!-- *ngFor="let item of lista; index as i" [item]="item" [config]="config" -->
     <!-- tipo: "propriedade" | "propLongo" | "propDinheiro" | "toggle" | 'acao' -->
-    <ng-template #linhaTemplate let-item let-nivel="nivel">
+    <ng-template #linhaTemplate let-item let-nivel="nivel" let-index="index">
         <div class="tr" [ngClass]="{'aberto': item.aberto, 'clicavel': !!clickFunc}" (click)="clickFunc ? abrirItem(item, $event) : undefined" [style.grid-template-columns]="getLarguras(item.config, nivel, item.filhos)">
             <div class="td dummy" *ngFor="let _ of [].constructor(nivel)"></div>
             <div class="td toggler " *ngIf="item.filhos" [ngClass]="{'primeiro': item.filhos}">
@@ -50,7 +50,7 @@
                         <menu class="opcao-menu" *ngIf="menuItem === item" @openClose [overlay]="acaoWrapper">
                             <li *ngFor="let itemMenu of col.opcoes"
                                 class="opcao-item" [ngClass]="{'pos': (itemMenu.tipo === 'positivo'), 'neg': (itemMenu.tipo === 'negativo'), 'clicavel': !!itemMenu.acao}"
-                                (click)="itemMenu.acao ? itemMenu.acao($event, item.dado) : undefined">
+                                (click)="itemMenu.acao ? itemMenu.acao($event, item.dado, index) : undefined">
                                 <span class="icon-wrapper"><fa-icon [icon]="itemMenu.icon" *ngIf="itemMenu.icon"></fa-icon></span>
                                 <span class="label">{{itemMenu.label}}</span>
                             </li>
@@ -59,20 +59,20 @@
                 </ng-container>
                 <ng-container *ngSwitchCase="'botao'"> 
                     <div class="botoes-wrapper">
-                        <fa-icon *ngFor="let btn of col.opcoes" [ngClass]="{
+                        <fa-icon *ngFor="let btn of col.opcoes" #btnAcaoElem [ngClass]="{
                             'clicavel': !!btn.acao, 
                             'negativo': btn.tipo === 'negativo', 
                             'positivo': btn.tipo === 'positivo'
                             }" role="button" tabindex="0"
-                                [icon]="btn.icon" [title]="btn.label" (click)="btn.acao ? btn.acao($event, item.dado) : undefined"></fa-icon>
+                                [icon]="btn.icon" [title]="btn.label" (click)="btn.acao ? btn.acao($event, item.dado, index) : undefined"></fa-icon>
                     </div>
                 </ng-container>
                 
             </div>
         </div>
         <div *ngIf="item.aberto" class="filhos" @openClose>
-            <ng-container *ngFor="let child of item.filhos">
-                 <ng-container *ngTemplateOutlet="linhaTemplate; context: {$implicit: child, nivel: (nivel + 1)}" ></ng-container> 
+            <ng-container *ngFor="let child of item.filhos; index as i">
+                 <ng-container *ngTemplateOutlet="linhaTemplate; context: {$implicit: child, nivel: (nivel + 1), index: i}" ></ng-container> 
             </ng-container>
         </div> 
     </ng-template>

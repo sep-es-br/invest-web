@@ -4,6 +4,7 @@ export const breadCrumbNames : { [index : string] : string } = {
     investimentos: "Investimentos",
     carteira: "Minha Carteira",
     objetos: "Objetos",
+    objeto: "Objeto",
     avaliacao: "Avaliação Setorial",
     usuario: "Usuário",
     meuperfil: "Meu Perfil",

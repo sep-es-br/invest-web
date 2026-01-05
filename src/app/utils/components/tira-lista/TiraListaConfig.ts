@@ -35,7 +35,7 @@ export class TiraListaCol<T> {
       icon?: IconDefinition, 
       label: string,
       tipo? : 'positivo' | 'negativo';
-      acao: (evt:MouseEvent, data: T) => void
+      acao: (evt:MouseEvent, data: T, index: number) => void
     }[];
     valorDefault?: any;
 

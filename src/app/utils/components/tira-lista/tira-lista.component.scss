@@ -71,6 +71,17 @@ spo-tira-lista {
                     width: 100%;
                     color: var(--cor-primaria);
                     font-size: large;
+                    gap: 1rem;
+
+                    
+                    .negativo {
+                        color: var(--vermelho-padrao);
+                    }
+
+                    .positivo {
+                        color: var(--verde-padrao);
+                    }
+
                 }
 
                 &.longo {
@@ -93,9 +104,6 @@ spo-tira-lista {
                     color: var(--cor-primaria);
                 }
 
-                fa-icon.negativo {
-                    color: var(--vermelho-padrao)
-                }
 
                 menu.opcao-menu {
                     text-wrap: nowrap;

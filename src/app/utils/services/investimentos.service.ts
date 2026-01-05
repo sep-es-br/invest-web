@@ -10,6 +10,8 @@ import { IDataList } from "../interfaces/dataList.interface";
 import { IOrdemItem } from "../interfaces/ordem-item.interface";
 import { IContaLista } from "../interfaces/conta-lista.interface";
 import { IContaDetail } from "../interfaces/conta-detail.interface";
+import { IInvestimentoCadastro } from "../interfaces/investimento-cadastro.interface";
+import { IConta } from "../interfaces/IConta";
 
 @Injectable({providedIn: "root"})
 export class InvestimentosService {
@@ -55,6 +57,16 @@ export class InvestimentosService {
 
     public getDetail(id: number) : Observable<IContaDetail> {
         return this.http.get<IContaDetail>(`${this.investimentoUrl}/${id}`)
+        .pipe(catchError(err => this.errorHandlerService.handleError(err)))
+    }
+
+    public salvar(cadastroForm: IInvestimentoCadastro) : Observable<IContaDetail> {
+        return this.http.post(`${this.investimentoUrl}`, cadastroForm)
+        .pipe(catchError(err => this.errorHandlerService.handleError(err)))
+    }
+
+    public delete(idInvestimento: number) : Observable<void> {
+        return this.http.delete<void>(`${this.investimentoUrl}/${idInvestimento}`)
         .pipe(catchError(err => this.errorHandlerService.handleError(err)))
     }
     

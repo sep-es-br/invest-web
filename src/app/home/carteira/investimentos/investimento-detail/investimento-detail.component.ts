@@ -78,7 +78,21 @@ export class InvestimentoDetailComponent implements OnInit, OnDestroy {
 
         this.dataUtil.setTitleInfo("id", (conta.nome.length > 50) ? conta.nome.substring(0, 50) + "..." : conta.nome)
 
-        this.listObjetos = conta.objetos.map(
+        this.listObjetos = conta.objetos
+        .map((obj) => {
+          
+          let custoReduzido = Object.values(obj.custos)
+                  .flatMap(value => Object.values(value))
+                  .reduce((acc, vlr) => ({previsto: acc.previsto + vlr.previsto, contratado: acc.contratado + vlr.contratado}))
+
+          return {
+            id: obj.id,
+            nome: obj.nome,
+            previsto: custoReduzido.previsto,
+            contratado: custoReduzido.contratado
+          } as IObjetoTiraSimples
+        })
+        .map(
           (obj) => new TiraRecord<IObjetoTiraSimples>({
             dado: obj,
             config: [
@@ -117,7 +131,7 @@ export class InvestimentoDetailComponent implements OnInit, OnDestroy {
   }
 
   abrirEditar(){
-
+    this.router.navigate(['editar'], {relativeTo: this.activatedRoute});
   }
 
 }

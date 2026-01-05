@@ -1,3 +1,4 @@
+import { IObjetoDetail } from "./objetoDetail.interface";
 
 export interface IContaDetail {
     id: number;
@@ -6,7 +7,7 @@ export interface IContaDetail {
     descricao: string;
     codUnidade: string;
     codPO: string;
-    objetos: IObjetoTiraSimples[]
+    objetos: IObjetoDetail[]
 }
 
 export interface IObjetoTiraSimples {
