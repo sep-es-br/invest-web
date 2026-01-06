@@ -36,6 +36,10 @@ export class UnidadeOrcamentariaService {
         .pipe(catchError(err => this.errorHandlerService.handleError(err)));
     }
 
+    public getByCodigo (codigo: string) : Observable<UnidadeOrcamentariaDTO> {
+        return this.http.get<UnidadeOrcamentariaDTO>(`${this.unidadeUrl}/byCodigo/${codigo}`)
+        .pipe(catchError(err => this.errorHandlerService.handleError(err)))
+    }
 
     
 

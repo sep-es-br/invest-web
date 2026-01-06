@@ -46,7 +46,7 @@
                     'srcProposta': (!!objeto.hashProposta)
                 }"     
                 [items]="opcoesUnidades"
-                [disabled]="this.unidades?.length == 1"
+                [disabled]="disableUoPo || this.unidades?.length == 1"
                 placeholder="Selecionar a unidade orçamentária"
                 bindLabel="label"
                 bindValue="value"
@@ -56,7 +56,7 @@
                 ></ng-select>            
            
             <label>Plano Orçamentário <span *ngIf="checarCadastrado()" class="obrigatorio">*</span></label>
-            <ng-select [(ngModel)]="planoOrcamentario"
+            <ng-select [(ngModel)]="planoOrcamentario" [disabled]="disableUoPo"
                 (ngModelChange)="updateTipoPlano($event)"
                 [items]="opcoesPlanosOrcamentarios" [required]="checarCadastrado()"
                 placeholder="Selecionar plano orçamentário"

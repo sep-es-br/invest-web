@@ -1,0 +1,63 @@
+<spo-progress-modal [visivel]="carregando"></spo-progress-modal>
+<div id="content" *ngIf="conta">
+    <section>
+        <header>
+            <h2>Investimento</h2>
+            <button (click)="abrirEditar()" *ngIf="permissao?.editar" ><fa-icon [icon]="editIcon"></fa-icon></button>
+        </header>
+        <main class="objInfo">
+            <div class="campo">
+                <div class="label">
+                    <h3>Tipo</h3>
+                </div>
+                <div class="value">
+                    <p>{{conta.tipo}}</p>
+                </div>
+            </div>
+            <div class="campo">
+                <div class="label">
+                    <h3>Nome</h3>
+                </div>
+                <div class="value">
+                    <p>{{conta.nome}}</p>
+                </div>
+            </div>
+            <div class="campo">
+                <div class="label">
+                    <h3>Descrição</h3>
+                </div>
+                <div class="value">
+                    <p>{{conta?.descricao}}</p>
+                </div>
+            </div>
+            <div class="campo">
+                <div class="label">
+                    <h3>Unidade Orçamentária</h3>
+                </div>
+                <div class="value">
+                    <p>{{unidade?.codigo}} - {{unidade?.sigla}}</p>
+                </div>
+            </div>
+            <div class="campo">
+                <div class="label">
+                    <h3>Plano Orçamentário</h3>
+                </div>
+                <div class="value">
+                    <p>{{planoOrcamentario?.codigo}} - {{planoOrcamentario?.nome}}</p>
+                </div>
+            </div>
+        </main>
+    </section>
+</div>
+<div id="content" *ngIf="listObjetos">
+    <section>
+        <header>
+            <h2>Objetos</h2>
+        </header>    
+        <main>
+            <spo-tira-lista [lista]="listObjetos"></spo-tira-lista>
+        </main>
+    </section>
+    
+
+</div>

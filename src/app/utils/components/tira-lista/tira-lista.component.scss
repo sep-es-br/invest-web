@@ -71,8 +71,9 @@ spo-tira-lista {
                     width: 100%;
                     color: var(--cor-primaria);
                     font-size: large;
-                    gap: 0.5rem;
+                    gap: 1rem;
 
+                    
                     .negativo {
                         color: var(--vermelho-padrao);
                     }
@@ -80,6 +81,7 @@ spo-tira-lista {
                     .positivo {
                         color: var(--verde-padrao);
                     }
+
                 }
 
                 &.longo {
@@ -109,6 +111,7 @@ spo-tira-lista {
                 fa-icon.btnMenu {
                     color: var(--cor-primaria);
                 }
+
 
                 menu.opcao-menu {
                     text-wrap: nowrap;
@@ -197,5 +200,5 @@ spo-tira-lista {
     .no-wrap {
         text-wrap-mode: nowrap;
     }
-
+    
 }

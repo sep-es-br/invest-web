@@ -30,6 +30,7 @@ import { IObjetoDetail } from "../../../../utils/interfaces/objetoDetail.interfa
 import { FonteOrcamentariaService } from "../../../../utils/services/fonteOrcamentaria.service";
 import { IFonteExercicio } from "./fonte-exercicio.interface";
 import { IObjetoCadastroForm, ICusto as CadastroCusto, IValoresFonte as CadastroValoresFonte } from "../../../../utils/interfaces/objeto-cadastro-form.interface";
+import { CadastroInvestimentoService } from "../../../../utils/services/cadastro-investimento.service";
 
 @Component({
     templateUrl: "./objeto-cadastro.component.html",
@@ -49,6 +50,7 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
     salvarIcon = faFloppyDisk;
     enviarIcon = faPaperPlane;
 
+    disableUoPo = false;
 
 
     opcoesUnidades : ISelectOpcao<UnidadeOrcamentariaDTO>[];
@@ -86,7 +88,8 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
         private tipoPlanoService : TipoPlanoService,
         private areaTematicaService : AreaTematicaService,
         private permissaoService : PermissaoService,
-        private fonteSrv : FonteOrcamentariaService
+        private fonteSrv : FonteOrcamentariaService,
+        private cadastroInvestimentoService : CadastroInvestimentoService
     ) {}
 
     @ViewChild('inNome') inNome: NgModel;
@@ -169,6 +172,17 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
                     this.microrregiao = localidadeList.find(value => value.nome === proposta.microrregion),
                     this.unidadeOrcamentaria = unidadeList.find(value => value.codigo === proposta.budgetUnitId)
 
+                } else if(this.cadastroInvestimentoService.objAtivo != undefined){
+                    
+                    this.setObjeto(this.cadastroInvestimentoService.investimento.objetos[this.cadastroInvestimentoService.objAtivo])
+
+                    this.disableUoPo = true;
+                    
+                    if(this.cadastroInvestimentoService.investimento.id) 
+                    this.dataUtil.setTitleInfo("id", this.cadastroInvestimentoService.investimento.nome.length > 50 
+                        ? `${this.cadastroInvestimentoService.investimento.nome.substring(0, 50)}...` 
+                        : this.cadastroInvestimentoService.investimento.nome)
+
                 } else {
                     this.route.params
                         .pipe(
@@ -237,7 +251,17 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
         this.unidadeOrcamentaria = this.unidades.find(unidade => unidade.codigo === objeto.codUnidade);
         
         this.objeto.tiposPlano = this.tiposplano.filter(tipoItem => objeto.tiposPlano.map( objTipoPlano => objTipoPlano.id).includes(tipoItem.id));
-        
+        if(this.objeto.tiposPlano.length === 0) {
+            this.updateTipoPlano(this.planoOrcamentario);
+        }
+
+        if(!objeto.custos)
+            this.objeto.custos = {}
+
+
+        if(Object.entries(objeto.custos).length > 0)
+            this.recursosFinanceiros = [];
+
         Object.entries(objeto.custos).forEach(([anoStr, fontes]) => {
             const _fontes = [] as IFonteExercicio[];
             
@@ -365,6 +389,26 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
 
         if(!exercValidos || this.cadastroObjeto.invalid) {
             this.toastr.error("Favor preeencher os campos obrigatórios");
+        } else if(this.cadastroInvestimentoService.objAtivo != undefined){
+            this.objeto.microrregiaoId = this.microrregiao.id;
+            this.objeto.custos = this.recursosFinanceiros.reduce(
+                (acc, custo) => {
+                    acc[custo.anoExercicio] = custo.indicadaPor
+                                                .reduce(
+                                                    (acc, fonteExercicio) => {
+                                                        acc[fonteExercicio.fonteOrcamentaria.codigo] = {
+                                                            previsto: fonteExercicio.previsto,
+                                                            contratado: fonteExercicio.contratado
+                                                        }
+                                                        return acc;
+                                                    }
+                                                , {});
+                    
+                    return acc;
+                }
+            , {})
+            this.cadastroInvestimentoService.patchValueObjeto(this.objeto);
+            this.router.navigate(['..'], {relativeTo: this.route})
         } else {
             
             let objetoForm : IObjetoCadastroForm = {
@@ -403,7 +447,7 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
                 this.objetoService.salvarObjeto(objetoForm).pipe(
                     tap(() => {
                         this.toastr.success("Objeto Salvo");
-                        this.router.navigate(['../'], {relativeTo: this.route})
+                        this.router.navigate(['../'], {relativeTo: this.route});
                     }), finalize(() => {
                         this.carregamento--;
                         this.salvarDebounce = false

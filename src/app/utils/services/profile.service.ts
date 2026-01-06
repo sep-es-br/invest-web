@@ -44,21 +44,6 @@ export class ProfileService {
     );
   }
 
-  public getAllUser(pageNumber: number, pageSize: number, termo?: string): Observable<IDataList<IUsuarioResponse>> {
-    
-    let params = new HttpParams()
-        .set('pageNumber', pageNumber)
-        .set('pageSize', pageSize);
-
-    if(termo) {
-      params = params.set('term', termo);
-    }
-    
-    return this.http.get<IDataList<IUsuarioResponse>>(this._url, {params: params}).pipe(
-      catchError(err => this.errorHandlerService.handleError(err))
-    );
-  }
-
   public salvarUsuario(usuario: any) : Observable<IProfile> {
     return this.http.put<IProfile>(this._url, usuario).pipe(
       catchError(err => this.errorHandlerService.handleError(err))

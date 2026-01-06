@@ -1,13 +1,17 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpErrorResponse, HttpParams } from "@angular/common/http";
 import { environment } from "../../../environments/environment";
-import { catchError, Observable, throwError } from "rxjs";
+import { catchError, map, Observable, throwError } from "rxjs";
 import { InvestimentoFiltro } from "../models/InvestimentoFiltro";
 import { ErrorHandlerService } from "./error-handler.service";
 import { Router } from "@angular/router";
 import { InvestimentoTiraDTO } from "../models/InvestimentoTiraDTO";
 import { IDataList } from "../interfaces/dataList.interface";
 import { IOrdemItem } from "../interfaces/ordem-item.interface";
+import { IContaLista } from "../interfaces/conta-lista.interface";
+import { IContaDetail } from "../interfaces/conta-detail.interface";
+import { IInvestimentoCadastro } from "../interfaces/investimento-cadastro.interface";
+import { IConta } from "../interfaces/IConta";
 
 @Injectable({providedIn: "root"})
 export class InvestimentosService {
@@ -30,6 +34,48 @@ export class InvestimentosService {
             }).pipe(
                 catchError(err => this.errorHandlerService.handleError(err))
             );
+    }
+
+    public getLista(
+        term: string,
+        podeVerUnidades: boolean,
+        numPag: number,
+        tamPag: number
+    ) : Observable<IDataList<IContaLista>> {
+        let params = {
+            numPag,
+            tamPag,
+            podeVerUnidades,
+            ...(term && {term})   
+        }
+
+        return this.http.get<IDataList<IContaLista>>(`${this.investimentoUrl}`, { params })
+        .pipe(
+            catchError(err => this.errorHandlerService.handleError(err))
+        )
+    }
+
+    public getDetail(id: number) : Observable<IContaDetail> {
+        return this.http.get<IContaDetail>(`${this.investimentoUrl}/${id}`)
+        .pipe(catchError(err => this.errorHandlerService.handleError(err)))
+    }
+
+    public salvar(cadastroForm: IInvestimentoCadastro) : Observable<IContaDetail> {
+        return this.http.post(`${this.investimentoUrl}`, cadastroForm)
+        .pipe(catchError(err => this.errorHandlerService.handleError(err)))
+    }
+
+    public delete(idInvestimento: number) : Observable<void> {
+        return this.http.delete<void>(`${this.investimentoUrl}/${idInvestimento}`)
+        .pipe(catchError(err => this.errorHandlerService.handleError(err)))
+    }
+
+    public checarValor(codPo: string, codUo: string) : Observable<number> {
+        return this.http.get<{existe: number}>(`${this.investimentoUrl}/checarPar/${codPo}/${codUo}`)
+        .pipe(
+            catchError(err => this.errorHandlerService.handleError(err)),
+            map(value => value.existe)
+        )
     }
     
     public filterToParams(filtro : InvestimentoFiltro) : HttpParams {
