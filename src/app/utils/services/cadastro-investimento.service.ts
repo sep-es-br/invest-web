@@ -36,7 +36,8 @@ export class CadastroInvestimentoService {
         .subscribe((event: NavigationEnd) => {
             const rotaAtual = event.urlAfterRedirects;
     
-            const saiuDoCadastro =  !/\/carteira\/investimentos\/\d+\/editar/.test(rotaAtual);
+            const saiuDoCadastro =  !/\/carteira\/investimentos\/\d+\/editar/.test(rotaAtual)
+                                    && !/\/carteira\/investimentos\/novo/.test(rotaAtual);
     
             if(saiuDoCadastro) {
                 this.investimento = undefined;

@@ -16,6 +16,20 @@ const routes : Route[] = [
                 path: '',
                 pathMatch: 'full',
                 component: InvestimentosComponent
+            }, 
+            {
+                path: 'novo',
+                children: [
+                    {
+                        path: '',
+                        pathMatch: 'full',
+                        component: InvestimentoCadastroComponent
+                    },
+                    {
+                        path: 'objeto',
+                        component: ObjetoCadastroComponent
+                    }
+                ]
             },
             {
                 path: ':id',

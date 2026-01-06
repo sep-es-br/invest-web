@@ -2,10 +2,10 @@
 <header>
   <p>Investimentos ({{qtInvestimentos}})</p>
   <spo-campo-pesquisa [(ngModel)]="term" [ngModelOptions]="{standalone: true}" (keydown.enter)="recarregarLista()"></spo-campo-pesquisa>
-  <button class="add-conta btn-acao"><fa-icon [icon]="faIconPlus"></fa-icon></button> 
+  <button *ngIf="permissao.criar" class="add-conta btn-acao" (click)="novoInvestimento()"><fa-icon [icon]="faIconPlus"></fa-icon></button> 
 </header>
 <main>
-  <spo-tira-lista [lista]="investimentos" [clickFunc]="abrirInvestimento"></spo-tira-lista>
+  <spo-tira-lista [lista]="investimentos" [clickFunc]="permissao.visualizar ? abrirInvestimento : undefined"></spo-tira-lista>
 </main>
 <footer>
   <spo-barra-paginacao [quantidade]="qtInvestimentos" (onPageChange)="recarregarLista(undefined, $event)" ></spo-barra-paginacao>

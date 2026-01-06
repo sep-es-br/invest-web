@@ -9,8 +9,8 @@ import { cleanApoc } from '../../../../utils/funcoes-util';
 import { PlanoOrcamentarioDTO } from '../../../../utils/models/PlanoOrcamentarioDTO';
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 import { faEye, faFloppyDisk, faPencil, faPlusCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { filter, finalize, forkJoin, of, Subject, switchMap, takeUntil } from 'rxjs';
+import { ActivatedRoute, NavigationEnd, Router, RouterLink, RouterModule } from '@angular/router';
+import { catchError, combineLatest, filter, finalize, forkJoin, of, startWith, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { InvestimentosService } from '../../../../utils/services/investimentos.service';
 import { UnidadeOrcamentariaService } from '../../../../utils/services/unidadeOrcamentaria.service';
 import { PlanoOrcamentarioService } from '../../../../utils/services/planoOrcamentario.service';
@@ -18,10 +18,21 @@ import { DataUtilService } from '../../../../utils/services/data-util.service';
 import { TiraListaComponent } from "../../../../utils/components/tira-lista/tira-lista.component";
 import { TiraListaCol, TiraRecord } from '../../../../utils/components/tira-lista/TiraListaConfig';
 import { CadastroInvestimentoService } from '../../../../utils/services/cadastro-investimento.service';
+import { PermissaoService } from '../../../../utils/services/permissao.service';
+import { IPodeDTO } from '../../../../utils/models/PodeDto';
 
 @Component({
   selector: 'app-investimento-cadastro',
-  imports: [CommonModule, ProgressModalComponent, NgSelectModule, FaIconComponent, TiraListaComponent, ReactiveFormsModule, FormsModule],
+  imports: [
+    CommonModule, 
+    ProgressModalComponent, 
+    NgSelectModule, 
+    FaIconComponent, 
+    TiraListaComponent, 
+    ReactiveFormsModule, 
+    FormsModule,
+    RouterModule
+  ],
   templateUrl: './investimento-cadastro.component.html',
   styleUrl: './investimento-cadastro.component.scss'
 })
@@ -39,6 +50,14 @@ export class InvestimentoCadastroComponent implements OnInit, OnDestroy {
 
   listObjetos : TiraRecord<IObjetoTiraSimples>[];
 
+  permissao : IPodeDTO;
+
+  existePar = undefined;
+
+  get parUsado() {
+    return !!this.existePar && this.existePar !== this.cadastroInvestimentoService.investimento?.id
+  }
+
   form : FormGroup;
   novo = true;
 
@@ -50,7 +69,8 @@ export class InvestimentoCadastroComponent implements OnInit, OnDestroy {
     private dataUtilSrv : DataUtilService,
     private cadastroInvestimentoService: CadastroInvestimentoService,
     private fb: FormBuilder, 
-    private router: Router
+    private router: Router,
+    private permissaoSrv: PermissaoService
   ){
     this.form = this.fb.group({
       tipo: this.fb.control({value: 'Investimento', disabled: true}, [Validators.required]) ,
@@ -62,51 +82,64 @@ export class InvestimentoCadastroComponent implements OnInit, OnDestroy {
 
     this.form.valueChanges.subscribe(value => this.cadastroInvestimentoService.patchValueInvestimento(value));
     this.cadastroInvestimentoService.investimentoObs.subscribe(value => this.form.patchValue(value, {emitEvent: false}));
+
+    const controlCodUnidade = this.form.controls['codUnidade'];
+    const controlCodPO = this.form.controls['codPO'];
+
+    combineLatest([
+      controlCodUnidade.valueChanges.pipe(startWith(controlCodUnidade.value)),
+      controlCodPO.valueChanges.pipe(startWith(controlCodPO.value))
+    ]).pipe(switchMap(
+      ([codUnidade, codPo]) => this.investimentoSrv.checarValor(codPo, codUnidade)
+    )).subscribe(existe => this.existePar = existe)
   }
 
   ngOnInit(): void {
     this.carregamento = true;
 
-    this.activeRoute.params.pipe(
-      takeUntil(this.$destroy)
-    ).subscribe({
-      next: ({id}) => forkJoin({
+    this.activeRoute.params
+    .pipe(
+      switchMap(({id}) => forkJoin({
         conta: id ? 
               this.investimentoSrv.getDetail(id) :
-              of({} as IContaDetail),
+              of(this.cadastroInvestimentoService.investimento),
         unidades: this.unidadeSrv.getFromSigefes(),
         planosOrcamentarios: this.planoOrcamentarioSrv.getDoSigefes(undefined)
+      })),
+      tap(() => this.carregamento = false),
+      catchError((err) => {
+        this.carregamento = false;
+        return err;
       })
-      .pipe(finalize(() => this.carregamento = false))
-      .subscribe({
-      next: ({conta, unidades, planosOrcamentarios}) => {
-        this.novo = !conta.id;
-        if(!this.cadastroInvestimentoService.investimento)
-          this.cadastroInvestimentoService.investimento = conta;
+    )
+    .subscribe({
+    next: ({permissao, conta, unidades, planosOrcamentarios}) => {
+      this.novo = !conta.id;
+      if(!this.cadastroInvestimentoService.investimento)
+        this.cadastroInvestimentoService.investimento = conta;
 
-        if(this.cadastroInvestimentoService.investimento.id) 
-          this.dataUtilSrv.setTitleInfo("id", this.cadastroInvestimentoService.investimento.nome.length > 50 
-            ? `${this.cadastroInvestimentoService.investimento.nome.substring(0, 50)}...` 
-            : this.cadastroInvestimentoService.investimento.nome)
+      if(this.cadastroInvestimentoService.investimento.id) 
+        this.dataUtilSrv.setTitleInfo("id", this.cadastroInvestimentoService.investimento.nome.length > 50 
+          ? `${this.cadastroInvestimentoService.investimento.nome.substring(0, 50)}...` 
+          : this.cadastroInvestimentoService.investimento.nome)
 
-        this.loadObjetos(this.cadastroInvestimentoService.investimento.objetos?.map((obj) => {
-          
-          let custoReduzido = Object.values(obj.custos)
-                  .flatMap(value => Object.values(value))
-                  .reduce((acc, vlr) => ({previsto: (acc.previsto ?? 0) + (vlr?.previsto ?? 0), contratado: (acc.contratado ?? 0) + (vlr?.contratado ?? 0)}))
+      this.loadObjetos(this.cadastroInvestimentoService.investimento.objetos?.map((obj) => {
+        
+        let custoReduzido = Object.values(obj.custos)
+                .flatMap(value => Object.values(value))
+                .reduce((acc, vlr) => ({previsto: (acc.previsto ?? 0) + (vlr?.previsto ?? 0), contratado: (acc.contratado ?? 0) + (vlr?.contratado ?? 0)}))
 
-          return {
-            id: obj.id,
-            nome: obj.nome,
-            previsto: custoReduzido.previsto,
-            contratado: custoReduzido.contratado
-          } as IObjetoTiraSimples
-        }));
-        this.listUnidades = unidades;
-        this.listPlanosOrcamentarios = planosOrcamentarios
-      }
-    })
-    })
+        return {
+          id: obj.id,
+          nome: obj.nome,
+          previsto: custoReduzido.previsto,
+          contratado: custoReduzido.contratado
+        } as IObjetoTiraSimples
+      }));
+      this.listUnidades = unidades;
+      this.listPlanosOrcamentarios = planosOrcamentarios
+    }
+  })
 
 
   
@@ -210,5 +243,17 @@ export class InvestimentoCadastroComponent implements OnInit, OnDestroy {
     console.log(cod)
     return this.listPlanosOrcamentarios?.find(unidade => unidade.codigo === cod)
   }
+
+  limparInvestimentoENavegar() {
+    this.cadastroInvestimentoService.investimento = undefined;
+    const routeConf = this.activeRoute.parent.routeConfig;
+    if(routeConf.path === 'novo') {
+      this.router.navigate([`../${this.existePar}/editar`], {relativeTo: this.activeRoute}) ;
+    } else {
+      this.router.navigate([`../../${this.existePar}/editar`], {relativeTo: this.activeRoute}) ;
+    }
+  }
+
+  
 
 }

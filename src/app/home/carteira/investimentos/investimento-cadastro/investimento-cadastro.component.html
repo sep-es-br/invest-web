@@ -48,6 +48,11 @@
                     {{unidade.codigo}} - {{unidade.sigla}}
                 </ng-template>
             </ng-select>            
+
+            <ng-container *ngIf="parUsado">
+                <div class="dummy"></div>
+                <div class="alerta">Já existe um investimento com esse par: Unidade Orçamentária e Plano Orçamentário (<a (click)="limparInvestimentoENavegar(); $event.preventDefault()" href="#">ir para investimento</a>)</div>
+            </ng-container>
            
             <label>Plano Orçamentário <span class="obrigatorio">*</span></label>
             <ng-select 
@@ -75,7 +80,7 @@
             <spo-tira-lista [lista]="listObjetos"></spo-tira-lista>
         </div>
         <div class="acoes">
-            <button (click)="salvar()" class="btn positivo" >
+            <button (click)="salvar()" class="btn positivo" [disabled]="parUsado">
                 <fa-icon [icon]="salvarIcon"></fa-icon> SALVAR 
             </button>
         </div>

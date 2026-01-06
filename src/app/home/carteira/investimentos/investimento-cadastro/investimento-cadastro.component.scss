@@ -33,6 +33,10 @@
                 display: grid;
                 grid-template-columns: max-content auto;
                 gap: 1rem;
+
+                .alerta {
+                    color: var(--vermelho-padrao);
+                }
                 
             }
 

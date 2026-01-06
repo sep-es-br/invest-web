@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpErrorResponse, HttpParams } from "@angular/common/http";
 import { environment } from "../../../environments/environment";
-import { catchError, Observable, throwError } from "rxjs";
+import { catchError, map, Observable, throwError } from "rxjs";
 import { InvestimentoFiltro } from "../models/InvestimentoFiltro";
 import { ErrorHandlerService } from "./error-handler.service";
 import { Router } from "@angular/router";
@@ -68,6 +68,14 @@ export class InvestimentosService {
     public delete(idInvestimento: number) : Observable<void> {
         return this.http.delete<void>(`${this.investimentoUrl}/${idInvestimento}`)
         .pipe(catchError(err => this.errorHandlerService.handleError(err)))
+    }
+
+    public checarValor(codPo: string, codUo: string) : Observable<number> {
+        return this.http.get<{existe: number}>(`${this.investimentoUrl}/checarPar/${codPo}/${codUo}`)
+        .pipe(
+            catchError(err => this.errorHandlerService.handleError(err)),
+            map(value => value.existe)
+        )
     }
     
     public filterToParams(filtro : InvestimentoFiltro) : HttpParams {
