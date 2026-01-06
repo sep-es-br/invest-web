@@ -33,10 +33,7 @@ export class PerfilComponent implements AfterViewInit{
 
     ngAfterViewInit(): void {
         
-        this.profileService.getUser().subscribe(user => {
-            
-            this.user = user;
-        });
+        setTimeout(() => this.userSignal = this.profileService.displayUser$); 
 
         this.dataUtilService.editModeListener.next(false);
 

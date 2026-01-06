@@ -49,6 +49,21 @@ export class ProfileService {
       catchError(err => this.errorHandlerService.handleError(err))
     )
   }
+  
+  public getAllUser(pageNumber: number, pageSize: number, termo?: string): Observable<IDataList<IUsuarioResponse>> {
+    
+    let params = new HttpParams()
+        .set('pageNumber', pageNumber)
+        .set('pageSize', pageSize);
+
+    if(termo) {
+      params = params.set('term', termo);
+    }
+    
+    return this.http.get<IDataList<IUsuarioResponse>>(this._url, {params: params}).pipe(
+      catchError(err => this.errorHandlerService.handleError(err))
+    );
+  }
 
   public removerAgente(id : number) : Observable<IProfile> {
     return this.http.delete<IProfile>(`${this._url}/${id}`).pipe(

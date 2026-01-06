@@ -122,7 +122,7 @@ export class InvestimentosComponent implements OnInit {
               
               
           ]
-      }))
+      })) as TiraRecord<IContaLista>[];
   }
 
   
