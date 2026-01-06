@@ -24,7 +24,7 @@ import { ValorCardComponent } from "../../../utils/components/valor-card/valor-c
     styleUrl: "./relatorio-consolidado.component.scss",
     imports: [
     CommonModule, BarraPaginacaoComponent, FontAwesomeModule,
-    ReactiveFormsModule, ProgressModalComponent, InvestimentoFiltroComponent,
+    FormsModule, ProgressModalComponent, InvestimentoFiltroComponent,
     TiraDadoConsolidadoComponent, FontAwesomeModule, NgSelectModule,
     ValorCardComponent
 ]
@@ -37,7 +37,7 @@ export class RelatorioConsolidadoComponent {
     searchIcon = faMagnifyingGlass;
     downloadIcon = faFileDownload;
 
-    txtBusca = new FormControl(undefined);
+    termo
 
     qtDados = 0;
     larguraPaginacao = 7;

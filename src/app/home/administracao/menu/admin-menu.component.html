@@ -3,12 +3,12 @@
     <input type="text" [formControl]="txtBusca" placeholder="Procurar" class="pesquisa"/>
 </div>
 <div class="listaOpcoes" >
-    <div *ngFor="let item of opcoesMenuAdmin">
+    <ng-container *ngFor="let item of opcoesMenuAdmin">
         <div class="itemMenu" *ngIf="temAcesso.get(item.caminho)" (click)="redirectTo(item.caminho)">
             <div class="icone">
                 <span class="material-symbols-outlined">{{item.icone}}</span>
             </div>
             <p>{{item.titulo}}</p>
         </div>
-    </div>
+    </ng-container>
 </div>

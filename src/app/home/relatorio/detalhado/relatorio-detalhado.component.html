@@ -6,7 +6,6 @@
         <select [formControl]="selectAno">
             <option [ngValue]="ano" *ngFor="let ano of datas" >{{ano}}</option>
         </select>
-        <spo-campo-pesquisa [formControl]="txtBusca"></spo-campo-pesquisa>
     </div>
     <div id="acoes">
         <button class="btn-acao" (click)="gerarRelatorio()"><fa-icon [icon]="downloadIcon"></fa-icon></button>

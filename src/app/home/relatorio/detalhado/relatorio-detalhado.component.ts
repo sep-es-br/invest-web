@@ -34,8 +34,6 @@ export class RelatorioDetalhadoComponent implements AfterViewInit {
     searchIcon = faMagnifyingGlass;
     downloadIcon = faFileDownload;
 
-    txtBusca = new FormControl(undefined);
-
     selectAno = new FormControl(new Date().getFullYear());
 
     qtDados = 0;

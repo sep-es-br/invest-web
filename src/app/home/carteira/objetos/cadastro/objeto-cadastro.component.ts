@@ -52,6 +52,7 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
 
     disableUoPo = false;
 
+
     opcoesUnidades : ISelectOpcao<UnidadeOrcamentariaDTO>[];
     opcoesPlanosOrcamentarios : ISelectOpcao<PlanoOrcamentarioDTO>[];
     opcoesTipoPlano : ISelectOpcao<ITipoPlano>[];
