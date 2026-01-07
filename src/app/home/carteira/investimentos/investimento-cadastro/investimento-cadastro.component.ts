@@ -56,7 +56,7 @@ export class InvestimentoCadastroComponent implements OnInit, OnDestroy {
 
   objARemover : IObjetoTiraSimples;
 
-  permissao : IPodeDTO;
+  permissaoObjeto : IPodeDTO;
 
   existePar = undefined;
 
@@ -76,7 +76,8 @@ export class InvestimentoCadastroComponent implements OnInit, OnDestroy {
     private cadastroInvestimentoService: CadastroInvestimentoService,
     private fb: FormBuilder, 
     private router: Router,
-    private toaster : ToastrService
+    private toaster : ToastrService,
+    private permissaoService: PermissaoService
   ){
     this.form = this.fb.group({
       tipo: this.fb.control({value: 'Investimento', disabled: true}, [Validators.required]) ,
@@ -106,6 +107,7 @@ export class InvestimentoCadastroComponent implements OnInit, OnDestroy {
     this.activeRoute.params
     .pipe(
       switchMap(({id}) => forkJoin({
+        permissaoObjeto: this.permissaoService.getPermissao('carteiraobjetos'),
         conta: id ? 
               this.investimentoSrv.getDetail(id) :
               of(this.cadastroInvestimentoService.investimento),
@@ -119,7 +121,8 @@ export class InvestimentoCadastroComponent implements OnInit, OnDestroy {
       })
     )
     .subscribe({
-    next: ({permissao, conta, unidades, planosOrcamentarios}) => {
+    next: ({permissaoObjeto, conta, unidades, planosOrcamentarios}) => {
+      this.permissaoObjeto = permissaoObjeto;
       this.novo = !conta.id;
       if(!this.cadastroInvestimentoService.investimento)
         this.cadastroInvestimentoService.investimento = conta;
@@ -193,29 +196,35 @@ export class InvestimentoCadastroComponent implements OnInit, OnDestroy {
             } ),
              new TiraListaCol<IObjetoTiraSimples>({
               tipo: 'botao', opcoes: [
-                {
-                  icon: faPencil, 
-                  label: 'Alterar', 
-                  acao: (evt, data, index) => {
+                ...( this.permissaoObjeto.editar
+                      ? [{
+                          icon: faPencil, 
+                          label: 'Alterar', 
+                          acao: (evt: MouseEvent, data: IObjetoTiraSimples, index: number) => {
 
-                    this.cadastroInvestimentoService.objAtivo = index;
-                    this.router.navigate(['objeto'], {relativeTo: this.activeRoute})
-                    
-                  }
-                },
-                {
-                  icon: faTrash, 
-                  label: 'Remover', 
-                  tipo: 'negativo',
-                  acao: (evt, data, index) => {
-                    
-                    this.objARemover = data;
-                  }
-                }
+                            this.cadastroInvestimentoService.objAtivo = index;
+                            this.router.navigate(['objeto'], {relativeTo: this.activeRoute})
+                            
+                          }
+                        }]
+                      : []
+                ),
+                ...( this.permissaoObjeto.excluir
+                    ? [{
+                        icon: faTrash, 
+                        label: 'Remover', 
+                        tipo: 'negativo' as const,
+                        acao: (evt: MouseEvent, data: IObjetoTiraSimples, index: number) => {
+                          
+                          this.objARemover = data;
+                        }
+                      }]
+                    : []
+                )                
                 ]
             } )]
           })  
-        )
+        ) as TiraRecord<IObjetoTiraSimples>[];
   }
 
   ngOnDestroy(): void {
