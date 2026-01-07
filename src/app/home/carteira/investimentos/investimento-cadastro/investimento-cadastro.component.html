@@ -86,3 +86,17 @@
         </div>
     </main>
 </div>
+<div class="confirmacao" [overlay] *ngIf="objARemover">
+  <header>
+    <p>Confirmação</p>
+    <button class="btn negativo" (click)="objARemover = undefined"><fa-icon [icon]="faIconX"></fa-icon></button>
+  </header>
+  <main>
+    <p>Tem certeza que deseja remover o objeto? essa ação não poderá ser desfeita.</p>
+    <p>{{objARemover.nome}}</p>
+  </main>
+  <footer>
+    <button class="btn neutro" (click)="objARemover = undefined">Cancelar</button>
+    <button class="btn negativo" (click)="excluirObjeto()">Remover</button>
+  </footer>
+</div>

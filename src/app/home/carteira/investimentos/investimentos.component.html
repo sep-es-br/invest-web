@@ -10,3 +10,18 @@
 <footer>
   <spo-barra-paginacao [quantidade]="qtInvestimentos" (onPageChange)="recarregarLista(undefined, $event)" ></spo-barra-paginacao>
 </footer>
+<div class="confirmacao" [overlay] *ngIf="investimentoAExcluir">
+  <header>
+    <p>Confirmação</p>
+    <button class="btn negativo" (click)="investimentoAExcluir = undefined"><fa-icon [icon]="faIconX"></fa-icon></button>
+  </header>
+  <main>
+    <p>Tem certeza que deseja remover o investimento? essa ação não poderá ser desfeita.</p>
+    <p>{{investimentoAExcluir.nome}}</p>
+    <p>({{investimentoAExcluir.codUnidade}}) {{investimentoAExcluir.siglaUnidade}} - {{investimentoAExcluir.codPO}}</p>
+  </main>
+  <footer>
+    <button class="btn neutro" (click)="investimentoAExcluir = undefined">Cancelar</button>
+    <button class="btn negativo" (click)="excluirConta()">Remover</button>
+  </footer>
+</div>

@@ -8,7 +8,7 @@ import { UnidadeOrcamentariaDTO } from '../../../../utils/models/UnidadeOrcament
 import { cleanApoc } from '../../../../utils/funcoes-util';
 import { PlanoOrcamentarioDTO } from '../../../../utils/models/PlanoOrcamentarioDTO';
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
-import { faEye, faFloppyDisk, faPencil, faPlusCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faFloppyDisk, faPencil, faPlusCircle, faTrash, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { ActivatedRoute, NavigationEnd, Router, RouterLink, RouterModule } from '@angular/router';
 import { catchError, combineLatest, filter, finalize, forkJoin, of, startWith, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { InvestimentosService } from '../../../../utils/services/investimentos.service';
@@ -20,19 +20,22 @@ import { TiraListaCol, TiraRecord } from '../../../../utils/components/tira-list
 import { CadastroInvestimentoService } from '../../../../utils/services/cadastro-investimento.service';
 import { PermissaoService } from '../../../../utils/services/permissao.service';
 import { IPodeDTO } from '../../../../utils/models/PodeDto';
+import { ToastrService } from 'ngx-toastr';
+import { OverlayDirective } from "../../../../utils/directive/overflow.directive";
 
 @Component({
   selector: 'app-investimento-cadastro',
   imports: [
-    CommonModule, 
-    ProgressModalComponent, 
-    NgSelectModule, 
-    FaIconComponent, 
-    TiraListaComponent, 
-    ReactiveFormsModule, 
+    CommonModule,
+    ProgressModalComponent,
+    NgSelectModule,
+    FaIconComponent,
+    TiraListaComponent,
+    ReactiveFormsModule,
     FormsModule,
-    RouterModule
-  ],
+    RouterModule,
+    OverlayDirective
+],
   templateUrl: './investimento-cadastro.component.html',
   styleUrl: './investimento-cadastro.component.scss'
 })
@@ -42,6 +45,7 @@ export class InvestimentoCadastroComponent implements OnInit, OnDestroy {
 
   addIcon = faPlusCircle;
   salvarIcon = faFloppyDisk;
+    faIconX = faXmark;
 
   checado = false;
   carregamento = false;
@@ -49,6 +53,8 @@ export class InvestimentoCadastroComponent implements OnInit, OnDestroy {
   listPlanosOrcamentarios : PlanoOrcamentarioDTO[];
 
   listObjetos : TiraRecord<IObjetoTiraSimples>[];
+
+  objARemover : IObjetoTiraSimples;
 
   permissao : IPodeDTO;
 
@@ -70,7 +76,7 @@ export class InvestimentoCadastroComponent implements OnInit, OnDestroy {
     private cadastroInvestimentoService: CadastroInvestimentoService,
     private fb: FormBuilder, 
     private router: Router,
-    private permissaoSrv: PermissaoService
+    private toaster : ToastrService
   ){
     this.form = this.fb.group({
       tipo: this.fb.control({value: 'Investimento', disabled: true}, [Validators.required]) ,
@@ -145,6 +151,29 @@ export class InvestimentoCadastroComponent implements OnInit, OnDestroy {
   
   }
 
+
+  excluirObjeto() {
+    this.carregamento = true;
+    this.cadastroInvestimentoService.removerObjeto(this.listObjetos?.findIndex((obj) => obj.dado.id === this.objARemover.id) ).then(() => {
+      this.loadObjetos(this.cadastroInvestimentoService.investimento.objetos?.map((obj) => {
+
+        let custoReduzido = Object.values(obj.custos)
+                .flatMap(value => Object.values(value))
+                .reduce((acc, vlr) => ({previsto: (acc.previsto ?? 0) + (vlr?.previsto ?? 0), contratado: (acc.contratado ?? 0) + (vlr?.contratado ?? 0)}))
+
+        return {
+          id: obj.id,
+          nome: obj.nome,
+          previsto: custoReduzido.previsto,
+          contratado: custoReduzido.contratado
+        } as IObjetoTiraSimples
+      }));
+    }).finally(() => {
+      this.carregamento = false;
+      this.objARemover = undefined;
+    });
+  }
+
   loadObjetos(objs: IObjetoTiraSimples[]) {
     if(!objs) return;
 
@@ -179,22 +208,8 @@ export class InvestimentoCadastroComponent implements OnInit, OnDestroy {
                   label: 'Remover', 
                   tipo: 'negativo',
                   acao: (evt, data, index) => {
-                    this.cadastroInvestimentoService.removerObjeto(index).then(() => {
-                      this.loadObjetos(this.cadastroInvestimentoService.investimento.objetos?.map((obj) => {
-          
-                      let custoReduzido = Object.values(obj.custos)
-                              .flatMap(value => Object.values(value))
-                              .reduce((acc, vlr) => ({previsto: (acc.previsto ?? 0) + (vlr?.previsto ?? 0), contratado: (acc.contratado ?? 0) + (vlr?.contratado ?? 0)}))
-
-                      return {
-                        id: obj.id,
-                        nome: obj.nome,
-                        previsto: custoReduzido.previsto,
-                        contratado: custoReduzido.contratado
-                      } as IObjetoTiraSimples
-                    }));
-                    });
-
+                    
+                    this.objARemover = data;
                   }
                 }
                 ]
@@ -217,6 +232,15 @@ export class InvestimentoCadastroComponent implements OnInit, OnDestroy {
   }
 
   async salvar(){
+    this.checado = true;
+    if(this.form.invalid){
+      this.toaster.error('Favor preencher os campos obrigatórios', 'ATENÇÃO');
+      return;
+    }
+
+      
+
+
     this.carregamento = true;
     (await this.cadastroInvestimentoService.salvar(
       this.listPlanosOrcamentarios.find(plano => plano.codigo === this.cadastroInvestimentoService.investimento.codPO),

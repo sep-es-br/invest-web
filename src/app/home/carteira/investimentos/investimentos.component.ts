@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
 import { TiraListaComponent } from "../../../utils/components/tira-lista/tira-lista.component";
 import { TiraListaCol, TiraRecord } from '../../../utils/components/tira-lista/TiraListaConfig';
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
-import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faTrash, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { InvestimentosService } from '../../../utils/services/investimentos.service';
 import { ProgressModalComponent } from "../../../utils/components/progress-modal/progress-modal.component";
 import { finalize, switchMap } from 'rxjs';
@@ -17,12 +17,13 @@ import { BarraPaginacaoComponent } from "../../../utils/components/barra-paginac
 import { ActivatedRoute, Router } from '@angular/router';
 import { CadastroInvestimentoService } from '../../../utils/services/cadastro-investimento.service';
 import { IContaDetail } from '../../../utils/interfaces/conta-detail.interface';
+import { OverlayDirective } from "../../../utils/directive/overflow.directive";
 
 @Component({
   selector: 'app-investimentos',
   templateUrl: './investimentos.component.html',
   styleUrls: ['./investimentos.component.scss'],
-  imports: [CommonModule, CampoPesquisaComponent, TiraListaComponent, FaIconComponent, ProgressModalComponent, FormsModule, BarraPaginacaoComponent]
+  imports: [CommonModule, CampoPesquisaComponent, TiraListaComponent, FaIconComponent, ProgressModalComponent, FormsModule, BarraPaginacaoComponent, OverlayDirective]
 })
 export class InvestimentosComponent implements OnInit {
 
@@ -36,6 +37,9 @@ export class InvestimentosComponent implements OnInit {
   permissao : IPodeDTO = undefined;
 
   faIconPlus = faPlus;
+  faIconX = faXmark;
+
+  investimentoAExcluir : IContaLista;
 
   abrirInvestimento = (record: TiraRecord<IContaLista>) => {
     this.router.navigate([record.dado.id], {relativeTo: this.activeRoute})
@@ -105,12 +109,7 @@ export class InvestimentosComponent implements OnInit {
                       icon: faTrash,
                       tipo: 'negativo',
                       acao: (evt, data, index) => {
-                        this.carregando = true;
-                        this.investimentoSrv.delete((data as {id}).id)
-                        .pipe(finalize(() => this.carregando = false))
-                        .subscribe(() => {
-                          this.recarregarLista();
-                        });
+                        this.investimentoAExcluir = data as IContaLista;
 
                       }
                     }
@@ -122,9 +121,19 @@ export class InvestimentosComponent implements OnInit {
               
               
           ]
-      }))
+      })) as TiraRecord<IContaLista>[];
   }
 
-  
+  excluirConta() {
+    this.carregando = true;
+    this.investimentoSrv.delete(this.investimentoAExcluir.id)
+    .pipe(finalize(() => {
+      this.carregando = false;
+      this.investimentoAExcluir = undefined;
+    }))
+    .subscribe(() => {
+      this.recarregarLista();
+    });
+  }
 
 }
