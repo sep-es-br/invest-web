@@ -75,7 +75,7 @@
         <div class="objetos">
             <header>
                 <h4>Objetos</h4>
-                <fa-icon [icon]="addIcon" (click)="addObjeto()" ></fa-icon>
+                <fa-icon [icon]="addIcon" *ngIf="permissaoObjeto?.criar" (click)="addObjeto()" ></fa-icon>
             </header>
             <spo-tira-lista [lista]="listObjetos"></spo-tira-lista>
         </div>
