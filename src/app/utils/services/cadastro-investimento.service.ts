@@ -56,7 +56,8 @@ export class CadastroInvestimentoService {
     }
 
     get objAtivo() {
-        return Number(sessionStorage.getItem(this.objAtivoKey));
+        let raw = sessionStorage.getItem(this.objAtivoKey);
+        return raw && Number(raw);
     }
 
     private loadInvestimento() {
