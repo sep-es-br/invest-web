@@ -10,7 +10,7 @@ import { PlanoOrcamentarioDTO } from '../../../../utils/models/PlanoOrcamentario
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 import { faEye, faFloppyDisk, faPencil, faPlusCircle, faTrash, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { ActivatedRoute, NavigationEnd, Router, RouterLink, RouterModule } from '@angular/router';
-import { catchError, combineLatest, filter, finalize, forkJoin, of, startWith, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import { catchError, combineLatest, filter, finalize, forkJoin, Observable, of, startWith, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { InvestimentosService } from '../../../../utils/services/investimentos.service';
 import { UnidadeOrcamentariaService } from '../../../../utils/services/unidadeOrcamentaria.service';
 import { PlanoOrcamentarioService } from '../../../../utils/services/planoOrcamentario.service';
@@ -22,6 +22,7 @@ import { PermissaoService } from '../../../../utils/services/permissao.service';
 import { IPodeDTO } from '../../../../utils/models/PodeDto';
 import { ToastrService } from 'ngx-toastr';
 import { OverlayDirective } from "../../../../utils/directive/overflow.directive";
+import { IDoUnload } from '../../../../utils/guard/DoUnload.interface';
 
 @Component({
   selector: 'app-investimento-cadastro',
@@ -66,6 +67,7 @@ export class InvestimentoCadastroComponent implements OnInit, OnDestroy {
 
   form : FormGroup;
   novo = true;
+
 
   constructor(
     private activeRoute : ActivatedRoute,

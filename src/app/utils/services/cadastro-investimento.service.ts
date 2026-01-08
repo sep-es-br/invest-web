@@ -85,7 +85,8 @@ export class CadastroInvestimentoService {
             tipoObjeto: "Projeto",
             codPlano: this.investimento.codPO,
             codUnidade: this.investimento.codUnidade,
-            tiposPlano: []
+            tiposPlano: [],
+            new: true
         } as IObjetoDetail;
 
         const objList = this.investimento.objetos;

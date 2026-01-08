@@ -3,6 +3,9 @@ import { IEmStatus } from "./emStatus.interface";
 import { ITipoPlano } from "./ITipoPlano";
 
 export interface IObjetoDetail {
+  new: boolean;
+
+
     id: number;
     hashProposta: string;
   tipoInvestimento: string;

@@ -8,7 +8,7 @@ import { CadastroExercicioComponent } from "./cadastro-exercicio/cadastro-exerci
 import { ICusto } from "./exercicio-cadastro.interface";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faFloppyDisk, faPaperPlane, faPlusCircle, faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
-import { filter, finalize, forkJoin, map, merge, switchMap, tap } from "rxjs";
+import { filter, finalize, forkJoin, map, merge, Observable, switchMap, tap } from "rxjs";
 import { UnidadeOrcamentariaService } from "../../../../utils/services/unidadeOrcamentaria.service";
 import { PlanoOrcamentarioService } from "../../../../utils/services/planoOrcamentario.service";
 import { LocalidadeService } from "../../../../utils/services/localidade.service";
@@ -31,6 +31,7 @@ import { FonteOrcamentariaService } from "../../../../utils/services/fonteOrcame
 import { IFonteExercicio } from "./fonte-exercicio.interface";
 import { IObjetoCadastroForm, ICusto as CadastroCusto, IValoresFonte as CadastroValoresFonte } from "../../../../utils/interfaces/objeto-cadastro-form.interface";
 import { CadastroInvestimentoService } from "../../../../utils/services/cadastro-investimento.service";
+import { IDoUnload } from "../../../../utils/guard/DoUnload.interface";
 
 @Component({
     templateUrl: "./objeto-cadastro.component.html",
@@ -40,7 +41,7 @@ import { CadastroInvestimentoService } from "../../../../utils/services/cadastro
         CadastroExercicioComponent, FontAwesomeModule, FormsModule, NgSelectComponent
     ]
 })
-export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy {
+export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy, IDoUnload {
 
     @ViewChildren(CadastroExercicioComponent) cadastroExercicios : QueryList<CadastroExercicioComponent>;
     @ViewChild('cadastroObjeto') cadastroObjeto : NgForm;
@@ -96,7 +97,8 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
 
     objeto : IObjetoDetail = {
         tipoInvestimento: "Investimento",
-        tipoObjeto: "Projeto"
+        tipoObjeto: "Projeto",
+        new: true
     } as IObjetoDetail
 
     recursosFinanceiros : ICusto[] = [];
@@ -104,6 +106,16 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
     unidadeOrcamentaria : UnidadeOrcamentariaDTO;
     areaTematica : IAreaTematica;
     microrregiao : LocalidadeDTO;
+
+    saved = false;
+
+    unload: () => boolean | Observable<boolean> = () => {
+        if(!this.saved && this.objeto.new) {
+            this.cadastroInvestimentoService.removerObjeto(this.cadastroInvestimentoService.objAtivo);
+        }
+
+        return true;
+    };
 
     ngOnDestroy(): void {
         sessionStorage.removeItem(PROPOSTA_ATIVA)
@@ -408,6 +420,7 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
                 }
             , {})
             this.cadastroInvestimentoService.patchValueObjeto(this.objeto);
+            this.saved = true;
             this.router.navigate(['..'], {relativeTo: this.route})
         } else {
             
@@ -447,6 +460,7 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
                 this.objetoService.salvarObjeto(objetoForm).pipe(
                     tap(() => {
                         this.toastr.success("Objeto Salvo");
+                        this.saved = true;
                         this.router.navigate(['../'], {relativeTo: this.route});
                     }), finalize(() => {
                         this.carregamento--;

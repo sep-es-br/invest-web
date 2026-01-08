@@ -7,6 +7,7 @@ import { InvestimentosComponent } from "./investimentos/investimentos.component"
 import { InvestimentoCadastroComponent } from "./investimentos/investimento-cadastro/investimento-cadastro.component";
 import { InvestimentoDetailComponent } from "./investimentos/investimento-detail/investimento-detail.component";
 import { ObjetoCadastroComponent } from "./objetos/cadastro/objeto-cadastro.component";
+import { UnloadGuard } from "../../utils/guard/Unload.guard";
 
 const routes : Route[] = [
     {
@@ -27,6 +28,7 @@ const routes : Route[] = [
                     },
                     {
                         path: 'objeto',
+                        canDeactivate: [UnloadGuard],
                         component: ObjetoCadastroComponent
                     }
                 ]
@@ -37,7 +39,7 @@ const routes : Route[] = [
                     {
                         path: '',
                         pathMatch: 'full',
-                        component: InvestimentoDetailComponent,
+                        component: InvestimentoDetailComponent
                     }, 
                     {
                         path: 'editar',
@@ -49,6 +51,7 @@ const routes : Route[] = [
                             },
                             {
                                 path: 'objeto',
+                                canDeactivate: [UnloadGuard],
                                 component: ObjetoCadastroComponent
                             }
                         ]
