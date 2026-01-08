@@ -109,11 +109,11 @@ select, input:not(.pesquisa) {
 }
 
 .invalido {
-    border-color: var(--vermelho-padrao);
-    color: var(--vermelho-padrao);
+    border-color: var(--vermelho-padrao) !important;
+    color: var(--vermelho-padrao) !important;
 
     &::placeholder {
-        color: var(--vermelho-padrao);
+        color: var(--vermelho-padrao) !important;
     }
 }
 
