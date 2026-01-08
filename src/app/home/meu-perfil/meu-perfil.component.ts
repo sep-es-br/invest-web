@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { AfterViewInit, Component, Signal, WritableSignal } from "@angular/core";
+import { AfterViewInit, Component, signal, Signal, WritableSignal } from "@angular/core";
 import { FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { IProfile } from "../../utils/interfaces/profile.interface";
 import { Observable } from "rxjs/internal/Observable";
@@ -13,6 +13,7 @@ import { faPencil, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { ToastrService } from "ngx-toastr";
 import { IPapelDTO } from "../../utils/models/PapelDto";
 import { AVATAR_PLACEHOLDER_URL } from "../../utils/sessionLocalItems.const";
+import { map, switchMap, take } from "rxjs";
 
 @Component({
     selector: 'spo-meu-perfil',
@@ -30,7 +31,7 @@ export class MeuPerfilComponent implements AfterViewInit{
     editarImg : boolean;
 
     user : IProfile;
-    userSignal : WritableSignal<IProfile>;
+    userSignal : WritableSignal<IProfile> = signal(undefined);
 
     form = new FormGroup({
         avatar: new FormControl(null),
@@ -48,11 +49,20 @@ export class MeuPerfilComponent implements AfterViewInit{
         
         this.userSignal = this.profileService.displayUser$;
 
-        this.route.data.subscribe(({user} : {user: IProfile}) => {
-            this.userSignal.set(user);
-        })
+        
+        this.route.paramMap.pipe(
+            take(1),
+            switchMap((pmap) => {
+                return  pmap.has('id') 
+                        ? this.profileService.getUser(Number(pmap.get('id')))
+                        : this.route.data.pipe(take(1), map(({user}) => user as IProfile))
+            })
+        ).subscribe(user => {
+            setTimeout(() => this.userSignal.set(user));
+            this.dataUtilService.setTitleInfo('id', user.name);
+        });
 
-        this.dataUtilService.editModeListener.subscribe(mode => this.editarImg = mode)
+        this.dataUtilService.editModeListener.subscribe(mode => setTimeout(() => this.editarImg = mode) )
 
     }
 
