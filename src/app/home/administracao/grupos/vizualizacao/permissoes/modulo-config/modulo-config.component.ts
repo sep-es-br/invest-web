@@ -62,7 +62,7 @@ export class ModuloConfigComponent implements AfterViewInit {
                         inVerTodasUnidades: permissao.verTodasUnidades
                     });
                 }
-                this.permissaoService.getPermissao('grupo').pipe(tap(
+                this.permissaoService.getPermissao('administracaogrupo').pipe(tap(
                     permissao => {
                         if(!permissao?.editar)
                             this.form.disable();

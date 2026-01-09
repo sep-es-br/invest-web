@@ -47,7 +47,7 @@ export class GrupoPermissoesComponent implements OnInit {
                 this.moduloService.findAll().pipe(tap( moduloList => {
                     this.modulos = moduloList;
                 })),
-                this.permissaoService.getPermissao('grupo').pipe(tap( 
+                this.permissaoService.getPermissao('administracaogrupo').pipe(tap( 
                     permissao => {
                         this.permissao = permissao;
                         if(permissao.editar) {

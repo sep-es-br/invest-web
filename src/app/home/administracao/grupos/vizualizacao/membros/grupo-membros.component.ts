@@ -86,7 +86,7 @@ export class GrupoMembrosComponent implements AfterViewInit {
             }
         })).subscribe()
         
-        this.permissaoService.getPermissao('grupo').pipe(tap(
+        this.permissaoService.getPermissao('administracaogrupo').pipe(tap(
             permissao => {
                 this.permissao = permissao;
             }

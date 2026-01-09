@@ -50,7 +50,7 @@ export class GrupoListaComponent implements AfterViewInit{
         })
 
         concat(this.atualizarLista(this.paginaAtual),
-               this.permissaoService.getPermissao('grupo').pipe(
+               this.permissaoService.getPermissao('administracaogrupo').pipe(
                 tap( permissao => this.permissao = permissao)
                )).subscribe();
     }
