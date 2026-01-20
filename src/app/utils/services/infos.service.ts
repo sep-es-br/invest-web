@@ -53,6 +53,10 @@ export class InfosService {
         )
     }
 
+    public printError(error: any) {
+        return this.http.post(`${this.infosUrl}/frontendError`, JSON.stringify(error))
+    }
+
     public getCardTotais(
         nome : string, idUo : number[], idPo : number[], idFonte : number, ano : number, gnd : number,
         podeVerUnidades : boolean

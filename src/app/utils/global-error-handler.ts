@@ -4,6 +4,7 @@ import { Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { of } from "rxjs";
 import { HttpErrorResponse } from "@angular/common/http";
+import { InfosService } from "./services/infos.service";
 
 @Injectable()
 export class GlobalErrorHandler extends ErrorHandler {
@@ -13,6 +14,10 @@ export class GlobalErrorHandler extends ErrorHandler {
   ){
     super();
 
+  }
+
+  private get infoSrv() : InfosService {
+    return this.injector.get(InfosService);
   }
 
   private get router() : Router {
@@ -29,6 +34,7 @@ export class GlobalErrorHandler extends ErrorHandler {
     override handleError(error: any): void {
 
         console.error(error);
+        this.infoSrv.printError(error);
         if(!(error instanceof HttpErrorResponse)) super.handleError(error);
 
         const backEndError: IHttpError = error.error;
