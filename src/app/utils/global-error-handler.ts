@@ -34,7 +34,7 @@ export class GlobalErrorHandler extends ErrorHandler {
     override handleError(error: any): void {
 
         console.error(error);
-        this.infoSrv.printError(error);
+        this.infoSrv.printError(error).subscribe();
         if(!(error instanceof HttpErrorResponse)) super.handleError(error);
 
         const backEndError: IHttpError = error.error;
