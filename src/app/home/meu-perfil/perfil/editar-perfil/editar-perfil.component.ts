@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { AfterViewInit, Component, effect } from "@angular/core";
+import { AfterViewInit, Component, effect, signal, WritableSignal } from "@angular/core";
 import { FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { map, Observable, ReplaySubject, switchMap } from "rxjs";
 import { IProfile } from "../../../../utils/interfaces/profile.interface";
@@ -22,7 +22,7 @@ export class EditarPerfilComponent implements AfterViewInit{
 
     faSalvarIcon = faFloppyDisk
 
-    user : IProfile;
+    userSignal : WritableSignal<IProfile> = signal(undefined) ;
 
     form = new FormGroup({
         nome: new FormControl(''),
@@ -38,11 +38,11 @@ export class EditarPerfilComponent implements AfterViewInit{
     ){}
 
     ngAfterViewInit(): void {
-        
-        effect(() => {
-            this.user = this.profileService.sessionProfile$();
+                
+        setTimeout(() => {
+            this.userSignal = this.profileService.displayUser$;
             this.loadUser();
-        })
+        }); 
 
 
         this.dataUtilService.editModeListener.next(true);
@@ -51,7 +51,7 @@ export class EditarPerfilComponent implements AfterViewInit{
 
     loadUser(){
         
-        const {name, nomeCompleto, email, telefone} = this.profileService.sessionProfile$();
+        const {name, nomeCompleto, email, telefone} = this.userSignal();
 
         this.form.patchValue({
             nome: name,
@@ -61,18 +61,32 @@ export class EditarPerfilComponent implements AfterViewInit{
         })
 
     }
-
+    
     getPapelUser() : IPapelDTO{
-        
-        if(this.user.papeis?.length === 1)
-            return this.user.papeis[0]
-        else
-            return this.user.papeis?.find(p => p.prioritario)
+        if(!this.userSignal()) return undefined;
+
+        if(this.userSignal().papeis){
+            
+            let prioritario = this.userSignal().papeis.find(p => p.prioritario);
+
+            return prioritario ?? this.userSignal().papeis[0]
+            
+        } else {
+            return {
+                id: undefined,
+                nome: this.userSignal().papel,
+                agenteNome: undefined,
+                agenteSub: undefined,
+                guid: undefined,
+                prioritario: undefined,
+                setor: this.userSignal().setor
+            }
+        }
     }
 
     salvarUser() {
 
-        const {sub, imgPerfil} = this.profileService.sessionProfile$();
+        const {sub, imgPerfil} = this.userSignal();
 
         const salvarUsuarioForm = {
             ...this.form.value,

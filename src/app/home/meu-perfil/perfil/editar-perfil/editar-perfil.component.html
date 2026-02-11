@@ -5,24 +5,24 @@
 <div id="infos">
     <form [formGroup]="form">
         <div class="label">Nome</div>
-        <input type="text" formControlName="inNome"/>
+        <input type="text" formControlName="nome"/>
 
         <div class="label">Nome Completo</div>
-        <input type="text" formControlName="inNomeCompleto">
+        <input type="text" formControlName="nomeCompleto">
 
         <div class="label">E-mail Principal</div>
-        <input type="text" formControlName="inEmail">
+        <input type="text" formControlName="email">
 
         <div class="label">Contato</div>
-        <input type="tel" formControlName="inTelefone">
+        <input type="tel" formControlName="telefone">
 
         <div class="label">Orgão</div>
-        <div class="campo">{{getPapelUser().setor.orgao.sigla}} - {{getPapelUser().setor.orgao.nome}}</div>
+        <div class="campo">{{getPapelUser()?.setor?.orgao?.sigla}} - {{getPapelUser()?.setor?.orgao?.nome}}</div>
 
         <div class="label">Setor</div>
-        <div class="campo">{{getPapelUser().setor.sigla}} - {{getPapelUser().setor.nome}}</div>
+        <div class="campo">{{getPapelUser()?.setor?.sigla}} - {{getPapelUser()?.setor?.nome}}</div>
 
         <div class="label">Papel</div>
-        <div class="campo">{{getPapelUser().nome}}</div>
+        <div class="campo">{{getPapelUser()?.nome}}</div>
     </form>
 </div>

@@ -71,7 +71,7 @@ export class HeaderComponent implements OnInit {
     }
 
     get userImage() {
-        return this.dataUtilService.imageFromBase64(this.userSignal()?.imgPerfil?.blob)
+        return this.userSignal()?.imgPerfil && this.dataUtilService.imageFromBase64(this.userSignal().imgPerfil.blob)
     }
 
     get iniciais() {

@@ -1,5 +1,5 @@
 import { Injectable, signal } from "@angular/core";
-import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
+import { DomSanitizer, SafeResourceUrl, SafeUrl } from "@angular/platform-browser";
 import { BehaviorSubject, Subject } from "rxjs";
 import { IItemMenu } from "../IItemMenu";
 import { IContaDetail, IObjetoTiraSimples } from "../interfaces/conta-detail.interface";
@@ -18,8 +18,8 @@ export class DataUtilService {
     public readonly obsNomeTela = new BehaviorSubject(null);
 
 
-    imageFromBase64(base64 : string) : SafeResourceUrl {
-        return this.domSanitizer.bypassSecurityTrustResourceUrl(base64)
+    imageFromBase64(base64 : string) : SafeUrl {
+        return this.domSanitizer.bypassSecurityTrustUrl(base64)
     }
 
 

@@ -126,13 +126,28 @@ export class MeuPerfilComponent implements AfterViewInit{
     }
 
     salvarUser() {
-        this.profileService.salvarUsuario(this.userSignal()).subscribe(user => {
-            if(user){
-                this.profileService.sessionProfile$.set(this.userSignal())
-                this.toastr.success("Usuário salvo com sucesso");
-            } else
-                this.toastr.error("erro ao salvar usuario");
-        })
+
+
+        const {name, sub, imgPerfil} = this.userSignal();
+
+        const salvarUsuarioForm = {
+            ...this.userSignal(),
+            nome: name,
+            sub,
+            avatar: imgPerfil?.blob
+        }
+
+        this.profileService.salvarUsuario(salvarUsuarioForm).subscribe({
+            next: user => {
+                if(user){
+                    this.profileService.sessionProfile$.set(user);
+                    this.toastr.success("Usuário salvo com sucesso");
+                } else
+                    this.toastr.error("erro ao salvar usuario");
+            }
+    });
+        
+
     }
 
 
