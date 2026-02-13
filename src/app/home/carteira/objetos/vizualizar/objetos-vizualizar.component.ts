@@ -40,7 +40,7 @@ export class ObjetosVizualizarComponent implements AfterViewInit {
         nivel : number,
         label : string,
         nome: string,
-        previsto: number,
+        planejado: number,
         contratado : number
     }[] = [];
 
@@ -83,7 +83,7 @@ export class ObjetosVizualizarComponent implements AfterViewInit {
                     nivel: 0,
                     label: 'Exercicio',
                     nome: `${ano}`,
-                    previsto: this.somarValoresPrevisto(fontes),
+                    planejado: this.somarValoresPlanejado(fontes),
                     contratado: this.somarValoresContratado(fontes)
                 })
 
@@ -93,7 +93,7 @@ export class ObjetosVizualizarComponent implements AfterViewInit {
                         nivel: 1,
                         label: 'Fonte:',
                         nome: fontMap[fonte].nome,
-                        previsto: valores.previsto,
+                        planejado: valores.planejado,
                         contratado: valores.contratado
                     })
 
@@ -119,11 +119,11 @@ export class ObjetosVizualizarComponent implements AfterViewInit {
         this.router.navigate(['edit'], {relativeTo: this.route});
     }
 
-    somarValoresPrevisto(fontes : Record<string, ICusto>) {
+    somarValoresPlanejado(fontes : Record<string, ICusto>) {
         let total = 0;
 
         for(let valores of Object.values(fontes) ){
-            total += valores.previsto;
+            total += valores.planejado;
         }
 
         return total;

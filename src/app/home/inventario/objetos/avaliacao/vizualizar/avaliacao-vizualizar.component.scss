@@ -102,6 +102,14 @@
             color: var(--cinza-escuro);
             border-bottom: 1px #d7d7d7 solid;
             font-size: large;
+            display: flex;
+            align-items: center;
+
+            span.timestamp {
+                font-size: small;
+                color: var(--cinza-claro);
+                margin-left: auto;
+            }
         }
 
         main {

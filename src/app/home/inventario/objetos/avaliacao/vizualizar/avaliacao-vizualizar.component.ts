@@ -133,7 +133,8 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
     etapasStatus : {
         etapa: IEtapa,
         status: number,
-        pos: number
+        pos: number,
+        timestamp: string
     }[] = [];
 
     linhas : {
@@ -288,7 +289,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
     }
 
     checarEtapaEnum(etapaEnum : EtapaEnum){
-        return (<any>EtapaEnum)[this.objeto.emEtapa?.etapa.etapaId] === etapaEnum;
+        return (<any>EtapaEnum)[this.getEtapaAtual()?.etapa.etapaId] === etapaEnum;
     }
 
     limparContratado() {
@@ -320,7 +321,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                 this.fonteSrv.findByCodigo(codFonte).subscribe(fonte => {
                     _fontes.push({
                         fonteOrcamentaria: fonte,
-                        previsto: valores.previsto,
+                        planejado: valores.planejado,
                         contratado: valores.contratado
                     })
                 })
@@ -350,24 +351,24 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                 this.userId = user.id;
                 this.grupoService.findByUsuario(user.id).pipe(
                     tap(grupos => {
-                        this.executaAcao = grupos.map(g => g.id).includes(objeto.emEtapa.etapa.grupoResponsavel.id)
+                        this.executaAcao = grupos.map(g => g.id).includes(this.getEtapaAtual().etapa.grupoResponsavel.id)
                                            || Boolean(user.role.find(funcao => funcao.nome === "GESTOR_MASTER"));
                     })
                 ).subscribe()
             })
         ).pipe(finalize(() => this.carregamento--)).subscribe()
 
-        this.acaoDoModal = objeto.emEtapa.etapa.acoes.find(acao => acao.positivo !== undefined && !acao.positivo);
+        this.acaoDoModal = this.getEtapaAtual().etapa.acoes.find(acao => acao.positivo !== undefined && !acao.positivo);
         this.recarregarFluxo();
               
-        this.acoesNegativas = this.objeto.emEtapa.etapa.acoes.filter(a => a.positivo !== undefined && !a.positivo);
-        this.acoesPositivas = this.objeto.emEtapa.etapa.acoes.filter(a => a.positivo !== undefined && a.positivo);
+        this.acoesNegativas = this.getEtapaAtual().etapa.acoes.filter(a => a.positivo !== undefined && !a.positivo);
+        this.acoesPositivas = this.getEtapaAtual().etapa.acoes.filter(a => a.positivo !== undefined && a.positivo);
 
 
     }
 
     getEtapaAnterior() : IEtapa {
-        let nOrdem = this.objeto.emEtapa.etapa.ordem;
+        let nOrdem = this.getEtapaAtual().etapa.ordem;
         
         if (nOrdem === 0)
             return undefined;
@@ -390,11 +391,12 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
         let posInicial = -20;
         this.fluxo.etapas.forEach((etapa, i) => {
             let pos = (i * posStep) + 50;
-            if(etapa.id == this.objeto.emEtapa.etapa.id){
+            if(etapa.id == this.getEtapaAtual().etapa.id){
                 this.etapasStatus.push({
                     etapa: etapa,
                     status: 1,
-                    pos: pos
+                    pos: pos,
+                    timestamp: this.getUltimoEtapaByEtapa(etapa)?.timestamp
                 })
                 this.linhas.push({
                     status: 1,
@@ -405,15 +407,16 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                 status = 2
             } else {
                 
-                let acaoPositivo = this.objeto.emEtapa.etapa.acoes.find(acao => acao.positivo);
+                let acaoPositivo = this.getEtapaAtual().etapa.acoes.find(acao => acao.positivo);
 
                 let statusFinal = (acaoPositivo.proxEtapaId === etapa.id)
-                                && this.objeto.emEtapa.devolvido ? -1 : status
+                                && this.getEtapaAtual().devolvido ? -1 : status
 
                 this.etapasStatus.push({
                     etapa: etapa,
                     status: statusFinal,
-                    pos: pos
+                    pos: pos,
+                    timestamp: this.getUltimoEtapaByEtapa(etapa)?.timestamp
 
                 })
 
@@ -432,6 +435,16 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
             posInicial: posInicial,
             posFinal: 1420
         })
+    }
+
+    getUltimoEtapaByEtapa(etapa) {
+        const list = this.objeto.emEtapa.filter(ee => ee.etapa.id == etapa.id);
+
+        if(list.length == 0) {
+            return undefined;
+        } else {
+            return [...list].sort((a, b) => Date.parse(b.timestamp) - Date.parse(a.timestamp))[0]
+        }
     }
 
     gerarPath(pos: number, status : number) : string{
@@ -558,7 +571,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                         this.objetoService.getById(objetoId).pipe(
                             tap(objeto => {
                                 
-                                this.fluxoService.findWithEtapa(objeto.emEtapa.etapa.etapaId).pipe(
+                                this.fluxoService.findWithEtapa(this.getEtapaAtual(objeto).etapa.etapaId).pipe(
                                     tap(fluxo => this.setFluxo(fluxo)),
                                     finalize(() => this.setObjeto(objeto))
                                 ).subscribe()
@@ -695,7 +708,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                         indiPor => ({
                             fonte: indiPor.fonteOrcamentaria,
                             contratado: indiPor.contratado,
-                            previsto: indiPor.previsto
+                            planejado: indiPor.planejado
                         } as CadastroValoresFonte)
                     )
                 })
@@ -715,6 +728,22 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
             indicadaPor: [{fonteOrcamentaria: null, gnd: 4}],
             
         })
+    }
+
+    getEtapaAtual(obj?: IObjetoDetail) {
+        obj = obj ?? this.objeto;
+
+        if (!obj?.emEtapa || obj?.emEtapa?.length === 0) {
+            return null;
+        }
+
+        return [...obj.emEtapa]
+            .sort((a, b) =>{
+                if(!a.timestamp) return 1;
+                if(!b.timestamp) return -1;
+
+                return Date.parse(b.timestamp) - Date.parse(a.timestamp)
+            })[0];
     }
 
 

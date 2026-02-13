@@ -20,8 +20,8 @@ export class UnidadeOrcamentariaService {
     }
 
 
-    public getAllUnidadesOrcamentarias(  ) : Observable<UnidadeOrcamentariaDTO[]> {
-        return this.http.get<UnidadeOrcamentariaDTO[]>(`${this.unidadeUrl}/all`).pipe(
+    public getAllUnidadesOrcamentarias(version?:string) : Observable<UnidadeOrcamentariaDTO[]> {
+        return this.http.get<UnidadeOrcamentariaDTO[]>(`${this.unidadeUrl}/all`, {params: version && {version}}).pipe(
             catchError(err => this.errorHandlerService.handleError(err))
         );
     }

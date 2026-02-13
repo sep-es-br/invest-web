@@ -67,7 +67,7 @@ export class ObjetoFiltroComponent implements AfterViewInit {
             this.infoService.getAllAnos().pipe(
                 tap(anosList => this.setAnos(anosList))
             ),
-            this.statusService.findAll().pipe(
+            this.statusService.findAll('fluxo').pipe(
                 tap(statusList => this.setStatus(statusList))
             ),
             this.etapaService.findAll().pipe(
@@ -87,7 +87,7 @@ export class ObjetoFiltroComponent implements AfterViewInit {
                         this.filtro.etapa = this.etapas.find(e => e.id === etapa?.id);
 
                         if(this.podeVerUnidades) {
-                            this.unidadeService.getAllUnidadesOrcamentarias().pipe(
+                            this.unidadeService.getAllUnidadesOrcamentarias('fluxo').pipe(
                                 tap(unidadeList => this.setUnidades(unidadeList))
                             ).subscribe()
                         } else {

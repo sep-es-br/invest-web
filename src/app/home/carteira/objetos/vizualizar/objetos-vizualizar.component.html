@@ -105,13 +105,21 @@
                     <p>{{objeto?.contrato}}</p>
                 </div>
             </div>
+            <div class="campo">
+                <div class="label">
+                    <h3>Solicitado em</h3>
+                </div>
+                <div class="value">
+                    <p>{{objeto?.timestamp | date : "dd/MM/yyyy 'às' hh:mm a"}}</p>
+                </div>
+            </div>
         </main>
     </section>
     <table>
         <thead>
             <tr>
                 <th>Valores</th>
-                <th>Previsto</th>
+                <th>Planejado</th>
                 <th>Contratado</th>
                 <!-- <th>GND</th> -->
             </tr>
@@ -120,7 +128,7 @@
             <tr *ngFor="let linha of linhas"
                 [ngClass]="'nivel' + linha.nivel">
                 <td>{{linha.label}} <span>{{linha.nome}}</span></td>
-                <td><span title="{{linha.previsto | customCurrency}}">R$ {{linha.previsto | numeroResumido}}</span></td>
+                <td><span title="{{linha.planejado | customCurrency}}">R$ {{linha.planejado | numeroResumido}}</span></td>
                 <td><span title="{{linha.contratado | customCurrency}}">R$ {{linha.contratado | numeroResumido}}</span></td>
                 <!-- <td>{{linha.gnd}}</td> -->
             </tr>

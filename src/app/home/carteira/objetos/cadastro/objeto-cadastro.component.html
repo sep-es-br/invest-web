@@ -2,6 +2,7 @@
 <div id="content">
     <header>
         Solicitação
+        <span class="timestamp">{{ objeto.timestamp && ('Solicitado em ' + (objeto.timestamp | date : 'dd/MM/yyyy hh:mm a'))}}</span>
     </header>
     <main>
         <form #cadastroObjeto="ngForm">
@@ -37,7 +38,7 @@
                  [maxlength]="280" required #descricao="ngModel" name="descricao" [ngClass]="{
                     'invalido': (checado && descricao.invalid),
                     'srcProposta': (!!objeto.hashProposta)
-                }" rows="5"></textarea>
+                }" rows="10"></textarea>
             
             <label>Unidade Orçamentária <span class="obrigatorio">*</span></label>
             <ng-select [(ngModel)]="unidadeOrcamentaria" required

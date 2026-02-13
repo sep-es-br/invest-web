@@ -12,15 +12,15 @@
         height: 1.5rem;
         box-sizing: content-box;
         cursor: default;
+        gap: 0.5rem;
         
         h2 {
             font-size: medium;
-            margin-left: 0.5rem;
-            margin-right: auto;
         }
 
         .removerIcon {
             color: red;
+            margin-left: auto;
         }
     }
 

@@ -42,7 +42,7 @@ export class InvestimentosComponent implements AfterViewInit {
     @ViewChild(InvestimentoOrdenacaoComponent) ordenacaoComponent : InvestimentoOrdenacaoComponent;
 
 
-    totalPrevisto : number = 0;
+    totalPlanejado : number = 0;
     totalHomologado : number = 0;
     totalOrcado : number = 0;
     totalAutorizado : number = 0;
@@ -82,8 +82,8 @@ export class InvestimentosComponent implements AfterViewInit {
             config: [
                 new TiraListaCol({ titulo: "Investimento", caminhoValor: "nome", tipo: "propLongo", largura: "5fr" }),
                 new TiraListaCol({ titulo: "Unidade", caminhoValor: "unidadeOrcamentaria" }),
-                new TiraListaCol({ titulo: "Código P.O", caminhoValor: "codPO" }),
-                new TiraListaCol({ titulo: "Previsto", caminhoValor: "totalPrevisto", tipo: "propDinheiro" }),
+                new TiraListaCol({ titulo: "Código PO", caminhoValor: "codPO" }),
+                new TiraListaCol({ titulo: "Planejado", caminhoValor: "totalPlanejado", tipo: "propDinheiro" }),
                 new TiraListaCol({ titulo: "Contratado", caminhoValor: "totalContratado", tipo: "propDinheiro" }),
                 new TiraListaCol({ titulo: "Autorizado", caminhoValor: "totalAutorizado", tipo: "propDinheiro" }),
                 new TiraListaCol({ titulo: "Empenhado", caminhoValor: "totalEmpenhado", tipo: "propDinheiro" }),
@@ -95,7 +95,7 @@ export class InvestimentosComponent implements AfterViewInit {
                     new TiraListaCol({ titulo: "Objeto", caminhoValor: "nome", tipo: "propLongo", largura: '5fr' }),
                     new TiraListaCol({ titulo: "Status", caminhoValor: "status" }),
                     new TiraListaCol({ titulo: "Tipo", caminhoValor: "tipo" }),
-                    new TiraListaCol({ titulo: "Previsto", caminhoValor: "totalPrevisto", tipo: "propDinheiro" }),
+                    new TiraListaCol({ titulo: "Planejado", caminhoValor: "totalPlanejado", tipo: "propDinheiro" }),
                     new TiraListaCol({ titulo: "Contratado", caminhoValor: "totalContratado", tipo: "propDinheiro" }),
                     new TiraListaCol({ titulo: "Autorizado", caminhoValor: "totalAutorizado", tipo: "propDinheiro" }),
                     new TiraListaCol({ titulo: "Empenhado", caminhoValor: "totalEmpenhado", tipo: "propDinheiro" }),
@@ -168,7 +168,7 @@ export class InvestimentosComponent implements AfterViewInit {
                 
                 if(!totais) return;
 
-                this.totalPrevisto = totais.previsto;
+                this.totalPlanejado = totais.planejado;
                 this.totalHomologado = totais.contratado;
                 this.totalOrcado = totais.orcado;
                 this.totalAutorizado = totais.autorizado;

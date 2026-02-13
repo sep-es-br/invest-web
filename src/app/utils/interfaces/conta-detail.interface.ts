@@ -13,6 +13,6 @@ export interface IContaDetail {
 export interface IObjetoTiraSimples {
     id: number, 
     nome : string, 
-    previsto: number, 
+    planejado: number, 
     contratado: number
 }

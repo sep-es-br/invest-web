@@ -9,6 +9,7 @@
             <p>Quem Apontou: {{apontamento.usuario?.nomeCompleto}} ({{apontamento.grupo?.sigla}})</p>
             <p>Apontamento:</p>
             <p>{{apontamento.texto}}</p>
+            <p>Quando: {{apontamento.timestamp | date : "dd/MM/yyyy 'às' hh:mm a"}}</p>
         </div>
     </main>
 </main>

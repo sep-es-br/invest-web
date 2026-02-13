@@ -4,7 +4,7 @@
         <div id="value">{{dadoDetalhado.unidadeResponsavel}}</div>
     </div>
     <div>
-        <div id="label">Código P.O</div>
+        <div id="label">Código PO</div>
         <div id="value">{{dadoDetalhado.codPO}}</div>
     </div>
     <div id="invNome">
@@ -21,10 +21,10 @@
     </div>
     <section *ngFor="let valor of dadoDetalhado.valores">
         <div>
-            <div id="label">Previsto {{
+            <div id="label">Planejado {{
                 (valor.nomeFonte | uppercase).split(' ').length == 1 ? (valor.nomeFonte | uppercase) :  (valor.nomeFonte | uppercase | toSigla)
                 }}</div>
-            <div id="value"><span [title]="valor.valorPrevisto | customCurrency">R$ {{valor.valorPrevisto | numeroResumido }}</span></div>
+            <div id="value"><span [title]="valor.valorPlanejado | customCurrency">R$ {{valor.valorPlanejado | numeroResumido }}</span></div>
         </div>
         <div>
             <div id="label">Contratado {{

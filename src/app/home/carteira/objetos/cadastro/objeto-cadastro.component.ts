@@ -129,7 +129,7 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
                 indicadaPor : [
                     {
                         fonteOrcamentaria: null, 
-                        previsto: null,
+                        planejado: null,
                         contratado: null,
                         gnd: 4
                     }
@@ -278,11 +278,11 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
             const _fontes = [] as IFonteExercicio[];
             
             Object.entries(fontes).forEach(([codFonte, valores]) => {
-                const { previsto, contratado } = valores;
+                const { planejado, contratado } = valores;
                 this.fonteSrv.findByCodigo(codFonte).subscribe(fonte => {
                     _fontes.push({
                         fonteOrcamentaria: fonte,
-                        previsto,
+                        planejado,
                         contratado
                     } as IFonteExercicio)
                 })
@@ -409,7 +409,7 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
                                                 .reduce(
                                                     (acc, fonteExercicio) => {
                                                         acc[fonteExercicio.fonteOrcamentaria.codigo] = {
-                                                            previsto: fonteExercicio.previsto,
+                                                            planejado: fonteExercicio.planejado,
                                                             contratado: fonteExercicio.contratado
                                                         }
                                                         return acc;
@@ -446,7 +446,7 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
                             indiPor => ({
                                 fonte: indiPor.fonteOrcamentaria,
                                 contratado: indiPor.contratado,
-                                previsto: indiPor.previsto
+                                planejado: indiPor.planejado
                             } as CadastroValoresFonte)
                         )
                     })

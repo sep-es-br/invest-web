@@ -28,6 +28,6 @@ export interface ICusto {
 
 export interface IValoresFonte {
     fonte: FonteOrcamentariaDTO;
-    previsto: number;
+    planejado: number;
     contratado: number;
 }

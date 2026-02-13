@@ -8,19 +8,20 @@
         <fa-icon [icon]="setaDireita"></fa-icon>
         <div class="grupo">
             <div class="label">Grupo</div>
-            <div class="valor">{{objeto.emEtapa?.etapa.grupoResponsavel.nome}}-{{objeto.emEtapa?.etapa.grupoResponsavel.sigla}}</div>
+            <div class="valor">{{getEtapaAtual()?.etapa.grupoResponsavel.nome}}-{{getEtapaAtual()?.etapa.grupoResponsavel.sigla}}</div>
         </div>
         <fa-icon [icon]="setaDireita"></fa-icon>
         <div class="grupo">
             <div class="label">Atividade</div>
-            <div class="valor">{{objeto.emEtapa?.atividade}}</div>
+            <div class="valor">{{getEtapaAtual()?.atividade}}</div>
         </div>
     </div>
     <svg class="timeline" viewBox="-50 0 1500 100" width="100%" >
         <line *ngFor="let linha of linhas" [ngClass]="'status' + linha.status" [attr.x1]="linha.posInicial" [attr.x2]="linha.posFinal" y1="50%" y2="50%" ></line>
         <circle r ="10" cy="50%" cx="-20" class="status0"></circle>
         <g *ngFor="let status of etapasStatus">
-            <circle r="15" cy="50%" [attr.cx]="status.pos" [ngClass]="'status' + status.status"></circle>
+            <title *ngIf="status.timestamp">{{status.timestamp | date: 'dd/MM/yyyy hh:mm a'}}</title>
+            <circle r="15" cy="50%" [attr.cx]="status.pos" [ngClass]="'status' + status.status" ></circle>
             <path [attr.d]="gerarPath(status.pos, status.status)" stroke="white" stroke-width="3" fill="none"></path>
             <text [ngClass]="'status' + status.status" y="85%" [attr.x]="status.pos" text-anchor="middle">{{status.etapa.ordem}}. {{status.etapa.nome}}</text>
         </g>
@@ -30,6 +31,7 @@
 <main>
     <header>
         Solicitação
+        <span class="timestamp">{{ objeto.timestamp && ('Solicitado em ' + (objeto.timestamp | date : 'dd/MM/yyyy hh:mm a'))}}</span>
     </header>
     <main>
         <form #form="ngForm">
@@ -156,7 +158,7 @@
                 (onRemover)="removerExercicio($event)"></spo-avaliacao-exercicio>
         </div>
         <div class="acoes" *ngIf="executaAcao">
-            <button *ngIf="objeto?.emEtapa?.devolvido" (click)="doExibirFeedBack()"
+            <button *ngIf="getEtapaAtual()?.devolvido" (click)="doExibirFeedBack()"
                 class="btn neutro">
                 <!-- <span *ngIf="checarEtapaEnum(EtapaEnum.ANALISE_TECNICA); else verParecer"><fa-icon [icon]="parecerIcon"></fa-icon> Vizualizar Parecer</span>
                 <ng-template #verParecer><fa-icon [icon]="apontamentoIcon"></fa-icon> Vizualizar apontamentos</ng-template> -->

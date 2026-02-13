@@ -14,6 +14,6 @@ export interface IDadoDetalhado {
 interface IDadosValores {
     idFonte: number;
     nomeFonte: string;
-    valorPrevisto: number;
+    valorPlanejado: number;
     valorContratado: number;
 }

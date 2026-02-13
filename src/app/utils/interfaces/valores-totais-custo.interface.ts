@@ -1,5 +1,5 @@
 export interface ICardsTotaisDto {
-    previsto : number;
+    planejado : number;
     contratado : number;
     orcado : number;
     autorizado : number;

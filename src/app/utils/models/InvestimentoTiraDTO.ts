@@ -5,7 +5,7 @@ export class InvestimentoTiraDTO {
     nome!: string;
     unidadeOrcamentaria!: string;
     codPO!: string;
-    totalPrevisto!: number;
+    totalPlanejado!: number;
     totalContratado!: number;
     totalAutorizado! : number;
     totalDisponivel! : number;

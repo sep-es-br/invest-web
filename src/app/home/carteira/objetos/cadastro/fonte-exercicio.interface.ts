@@ -3,7 +3,7 @@ import { FonteOrcamentariaDTO } from "../../../../utils/models/FonteOrcamentaria
 export interface IFonteExercicio {
     id?:string;
     fonteOrcamentaria: FonteOrcamentariaDTO,
-    previsto?: number,
+    planejado?: number,
     contratado?: number,
     gnd : number
 }

@@ -39,7 +39,7 @@ export class ObjetosFiltroComponent implements AfterViewInit {
     status : IStatus[];
 
     planoSemPlano : PlanoOrcamentarioDTO = {
-        nome: 'Sem P.O.',
+        nome: 'Sem PO.',
         codigo: 'S.PO',
         id: -1
     }
@@ -104,7 +104,7 @@ export class ObjetosFiltroComponent implements AfterViewInit {
 
                 this.podeVerUnidades = permissao.verTodasUnidades;
                 if(this.podeVerUnidades) {
-                    consulta.push(this.unidadeService.getAllUnidadesOrcamentarias()
+                    consulta.push(this.unidadeService.getAllUnidadesOrcamentarias('fluxo')
                     .pipe(tap((unidadeList) => {
                         
                         this.unidades = unidadeList;

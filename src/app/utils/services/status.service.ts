@@ -15,8 +15,8 @@ export class StatusService {
         private errorHandler : ErrorHandlerService
     ){}
 
-    public findAll() : Observable<IStatus[]> {
-        return this.http.get<IStatus[]>(`${this.statusUrl}`)
+    public findAll(version?:string) : Observable<IStatus[]> {
+        return this.http.get<IStatus[]>(`${this.statusUrl}`, {params: version && {version: version}})
                 .pipe(catchError(err => this.errorHandler.handleError(err)));
     }
 

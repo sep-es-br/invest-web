@@ -181,11 +181,11 @@ export class CadastroInvestimentoService {
                         const _fontes = [] as IFonteExercicio[];
                         
                         Object.entries(fontes).forEach(([codFonte, valores]) => {
-                            const { previsto, contratado } = valores;
+                            const { planejado, contratado } = valores;
                             
                             _fontes.push({
                                 fonteOrcamentaria: fontesValues[codFonte],
-                                previsto,
+                                planejado,
                                 contratado
                             } as IFonteExercicio)
                             
@@ -219,7 +219,7 @@ export class CadastroInvestimentoService {
                                     indiPor => ({
                                         fonte: indiPor.fonteOrcamentaria,
                                         contratado: indiPor.contratado,
-                                        previsto: indiPor.previsto
+                                        planejado: indiPor.planejado
                                     } as CadastroValoresFonte)
                                 )
                             })
