@@ -108,6 +108,12 @@ select, input:not(.pesquisa) {
     
 }
 
+p-datepicker .p-datepicker-input {
+    --p-inputtext-padding-y: 0;
+    
+    align-items: center;
+}
+
 .invalido {
     border-color: var(--vermelho-padrao) !important;
     color: var(--vermelho-padrao) !important;

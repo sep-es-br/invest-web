@@ -1,7 +1,7 @@
 <header>
     <div>
         <fa-icon [icon]="removerIcon" 
-            class="remover"
+            class="remover" *ngIf="!(cadastrado && !emPeriodoRevisao)"
             (click)="onRemover.emit(exercicio)"></fa-icon>
     </div>
     <h4>Exercício <span>{{exercicio.anoExercicio}}</span></h4>
@@ -13,6 +13,8 @@
         *ngFor="let fonte of exercicio.indicadaPor, index as i"
         [fonteValores]="fonte"
         [lastElem]="i == exercicio.indicadaPor.length-1"
+        [cadastrado]="cadastrado"
+        [emPeriodoRevisao]="emPeriodoRevisao"
         (alterado)="getAlterado($event)"
         (onRemover)="removerFonte($event)"
         (onAdd)="exercicio.indicadaPor.push({fonteOrcamentaria: null, gnd: undefined})"

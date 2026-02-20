@@ -91,7 +91,7 @@
                     <h3>Plano (s)</h3>
                 </div>
                 <div class="value">
-                    <p *ngIf="objeto?.tiposPlano.length === 0; else planosLista" >Não Definido - ND</p>
+                    <p *ngIf="objeto?.tiposPlano?.length === 0; else planosLista" >Não Definido - ND</p>
                     <ng-template #planosLista>
                         <p *ngFor="let plano of objeto?.tiposPlano">{{plano.nome}} - {{plano.sigla}}</p>
                     </ng-template>

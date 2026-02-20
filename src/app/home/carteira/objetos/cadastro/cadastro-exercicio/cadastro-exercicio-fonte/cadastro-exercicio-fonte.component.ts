@@ -31,6 +31,8 @@ export class CadastroExercicioFonteComponent implements OnInit {
 
     @Input() lastElem : boolean;
     @Input() contratadoEditavel : boolean = false;
+    @Input() cadastrado : boolean = false;
+    @Input() emPeriodoRevisao : boolean = false;
 
     @Output() onRemover = new EventEmitter<IFonteExercicio>();
     @Output() onAdd = new EventEmitter<never>();

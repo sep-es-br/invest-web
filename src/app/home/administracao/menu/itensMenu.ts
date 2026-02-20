@@ -12,16 +12,8 @@ export const opcoesMenuAdm : {
         titulo: "Grupos",
         caminho: "/grupo"
     },{
-        icone: "flowchart",
-        titulo: "Fluxos",
-        caminho: ""
-    },{
-        icone: "question_mark",
-        titulo: "",
-        caminho: ""
-    },{
-        icone: "question_mark",
-        titulo: "",
-        caminho: ""
+        icone: "settings",
+        titulo: "Configurações Gerais",
+        caminho: "/configGerais"
     }
 ]

@@ -6,6 +6,7 @@ import { PessoasComponent } from "./pessoas/pessoas.component";
 import { MeuPerfilComponent } from "../meu-perfil/meu-perfil.component";
 import { PerfilComponent } from "../meu-perfil/perfil/perfil.component";
 import { MeuPerfilGruposComponent } from "../meu-perfil/grupos/grupos.component";
+import { ConfigGeraisComponent } from "./config-gerais/config-gerais.component";
 
 const routes : Route[] = [
     {
@@ -41,8 +42,8 @@ const routes : Route[] = [
             }
         ]
     }, {
-        path: 'fluxos',
-        component: EmConstrucaoComponent
+        path: 'configGerais',
+        component: ConfigGeraisComponent
     }
 
 ]

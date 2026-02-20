@@ -32,6 +32,8 @@ import { IFonteExercicio } from "./fonte-exercicio.interface";
 import { IObjetoCadastroForm, ICusto as CadastroCusto, IValoresFonte as CadastroValoresFonte } from "../../../../utils/interfaces/objeto-cadastro-form.interface";
 import { CadastroInvestimentoService } from "../../../../utils/services/cadastro-investimento.service";
 import { IDoUnload } from "../../../../utils/guard/DoUnload.interface";
+import { ConfigGeraisService } from "../../../../utils/services/config-gerais.service";
+import { StatusEnum } from "../../../../utils/enum/status.enum";
 
 @Component({
     templateUrl: "./objeto-cadastro.component.html",
@@ -77,6 +79,9 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
 
     gnd : number = 4;
 
+    cadastrado = false;
+    emPeriodoRevisao = false;
+
     constructor(
         private unidadeService : UnidadeOrcamentariaService,
         private planoService : PlanoOrcamentarioService,
@@ -90,7 +95,8 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
         private areaTematicaService : AreaTematicaService,
         private permissaoService : PermissaoService,
         private fonteSrv : FonteOrcamentariaService,
-        private cadastroInvestimentoService : CadastroInvestimentoService
+        private cadastroInvestimentoService : CadastroInvestimentoService,
+        private readonly configGeraisSrv : ConfigGeraisService
     ) {}
 
     @ViewChild('inNome') inNome: NgModel;
@@ -150,16 +156,18 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
                     planoList: this.planoService.getDoSigefes(null),
                     unidadeList: this.podeVerUnidades
                                     ? this.unidadeService.getFromSigefes()
-                                    : this.unidadeService.getUnidadeDoUsuario()
+                                    : this.unidadeService.getUnidadeDoUsuario(),
+                    emRevisao: this.configGeraisSrv.checarEmRevisao()
                 })
 
             }),
-            tap(({areasTematicas, localidadeList,planoList,tipoPlanoList,unidadeList}) => {
+            tap(({areasTematicas, localidadeList,planoList,tipoPlanoList,unidadeList, emRevisao}) => {
                 this.setUnidades(unidadeList);
                 this.setMicrorregioes(localidadeList);
                 this.setTiposPlano(tipoPlanoList as ITipoPlano[]);
                 this.setAreasTematicas(areasTematicas);
                 this.setPlanos(planoList);
+                this.emPeriodoRevisao = emRevisao.valueOf();
 
                 this.objeto.tiposPlano = [(tipoPlanoList as ITipoPlano[]).find(value => value.sigla === 'PIP')];
 
@@ -248,6 +256,7 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
 
     setObjeto(objeto : IObjetoDetail) {
         this.objeto = objeto;
+        this.cadastrado = objeto.emStatus.status.statusId === StatusEnum.CADASTRADO;
 
        
         let nome = `${objeto.codUnidade} - Objeto - ${objeto.id}`;

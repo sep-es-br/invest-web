@@ -26,6 +26,9 @@ export class CadastroExercicioComponent implements AfterViewInit{
     @Input() lastElem : boolean;
     @Input() contratadoEditavel : boolean = false;
 
+    @Input() cadastrado = false;
+    @Input() emPeriodoRevisao = false;
+
     @Output() onRemover = new EventEmitter<ICusto>();
     @Output() onAdd = new EventEmitter<never>();
 

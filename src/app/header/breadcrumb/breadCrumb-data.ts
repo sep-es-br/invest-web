@@ -22,6 +22,7 @@ export const breadCrumbNames : { [index : string] : string } = {
     relatorio: "Relatório",
     consolidado: "Consolidado",
     detalhado: "Detalhado",
-    'audiencia-publica': "Propostas de Audiência Pública"
+    'audiencia-publica': "Propostas de Audiência Pública",
+    configGerais: "Configurações Gerais"
 
 }

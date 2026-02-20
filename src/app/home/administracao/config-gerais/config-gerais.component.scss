@@ -1,0 +1,34 @@
+:host {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    box-shadow: var(--sombra-padrao);
+    border-radius: 0.5rem;
+    padding: 1rem;
+
+    header {
+        border-bottom: 1px solid var(--cinza-claro);
+        border-bottom-left-radius: 0.3rem;
+        border-bottom-right-radius: 0.3rem;
+        padding: 1rem;
+        h1 {
+            color: var(--cor-primaria);
+        }
+
+
+    }
+
+    main {
+        display: grid;
+        grid-template-columns: 1fr 4fr;
+        align-items: center;
+        margin-block: 1rem;
+
+    }
+
+    footer {
+        display: flex;
+        justify-content: flex-end;
+    }
+}

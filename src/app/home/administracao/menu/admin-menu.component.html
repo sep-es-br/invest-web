@@ -4,7 +4,7 @@
 </div>
 <div class="listaOpcoes" >
     <ng-container *ngFor="let item of opcoesMenuAdmin">
-        <div class="itemMenu" *ngIf="temAcesso.get(item.caminho)" (click)="redirectTo(item.caminho)">
+        <div class="itemMenu" *ngIf="temAcesso[item.caminho]" (click)="redirectTo(item.caminho)">
             <div class="icone">
                 <span class="material-symbols-outlined">{{item.icone}}</span>
             </div>
