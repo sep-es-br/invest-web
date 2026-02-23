@@ -70,17 +70,7 @@ export class GrupoMembrosComponent implements AfterViewInit {
             this.grupo = grupoSession;
             
             if(grupoSession){
-                concat(
-                    this.service.quantidadeMembros(grupoSession.id).pipe(tap(quantidade => {
-                        this.qtMembros = quantidade;
-                    })),
-                    this.service.getMembros(grupoSession.id).pipe(
-                        tap( membros => this.membros = membros )
-                    )
-                ).subscribe();
-                
-                
-
+                this.atualizarLista();
                 
                 
             }
@@ -91,8 +81,24 @@ export class GrupoMembrosComponent implements AfterViewInit {
                 this.permissao = permissao;
             }
         )).subscribe();
+
         
 
+    }
+
+    atualizarLista() {
+         if(this.grupo){
+                concat(
+                    this.service.getMembros(this.grupo.id, this.txtBusca.value).pipe(
+                        tap( membrosList => {
+                            this.membros = membrosList.data;
+                            this.qtMembros = membrosList.ammount;
+                        })
+                    )
+                ).subscribe();
+                
+                
+            }
     }
 
     getAvatar(avatar : string) : string {
@@ -115,6 +121,7 @@ export class GrupoMembrosComponent implements AfterViewInit {
        this.service.removerMembro(this.grupo.id, membroId).subscribe(grupo => {
             this.service.grupoSession.next(grupo);
             this.subAberto = -1;
+            this.atualizarLista();
             this.toastr.success('Membro removido')
             
        }) 
@@ -128,6 +135,7 @@ export class GrupoMembrosComponent implements AfterViewInit {
 
             this.service.addMembro(membroForm).subscribe(value => {
                 this.service.grupoSession.next(value);
+                this.atualizarLista();
                 this.toastr.success("Membro Salvo");
             });
         }
