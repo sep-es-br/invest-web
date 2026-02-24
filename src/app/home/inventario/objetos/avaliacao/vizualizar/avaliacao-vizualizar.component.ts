@@ -46,6 +46,7 @@ import { FonteOrcamentariaService } from "../../../../../utils/services/fonteOrc
 import { IVinculadaPor } from "../../../../../utils/interfaces/IVinculadaPor";
 import { IFonteExercicio } from "./fonte-exercicio.interface";
 import { IObjetoCadastroForm, ICusto as CadastroCusto, IValoresFonte as CadastroValoresFonte } from "../../../../../utils/interfaces/objeto-cadastro-form.interface";
+import { StatusEnum } from "../../../../../utils/enum/status.enum";
 
 @Component({
     templateUrl: "./avaliacao-vizualizar.component.html",
@@ -626,7 +627,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                 this.acaoService.executarAcao(executarAcaoDto).pipe(
                     tap(objeto => {
                         this.toastr.success("Acão de " + acao.nome + " executada com sucesso");
-                        if(!objeto?.emEtapa){
+                        if(objeto?.emStatus.status.statusId == StatusEnum.CADASTRADO){
                             this.router.navigate([".."], {relativeTo: this.route});
                         } else {
                             this.setObjeto(objeto);
