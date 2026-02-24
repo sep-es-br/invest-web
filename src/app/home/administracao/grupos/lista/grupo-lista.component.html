@@ -3,7 +3,7 @@
         <fa-icon [icon]="searchIcon"></fa-icon>
         <input type="text" [formControl]="txtBusca" class="pesquisa" placeholder="Procurar" />
     </div>
-    <button class="btn-acao" *ngIf="permissao?.criar" (click)="mostrarModal()">
+    <button title="Criar grupo" class="btn-acao" *ngIf="permissao?.criar" (click)="mostrarModal()">
         <span class="material-symbols-outlined">group</span>
     </button>
 </header>

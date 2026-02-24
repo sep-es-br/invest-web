@@ -5,7 +5,7 @@
         <input type="text" [formControl]="txtBusca" placeholder="Procurar" class="pesquisa" (keydown.enter)="atualizarLista()" />
     </div>
     <div class="acoes">
-        <div class="btn-acao" *ngIf="permissao?.editar" (click)="mostrarCadastro = true;">
+        <div class="btn-acao" role="button" title="Adcionar Membro" *ngIf="permissao?.editar" (click)="mostrarCadastro = true;">
             <fa-icon [icon]="addMembroIcon"></fa-icon>
         </div>
     </div>

@@ -150,7 +150,7 @@ export class ObjetosListagemComponent implements AfterViewInit{
                     let config = [
                             new TiraListaCol({ titulo: "Objeto", caminhoValor: 'nome', tipo: 'propLongo', largura: '5fr' }),
                             new TiraListaCol({ titulo: "Unidade", caminhoValor: 'unidadeResponsavel', largura: '10rem' }),
-                            new TiraListaCol({ titulo: "Código PO.", caminhoValor: 'codPO', valorDefault: 'Sem PO' }),
+                            new TiraListaCol({ titulo: "Código PO", caminhoValor: 'codPO', valorDefault: 'Sem PO' }),
                             new TiraListaCol({ titulo: "Planejado", caminhoValor: 'totalPlanejado', tipo: "propDinheiro" }),
                             new TiraListaCol({ titulo: "Contratado", caminhoValor: 'totalContratado', tipo: "propDinheiro" }),
                             new TiraListaCol({ titulo: "Autorizado", caminhoValor: 'totalAutorizado', tipo: "propDinheiro" }),

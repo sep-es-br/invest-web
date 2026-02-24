@@ -2,8 +2,8 @@
     <main>
         <div id="imgControl">
             <img [src]="imgAvatar" />
-            <label for="inAlterar"><div class="imgBtn btnEditar" *ngIf="editarImg"><fa-icon [icon]="faEditarImg"></fa-icon></div></label>
-            <div class="imgBtn btnRemover" *ngIf="editarImg" (click)="removerImg()"><fa-icon [icon]="faRemover"></fa-icon></div>
+            <label for="inAlterar"><div class="imgBtn btnEditar" *ngIf="editarImg"><fa-icon  title="Editar avatar" [icon]="faEditarImg"></fa-icon></div></label>
+            <div class="imgBtn btnRemover" *ngIf="editarImg" (click)="removerImg()"><fa-icon title="Remover avatar"  [icon]="faRemover"></fa-icon></div>
             <input *ngIf="editarImg" type="file" id="inAlterar" (change)="alterarImg($event)" />
         </div>
         <div id="infos">
