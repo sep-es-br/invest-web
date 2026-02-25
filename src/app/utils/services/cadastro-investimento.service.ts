@@ -199,6 +199,7 @@ export class CadastroInvestimentoService {
 
                     let objetoForm : IObjetoCadastroForm = {
                         id: obj.id,
+                        gnd: obj.gnd,
                         tipoConta: obj.tipoInvestimento,
                         tipo: obj.tipoObjeto,
                         areaTematicaId: obj.idArea,

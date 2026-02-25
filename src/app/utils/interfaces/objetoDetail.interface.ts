@@ -7,6 +7,7 @@ export interface IObjetoDetail {
 
 
     id: number;
+    gnd: number;
     hashProposta: string;
   tipoInvestimento: string;
   tipoObjeto: string;

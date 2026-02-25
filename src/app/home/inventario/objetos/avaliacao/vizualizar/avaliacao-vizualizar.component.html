@@ -36,9 +36,9 @@
     <main>
         <form #form="ngForm">
             <label for="inGnd">GND:<span class="obrigatorio">*</span></label>
-            <select id="inGnd" name="gnd" [(ngModel)]="gnd" disabled>
-                <option [ngValue]="4">4</option>
-                <option [ngValue]="5">5</option>
+            <select id="inGnd" name="gnd" [(ngModel)]="gnd">
+                <option [ngValue]="4">4 (Despesa)</option>
+                <option [ngValue]="5">5 (Inversão financeira)</option>
             </select>
 
             <label for="inConta">Tipo da Despesa:<span class="obrigatorio">*</span></label>
@@ -47,14 +47,6 @@
                 <option [ngValue]="undefined" disabled>Selecionar o tipo da despesa</option>
                 <option value="Investimento">Investimento</option>
                 <option value="Custeio">Outras Desp. Correntes</option>
-            </select>
-
-            <label for="inTipo">Tipo de Objeto <span class="obrigatorio">*</span></label>
-            <select id="inTipo" name="tipo" [(ngModel)]="objeto.tipoObjeto" disabled
-                [ngClass]="(checado && !objeto.tipoObjeto) ? 'invalido' : ''">
-                <option [ngValue]="undefined">Selecionar o tipo de objeto</option>
-                <option ngValue="Projeto">Projeto</option>
-                <option ngValue="Entrega">Entrega</option>
             </select>
             
             <label for="inNome">Nome <span class="obrigatorio">*</span></label>

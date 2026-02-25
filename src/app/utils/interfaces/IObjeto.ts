@@ -13,6 +13,7 @@ import { IProfile } from "./profile.interface";
 
 export interface IObjeto {
     id?: number;
+    gnd?: number;
     tipoConta?: string;
     tipo?: string;
     nome?: string;

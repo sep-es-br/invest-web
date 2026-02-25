@@ -689,6 +689,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
         
         let objetoForm : IObjetoCadastroForm = {
             id: this.objeto.id,
+            gnd: this.gnd,
             tipoConta: this.objeto.tipoInvestimento,
             tipo: this.objeto.tipoObjeto,
             areaTematicaId: this.objeto.idArea,

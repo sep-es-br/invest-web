@@ -5,6 +5,7 @@ import { ITipoPlano } from "./ITipoPlano"
 
 export interface IObjetoCadastroForm {
     id: number;
+    gnd: number;
     tipoConta: string;
     tipo: string;
     hashProposta: string;

@@ -136,8 +136,7 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
                     {
                         fonteOrcamentaria: null, 
                         planejado: null,
-                        contratado: null,
-                        gnd: 4
+                        contratado: null
                     }
                 ]
             }
@@ -257,7 +256,7 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
     setObjeto(objeto : IObjetoDetail) {
         this.objeto = objeto;
         this.cadastrado = objeto.emStatus.status.statusId === StatusEnum.CADASTRADO;
-
+        this.gnd = objeto.gnd;
        
         let nome = `${objeto.codUnidade} - Objeto - ${objeto.id}`;
 
@@ -435,6 +434,7 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
             
             let objetoForm : IObjetoCadastroForm = {
                 id: this.objeto.id,
+                gnd: this.gnd,
                 tipoConta: this.objeto.tipoInvestimento,
                 tipo: this.objeto.tipoObjeto,
                 areaTematicaId: this.objeto.idArea,
@@ -492,7 +492,7 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
     addExercicio() {
         this.recursosFinanceiros.push({
             anoExercicio: this.recursosFinanceiros.length > 0 ? this.recursosFinanceiros[this.recursosFinanceiros.length-1].anoExercicio + 1 : new Date().getFullYear(),
-            indicadaPor: [{fonteOrcamentaria: null, gnd: 4}]
+            indicadaPor: [{fonteOrcamentaria: null}]
         })
     }
 
