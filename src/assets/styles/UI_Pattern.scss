@@ -81,6 +81,15 @@ inputBase {
     }
 }
 
+p-datepicker {
+    input {
+        padding-right: 2rem !important;
+    }
+    .p-datepicker-clear-icon {
+        color: var(--vermelho-padrao)
+    }
+}
+
 textarea {
     @extend inputBase;
     padding-block: 0.5rem !important;

@@ -301,6 +301,8 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
     setObjeto(objeto : IObjetoDetail) {
         this.objeto = objeto;
 
+        this.gnd = objeto.gnd;
+
         
         this.dataUtil.setTitleInfo("objetoId", this.objeto.nome);
     
