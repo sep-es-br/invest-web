@@ -75,6 +75,7 @@ export class AvaliacaoListagemComponent implements AfterViewInit{
             status : this.filtroComponent.filtro.status,
             unidades : this.filtroComponent.filtro.unidade,
             etapa: this.filtroComponent.filtro.etapa,
+            gnd: this.filtroComponent.filtro.gnd,
             nome: this.txtBusca.value,
             podeVerUnidades: !!this.pode.verTodasUnidades
         };

@@ -39,6 +39,16 @@
     </ng-template>
 </ng-select>
 
+<ng-select [items]="gndOpcoes"
+            placeholder="GND"
+            [(ngModel)]="filtro.gnd"
+            [ngModelOptions]="{standalone: true}"
+            [clearable]="true"
+            (ngModelChange)="update()"
+            bindValue="value"
+        >
+</ng-select>
+
 <ng-select class="menor"
             [items]="status"
             placeholder="Status"

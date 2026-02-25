@@ -37,6 +37,7 @@ export class ObjetosFiltroComponent implements AfterViewInit {
     anos : number[];
     planos : PlanoOrcamentarioDTO[];
     status : IStatus[];
+    gndOpcoes : any[];
 
     planoSemPlano : PlanoOrcamentarioDTO = {
         nome: 'Sem PO',
@@ -79,6 +80,11 @@ export class ObjetosFiltroComponent implements AfterViewInit {
     }
 
     ngAfterViewInit(): void {
+
+        this.gndOpcoes = [
+            {value: 4, label: '4 (Despesa)'},
+            {value: 5, label: '5 (Inversão Financeira)'}
+        ]
 
         let consulta : Observable<any>[] = [
             this.infosService.getAllAnos()

@@ -29,6 +29,7 @@ export class ObjetoFiltroComponent implements AfterViewInit {
         status: undefined,
         unidade: undefined,
         etapa: undefined,
+        gnd: undefined,
         ano: new Date().getFullYear()
     }
 
@@ -41,6 +42,7 @@ export class ObjetoFiltroComponent implements AfterViewInit {
     unidades : UnidadeOrcamentariaDTO[];
     status : IStatus[];
     etapas : IEtapa[];
+    gndOpcoes : any[];
 
     opcoesUnidade : ISelectOpcao<UnidadeOrcamentariaDTO>[];
 
@@ -61,6 +63,11 @@ export class ObjetoFiltroComponent implements AfterViewInit {
         
         let etapa : IEtapa;
         let unidade : UnidadeOrcamentariaDTO;
+
+        this.gndOpcoes = [
+            {value: 4, label: '4 (Despesas)'},
+            {value: 5, label: '5 (Inversão finaceira)'}
+        ]
 
 
         merge(
@@ -167,5 +174,6 @@ export interface IFiltro {
     ano?: number,
     etapa?: IEtapa,
     nome? : string,
+    gnd? : number,
     podeVerUnidades? : boolean
 }

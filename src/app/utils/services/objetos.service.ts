@@ -111,6 +111,9 @@ export class ObjetosService {
         if(filtro.etapa)
             params = params.set("etapaId", filtro.etapa.id)
 
+        if(filtro.gnd)
+            params = params.set("gnd", filtro.gnd)
+
         params = params.set("podeVerUnidades", !!filtro.podeVerUnidades)
 
 

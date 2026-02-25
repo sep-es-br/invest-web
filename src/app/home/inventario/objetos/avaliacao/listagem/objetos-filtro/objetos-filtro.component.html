@@ -18,6 +18,16 @@
     </ng-template>
 </ng-select>
 
+<ng-select [items]="gndOpcoes"
+        placeholder="GND"
+        [(ngModel)]="filtro.gnd"
+        [ngModelOptions]="{standalone: true}"
+        [clearable]="true"
+        (ngModelChange)="atualizar()"
+        bindValue="value"
+    >
+</ng-select>
+
 <ng-select [items]="etapas" class="menor"
         placeholder="Etapa"
         [(ngModel)]="filtro.etapa"
