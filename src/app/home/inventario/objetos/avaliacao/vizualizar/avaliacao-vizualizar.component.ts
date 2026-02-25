@@ -727,7 +727,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
     addExercicio() {
         this.recursosFinanceiros.push({
             anoExercicio: this.recursosFinanceiros.length > 0 ? this.recursosFinanceiros[this.recursosFinanceiros.length-1].anoExercicio + 1 : new Date().getFullYear(),
-            indicadaPor: [{fonteOrcamentaria: null, gnd: 4}],
+            indicadaPor: [{fonteOrcamentaria: null}],
             
         })
     }

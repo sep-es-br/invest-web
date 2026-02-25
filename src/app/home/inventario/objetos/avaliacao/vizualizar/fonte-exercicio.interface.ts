@@ -5,6 +5,5 @@ export interface IFonteExercicio {
     id?:string;
     fonteOrcamentaria: FonteOrcamentariaDTO,
     planejado?: number,
-    contratado?: number,
-    gnd? : number
+    contratado?: number
 }
