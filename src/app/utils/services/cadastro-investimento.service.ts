@@ -81,6 +81,7 @@ export class CadastroInvestimentoService {
 
     addNovoObjeto() : number {
         let objeto : IObjetoDetail = {
+            gnd: 4,
             tipoInvestimento: "Investimento",
             tipoObjeto: "Projeto",
             codPlano: this.investimento.codPO,
