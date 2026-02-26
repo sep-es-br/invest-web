@@ -77,8 +77,6 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
 
     carregamento = 0;
 
-    gnd : number = 4;
-
     cadastrado = false;
     emPeriodoRevisao = false;
 
@@ -193,7 +191,9 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
 
                 } else if(this.cadastroInvestimentoService.objAtivo != undefined){
                     
-                    this.setObjeto(this.cadastroInvestimentoService.investimento.objetos[this.cadastroInvestimentoService.objAtivo])
+                    const objTarget = this.cadastroInvestimentoService.investimento.objetos[this.cadastroInvestimentoService.objAtivo];
+
+                    this.setObjeto(objTarget)
 
                     this.disableUoPo = true;
                     
@@ -255,8 +255,7 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
 
     setObjeto(objeto : IObjetoDetail) {
         this.objeto = objeto;
-        this.cadastrado = objeto.emStatus.status.statusId === StatusEnum.CADASTRADO;
-        this.gnd = objeto.gnd;
+        this.cadastrado = objeto.emStatus?.status.statusId === StatusEnum.CADASTRADO;
        
         let nome = `${objeto.codUnidade} - Objeto - ${objeto.id}`;
 
@@ -417,8 +416,8 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
                                                 .reduce(
                                                     (acc, fonteExercicio) => {
                                                         acc[fonteExercicio.fonteOrcamentaria.codigo] = {
-                                                            planejado: fonteExercicio.planejado,
-                                                            contratado: fonteExercicio.contratado
+                                                            planejado: fonteExercicio.planejado ?? 0,
+                                                            contratado: fonteExercicio.contratado ?? 0
                                                         }
                                                         return acc;
                                                     }
@@ -427,6 +426,7 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
                     return acc;
                 }
             , {})
+            this.objeto.new = false;
             this.cadastroInvestimentoService.patchValueObjeto(this.objeto);
             this.saved = true;
             this.router.navigate(['..'], {relativeTo: this.route})
@@ -434,7 +434,7 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
             
             let objetoForm : IObjetoCadastroForm = {
                 id: this.objeto.id,
-                gnd: this.gnd,
+                gnd: this.objeto.gnd,
                 tipoConta: this.objeto.tipoInvestimento,
                 tipo: this.objeto.tipoObjeto,
                 areaTematicaId: this.objeto.idArea,

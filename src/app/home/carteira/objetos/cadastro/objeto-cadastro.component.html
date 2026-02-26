@@ -7,7 +7,7 @@
     <main>
         <form #cadastroObjeto="ngForm">
             <label for="inGnd">GND:<span class="obrigatorio">*</span></label>
-            <select id="inGnd" name="gnd" [(ngModel)]="gnd" [disabled]="cadastrado && !emPeriodoRevisao">
+            <select id="inGnd" name="gnd" [(ngModel)]="objeto.gnd" [disabled]="cadastrado && !emPeriodoRevisao">
                 <option [ngValue]="4">4 (Despesa)</option>
                 <option [ngValue]="5">5 (Inversão financeira)</option>
             </select>
