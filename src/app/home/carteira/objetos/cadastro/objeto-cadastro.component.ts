@@ -100,6 +100,7 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
     @ViewChild('inNome') inNome: NgModel;
 
     objeto : IObjetoDetail = {
+        gnd: 4,
         tipoInvestimento: "Investimento",
         tipoObjeto: "Projeto",
         new: true
