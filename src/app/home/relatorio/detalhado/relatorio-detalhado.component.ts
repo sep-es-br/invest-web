@@ -9,7 +9,6 @@ import { ProgressModalComponent } from "../../../utils/components/progress-modal
 import { InvestimentoFiltroComponent } from "./investimento-filtro/investimento-filtro.component";
 import { IFiltroInvestimento, IFiltroInvestimentoComPag } from "./investimento-filtro/IFiltroInvestimento";
 import { ContaService } from "../../../utils/services/conta.service";
-import { ErrorHandlerService } from "../../../utils/services/error-handler.service";
 import { IDadoDetalhado } from "../../../utils/interfaces/dado-detalhado.interface";
 import { TiraDadoDetalhadoComponent } from "./tira-rel-detalhado/tira-dado-detalhado.component";
 import { NgSelectModule } from "@ng-select/ng-select";
@@ -56,7 +55,6 @@ export class RelatorioDetalhadoComponent implements AfterViewInit {
 
     constructor(
         private contaService : ContaService,
-        private errorHandler : ErrorHandlerService,
         private relatorioService : RelatorioService
     ){}
 
@@ -70,7 +68,6 @@ export class RelatorioDetalhadoComponent implements AfterViewInit {
         this.showProgress = true;
 
         acao.pipe(
-            catchError(err => this.errorHandler.handleError(err)),
             finalize(() => this.showProgress = false)
         ).subscribe()
     }
@@ -115,9 +112,7 @@ export class RelatorioDetalhadoComponent implements AfterViewInit {
     }
 
     gerarRelatorio() {
-        this.executar(this.relatorioService.gerarRelatorio(this.filtroCompleto).pipe(
-            catchError(err => this.errorHandler.handleError(err))
-        ));
+        this.executar(this.relatorioService.gerarRelatorio(this.filtroCompleto))
     }
     
     recarregarLista(novaPagina : number) {

@@ -4,7 +4,6 @@ import { environment } from "../../../environments/environment";
 import { Observable } from "rxjs/internal/Observable";
 import { ObjetoFiltro } from "../models/ObjetoFiltro";
 import { catchError, EMPTY, empty, EmptyError, map, of, switchMap, throwError } from "rxjs";
-import { ErrorHandlerService } from "./error-handler.service";
 import { InvestimentoFiltro } from "../models/InvestimentoFiltro";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ObjetoTiraDTO } from "../models/ObjetoTiraDTO";
@@ -24,7 +23,6 @@ export class ObjetosService {
     private readonly objetoUrl = `${environment.apiUrl}/objeto`;
 
     constructor(private http : HttpClient,
-        private errorHandlerService: ErrorHandlerService,
         private router : Router,
         private toastr : ToastrService,
         private route : ActivatedRoute
@@ -46,9 +44,7 @@ export class ObjetosService {
                 pagAtual: pgAtual,
                 ordem: ordem
             }
-        ).pipe(
-            catchError(err => this.errorHandlerService.handleError(err))
-        );
+        )
     }
 
     public getListaTiraObjetosEmProcessamento( filtro : IObjetoFiltro, pgAtual : number, tamPg : number ) : Observable<IDataList<ObjetoTiraDTO>> {
@@ -58,26 +54,18 @@ export class ObjetosService {
                         .set("tamPag", tamPg);
         
 
-        return this.http.get<IDataList<ObjetoTiraDTO>>(`${this.objetoUrl}/allTiraEmProcessamento`, { params: params }).pipe(
-            catchError(err => this.errorHandlerService.handleError(err))
-        );
+        return this.http.get<IDataList<ObjetoTiraDTO>>(`${this.objetoUrl}/allTiraEmProcessamento`, { params: params })
     }
 
     public getQuantidadeItensEmProcessamento( filtro : IObjetoFiltro) : Observable<number> {
-        return this.http.post<number>(`${this.objetoUrl}/countEmProcessameto`, {params: this.objetoFilterToParams(filtro)}).pipe(
-            catchError(err => this.errorHandlerService.handleError(err))
-        );
+        return this.http.post<number>(`${this.objetoUrl}/countEmProcessameto`, {params: this.objetoFilterToParams(filtro)})
     }
 
     public salvarObjeto(objeto : IObjetoCadastroForm) : Observable<any> {
         return this.http.post(`${this.objetoUrl}`, objeto)
-            .pipe(
-                catchError(err => this.errorHandlerService.handleError(err)),
-                switchMap(obj => ("error" in obj) ? throwError(() => obj.error) : of(obj))
-            );
     }
 
-    public getById(id : number) : Observable<IObjetoDetail> {
+    public getById(id : number) : Observable<unknown> {
         return this.http.get<IObjetoDetail>(`${this.objetoUrl}/byId`, { params: { id: id } })
         .pipe(catchError((err) => {
                 let mensagemErro : IHttpError = err.error    
@@ -89,8 +77,7 @@ export class ObjetosService {
                 }
 
                 return err;
-            }),
-            catchError(err => this.errorHandlerService.handleError(err)));
+            }));
     }
 
     public objetoFilterToParams(filtro : IObjetoFiltro) : HttpParams {
@@ -135,8 +122,7 @@ export class ObjetosService {
 
                 throw EmptyError;
                 
-            }),
-            catchError(err => this.errorHandlerService.handleError(err))
+            })
         );
     }
 

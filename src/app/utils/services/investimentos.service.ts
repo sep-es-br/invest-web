@@ -3,7 +3,6 @@ import { HttpClient, HttpErrorResponse, HttpParams } from "@angular/common/http"
 import { environment } from "../../../environments/environment";
 import { catchError, map, Observable, throwError } from "rxjs";
 import { InvestimentoFiltro } from "../models/InvestimentoFiltro";
-import { ErrorHandlerService } from "./error-handler.service";
 import { Router } from "@angular/router";
 import { InvestimentoTiraDTO } from "../models/InvestimentoTiraDTO";
 import { IDataList } from "../interfaces/dataList.interface";
@@ -18,9 +17,7 @@ export class InvestimentosService {
 
     private readonly investimentoUrl = `${environment.apiUrl}/investimento`;
    
-    constructor(private http : HttpClient,
-         private errorHandlerService: ErrorHandlerService,
-        private router : Router){
+    constructor(private http : HttpClient){
     }
 
 
@@ -31,9 +28,7 @@ export class InvestimentosService {
                 ...filtro,
                 ordem : ordem
 
-            }).pipe(
-                catchError(err => this.errorHandlerService.handleError(err))
-            );
+            })
     }
 
     public getLista(
@@ -50,30 +45,24 @@ export class InvestimentosService {
         }
 
         return this.http.get<IDataList<IContaLista>>(`${this.investimentoUrl}`, { params })
-        .pipe(
-            catchError(err => this.errorHandlerService.handleError(err))
-        )
+        
     }
 
     public getDetail(id: number) : Observable<IContaDetail> {
         return this.http.get<IContaDetail>(`${this.investimentoUrl}/${id}`)
-        .pipe(catchError(err => this.errorHandlerService.handleError(err)))
     }
 
     public salvar(cadastroForm: IInvestimentoCadastro) : Observable<IContaDetail> {
-        return this.http.post(`${this.investimentoUrl}`, cadastroForm)
-        .pipe(catchError(err => this.errorHandlerService.handleError(err)))
+        return this.http.post<IContaDetail>(`${this.investimentoUrl}`, cadastroForm)
     }
 
     public delete(idInvestimento: number) : Observable<void> {
         return this.http.delete<void>(`${this.investimentoUrl}/${idInvestimento}`)
-        .pipe(catchError(err => this.errorHandlerService.handleError(err)))
     }
 
     public checarValor(codPo: string, codUo: string) : Observable<number> {
         return this.http.get<{existe: number}>(`${this.investimentoUrl}/checarPar/${codPo}/${codUo}`)
         .pipe(
-            catchError(err => this.errorHandlerService.handleError(err)),
             map(value => value.existe)
         )
     }

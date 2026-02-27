@@ -60,7 +60,7 @@ export class ObjetosVizualizarComponent implements AfterViewInit {
         this.route.params.pipe(
             skipWhile((paramMap) => !('objetoId' in paramMap) ),
             mergeMap(({objetoId}) => this.objetoService.getById(objetoId).pipe(finalize(() => this.carregando = false))),
-        ).subscribe(obj => {
+        ).subscribe((obj : IObjetoDetail) => {
             this.objeto = obj
 
             let nome = `${obj.siglaUnidade} - Objeto - ${obj.id}`;

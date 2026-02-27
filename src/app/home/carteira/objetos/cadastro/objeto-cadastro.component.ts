@@ -211,7 +211,7 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
                             switchMap(objetoId => {
                                 this.carregamento++;
                                 return this.objetoService.getById(objetoId).pipe(
-                                    tap(obj => this.setObjeto(obj)),
+                                    tap(obj => this.setObjeto(obj as IObjetoDetail)),
                                     finalize(() => this.carregamento--)
                                 );
                             })
