@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ProgressModalComponent } from "../../../../utils/components/progress-modal/progress-modal.component";
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, MaxLengthValidator, NgForm, ReactiveFormsModule, RequiredValidator, Validators } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -21,14 +20,13 @@ import { CadastroInvestimentoService } from '../../../../utils/services/cadastro
 import { PermissaoService } from '../../../../utils/services/permissao.service';
 import { IPodeDTO } from '../../../../utils/models/PodeDto';
 import { ToastrService } from 'ngx-toastr';
-import { OverlayDirective } from "../../../../utils/directive/overflow.directive";
+import { OverlayDirective } from "../../../../utils/directive/overlay.directive";
 import { IDoUnload } from '../../../../utils/guard/DoUnload.interface';
 
 @Component({
   selector: 'app-investimento-cadastro',
   imports: [
     CommonModule,
-    ProgressModalComponent,
     NgSelectModule,
     FaIconComponent,
     TiraListaComponent,

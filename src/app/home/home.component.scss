@@ -15,6 +15,7 @@
         }
     }
 
+     
 
     main {
         display: flex;
@@ -29,10 +30,20 @@
             flex-grow: 1;
         }
     }
+}
 
-    @media screen and (max-width: 940px) {
-        
+div.progress {
+    img {
+        position: absolute;
+        top: calc(50% - 30px);
+        left: calc(50% - 25px);
     }
+
+    .p-progress-spinner-circle {
+        stroke: var(--cor-primaria);
+        animation: p-progress-spinner-dash 1.5s ease-in-out infinite ;
+    }
+
 }
 
 

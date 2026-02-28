@@ -2,31 +2,13 @@ import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { catchError, throwError } from 'rxjs';
+import { catchError, finalize, throwError } from 'rxjs';
 import { IHttpError } from '../interfaces/http-error.interface';
+import { LoadingService } from '../services/loading.service.service';
 
-export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  let token = sessionStorage.getItem('token');
+let count = 0;
 
-  if(token) {
-    const reqClone = req.clone({
-       
-      headers: req.headers.set(
-        'Authorization',
-        `Bearer ${sessionStorage.getItem('token')}`
-      ).set(
-        'Origin-URL',
-        inject(Router).url
-      ),
-    });
-
-    
-  
-    return next(reqClone);
-  }
-
-  return next(req).pipe(
-    catchError((error: HttpErrorResponse) => {
+let tratarErro = (error: HttpErrorResponse) => {
         const toastr = inject(ToastrService);
         const router = inject(Router);
 
@@ -59,6 +41,45 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         }
 
         return throwError(() => error);
-    })
+    }
+
+export const authInterceptor: HttpInterceptorFn = (req, next) => {
+  let token = sessionStorage.getItem('token');
+
+  let loadingSrv = inject(LoadingService);
+
+  if(token) {
+    const reqClone = req.clone({
+       
+      headers: req.headers.set(
+        'Authorization',
+        `Bearer ${sessionStorage.getItem('token')}`
+      ).set(
+        'Origin-URL',
+        inject(Router).url
+      ),
+    });
+
+    
+  
+    count++;
+    loadingSrv.carregando.set(count > 0);
+    return next(reqClone).pipe(
+      catchError(tratarErro),
+      finalize(() => {
+        count--;
+        loadingSrv.carregando.set(count > 0);
+      })
+    );
+  }
+
+  count++;
+  loadingSrv.carregando.set(count > 0);
+  return next(req).pipe(
+    catchError(tratarErro),
+      finalize(() => {
+        count--;
+        loadingSrv.carregando.set(count > 0);
+      })
   );
 };

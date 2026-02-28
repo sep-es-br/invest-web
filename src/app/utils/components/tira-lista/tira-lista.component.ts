@@ -6,7 +6,7 @@ import { faAngleRight, faEllipsis } from '@fortawesome/free-solid-svg-icons';
 import { CustomCurrencyPipe } from '../../pipes/customCurrency.pipe';
 import { NumeroResumidoPipe } from '../../pipes/numero-resumido.pipe';
 import { LARGURA_FUNC, TiraListaCol, TiraRecord } from './TiraListaConfig';
-import { OverlayDirective } from "../../directive/overflow.directive";
+import { OverlayDirective } from "../../directive/overlay.directive";
 
 @Component({
   selector: 'spo-tira-lista',

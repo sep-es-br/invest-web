@@ -5,7 +5,6 @@ import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faFileDownload, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FormControl, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { catchError, concat, finalize, merge, Observable, tap } from "rxjs";
-import { ProgressModalComponent } from "../../../utils/components/progress-modal/progress-modal.component";
 import { InvestimentoFiltroComponent } from "./investimento-filtro/investimento-filtro.component";
 import { IFiltroInvestimento, IFiltroInvestimentoComPag } from "./investimento-filtro/IFiltroInvestimento";
 import { ContaService } from "../../../utils/services/conta.service";
@@ -21,7 +20,7 @@ import { RelatorioService } from "../../../utils/services/relatorio.service";
     styleUrl: "./relatorio-detalhado.component.scss",
     imports: [
         CommonModule, BarraPaginacaoComponent, FontAwesomeModule,
-        ReactiveFormsModule, ProgressModalComponent, InvestimentoFiltroComponent,
+        ReactiveFormsModule, InvestimentoFiltroComponent,
         TiraDadoDetalhadoComponent, FontAwesomeModule, NgSelectModule
     ]
 })

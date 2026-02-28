@@ -39,7 +39,6 @@ import { AcaoEvent } from "./parecer-modal/parecer-modal.component";
 import { IParecer, parecerPadrao } from "../../../../../utils/interfaces/parecer.interface";
 import { EtapaEnum } from "../../../../../utils/enum/etapa.enum";
 import { PermissaoService } from "../../../../../utils/services/permissao.service";
-import { ProgressModalComponent } from "../../../../../utils/components/progress-modal/progress-modal.component";
 import { IObjetoDetail } from "../../../../../utils/interfaces/objetoDetail.interface";
 import { ApontamentoService } from "../../../../../utils/services/apontamento.service";
 import { FonteOrcamentariaService } from "../../../../../utils/services/fonteOrcamentaria.service";
@@ -54,8 +53,7 @@ import { StatusEnum } from "../../../../../utils/enum/status.enum";
     imports: [
     CommonModule, FontAwesomeModule, AvaliacaoExercicioComponent,
     NgSelectComponent, ReactiveFormsModule, FormsModule,
-    ApontamentoModalComponent, VizualizarApontamentoModalComponent,
-    ProgressModalComponent
+    ApontamentoModalComponent, VizualizarApontamentoModalComponent
 ]
 })
 export class AvaliacaoVizualizarComponent implements AfterViewInit {

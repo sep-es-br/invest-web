@@ -14,7 +14,6 @@ import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faPencil } from "@fortawesome/free-solid-svg-icons";
 import { PermissaoService } from "../../../../utils/services/permissao.service";
 import { IPodeDTO } from "../../../../utils/models/PodeDto";
-import { ProgressModalComponent } from "../../../../utils/components/progress-modal/progress-modal.component";
 import { ICusto, IObjetoDetail } from "../../../../utils/interfaces/objetoDetail.interface";
 import { cleanApoc } from "../../../../utils/funcoes-util";
 import { FonteOrcamentariaService } from "../../../../utils/services/fonteOrcamentaria.service";
@@ -24,8 +23,7 @@ import { FonteOrcamentariaService } from "../../../../utils/services/fonteOrcame
     styleUrl: "./objetos-vizualizar.component.scss",
     imports: [
     CommonModule, CustomCurrencyPipe, NumeroResumidoPipe,
-    FontAwesomeModule,
-    ProgressModalComponent
+    FontAwesomeModule
 ]
 })
 export class ObjetosVizualizarComponent implements AfterViewInit {

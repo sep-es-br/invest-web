@@ -4,7 +4,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { finalize, forkJoin, map, of, Subject, switchMap, take, takeUntil } from 'rxjs';
 import { IContaDetail, IObjetoTiraSimples } from '../../../../utils/interfaces/conta-detail.interface';
 import { CommonModule } from '@angular/common';
-import { ProgressModalComponent } from "../../../../utils/components/progress-modal/progress-modal.component";
 import { PermissaoService } from '../../../../utils/services/permissao.service';
 import { IPodeDTO } from '../../../../utils/models/PodeDto';
 import { faEye, faPencil, faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -19,7 +18,7 @@ import { TiraListaCol, TiraRecord } from '../../../../utils/components/tira-list
 
 @Component({
   selector: 'app-investimento-detail',
-  imports: [CommonModule, ProgressModalComponent, FaIconComponent, TiraListaComponent],
+  imports: [CommonModule, FaIconComponent, TiraListaComponent],
   templateUrl: './investimento-detail.component.html',
   styleUrl: './investimento-detail.component.scss'
 })

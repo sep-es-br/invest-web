@@ -8,7 +8,6 @@ import { TiraListaCol, TiraRecord } from '../../../utils/components/tira-lista/T
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 import { faPlus, faTrash, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { InvestimentosService } from '../../../utils/services/investimentos.service';
-import { ProgressModalComponent } from "../../../utils/components/progress-modal/progress-modal.component";
 import { finalize, switchMap } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { PermissaoService } from '../../../utils/services/permissao.service';
@@ -17,13 +16,13 @@ import { BarraPaginacaoComponent } from "../../../utils/components/barra-paginac
 import { ActivatedRoute, Router } from '@angular/router';
 import { CadastroInvestimentoService } from '../../../utils/services/cadastro-investimento.service';
 import { IContaDetail } from '../../../utils/interfaces/conta-detail.interface';
-import { OverlayDirective } from "../../../utils/directive/overflow.directive";
+import { OverlayDirective } from "../../../utils/directive/overlay.directive";
 
 @Component({
   selector: 'app-investimentos',
   templateUrl: './investimentos.component.html',
   styleUrls: ['./investimentos.component.scss'],
-  imports: [CommonModule, CampoPesquisaComponent, TiraListaComponent, FaIconComponent, ProgressModalComponent, FormsModule, BarraPaginacaoComponent, OverlayDirective]
+  imports: [CommonModule, CampoPesquisaComponent, TiraListaComponent, FaIconComponent, FormsModule, BarraPaginacaoComponent, OverlayDirective]
 })
 export class InvestimentosComponent implements OnInit {
 

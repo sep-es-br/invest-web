@@ -16,7 +16,6 @@ import { PermissaoService } from "../../../../utils/services/permissao.service";
 import { IPodeDTO } from "../../../../utils/models/PodeDto";
 import { ObjetosOrdenacaoComponent } from "./objetos-ordenacao/objetos-ordenacao.component";
 import { IOrdemItem } from "../../../../utils/interfaces/ordem-item.interface";
-import { ProgressModalComponent } from "../../../../utils/components/progress-modal/progress-modal.component";
 import { CampoPesquisaComponent } from "../../../../utils/components/campo-pesquisa/campo-pesquisa.component";
 import { TiraListaComponent } from "../../../../utils/components/tira-lista/tira-lista.component";
 import { TiraListaCol, TiraRecord } from "../../../../utils/components/tira-lista/TiraListaConfig";
@@ -28,7 +27,6 @@ import { TiraListaCol, TiraRecord } from "../../../../utils/components/tira-list
     CommonModule, ObjetosFiltroComponent, FontAwesomeModule,
     ReactiveFormsModule, BarraPaginacaoComponent,
     RouterModule, ObjetosOrdenacaoComponent, TiraListaComponent,
-    ProgressModalComponent,
     CampoPesquisaComponent
 ]
 })
