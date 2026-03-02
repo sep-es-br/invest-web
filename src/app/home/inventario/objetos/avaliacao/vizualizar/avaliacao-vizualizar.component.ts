@@ -352,7 +352,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                 this.userId = user.id;
                 this.grupoService.findByUsuario(user.id).pipe(
                     tap(grupos => {
-                        this.executaAcao = grupos.map(g => g.id).includes(this.getEtapaAtual().etapa.grupoResponsavel.id)
+                        this.executaAcao = grupos.map(g => g.idGrupo).includes(this.getEtapaAtual().etapa.grupoResponsavel.id)
                                            || Boolean(user.role.find(funcao => funcao.nome === "GESTOR_MASTER"));
                     })
                 ).subscribe()

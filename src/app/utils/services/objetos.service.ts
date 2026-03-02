@@ -40,6 +40,8 @@ export class ObjetosService {
         return this.http.post<IDataList<ObjetoTiraDTO>>(`${this.objetoUrl}/allTira`, 
             { 
                 ...filtro,
+                unidades: filtro?.unidades?.length === 0 ? undefined : filtro.unidades,
+                planos: filtro?.planos?.length === 0 ? undefined : filtro.planos,
                 tamPag: tamPg,
                 pagAtual: pgAtual,
                 ordem: ordem

@@ -141,4 +141,12 @@ export class ObjetosFiltroComponent implements AfterViewInit {
                 
     }
 
+    updatePOs() {
+        let uos = this.filtro.unidades.map(unidade => unidade.codigo)
+
+        this.planoService.getAllPlanos(uos).subscribe({
+            next: (planos => this.planos = planos)
+        })
+    }
+
 }

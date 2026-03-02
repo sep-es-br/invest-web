@@ -18,8 +18,12 @@ export class PlanoOrcamentarioService {
     }
 
 
-    public getAllPlanos(  ) : Observable<PlanoOrcamentarioDTO[]> {
-        return this.http.get<PlanoOrcamentarioDTO[]>(`${this.planoApi}/all`)
+    public getAllPlanos(codsUnidade? : string[]  ) : Observable<PlanoOrcamentarioDTO[]> {
+        let params = new HttpParams();
+
+        codsUnidade?.forEach(cod => params = params.append('codsUnidade', cod))
+
+        return this.http.get<PlanoOrcamentarioDTO[]>(`${this.planoApi}/all`, {params: params})
     }
 
     public getDoSigefes (unidade : UnidadeOrcamentariaDTO) : Observable<PlanoOrcamentarioDTO[]> {

@@ -4,6 +4,7 @@ import { GrupoDTO } from "../../../utils/models/GrupoDTO";
 import { GrupoService } from "../../../utils/services/grupo.service";
 import { ProfileService } from "../../../utils/services/profile.service";
 import { tap } from "rxjs";
+import { IGrupoDoUsuarioList } from "../../../utils/interfaces/grupoDoUsuarioList.interface";
 
 @Component({
     templateUrl: "./grupos.component.html",
@@ -12,7 +13,7 @@ import { tap } from "rxjs";
 })
 export class MeuPerfilGruposComponent {
 
-    grupos : GrupoDTO[]
+    grupos : IGrupoDoUsuarioList[]
 
     constructor(
         private grupoService : GrupoService, 

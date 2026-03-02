@@ -2,15 +2,20 @@ import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { catchError, finalize, throwError } from 'rxjs';
+import { catchError, finalize, of, throwError } from 'rxjs';
 import { IHttpError } from '../interfaces/http-error.interface';
 import { LoadingService } from '../services/loading.service.service';
 
 let count = 0;
 
-let tratarErro = (error: HttpErrorResponse) => {
-        const toastr = inject(ToastrService);
-        const router = inject(Router);
+export const authInterceptor: HttpInterceptorFn = (req, next) => {
+  let token = sessionStorage.getItem('token');
+
+  let loadingSrv = inject(LoadingService);
+  const toastr = inject(ToastrService);
+  const router = inject(Router);
+
+  const tratarErro = (error: HttpErrorResponse) => {
 
         const backEndError = (error.error ?? {}) as Partial<IHttpError>;
         const errorCode = error.status;
@@ -27,6 +32,7 @@ let tratarErro = (error: HttpErrorResponse) => {
             );
             sessionStorage.removeItem('token');
             router.navigateByUrl('login');
+            return of();
             break;
 
           case 501:
@@ -42,11 +48,6 @@ let tratarErro = (error: HttpErrorResponse) => {
 
         return throwError(() => error);
     }
-
-export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  let token = sessionStorage.getItem('token');
-
-  let loadingSrv = inject(LoadingService);
 
   if(token) {
     const reqClone = req.clone({
@@ -65,7 +66,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     count++;
     loadingSrv.carregando.set(count > 0);
     return next(reqClone).pipe(
-      catchError(tratarErro),
+      catchError(err => tratarErro(err)),
       finalize(() => {
         count--;
         loadingSrv.carregando.set(count > 0);
@@ -76,7 +77,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   count++;
   loadingSrv.carregando.set(count > 0);
   return next(req).pipe(
-    catchError(tratarErro),
+    catchError(err => tratarErro(err)),
       finalize(() => {
         count--;
         loadingSrv.carregando.set(count > 0);

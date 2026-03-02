@@ -9,6 +9,7 @@ import { ICadastroMembroForm } from "../../home/administracao/grupos/vizualizaca
 import { ToastrService } from "ngx-toastr";
 import { IMembroGrupo } from "../interfaces/membro-grupo.interface";
 import { IDataList } from "../interfaces/dataList.interface";
+import { IGrupoDoUsuarioList } from "../interfaces/grupoDoUsuarioList.interface";
 
 @Injectable({providedIn: "root"})
 export class GrupoService {
@@ -63,8 +64,8 @@ export class GrupoService {
             }))
     }
 
-    public findByUsuario(idUsuario : number) : Observable<GrupoDTO[]> {
-        return this.http.get<GrupoDTO[]>(`${this.grupoUrl}/byUsuario`, {params: {usuarioId: idUsuario}})
+    public findByUsuario(idUsuario : number) : Observable<IGrupoDoUsuarioList[]> {
+        return this.http.get<IGrupoDoUsuarioList[]>(`${this.grupoUrl}/byUsuario`, {params: {usuarioId: idUsuario}})
     }
 
     public save(grupo : GrupoDTO): Observable<GrupoDTO> {
