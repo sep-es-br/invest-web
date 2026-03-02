@@ -1,3 +1,10 @@
+<p-checkBox [(ngModel)]="filtro.audiencia"
+            [ngModelOptions]="{standalone: true}" 
+            [binary]="true" 
+            (ngModelChange)="update()"
+            inputId="audiencia" />
+<label for="audiencia">Audiência Pública</label>
+
 <ng-select [items]="unidades"
             [multiple]="true"
             placeholder="Unidade Orçamentária"

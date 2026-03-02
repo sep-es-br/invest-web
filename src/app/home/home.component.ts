@@ -14,7 +14,7 @@ import { of } from "rxjs";
 import { animate, style, transition, trigger } from "@angular/animations";
 import { isMobile } from "../utils/funcoes-util";
 import { OverlayDirective } from "../utils/directive/overlay.directive";
-import { ProgressSpinner } from "primeng/progressspinner";
+import { ProgressSpinnerModule } from "primeng/progressspinner";
 import { LoadingService } from '../utils/services/loading.service.service';
 
 @Component({
@@ -28,7 +28,7 @@ import { LoadingService } from '../utils/services/loading.service.service';
     MenuComponent,
     HomeRoutingModule,
     OverlayDirective,
-    ProgressSpinner
+    ProgressSpinnerModule
 ],
     animations: [
         trigger('openClose', [

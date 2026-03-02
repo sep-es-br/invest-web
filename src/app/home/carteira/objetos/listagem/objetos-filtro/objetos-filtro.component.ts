@@ -14,6 +14,7 @@ import { NgSelectModule } from "@ng-select/ng-select";
 import { FormsModule } from "@angular/forms";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
+import { CheckboxModule } from 'primeng/checkbox'
 
 @Component({
     selector: "spo-objetos-filtro",
@@ -21,14 +22,17 @@ import { faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
     styleUrl: "./objetos-filtro.component.scss",
     imports: [
         CommonModule, NgSelectModule, FormsModule,
-        FontAwesomeModule
+        FontAwesomeModule, CheckboxModule
     ]
 })
 export class ObjetosFiltroComponent implements AfterViewInit {
 
     removerIcon = faXmarkCircle;
 
-    filtro : IObjetoFiltro = {}
+    filtro : IObjetoFiltro = {
+        audiencia: false
+
+    }
 
     @Output() public filterChange = new EventEmitter<IObjetoFiltro>();
 
