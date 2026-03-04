@@ -36,6 +36,11 @@ export class AuthRedirectComponent {
           role: response.role,
         };
 
+        if(!infoplanToken){
+          this._router.navigate(['login']);
+          return;
+        }
+
         sessionStorage.setItem('token', infoplanToken);
 
         this._profileService.sessionProfile$.set(response);
