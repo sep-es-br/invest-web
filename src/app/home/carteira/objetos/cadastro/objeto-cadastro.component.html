@@ -8,16 +8,8 @@
         <form #cadastroObjeto="ngForm">
             <label for="inGnd">GND:<span class="obrigatorio">*</span></label>
             <select id="inGnd" name="gnd" [(ngModel)]="objeto.gnd" [disabled]="cadastrado && !emPeriodoRevisao">
-                <option [ngValue]="4">4 (Despesa)</option>
+                <option [ngValue]="4">4 (Investimento)</option>
                 <option [ngValue]="5">5 (Inversão financeira)</option>
-            </select>
-
-            <label for="inConta">Tipo da Despesa:<span class="obrigatorio">*</span></label>
-            <select id="inConta" name="tipoConta" [(ngModel)]="objeto.tipoInvestimento" required disabled
-                [ngClass]="(checado && tipoConta.invalid) ? 'invalido' : ''" #tipoConta="ngModel" >
-                <option [ngValue]="undefined" disabled>Selecionar o tipo da despesa</option>
-                <option value="Investimento">Investimento</option>
-                <option value="Custeio">Outras Desp. Correntes</option>
             </select>
             
             <label for="inNome">Nome <span class="obrigatorio">*</span></label>
@@ -27,7 +19,7 @@
 
             <label for="inDescricao">Descrição <span class="obrigatorio">*</span></label>
             <textarea id="inDescricao" [(ngModel)]="objeto.descricao" placeholder="Insira uma descrição" 
-                 [maxlength]="280" required #descricao="ngModel" name="descricao" [ngClass]="{
+                 [maxlength]="560" required #descricao="ngModel" name="descricao" [ngClass]="{
                     'invalido': (checado && descricao.invalid),
                     'srcProposta': (!!objeto.hashProposta)
                 }" rows="10" [disabled]="cadastrado && !emPeriodoRevisao"></textarea>

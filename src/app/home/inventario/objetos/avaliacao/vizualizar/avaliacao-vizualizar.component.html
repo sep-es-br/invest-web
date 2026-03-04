@@ -59,7 +59,7 @@
                         y="55"
                         fill="var(--cor-primaria)"
                         [ngStyle]="{'overflow': 'hidden'}">
-                        {{ status.avaliadoPor && ('Avaliado por: ' + status.avaliadoPor)  }}
+                        {{ status.avaliadoPor && ((status.etapa.ordem === 0 ? 'Solicitado por: ' : 'Avaliado por: ' ) + status.avaliadoPor)  }}
                     </text>
                 </g>
             </g>
@@ -74,16 +74,8 @@
         <form #form="ngForm">
             <label for="inGnd">GND:<span class="obrigatorio">*</span></label>
             <select id="inGnd" name="gnd" [(ngModel)]="gnd">
-                <option [ngValue]="4">4 (Despesa)</option>
+                <option [ngValue]="4">4 (Investimento)</option>
                 <option [ngValue]="5">5 (Inversão financeira)</option>
-            </select>
-
-            <label for="inConta">Tipo da Despesa:<span class="obrigatorio">*</span></label>
-            <select id="inConta" name="tipoConta" [(ngModel)]="objeto.tipoInvestimento" 
-                [ngClass]="(checado && !objeto.tipoInvestimento) ? 'invalido' : ''" disabled>
-                <option [ngValue]="undefined" disabled>Selecionar o tipo da despesa</option>
-                <option value="Investimento">Investimento</option>
-                <option value="Custeio">Outras Desp. Correntes</option>
             </select>
             
             <label for="inNome">Nome <span class="obrigatorio">*</span></label>
@@ -92,9 +84,11 @@
                 [ngClass]="(checado && nome.invalid) ? 'invalido' : ''"/>
 
             <label for="inDescricao">Descrição <span class="obrigatorio">*</span></label>
-            <input type="text" id="inDescricao" [(ngModel)]="objeto.descricao" name="descricao"
-                placeholder="Insira uma descrição" maxlength="280" required #descricao="ngModel"
-                [ngClass]="(checado && descricao.invalid) ? 'invalido' : ''" [disabled]="!executaAcao">
+            <textarea id="inDescricao" [(ngModel)]="objeto.descricao" placeholder="Insira uma descrição" 
+                 [maxlength]="560" required #descricao="ngModel" name="descricao" [ngClass]="{
+                    'invalido': (checado && descricao.invalid)
+                }" rows="10" ></textarea>
+
             
             <label>Unidade Orçamentária <span class="obrigatorio">*</span></label>
             <ng-select [(ngModel)]="unidadeOrcamentaria"

@@ -104,7 +104,6 @@ export class AvaliacaoListagemComponent implements AfterViewInit{
 
                    let config = [
                             new TiraListaCol({ titulo: "Objeto", caminhoValor: 'nome', tipo: 'propLongo', largura: '5fr' }),
-                            new TiraListaCol({ titulo: "Tipo", caminhoValor: 'tipo' }),
                             new TiraListaCol({ titulo: "Unidade", caminhoValor: 'unidadeResponsavel', largura: '8rem' }),
                             new TiraListaCol({ titulo: "Código PO", caminhoValor: 'codPO', valorDefault: 'Sem PO' }),
                             new TiraListaCol({ titulo: "Planejado", caminhoValor: 'totalPlanejado', tipo: "propDinheiro" }),

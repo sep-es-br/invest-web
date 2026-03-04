@@ -65,7 +65,7 @@ export class ObjetoFiltroComponent implements AfterViewInit {
         let unidade : UnidadeOrcamentariaDTO;
 
         this.gndOpcoes = [
-            {value: 4, label: '4 (Despesas)'},
+            {value: 4, label: '4 (Investimento)'},
             {value: 5, label: '5 (Inversão finaceira)'}
         ]
 

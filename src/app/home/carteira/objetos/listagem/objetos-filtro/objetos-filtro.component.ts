@@ -82,7 +82,7 @@ export class ObjetosFiltroComponent implements AfterViewInit {
     ngAfterViewInit(): void {
 
         this.gndOpcoes = [
-            {value: 4, label: '4 (Despesa)'},
+            {value: 4, label: '4 (Investimento)'},
             {value: 5, label: '5 (Inversão Financeira)'}
         ]
 

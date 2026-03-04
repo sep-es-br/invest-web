@@ -84,7 +84,7 @@ export class InvestimentoCadastroComponent implements OnInit, OnDestroy {
     this.form = this.fb.group({
       tipo: this.fb.control({value: 'Investimento', disabled: true}, [Validators.required]) ,
       nome: this.fb.control(undefined, [Validators.required, Validators.maxLength(140)]),
-      descricao: this.fb.control(undefined, [Validators.required, Validators.maxLength(280)]) ,
+      descricao: this.fb.control(undefined, [Validators.required, Validators.maxLength(560)]) ,
       codUnidade: this.fb.control(undefined, [Validators.required]),
       codPO: this.fb.control(undefined, [Validators.required])
     });
