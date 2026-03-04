@@ -21,7 +21,7 @@ import { CadastroInvestimentoService } from '../../../../utils/services/cadastro
 import { PermissaoService } from '../../../../utils/services/permissao.service';
 import { IPodeDTO } from '../../../../utils/models/PodeDto';
 import { ToastrService } from 'ngx-toastr';
-import { OverlayDirective } from "../../../../utils/directive/overflow.directive";
+import { OverlayDirective } from "../../../../utils/directive/overlay.directive";
 import { IDoUnload } from '../../../../utils/guard/DoUnload.interface';
 
 @Component({

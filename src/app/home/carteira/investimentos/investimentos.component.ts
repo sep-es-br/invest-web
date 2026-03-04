@@ -17,7 +17,7 @@ import { BarraPaginacaoComponent } from "../../../utils/components/barra-paginac
 import { ActivatedRoute, Router } from '@angular/router';
 import { CadastroInvestimentoService } from '../../../utils/services/cadastro-investimento.service';
 import { IContaDetail } from '../../../utils/interfaces/conta-detail.interface';
-import { OverlayDirective } from "../../../utils/directive/overflow.directive";
+import { OverlayDirective } from '../../../utils/directive/overlay.directive';
 
 @Component({
   selector: 'app-investimentos',
