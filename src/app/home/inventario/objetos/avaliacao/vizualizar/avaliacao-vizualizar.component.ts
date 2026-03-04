@@ -46,6 +46,7 @@ import { IVinculadaPor } from "../../../../../utils/interfaces/IVinculadaPor";
 import { IFonteExercicio } from "./fonte-exercicio.interface";
 import { IObjetoCadastroForm, ICusto as CadastroCusto, IValoresFonte as CadastroValoresFonte } from "../../../../../utils/interfaces/objeto-cadastro-form.interface";
 import { StatusEnum } from "../../../../../utils/enum/status.enum";
+import { OverlayDirective } from "../../../../../utils/directive/overlay.directive";
 
 @Component({
     templateUrl: "./avaliacao-vizualizar.component.html",
@@ -59,6 +60,8 @@ import { StatusEnum } from "../../../../../utils/enum/status.enum";
 export class AvaliacaoVizualizarComponent implements AfterViewInit {
 
     @ViewChildren(AvaliacaoExercicioComponent) cadastroExercicios : QueryList<AvaliacaoExercicioComponent>;
+
+    over : any;
 
     objeto : IObjetoDetail = {
         tipoInvestimento: "Investimento",
@@ -133,7 +136,9 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
         etapa: IEtapa,
         status: number,
         pos: number,
-        timestamp: string
+        timestamp: string,
+        avaliadoEm: string,
+        avaliadoPor: string
     }[] = [];
 
     linhas : {
@@ -392,12 +397,17 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
         let posInicial = -20;
         this.fluxo.etapas.forEach((etapa, i) => {
             let pos = (i * posStep) + 50;
+            const ultimaEtapa = this.getUltimoEtapaByEtapa(etapa);
+
             if(etapa.id == this.getEtapaAtual().etapa.id){
                 this.etapasStatus.push({
                     etapa: etapa,
                     status: 1,
                     pos: pos,
-                    timestamp: this.getUltimoEtapaByEtapa(etapa)?.timestamp
+                    timestamp: ultimaEtapa?.timestamp,
+                    avaliadoEm: ultimaEtapa?.avaliadoEm,
+                    avaliadoPor: ultimaEtapa?.avaliadoPor
+                    
                 })
                 this.linhas.push({
                     status: 1,
@@ -417,7 +427,9 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                     etapa: etapa,
                     status: statusFinal,
                     pos: pos,
-                    timestamp: this.getUltimoEtapaByEtapa(etapa)?.timestamp
+                    timestamp: ultimaEtapa?.timestamp,
+                    avaliadoEm: ultimaEtapa?.avaliadoEm,
+                    avaliadoPor: ultimaEtapa?.avaliadoPor
 
                 })
 

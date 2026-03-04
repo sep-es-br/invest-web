@@ -6,4 +6,6 @@ export interface IEmEtapa {
     atividade : string;
     devolvido : boolean;
     timestamp : string;
+    avaliadoEm : string;
+    avaliadoPor: string;
 }
