@@ -46,6 +46,8 @@ import { FonteOrcamentariaService } from "../../../../../utils/services/fonteOrc
 import { IVinculadaPor } from "../../../../../utils/interfaces/IVinculadaPor";
 import { IFonteExercicio } from "./fonte-exercicio.interface";
 import { IObjetoCadastroForm, ICusto as CadastroCusto, IValoresFonte as CadastroValoresFonte } from "../../../../../utils/interfaces/objeto-cadastro-form.interface";
+import { StatusEnum } from "../../../../../utils/enum/status.enum";
+import { OverlayDirective } from "../../../../../utils/directive/overlay.directive";
 
 @Component({
     templateUrl: "./avaliacao-vizualizar.component.html",
@@ -60,6 +62,8 @@ import { IObjetoCadastroForm, ICusto as CadastroCusto, IValoresFonte as Cadastro
 export class AvaliacaoVizualizarComponent implements AfterViewInit {
 
     @ViewChildren(AvaliacaoExercicioComponent) cadastroExercicios : QueryList<AvaliacaoExercicioComponent>;
+
+    over : any;
 
     objeto : IObjetoDetail = {
         tipoInvestimento: "Investimento",
@@ -133,7 +137,10 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
     etapasStatus : {
         etapa: IEtapa,
         status: number,
-        pos: number
+        pos: number,
+        timestamp: string,
+        avaliadoEm: string,
+        avaliadoPor: string
     }[] = [];
 
     linhas : {
@@ -288,7 +295,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
     }
 
     checarEtapaEnum(etapaEnum : EtapaEnum){
-        return (<any>EtapaEnum)[this.objeto.emEtapa?.etapa.etapaId] === etapaEnum;
+        return (<any>EtapaEnum)[this.getEtapaAtual()?.etapa.etapaId] === etapaEnum;
     }
 
     limparContratado() {
@@ -298,6 +305,8 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
 
     setObjeto(objeto : IObjetoDetail) {
         this.objeto = objeto;
+
+        this.gnd = objeto.gnd;
 
         
         this.dataUtil.setTitleInfo("objetoId", this.objeto.nome);
@@ -320,7 +329,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                 this.fonteSrv.findByCodigo(codFonte).subscribe(fonte => {
                     _fontes.push({
                         fonteOrcamentaria: fonte,
-                        previsto: valores.previsto,
+                        planejado: valores.planejado,
                         contratado: valores.contratado
                     })
                 })
@@ -350,24 +359,24 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                 this.userId = user.id;
                 this.grupoService.findByUsuario(user.id).pipe(
                     tap(grupos => {
-                        this.executaAcao = grupos.map(g => g.id).includes(objeto.emEtapa.etapa.grupoResponsavel.id)
+                        this.executaAcao = grupos.map(g => g.id).includes(this.getEtapaAtual().etapa.grupoResponsavel.id)
                                            || Boolean(user.role.find(funcao => funcao.nome === "GESTOR_MASTER"));
                     })
                 ).subscribe()
             })
         ).pipe(finalize(() => this.carregamento--)).subscribe()
 
-        this.acaoDoModal = objeto.emEtapa.etapa.acoes.find(acao => acao.positivo !== undefined && !acao.positivo);
+        this.acaoDoModal = this.getEtapaAtual().etapa.acoes.find(acao => acao.positivo !== undefined && !acao.positivo);
         this.recarregarFluxo();
               
-        this.acoesNegativas = this.objeto.emEtapa.etapa.acoes.filter(a => a.positivo !== undefined && !a.positivo);
-        this.acoesPositivas = this.objeto.emEtapa.etapa.acoes.filter(a => a.positivo !== undefined && a.positivo);
+        this.acoesNegativas = this.getEtapaAtual().etapa.acoes.filter(a => a.positivo !== undefined && !a.positivo);
+        this.acoesPositivas = this.getEtapaAtual().etapa.acoes.filter(a => a.positivo !== undefined && a.positivo);
 
 
     }
 
     getEtapaAnterior() : IEtapa {
-        let nOrdem = this.objeto.emEtapa.etapa.ordem;
+        let nOrdem = this.getEtapaAtual().etapa.ordem;
         
         if (nOrdem === 0)
             return undefined;
@@ -390,11 +399,17 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
         let posInicial = -20;
         this.fluxo.etapas.forEach((etapa, i) => {
             let pos = (i * posStep) + 50;
-            if(etapa.id == this.objeto.emEtapa.etapa.id){
+            const ultimaEtapa = this.getUltimoEtapaByEtapa(etapa);
+
+            if(etapa.id == this.getEtapaAtual().etapa.id){
                 this.etapasStatus.push({
                     etapa: etapa,
                     status: 1,
-                    pos: pos
+                    pos: pos,
+                    timestamp: ultimaEtapa?.timestamp,
+                    avaliadoEm: ultimaEtapa?.avaliadoEm,
+                    avaliadoPor: ultimaEtapa?.avaliadoPor
+                    
                 })
                 this.linhas.push({
                     status: 1,
@@ -405,15 +420,18 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                 status = 2
             } else {
                 
-                let acaoPositivo = this.objeto.emEtapa.etapa.acoes.find(acao => acao.positivo);
+                let acaoPositivo = this.getEtapaAtual().etapa.acoes.find(acao => acao.positivo);
 
                 let statusFinal = (acaoPositivo.proxEtapaId === etapa.id)
-                                && this.objeto.emEtapa.devolvido ? -1 : status
+                                && this.getEtapaAtual().devolvido ? -1 : status
 
                 this.etapasStatus.push({
                     etapa: etapa,
                     status: statusFinal,
-                    pos: pos
+                    pos: pos,
+                    timestamp: ultimaEtapa?.timestamp,
+                    avaliadoEm: ultimaEtapa?.avaliadoEm,
+                    avaliadoPor: ultimaEtapa?.avaliadoPor
 
                 })
 
@@ -432,6 +450,16 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
             posInicial: posInicial,
             posFinal: 1420
         })
+    }
+
+    getUltimoEtapaByEtapa(etapa) {
+        const list = this.objeto.emEtapa.filter(ee => ee.etapa.id == etapa.id);
+
+        if(list.length == 0) {
+            return undefined;
+        } else {
+            return [...list].sort((a, b) => Date.parse(b.timestamp) - Date.parse(a.timestamp))[0]
+        }
     }
 
     gerarPath(pos: number, status : number) : string{
@@ -558,7 +586,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                         this.objetoService.getById(objetoId).pipe(
                             tap(objeto => {
                                 
-                                this.fluxoService.findWithEtapa(objeto.emEtapa.etapa.etapaId).pipe(
+                                this.fluxoService.findWithEtapa(this.getEtapaAtual(objeto).etapa.etapaId).pipe(
                                     tap(fluxo => this.setFluxo(fluxo)),
                                     finalize(() => this.setObjeto(objeto))
                                 ).subscribe()
@@ -613,7 +641,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                 this.acaoService.executarAcao(executarAcaoDto).pipe(
                     tap(objeto => {
                         this.toastr.success("Acão de " + acao.nome + " executada com sucesso");
-                        if(!objeto?.emEtapa){
+                        if(objeto?.emStatus.status.statusId == StatusEnum.CADASTRADO){
                             this.router.navigate([".."], {relativeTo: this.route});
                         } else {
                             this.setObjeto(objeto);
@@ -675,6 +703,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
         
         let objetoForm : IObjetoCadastroForm = {
             id: this.objeto.id,
+            gnd: this.gnd,
             tipoConta: this.objeto.tipoInvestimento,
             tipo: this.objeto.tipoObjeto,
             areaTematicaId: this.objeto.idArea,
@@ -695,7 +724,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                         indiPor => ({
                             fonte: indiPor.fonteOrcamentaria,
                             contratado: indiPor.contratado,
-                            previsto: indiPor.previsto
+                            planejado: indiPor.planejado
                         } as CadastroValoresFonte)
                     )
                 })
@@ -712,9 +741,25 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
     addExercicio() {
         this.recursosFinanceiros.push({
             anoExercicio: this.recursosFinanceiros.length > 0 ? this.recursosFinanceiros[this.recursosFinanceiros.length-1].anoExercicio + 1 : new Date().getFullYear(),
-            indicadaPor: [{fonteOrcamentaria: null, gnd: 4}],
+            indicadaPor: [{fonteOrcamentaria: null}],
             
         })
+    }
+
+    getEtapaAtual(obj?: IObjetoDetail) {
+        obj = obj ?? this.objeto;
+
+        if (!obj?.emEtapa || obj?.emEtapa?.length === 0) {
+            return null;
+        }
+
+        return [...obj.emEtapa]
+            .sort((a, b) =>{
+                if(!a.timestamp) return 1;
+                if(!b.timestamp) return -1;
+
+                return Date.parse(b.timestamp) - Date.parse(a.timestamp)
+            })[0];
     }
 
 

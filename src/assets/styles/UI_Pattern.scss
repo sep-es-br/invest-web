@@ -81,6 +81,15 @@ inputBase {
     }
 }
 
+p-datepicker {
+    input {
+        padding-right: 2rem !important;
+    }
+    .p-datepicker-clear-icon {
+        color: var(--vermelho-padrao)
+    }
+}
+
 textarea {
     @extend inputBase;
     padding-block: 0.5rem !important;
@@ -106,6 +115,12 @@ select, input:not(.pesquisa) {
         color: var(--cor-primaria)
     }
     
+}
+
+p-datepicker .p-datepicker-input {
+    --p-inputtext-padding-y: 0;
+    
+    align-items: center;
 }
 
 .invalido {

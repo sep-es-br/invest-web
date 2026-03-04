@@ -19,12 +19,16 @@ spo-tira-lista {
         display: flex;
         flex-direction: column;
 
-        .filhos .tr:not(.detail) {
+        .filhos{
+            overflow: hidden;
+            
+            .tr:not(.detail) {
 
-            &:first-of-type {
-                margin-top: 1rem;
+                &:first-of-type {
+                    margin-top: 1rem;
+                }
             }
-        }
+        } 
 
         .tr:not(.detail) {
             display: grid;

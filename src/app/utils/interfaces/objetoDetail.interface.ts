@@ -7,6 +7,7 @@ export interface IObjetoDetail {
 
 
     id: number;
+    gnd: number;
     hashProposta: string;
   tipoInvestimento: string;
   tipoObjeto: string;
@@ -23,7 +24,7 @@ export interface IObjetoDetail {
   idArea: number;
   nomeArea: string;
   tiposPlano: ITipoPlano[];
-  emEtapa: IEmEtapa;
+  emEtapa: IEmEtapa[];
   emStatus: IEmStatus;
   contrato: string;
   possuiOrcamento: string;
@@ -32,14 +33,15 @@ export interface IObjetoDetail {
    * Representado em JSON como:
    * {
    *   "2025": {
-   *     "1234": { previsto: 100.0, contratado: 80.0 }
+   *     "1234": { planejado: 100.0, contratado: 80.0 }
    *   }
    * }
    */
   custos: Record<number, Record<string, ICusto>>;
+  timestamp: string;
 }
 
 export interface ICusto {
-  previsto: number;
+  planejado: number;
   contratado: number;
 }

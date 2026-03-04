@@ -2,42 +2,27 @@
 <div id="content">
     <header>
         Solicitação
+        <span class="timestamp">{{ objeto.timestamp && ('Solicitado em ' + (objeto.timestamp | date : 'dd/MM/yyyy hh:mm a'))}}</span>
     </header>
     <main>
         <form #cadastroObjeto="ngForm">
             <label for="inGnd">GND:<span class="obrigatorio">*</span></label>
-            <select id="inGnd" name="gnd" [(ngModel)]="gnd" disabled>
-                <option [ngValue]="4">4</option>
-                <option [ngValue]="5">5</option>
-            </select>
-
-            <label for="inConta">Tipo da Despesa:<span class="obrigatorio">*</span></label>
-            <select id="inConta" name="tipoConta" [(ngModel)]="objeto.tipoInvestimento" required disabled
-                [ngClass]="(checado && tipoConta.invalid) ? 'invalido' : ''" #tipoConta="ngModel" >
-                <option [ngValue]="undefined" disabled>Selecionar o tipo da despesa</option>
-                <option value="Investimento">Investimento</option>
-                <option value="Custeio">Outras Desp. Correntes</option>
-            </select>
-
-            <label for="inTipo">Tipo de Objeto <span class="obrigatorio">*</span></label>
-            <select id="inTipo" name="tipo" [(ngModel)]="objeto.tipoObjeto" required disabled
-                [ngClass]="(checado && !objeto.tipoObjeto) ? 'invalido' : ''">
-                <option [ngValue]="undefined" disabled>Selecionar o tipo de objeto</option>
-                <option ngValue="Projeto">Projeto</option>
-                <option ngValue="Entrega">Entrega</option>
+            <select id="inGnd" name="gnd" [(ngModel)]="objeto.gnd" [disabled]="cadastrado && !emPeriodoRevisao">
+                <option [ngValue]="4">4 (Investimento)</option>
+                <option [ngValue]="5">5 (Inversão financeira)</option>
             </select>
             
             <label for="inNome">Nome <span class="obrigatorio">*</span></label>
-            <input type="text" id="inNome" name="nome" [(ngModel)]="objeto.nome"
+            <input type="text" id="inNome" name="nome" [(ngModel)]="objeto.nome" [disabled]="cadastrado && !emPeriodoRevisao"
                 placeholder="Insira um nome" [maxlength]="140" required #nome="ngModel"
                 [ngClass]="(checado && nome.invalid) ? 'invalido' : ''"/>
 
             <label for="inDescricao">Descrição <span class="obrigatorio">*</span></label>
             <textarea id="inDescricao" [(ngModel)]="objeto.descricao" placeholder="Insira uma descrição" 
-                 [maxlength]="280" required #descricao="ngModel" name="descricao" [ngClass]="{
+                 [maxlength]="560" required #descricao="ngModel" name="descricao" [ngClass]="{
                     'invalido': (checado && descricao.invalid),
                     'srcProposta': (!!objeto.hashProposta)
-                }" rows="5"></textarea>
+                }" rows="10" [disabled]="cadastrado && !emPeriodoRevisao"></textarea>
             
             <label>Unidade Orçamentária <span class="obrigatorio">*</span></label>
             <ng-select [(ngModel)]="unidadeOrcamentaria" required
@@ -46,7 +31,7 @@
                     'srcProposta': (!!objeto.hashProposta)
                 }"     
                 [items]="opcoesUnidades"
-                [disabled]="disableUoPo || this.unidades?.length == 1"
+                [disabled]="disableUoPo || this.unidades?.length == 1 || (cadastrado && !emPeriodoRevisao)"
                 placeholder="Selecionar a unidade orçamentária"
                 bindLabel="label"
                 bindValue="value"
@@ -56,7 +41,7 @@
                 ></ng-select>            
            
             <label>Plano Orçamentário <span *ngIf="checarCadastrado()" class="obrigatorio">*</span></label>
-            <ng-select [(ngModel)]="planoOrcamentario" [disabled]="disableUoPo"
+            <ng-select [(ngModel)]="planoOrcamentario" [disabled]="disableUoPo || (cadastrado && !emPeriodoRevisao)"
                 (ngModelChange)="updateTipoPlano($event)"
                 [items]="opcoesPlanosOrcamentarios" [required]="checarCadastrado()"
                 placeholder="Selecionar plano orçamentário"
@@ -69,7 +54,7 @@
 
             
             <label for="inMicroregiao">Microrregião Atendida <span class="obrigatorio">*</span></label>
-            <select id="inMicroregiao" name="microregiaoAtendida" [(ngModel)]="microrregiao"
+            <select id="inMicroregiao" name="microregiaoAtendida" [(ngModel)]="microrregiao" [disabled]="cadastrado && !emPeriodoRevisao"
                 [ngClass]="{
                     'invalido': (checado && microregiaoAtendida.invalid),
                     'placeholder': !microrregiao
@@ -80,7 +65,7 @@
             </select>
             
             <label for="inAreaTematica">Área Temática <span class="obrigatorio">*</span></label>
-            <select id="inAreaTematica" name="areaTematica" [(ngModel)]="objeto.idArea"
+            <select id="inAreaTematica" name="areaTematica" [(ngModel)]="objeto.idArea" [disabled]="cadastrado && !emPeriodoRevisao"
                 [ngClass]="{
                         'invalido': (checado && areaTematica.invalid),
                         'placeholder': !areaTematica
@@ -100,7 +85,8 @@
             
             <label>Tipos de Plano(s): <span class="obrigatorio">*</span></label>
             <ng-select [(ngModel)]="objeto.tiposPlano"
-                [disabled]="objeto.id && objeto.tiposPlano && objeto.tiposPlano.length > 0 && !objeto.emEtapa"
+                [disabled]="(objeto.id && objeto.tiposPlano && objeto.tiposPlano.length > 0 && !objeto.emEtapa)
+                                || (cadastrado && !emPeriodoRevisao)"
                 [clearable]="false"
                 [ngClass]="{
                         'invalido': (checado && planos.invalid),
@@ -121,7 +107,7 @@
                 [ngClass]="{ 
                     'invalido': (checado && possuiOrcamento.invalid), 
                     'placeholder': !objeto.possuiOrcamento
-                }" required  #possuiOrcamento="ngModel">
+                }" required  #possuiOrcamento="ngModel" [disabled]="cadastrado && !emPeriodoRevisao">
                 <option [ngValue]="undefined">Selecionar se dispõe de orçamento</option>
                 <option value="total">Já dispõe, totalmente</option>
                 <option value="parcial">Já dispõe, parcialmente (indicar no campo Informações Complementares)</option>
@@ -132,10 +118,10 @@
         <div class="recursos">
             <header>
                 <h4>Valores</h4>
-                <fa-icon [icon]="addIcon" (click)="addExercicio()" ></fa-icon>
+                <fa-icon [icon]="addIcon" (click)="addExercicio()" *ngIf="!(cadastrado && !emPeriodoRevisao)" ></fa-icon>
             </header>
             <spo-cadastro-exercicio [contratadoEditavel]="objeto.contrato && objeto.contrato.length > 0"
-                [exercicio]="exercicio" 
+                [exercicio]="exercicio"  [cadastrado]="cadastrado" [emPeriodoRevisao]="emPeriodoRevisao"
                 *ngFor="let exercicio of recursosFinanceiros, index as i"
                 [lastElem]="i === recursosFinanceiros.length-1"
                 (onRemover)="removerExercicio($event)"></spo-cadastro-exercicio>

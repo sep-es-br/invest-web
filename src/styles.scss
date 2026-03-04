@@ -9,7 +9,8 @@
 :root {
     --cor-primaria: rgb(79, 129, 189);
     --cor-secundaria: rgb(249, 247, 247);
-    --cor-sigefes: rgb(57, 94, 139);
+    --cor-sigefes: rgb(50, 146, 221);
+    --cor-rosa: rgb(227, 150, 184);
     --fonte-open-sans: 'Open Sans', sans-serif;
     --sombra-padrao: 0 0 3px rgba(170, 170, 170, 0.35);
     --cinza-escuro: rgb(85, 85, 85);
@@ -17,6 +18,8 @@
     --cinza-claro: darkgray;
     --verde-padrao: #17c653;
     --vermelho-padrao: #f8285a;
+
+
 
     *, ::before, ::after {
         margin: 0;

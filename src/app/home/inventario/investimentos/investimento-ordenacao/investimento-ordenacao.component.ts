@@ -29,7 +29,7 @@ export class InvestimentoOrdenacaoComponent implements AfterViewInit {
         codUnidade: CampoOrdenacaoComponent.NONE,
         siglaUnidade: CampoOrdenacaoComponent.NONE,
         codPo: CampoOrdenacaoComponent.NONE,
-        previsto: CampoOrdenacaoComponent.NONE,
+        planejado: CampoOrdenacaoComponent.NONE,
         contratado: CampoOrdenacaoComponent.NONE,
         autorizado: CampoOrdenacaoComponent.NONE,
         empenhado: CampoOrdenacaoComponent.NONE,

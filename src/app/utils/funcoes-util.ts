@@ -19,3 +19,22 @@ export function cleanApoc(input: string): string {
 export const isMobile = () => {
   return screen.width <= 940;
 }
+
+export function toIsoZonedDateTime(date: Date): string {
+    const pad = (num: number) => num.toString().padStart(2, '0');
+    
+    const year = date.getFullYear();
+    const month = pad(date.getMonth() + 1);
+    const day = pad(date.getDate());
+    const hours = pad(date.getHours());
+    const minutes = pad(date.getMinutes());
+    const seconds = pad(date.getSeconds());
+
+    // O offset no JS é invertido (minutos que faltam/sobram para o UTC)
+    const tzOffset = -date.getTimezoneOffset();
+    const diff = tzOffset >= 0 ? '+' : '-';
+    const tzHours = pad(Math.floor(Math.abs(tzOffset) / 60));
+    const tzMin = pad(Math.abs(tzOffset) % 60);
+
+    return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}${diff}${tzHours}:${tzMin}`;
+}

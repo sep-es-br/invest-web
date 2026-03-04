@@ -5,6 +5,7 @@ import { ITipoPlano } from "./ITipoPlano"
 
 export interface IObjetoCadastroForm {
     id: number;
+    gnd: number;
     tipoConta: string;
     tipo: string;
     hashProposta: string;
@@ -28,6 +29,6 @@ export interface ICusto {
 
 export interface IValoresFonte {
     fonte: FonteOrcamentariaDTO;
-    previsto: number;
+    planejado: number;
     contratado: number;
 }

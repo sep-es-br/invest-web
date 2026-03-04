@@ -6,11 +6,13 @@ import { AfterViewInit, ComponentRef, Directive, ElementRef, Input, OnDestroy, R
 })
 export class OverlayDirective implements AfterViewInit, OnDestroy {
 
-    @Input('overlay') parent : HTMLElement | string ;
+    @Input('overlay') parent : HTMLElement | SVGAElement | string ;
     @Input() left : string;
     @Input() right : string;
     @Input() top : string;
     @Input() bottom : string;
+
+    @Input() followMouse: boolean;
     
     private overlayEl : HTMLElement;
 
@@ -32,6 +34,43 @@ export class OverlayDirective implements AfterViewInit, OnDestroy {
     }
 
     ngAfterViewInit(): void {
+
+        if((this.parent instanceof HTMLElement) || (this.parent instanceof SVGAElement)){
+            
+            if(this.followMouse){
+                const hostEl = this.hostRef.nativeElement;
+                this.renderer.setStyle(hostEl, 'pointer-events', `none`);
+                this.renderer.setStyle(hostEl, 'display', `none`); 
+            }
+
+            let parentElem = this.parent instanceof HTMLElement ? this.parent as HTMLElement : this.parent as SVGAElement;
+                
+
+            parentElem.onmousemove = (evt : MouseEvent) => {
+                if(!this.followMouse) return;
+
+                const hostEl = this.hostRef.nativeElement;
+                this.renderer.setStyle(hostEl, 'left', `${evt.clientX + 20}px`);
+                this.renderer.setStyle(hostEl, 'top', `${evt.clientY}px`);   
+            }
+
+            parentElem.onmouseenter = (evt : MouseEvent) => {
+                if(!this.followMouse) return;
+
+                const hostEl = this.hostRef.nativeElement;
+                this.renderer.setStyle(hostEl, 'display', `flex`); 
+            }
+
+            parentElem.onmouseleave = (evt : MouseEvent) => {
+                if(!this.followMouse) return;
+
+                const hostEl = this.hostRef.nativeElement;
+                this.renderer.setStyle(hostEl, 'display', `none`); 
+            }
+        }
+
+        
+
         if (!this.parent) {
             const hostElem = this.hostRef.nativeElement;
 

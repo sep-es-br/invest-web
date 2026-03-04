@@ -1,10 +1,10 @@
 <form>
         
         <div>
-                <fa-icon *ngIf="lastElem" [icon]="addIcon" class="add" (click)="onAdd.emit()"></fa-icon>
+                <fa-icon *ngIf="lastElem && !(cadastrado && !emPeriodoRevisao)" [icon]="addIcon" class="add" (click)="onAdd.emit()"></fa-icon>
         </div>
         <div>
-                <fa-icon [icon]="removerIcon" class="remover" (click)="onRemover.emit(fonteValores)"></fa-icon>
+                <fa-icon *ngIf="!(cadastrado && !emPeriodoRevisao)" [icon]="removerIcon" class="remover" (click)="onRemover.emit(fonteValores)"></fa-icon>
         </div>
         <ng-select [(ngModel)]="fonteValores.fonteOrcamentaria"
                 [ngModelOptions]="{standalone: true}"
@@ -12,14 +12,14 @@
                 placeholder="Selecionar a fonte orçamentária"
                 bindValue="value"
                 [compareWith]="selecionarFonte"
-                [searchFn]="filtrar"
+                [searchFn]="filtrar"  [disabled]="cadastrado && !emPeriodoRevisao"
                 [ngClass]="(checado && !valido) ? 'invalido' : ''"
                 ></ng-select>  
 
 
-        <input type="text" [(ngModel)]="fonteValores.previsto" [ngModelOptions]="{standalone: true}"
-                 placeholder="R$ " currencyMask/>
-        <fa-icon [icon]="limparIcon" class="apagar" (click)="fonteValores.previsto = null"></fa-icon>
+        <input type="text" [(ngModel)]="fonteValores.planejado" [ngModelOptions]="{standalone: true}"
+                 placeholder="R$ " currencyMask  [disabled]="cadastrado && !emPeriodoRevisao"/>
+        <fa-icon *ngIf="!(cadastrado && !emPeriodoRevisao)" [icon]="limparIcon" class="apagar" (click)="fonteValores.planejado = null"></fa-icon>
 
         <input type="text" [(ngModel)]="fonteValores.contratado" [ngModelOptions]="{standalone: true}"
                 placeholder="R$ " [disabled]="!contratadoEditavel" currencyMask/>

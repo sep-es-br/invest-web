@@ -83,12 +83,12 @@ export class InvestimentoDetailComponent implements OnInit, OnDestroy {
           
           let custoReduzido = Object.values(obj.custos)
                   .flatMap(value => Object.values(value))
-                  .reduce((acc, vlr) => ({previsto: acc.previsto + vlr.previsto, contratado: acc.contratado + vlr.contratado}))
+                  .reduce((acc, vlr) => ({planejado: acc.planejado + vlr.planejado, contratado: acc.contratado + vlr.contratado}))
 
           return {
             id: obj.id,
             nome: obj.nome,
-            previsto: custoReduzido.previsto,
+            planejado: custoReduzido.planejado,
             contratado: custoReduzido.contratado
           } as IObjetoTiraSimples
         })
@@ -101,7 +101,7 @@ export class InvestimentoDetailComponent implements OnInit, OnDestroy {
               }),
               
              new TiraListaCol<IObjetoTiraSimples>({
-              titulo: 'Previsto', caminhoValor: 'previsto', tipo: 'propDinheiro'
+              titulo: 'Planejado', caminhoValor: 'planejado', tipo: 'propDinheiro'
             } ),
              new TiraListaCol<IObjetoTiraSimples>({
               titulo: 'Contratado', caminhoValor: 'contratado', tipo: 'propDinheiro'

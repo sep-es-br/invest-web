@@ -9,6 +9,7 @@ import { Router } from "@angular/router";
 import { ICadastroMembroForm } from "../../home/administracao/grupos/vizualizacao/membros/grupo-membro-cadastro/CadastroMembroForm";
 import { ToastrService } from "ngx-toastr";
 import { IMembroGrupo } from "../interfaces/membro-grupo.interface";
+import { IDataList } from "../interfaces/dataList.interface";
 
 @Injectable({providedIn: "root"})
 export class GrupoService {
@@ -78,8 +79,14 @@ export class GrupoService {
         )
     }
 
-    public getMembros(grupoId : number) : Observable<IMembroGrupo[]> {
-        return this.http.get<IMembroGrupo[]>(`${this.grupoUrl}/membros`, {params: {  grupoId: grupoId }})
+    public getMembros(grupoId : number, termo : string) : Observable<IDataList<IMembroGrupo>> {
+        let params : {[index: string] : any} = {grupoId}
+
+        if(termo && termo.trim().length > 0){
+            params['termo'] = termo;
+        }
+
+        return this.http.get<IDataList<IMembroGrupo>>(`${this.grupoUrl}/membros`, {params})
         .pipe(catchError(err => this.errorHandler.handleError(err)))
     }
 

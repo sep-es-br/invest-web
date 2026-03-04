@@ -5,7 +5,7 @@ import { Router } from "@angular/router";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
-import { concat, Observable, tap } from "rxjs";
+import { concat, forkJoin, Observable, tap } from "rxjs";
 import { PermissaoService } from "../../../utils/services/permissao.service";
 
 @Component({
@@ -19,18 +19,22 @@ export class AdminMenuComponent {
 
     txtBusca = new FormControl(null);
 
-    temAcesso = new Map<string, boolean>();
+    temAcesso : {[index:string]: boolean} = {}
 
     constructor(private router : Router, private permissaoService : PermissaoService) {
-        let obs : Observable<boolean>[] = [];
+        
+        let temAcessoObs : {[index:string]: Observable<boolean>} = {}
         
         this.opcoesMenuAdmin.forEach(opcao => {
             if(opcao.caminho !== "")
-                obs.push(this.permissaoService.usuarioTemAcesso(opcao.caminho.slice(1))
-                        .pipe(tap(temAcesso => this.temAcesso.set(opcao.caminho, temAcesso))))
+                temAcessoObs[opcao.caminho] = this.permissaoService.usuarioTemAcesso(opcao.caminho.slice(1))
+            
+                
         })
 
-        concat(...obs).subscribe();
+        forkJoin(temAcessoObs).subscribe(
+            objAcesso => this.temAcesso = objAcesso
+        );
     }
 
     redirectTo(path : string){

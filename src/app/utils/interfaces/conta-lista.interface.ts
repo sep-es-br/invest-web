@@ -5,7 +5,7 @@ export interface IContaLista {
   codPO: string;
   nome: string;
   tipo: string;
-  totalPrevisto: number;
+  totalPlanejado: number;
   totalContratado: number;
   totalOrcado: number;
   totalAutorizado: number;

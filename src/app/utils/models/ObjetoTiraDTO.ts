@@ -4,7 +4,7 @@ export class ObjetoTiraDTO {
     codPO : string;
     nome!: string;
     tipo!: string;
-    totalPrevisto!: number;
+    totalPlanejado!: number;
     totalContratado!: number;
     totalAutorizado! : number;
     totalEmpenhado: number

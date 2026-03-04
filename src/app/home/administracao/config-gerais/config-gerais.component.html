@@ -1,0 +1,16 @@
+<header>
+  <h1>Configurações Gerais</h1>
+</header>
+<main>
+  <label>Periodo de Revisão do PIP</label>
+  <p-datePicker 
+    [(ngModel)]="periodoRevisao"
+    selectionMode="range"
+    dateFormat="dd/mm/yy"
+    showIcon="true"
+    view="date" 
+    showClear="true"/>
+</main>
+<footer>
+  <button class="btn positivo" (click)="salvar()"><fa-icon [icon]="salvarIcon"></fa-icon> Salvar</button>
+</footer>

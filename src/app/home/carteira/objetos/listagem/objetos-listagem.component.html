@@ -4,7 +4,7 @@
     <h3>Objetos ({{qtObjetos}})</h3>
     <spo-campo-pesquisa [formControl]="txtBusca"></spo-campo-pesquisa>
     <div id="acoes">
-        <button class="btn-acao" routerLink="novo" *ngIf="pode?.criar">
+        <button class="btn-acao" routerLink="novo" *ngIf="pode?.criar" title="Solicitar novo objeto">
             <fa-icon [icon]="novoObjIcon"></fa-icon>
         </button>
     </div>

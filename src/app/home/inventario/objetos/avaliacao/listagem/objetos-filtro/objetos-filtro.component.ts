@@ -29,6 +29,7 @@ export class ObjetoFiltroComponent implements AfterViewInit {
         status: undefined,
         unidade: undefined,
         etapa: undefined,
+        gnd: undefined,
         ano: new Date().getFullYear()
     }
 
@@ -41,6 +42,7 @@ export class ObjetoFiltroComponent implements AfterViewInit {
     unidades : UnidadeOrcamentariaDTO[];
     status : IStatus[];
     etapas : IEtapa[];
+    gndOpcoes : any[];
 
     opcoesUnidade : ISelectOpcao<UnidadeOrcamentariaDTO>[];
 
@@ -62,12 +64,17 @@ export class ObjetoFiltroComponent implements AfterViewInit {
         let etapa : IEtapa;
         let unidade : UnidadeOrcamentariaDTO;
 
+        this.gndOpcoes = [
+            {value: 4, label: '4 (Investimento)'},
+            {value: 5, label: '5 (Inversão finaceira)'}
+        ]
+
 
         merge(
             this.infoService.getAllAnos().pipe(
                 tap(anosList => this.setAnos(anosList))
             ),
-            this.statusService.findAll().pipe(
+            this.statusService.findAll('fluxo').pipe(
                 tap(statusList => this.setStatus(statusList))
             ),
             this.etapaService.findAll().pipe(
@@ -87,7 +94,7 @@ export class ObjetoFiltroComponent implements AfterViewInit {
                         this.filtro.etapa = this.etapas.find(e => e.id === etapa?.id);
 
                         if(this.podeVerUnidades) {
-                            this.unidadeService.getAllUnidadesOrcamentarias().pipe(
+                            this.unidadeService.getAllUnidadesOrcamentarias('fluxo').pipe(
                                 tap(unidadeList => this.setUnidades(unidadeList))
                             ).subscribe()
                         } else {
@@ -167,5 +174,6 @@ export interface IFiltro {
     ano?: number,
     etapa?: IEtapa,
     nome? : string,
+    gnd? : number,
     podeVerUnidades? : boolean
 }

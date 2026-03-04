@@ -56,7 +56,7 @@ export class RelatorioConsolidadoComponent {
         pagSize: 15,
     };
 
-    totalPrevisto : number;
+    totalPlanejado : number;
     totalContratado : number;
     totalAutorizado : number;
     totalDifAutorizadoContratado : number;     
@@ -90,7 +90,7 @@ export class RelatorioConsolidadoComponent {
             merge(
                 this.relatorioService.getValoresRelatorioConsolidado(filtro)
                 .pipe(tap( valores => {
-                    this.totalPrevisto = valores.previsto;
+                    this.totalPlanejado = valores.planejado;
                     this.totalContratado = valores.contratado;
                     this.totalAutorizado = valores.autorizado;
                     this.totalDifAutorizadoContratado = valores.difAutorizadoContratado;

@@ -81,6 +81,7 @@ export class CadastroInvestimentoService {
 
     addNovoObjeto() : number {
         let objeto : IObjetoDetail = {
+            gnd: 4,
             tipoInvestimento: "Investimento",
             tipoObjeto: "Projeto",
             codPlano: this.investimento.codPO,
@@ -181,11 +182,11 @@ export class CadastroInvestimentoService {
                         const _fontes = [] as IFonteExercicio[];
                         
                         Object.entries(fontes).forEach(([codFonte, valores]) => {
-                            const { previsto, contratado } = valores;
+                            const { planejado, contratado } = valores;
                             
                             _fontes.push({
                                 fonteOrcamentaria: fontesValues[codFonte],
-                                previsto,
+                                planejado,
                                 contratado
                             } as IFonteExercicio)
                             
@@ -199,6 +200,7 @@ export class CadastroInvestimentoService {
 
                     let objetoForm : IObjetoCadastroForm = {
                         id: obj.id,
+                        gnd: obj.gnd,
                         tipoConta: obj.tipoInvestimento,
                         tipo: obj.tipoObjeto,
                         areaTematicaId: obj.idArea,
@@ -219,7 +221,7 @@ export class CadastroInvestimentoService {
                                     indiPor => ({
                                         fonte: indiPor.fonteOrcamentaria,
                                         contratado: indiPor.contratado,
-                                        previsto: indiPor.previsto
+                                        planejado: indiPor.planejado
                                     } as CadastroValoresFonte)
                                 )
                             })

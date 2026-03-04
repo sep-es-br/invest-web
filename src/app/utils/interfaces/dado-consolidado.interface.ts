@@ -1,6 +1,6 @@
 export interface IDadoConsolidado {
     unidadeOrcamentaria : string;
-    previsto : number;
+    planejado : number;
     contratado : number;
     autorizado : number;
     difAutorizadoContratado : number;

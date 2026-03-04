@@ -17,7 +17,7 @@ import { BarraPaginacaoComponent } from "../../../utils/components/barra-paginac
 import { ActivatedRoute, Router } from '@angular/router';
 import { CadastroInvestimentoService } from '../../../utils/services/cadastro-investimento.service';
 import { IContaDetail } from '../../../utils/interfaces/conta-detail.interface';
-import { OverlayDirective } from "../../../utils/directive/overflow.directive";
+import { OverlayDirective } from '../../../utils/directive/overlay.directive';
 
 @Component({
   selector: 'app-investimentos',
@@ -94,8 +94,8 @@ export class InvestimentosComponent implements OnInit {
           config: [
               new TiraListaCol({ titulo: "Investimento", caminhoValor: "nome", tipo: "propLongo", largura: "5fr" }),
               new TiraListaCol({ titulo: "Unidade", caminhoValor: "unidadeOrcamentaria" }),
-              new TiraListaCol({ titulo: "Código P.O", caminhoValor: "codPO" }),
-              new TiraListaCol({ titulo: "Previsto", caminhoValor: "totalPrevisto", tipo: "propDinheiro" }),
+              new TiraListaCol({ titulo: "Código PO", caminhoValor: "codPO" }),
+              new TiraListaCol({ titulo: "Planejado", caminhoValor: "totalPlanejado", tipo: "propDinheiro" }),
               new TiraListaCol({ titulo: "Contratado", caminhoValor: "totalContratado", tipo: "propDinheiro" }),
               new TiraListaCol({ titulo: "Autorizado", caminhoValor: "totalAutorizado", tipo: "propDinheiro" }),
               new TiraListaCol({ titulo: "Empenhado", caminhoValor: "totalEmpenhado", tipo: "propDinheiro" }),

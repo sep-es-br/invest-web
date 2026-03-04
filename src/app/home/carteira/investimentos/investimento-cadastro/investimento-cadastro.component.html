@@ -9,14 +9,6 @@
     </header>
     <main>
         <form [formGroup]="form">
-            <label for="inConta">Tipo:<span class="obrigatorio">*</span></label>
-            <select id="inConta" formControlName="tipo"
-                [ngClass]="(checado && form.controls['tipo'].invalid) ? 'invalido' : ''" >
-                <option [ngValue]="undefined" disabled>Selecionar o tipo da despesa</option>
-                <option value="Investimento">Investimento</option>
-                <option value="Custeio">Outras Desp. Correntes</option>
-            </select>
-
             <label for="inNome">Nome <span class="obrigatorio">*</span></label>
             <input type="text" id="inNome" formControlName="nome"
                 placeholder="Insira um nome" 

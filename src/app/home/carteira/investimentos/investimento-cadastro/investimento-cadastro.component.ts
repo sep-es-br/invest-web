@@ -21,7 +21,7 @@ import { CadastroInvestimentoService } from '../../../../utils/services/cadastro
 import { PermissaoService } from '../../../../utils/services/permissao.service';
 import { IPodeDTO } from '../../../../utils/models/PodeDto';
 import { ToastrService } from 'ngx-toastr';
-import { OverlayDirective } from "../../../../utils/directive/overflow.directive";
+import { OverlayDirective } from "../../../../utils/directive/overlay.directive";
 import { IDoUnload } from '../../../../utils/guard/DoUnload.interface';
 
 @Component({
@@ -84,7 +84,7 @@ export class InvestimentoCadastroComponent implements OnInit, OnDestroy {
     this.form = this.fb.group({
       tipo: this.fb.control({value: 'Investimento', disabled: true}, [Validators.required]) ,
       nome: this.fb.control(undefined, [Validators.required, Validators.maxLength(140)]),
-      descricao: this.fb.control(undefined, [Validators.required, Validators.maxLength(280)]) ,
+      descricao: this.fb.control(undefined, [Validators.required, Validators.maxLength(560)]) ,
       codUnidade: this.fb.control(undefined, [Validators.required]),
       codPO: this.fb.control(undefined, [Validators.required])
     });
@@ -138,12 +138,12 @@ export class InvestimentoCadastroComponent implements OnInit, OnDestroy {
         
         let custoReduzido = Object.values(obj.custos)
                 .flatMap(value => Object.values(value))
-                .reduce((acc, vlr) => ({previsto: (acc.previsto ?? 0) + (vlr?.previsto ?? 0), contratado: (acc.contratado ?? 0) + (vlr?.contratado ?? 0)}))
+                .reduce((acc, vlr) => ({planejado: (acc.planejado ?? 0) + (vlr?.planejado ?? 0), contratado: (acc.contratado ?? 0) + (vlr?.contratado ?? 0)}))
 
         return {
           id: obj.id,
           nome: obj.nome,
-          previsto: custoReduzido.previsto,
+          planejado: custoReduzido.planejado,
           contratado: custoReduzido.contratado
         } as IObjetoTiraSimples
       }));
@@ -164,12 +164,12 @@ export class InvestimentoCadastroComponent implements OnInit, OnDestroy {
 
         let custoReduzido = Object.values(obj.custos)
                 .flatMap(value => Object.values(value))
-                .reduce((acc, vlr) => ({previsto: (acc.previsto ?? 0) + (vlr?.previsto ?? 0), contratado: (acc.contratado ?? 0) + (vlr?.contratado ?? 0)}))
+                .reduce((acc, vlr) => ({planejado: (acc.planejado ?? 0) + (vlr?.planejado ?? 0), contratado: (acc.contratado ?? 0) + (vlr?.contratado ?? 0)}))
 
         return {
           id: obj.id,
           nome: obj.nome,
-          previsto: custoReduzido.previsto,
+          planejado: custoReduzido.planejado,
           contratado: custoReduzido.contratado
         } as IObjetoTiraSimples
       }));
@@ -191,7 +191,7 @@ export class InvestimentoCadastroComponent implements OnInit, OnDestroy {
               }),
               
              new TiraListaCol<IObjetoTiraSimples>({
-              titulo: 'Previsto', caminhoValor: 'previsto', tipo: 'propDinheiro'
+              titulo: 'Planejado', caminhoValor: 'planejado', tipo: 'propDinheiro'
             } ),
              new TiraListaCol<IObjetoTiraSimples>({
               titulo: 'Contratado', caminhoValor: 'contratado', tipo: 'propDinheiro', valorDefault: 0

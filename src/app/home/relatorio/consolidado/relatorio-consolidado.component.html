@@ -2,9 +2,9 @@
 <spo-investimento-filtro (filterChange)="atualizarFiltro($event, 1)" ></spo-investimento-filtro>
 <div class="valoresCard">
     <spo-valor-card 
-        titulo="Previsto" 
+        titulo="Planejado" 
         nomeIcone="paid" 
-        [valor]="totalPrevisto"
+        [valor]="totalPlanejado"
     ></spo-valor-card>
     <spo-valor-card 
         titulo="Contratado" 
@@ -27,7 +27,7 @@
         <p>Relatório ({{qtDados}})</p>
     </div>
     <div id="acoes">
-        <button class="btn-acao" (click)="gerarRelatorio()"><fa-icon [icon]="downloadIcon"></fa-icon></button>
+        <button title="Gerar Relatório" class="btn-acao" (click)="gerarRelatorio()"><fa-icon [icon]="downloadIcon"></fa-icon></button>
     </div>
 </div>
 <div id="listaDados" class="displayLista">

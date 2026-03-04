@@ -8,18 +8,10 @@
         <main class="objInfo">
             <div class="campo">
                 <div class="label">
-                    <h3>Tipo de Despesa</h3>
+                    <h3>GND</h3>
                 </div>
                 <div class="value">
-                    <p>{{objeto?.tipoInvestimento}}</p>
-                </div>
-            </div>
-            <div class="campo">
-                <div class="label">
-                    <h3>Tipo de Objeto</h3>
-                </div>
-                <div class="value">
-                    <p>{{objeto?.tipoObjeto}}</p>
+                    <p>{{objeto?.gnd}} ({{ objeto?.gnd && ( objeto.gnd === 4 ? 'Investimento' : 'Inversão Financeira' )}})</p>
                 </div>
             </div>
             <div class="campo">
@@ -91,7 +83,7 @@
                     <h3>Plano (s)</h3>
                 </div>
                 <div class="value">
-                    <p *ngIf="objeto?.tiposPlano.length === 0; else planosLista" >Não Definido - ND</p>
+                    <p *ngIf="objeto?.tiposPlano?.length === 0; else planosLista" >Não Definido - ND</p>
                     <ng-template #planosLista>
                         <p *ngFor="let plano of objeto?.tiposPlano">{{plano.nome}} - {{plano.sigla}}</p>
                     </ng-template>
@@ -105,13 +97,21 @@
                     <p>{{objeto?.contrato}}</p>
                 </div>
             </div>
+            <div class="campo">
+                <div class="label">
+                    <h3>Solicitado em</h3>
+                </div>
+                <div class="value">
+                    <p>{{objeto?.timestamp | date : "dd/MM/yyyy 'às' hh:mm a"}}</p>
+                </div>
+            </div>
         </main>
     </section>
     <table>
         <thead>
             <tr>
                 <th>Valores</th>
-                <th>Previsto</th>
+                <th>Planejado</th>
                 <th>Contratado</th>
                 <!-- <th>GND</th> -->
             </tr>
@@ -120,7 +120,7 @@
             <tr *ngFor="let linha of linhas"
                 [ngClass]="'nivel' + linha.nivel">
                 <td>{{linha.label}} <span>{{linha.nome}}</span></td>
-                <td><span title="{{linha.previsto | customCurrency}}">R$ {{linha.previsto | numeroResumido}}</span></td>
+                <td><span title="{{linha.planejado | customCurrency}}">R$ {{linha.planejado | numeroResumido}}</span></td>
                 <td><span title="{{linha.contratado | customCurrency}}">R$ {{linha.contratado | numeroResumido}}</span></td>
                 <!-- <td>{{linha.gnd}}</td> -->
             </tr>

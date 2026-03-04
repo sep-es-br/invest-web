@@ -11,4 +11,5 @@ export interface IObjetoFiltro {
     etapa? : IEtapa,
     status? : IStatus,
     podeVerUnidades? : boolean
+    gnd? : number
 }

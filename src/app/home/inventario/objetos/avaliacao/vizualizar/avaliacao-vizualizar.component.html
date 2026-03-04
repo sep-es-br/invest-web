@@ -8,51 +8,74 @@
         <fa-icon [icon]="setaDireita"></fa-icon>
         <div class="grupo">
             <div class="label">Grupo</div>
-            <div class="valor">{{objeto.emEtapa?.etapa.grupoResponsavel.nome}}-{{objeto.emEtapa?.etapa.grupoResponsavel.sigla}}</div>
+            <div class="valor">{{getEtapaAtual()?.etapa.grupoResponsavel.nome}}-{{getEtapaAtual()?.etapa.grupoResponsavel.sigla}}</div>
         </div>
         <fa-icon [icon]="setaDireita"></fa-icon>
         <div class="grupo">
             <div class="label">Atividade</div>
-            <div class="valor">{{objeto.emEtapa?.atividade}}</div>
+            <div class="valor">{{getEtapaAtual()?.atividade}}</div>
         </div>
     </div>
-    <svg class="timeline" viewBox="-50 0 1500 100" width="100%" >
+    <svg class="timeline" viewBox="-50 0 1500 100" width="100%">
         <line *ngFor="let linha of linhas" [ngClass]="'status' + linha.status" [attr.x1]="linha.posInicial" [attr.x2]="linha.posFinal" y1="50%" y2="50%" ></line>
         <circle r ="10" cy="50%" cx="-20" class="status0"></circle>
-        <g *ngFor="let status of etapasStatus">
-            <circle r="15" cy="50%" [attr.cx]="status.pos" [ngClass]="'status' + status.status"></circle>
+        <g *ngFor="let status of etapasStatus" (mouseenter)="over = status.etapa.ordem" (mouseleave)="over = undefined">
+            <circle r="15" cy="50%" [attr.cx]="status.pos" [ngClass]="'status' + status.status" ></circle>
             <path [attr.d]="gerarPath(status.pos, status.status)" stroke="white" stroke-width="3" fill="none"></path>
             <text [ngClass]="'status' + status.status" y="85%" [attr.x]="status.pos" text-anchor="middle">{{status.etapa.ordem}}. {{status.etapa.nome}}</text>
         </g>
         <circle r ="10" cy="50%" cx="1420" class="status2"></circle>
+        <g *ngFor="let status of etapasStatus" ngClass="tooltip {{`tooltip${status.etapa.ordem}`}}">
+            <g *ngIf="(status.etapa.ordem === over) && status.timestamp" ngClass="{{`tooltip${status.etapa.ordem}`}}">
+                    <rect
+                        [attr.x]="status.pos + 20 < 1000 ? status.pos + 20 : status.pos - 270"
+                        y="5"
+                        width="250"
+                        height="60"
+                        rx="5"
+                        style="filter: drop-shadow(--sombra-padrao);"
+                        fill="white"
+                        stroke="var(--cinza-claro)"
+                        stroke-width="1px">
+
+                    </rect>
+
+                    <text
+                        [attr.x]="status.pos + 20 < 1000 ? status.pos + 30 : status.pos - 260"
+                        y="25"
+                        fill="var(--cor-primaria)">
+                        Iniciado em: {{status.timestamp | date:'dd/MM/yyyy HH:mm'}}
+                    </text>
+
+                    <text
+                        [attr.x]="status.pos + 20 < 1000 ? status.pos + 30 : status.pos - 260"
+                        y="40"
+                        fill="var(--cor-primaria)">
+                        {{ status.avaliadoEm && ('Avaliado em: ' + (status.avaliadoEm | date: 'dd/MM/yyyy HH:mm'))  }}
+                    </text>
+
+                    <text
+                        [attr.x]="status.pos + 20 < 1000 ? status.pos + 30 : status.pos - 260"
+                        y="55"
+                        fill="var(--cor-primaria)"
+                        [ngStyle]="{'overflow': 'hidden'}">
+                        {{ status.avaliadoPor && ((status.etapa.ordem === 0 ? 'Solicitado por: ' : 'Avaliado por: ' ) + status.avaliadoPor)  }}
+                    </text>
+                </g>
+            </g>
     </svg>
 </header>
 <main>
     <header>
         Solicitação
+        <span class="timestamp">{{ objeto.timestamp && ('Solicitado em ' + (objeto.timestamp | date : 'dd/MM/yyyy hh:mm a'))}}</span>
     </header>
     <main>
         <form #form="ngForm">
             <label for="inGnd">GND:<span class="obrigatorio">*</span></label>
-            <select id="inGnd" name="gnd" [(ngModel)]="gnd" disabled>
-                <option [ngValue]="4">4</option>
-                <option [ngValue]="5">5</option>
-            </select>
-
-            <label for="inConta">Tipo da Despesa:<span class="obrigatorio">*</span></label>
-            <select id="inConta" name="tipoConta" [(ngModel)]="objeto.tipoInvestimento" 
-                [ngClass]="(checado && !objeto.tipoInvestimento) ? 'invalido' : ''" disabled>
-                <option [ngValue]="undefined" disabled>Selecionar o tipo da despesa</option>
-                <option value="Investimento">Investimento</option>
-                <option value="Custeio">Outras Desp. Correntes</option>
-            </select>
-
-            <label for="inTipo">Tipo de Objeto <span class="obrigatorio">*</span></label>
-            <select id="inTipo" name="tipo" [(ngModel)]="objeto.tipoObjeto" disabled
-                [ngClass]="(checado && !objeto.tipoObjeto) ? 'invalido' : ''">
-                <option [ngValue]="undefined">Selecionar o tipo de objeto</option>
-                <option ngValue="Projeto">Projeto</option>
-                <option ngValue="Entrega">Entrega</option>
+            <select id="inGnd" name="gnd" [(ngModel)]="gnd">
+                <option [ngValue]="4">4 (Investimento)</option>
+                <option [ngValue]="5">5 (Inversão financeira)</option>
             </select>
             
             <label for="inNome">Nome <span class="obrigatorio">*</span></label>
@@ -61,9 +84,11 @@
                 [ngClass]="(checado && nome.invalid) ? 'invalido' : ''"/>
 
             <label for="inDescricao">Descrição <span class="obrigatorio">*</span></label>
-            <input type="text" id="inDescricao" [(ngModel)]="objeto.descricao" name="descricao"
-                placeholder="Insira uma descrição" maxlength="280" required #descricao="ngModel"
-                [ngClass]="(checado && descricao.invalid) ? 'invalido' : ''" [disabled]="!executaAcao">
+            <textarea id="inDescricao" [(ngModel)]="objeto.descricao" placeholder="Insira uma descrição" 
+                 [maxlength]="560" required #descricao="ngModel" name="descricao" [ngClass]="{
+                    'invalido': (checado && descricao.invalid)
+                }" rows="10" ></textarea>
+
             
             <label>Unidade Orçamentária <span class="obrigatorio">*</span></label>
             <ng-select [(ngModel)]="unidadeOrcamentaria"
@@ -156,7 +181,7 @@
                 (onRemover)="removerExercicio($event)"></spo-avaliacao-exercicio>
         </div>
         <div class="acoes" *ngIf="executaAcao">
-            <button *ngIf="objeto?.emEtapa?.devolvido" (click)="doExibirFeedBack()"
+            <button *ngIf="getEtapaAtual()?.devolvido" (click)="doExibirFeedBack()"
                 class="btn neutro">
                 <!-- <span *ngIf="checarEtapaEnum(EtapaEnum.ANALISE_TECNICA); else verParecer"><fa-icon [icon]="parecerIcon"></fa-icon> Vizualizar Parecer</span>
                 <ng-template #verParecer><fa-icon [icon]="apontamentoIcon"></fa-icon> Vizualizar apontamentos</ng-template> -->

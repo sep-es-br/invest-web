@@ -17,9 +17,9 @@
                 ></ng-select>  
 
 
-        <input type="text" [(ngModel)]="fonteValores.previsto" [ngModelOptions]="{standalone: true}"
+        <input type="text" [(ngModel)]="fonteValores.planejado" [ngModelOptions]="{standalone: true}"
                 placeholder="R$ " [disabled]="disabled" currencyMask/>
-        <fa-icon [icon]="limparIcon" class="apagar" (click)="disabled ? undefined : fonteValores.previsto = undefined"></fa-icon>
+        <fa-icon [icon]="limparIcon" class="apagar" (click)="disabled ? undefined : fonteValores.planejado = undefined"></fa-icon>
 
         <input type="text" [(ngModel)]="fonteValores.contratado" [ngModelOptions]="{standalone: true}"
                 placeholder="R$ " [disabled]="disabled || !contratadoEditavel" currencyMask/>

@@ -18,20 +18,14 @@
     </ng-template>
 </ng-select>
 
-<ng-select [items]="etapas" class="menor"
-        placeholder="Etapa"
-        [(ngModel)]="filtro.etapa"
+<ng-select [items]="gndOpcoes"
+        placeholder="GND"
+        [(ngModel)]="filtro.gnd"
         [ngModelOptions]="{standalone: true}"
         [clearable]="true"
         (ngModelChange)="atualizar()"
-        [searchFn]="filtrarSimples"
+        bindValue="value"
     >
-    <ng-template ng-label-tmp let-item="item" let-index="index">
-        {{item.nome}}
-    </ng-template>
-    <ng-template ng-option-tmp let-item="item">
-        {{item.nome}}
-    </ng-template>
 </ng-select>
 
 <ng-select [items]="status" class="menor"
