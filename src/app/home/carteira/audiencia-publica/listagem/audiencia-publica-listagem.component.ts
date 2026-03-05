@@ -15,7 +15,6 @@ import { faArrowRight, faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
 import { AreaTematicaService } from "../../../../utils/services/areaTematica.service";
 import { IAreaTematica } from "../../../../utils/interfaces/IAreaTematica";
 import { cleanApoc } from "../../../../utils/funcoes-util";
-import { ProgressModalComponent } from "../../../../utils/components/progress-modal/progress-modal.component";
 import { IProposta } from "../../../../utils/interfaces/proposta.interface";
 import { CampoPesquisaComponent } from "../../../../utils/components/campo-pesquisa/campo-pesquisa.component";
 import { Router } from "@angular/router";
@@ -30,7 +29,7 @@ import { TiraListaCol, TiraRecord } from "../../../../utils/components/tira-list
     styleUrl: './audiencia-publica-listagem.component.scss',
     imports: [
         CommonModule, NgSelectModule, FormsModule, TiraListaComponent,
-        FontAwesomeModule, ProgressModalComponent, 
+        FontAwesomeModule, 
         CampoPesquisaComponent, BarraPaginacaoComponent]
 })
 export class AudienciaPublicaListagemComponent implements OnInit{

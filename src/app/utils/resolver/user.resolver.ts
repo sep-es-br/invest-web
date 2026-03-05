@@ -10,9 +10,9 @@ export class UserResolver implements Resolve<IProfile> {
         private profileSrv : ProfileService
     ){}
     
-    async resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        return await firstValueFrom(this.profileSrv.getUser().pipe(
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+        return this.profileSrv.getUser().pipe(
             tap(user => {this.profileSrv.sessionProfile$.set(user)})
-        )) ;
+        );
     }
 }

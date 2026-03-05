@@ -5,6 +5,10 @@
         </div>
     </div>
 }
+<div class="progress" overlay transparente *ngIf="loading()" > 
+    <img src="assets/img/Ícone SPO_32x32_branco-04.1.png" width="50px"/>
+    <p-progressSpinner ariaLabel="carregando"></p-progressSpinner>
+</div>
 <main>
     <spo-header (onMenuClick)="exibirMenu = !exibirMenu" [qtObjetos]="objsNoFluxo" [permissaoAdm]="temAcessoAdm"></spo-header>
     <div id="conteudo">

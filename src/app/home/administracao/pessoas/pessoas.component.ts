@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TiraListaComponent } from "../../../utils/components/tira-lista/tira-lista.component";
 import { ProfileService } from '../../../utils/services/profile.service';
-import { ProgressModalComponent } from "../../../utils/components/progress-modal/progress-modal.component";
 import { BehaviorSubject, catchError, debounceTime, finalize, Subject, takeUntil } from 'rxjs';
 import { IUsuarioResponse } from '../../../utils/interfaces/usuarioResponse.interface';
 import { TiraListaCol, TiraRecord } from '../../../utils/components/tira-lista/TiraListaConfig';
@@ -21,7 +20,7 @@ import { CommonModule } from '@angular/common';
   selector: 'app-pessoas',
   templateUrl: './pessoas.component.html',
   styleUrls: ['./pessoas.component.scss'],
-  imports: [CommonModule, TiraListaComponent, ProgressModalComponent, FormsModule, CampoPesquisaComponent, BarraPaginacaoComponent, OverlayDirective]
+  imports: [CommonModule, TiraListaComponent, FormsModule, CampoPesquisaComponent, BarraPaginacaoComponent, OverlayDirective]
 })
 export class PessoasComponent implements OnInit, OnDestroy {
 

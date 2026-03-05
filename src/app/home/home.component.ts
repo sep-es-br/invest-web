@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { AfterViewInit, Component, ElementRef, OnInit, Signal, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, Inject, OnInit, Signal, ViewChild, signal } from '@angular/core';
 import { HeaderComponent } from "../header/header.component";
 import { ActivatedRoute, RouterModule, RouterOutlet } from "@angular/router";
 import { IProfile } from "../utils/interfaces/profile.interface";
@@ -13,13 +13,23 @@ import { DataUtilService } from "../utils/services/data-util.service";
 import { of } from "rxjs";
 import { animate, style, transition, trigger } from "@angular/animations";
 import { isMobile } from "../utils/funcoes-util";
+import { OverlayDirective } from "../utils/directive/overlay.directive";
+import { ProgressSpinnerModule } from "primeng/progressspinner";
+import { LoadingService } from '../utils/services/loading.service.service';
 
 @Component({
     selector: 'spo-home',
     templateUrl: 'home.component.html',
     styleUrl: 'home.component.scss',
-    imports: [CommonModule, HeaderComponent, RouterOutlet, MenuComponent, SwipeDirective, HomeRoutingModule],
-    hostDirectives: [SwipeDirective],
+    imports: [
+    CommonModule,
+    HeaderComponent,
+    RouterOutlet,
+    MenuComponent,
+    HomeRoutingModule,
+    OverlayDirective,
+    ProgressSpinnerModule
+],
     animations: [
         trigger('openClose', [
             transition(':enter', [
@@ -43,11 +53,15 @@ export class HomeComponent implements OnInit, AfterViewInit{
     isMobile = isMobile();
     loaded = true;
 
+    loading : Signal<boolean>
+
     constructor(
         private dataUtilSrv : DataUtilService,
-        private activatedRouter : ActivatedRoute
+        private activatedRouter : ActivatedRoute,
+        private loadingSrv : LoadingService
     ){
         this.menuItemsSignal = this.dataUtilSrv.menuItemnsSignal;
+        this.loading = this.loadingSrv.carregando
     }
 
     mostrarMenu = () => {

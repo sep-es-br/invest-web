@@ -12,8 +12,8 @@ export const routes: Routes = [
     {
       title: 'SPO',
       path: 'home',
-      component: HomeComponent,
       canActivateChild: [authGuard],
+      component: HomeComponent,
       resolve: {
         menuItem: MenuResolver, 
         user: UserResolver, 

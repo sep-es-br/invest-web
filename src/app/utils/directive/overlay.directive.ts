@@ -1,4 +1,4 @@
-import { AfterViewInit, ComponentRef, Directive, ElementRef, Input, OnDestroy, Renderer2, Type } from "@angular/core";
+import { AfterViewInit, booleanAttribute, ComponentRef, Directive, ElementRef, Input, OnDestroy, Renderer2, Type } from "@angular/core";
 
 @Directive({
     standalone: true,
@@ -12,12 +12,9 @@ export class OverlayDirective implements AfterViewInit, OnDestroy {
     @Input() top : string;
     @Input() bottom : string;
 
-    @Input() followMouse: boolean;
+    @Input({transform: booleanAttribute}) transparente : boolean = false;
     
     private overlayEl : HTMLElement;
-
-    private originalParent: HTMLElement;
-    private originalNextSibling: Node | null;
 
     constructor(
         private renderer : Renderer2,
@@ -74,8 +71,6 @@ export class OverlayDirective implements AfterViewInit, OnDestroy {
         if (!this.parent) {
             const hostElem = this.hostRef.nativeElement;
 
-            this.originalNextSibling = hostElem.nextSibling;
-            this.originalParent = hostElem.parentNode as HTMLElement;
 
             this.overlayEl = this.renderer.createElement('div');
             this.renderer.setStyle(this.overlayEl , 'position', 'fixed');
@@ -83,12 +78,12 @@ export class OverlayDirective implements AfterViewInit, OnDestroy {
             this.renderer.setStyle(this.overlayEl , 'width', '100vw');
             this.renderer.setStyle(this.overlayEl , 'top', 0);
             this.renderer.setStyle(this.overlayEl , 'left', 0);
-            this.renderer.setStyle(this.overlayEl , 'background-color', 'rgba(0, 0, 0, 0.5)');
+            this.renderer.setStyle(this.overlayEl , 'background-color', 'rgba(0, 0, 0, 0.3)');
             this.renderer.setStyle(this.overlayEl , 'display', 'flex');
             this.renderer.setStyle(this.overlayEl , 'justify-content', 'center');
             this.renderer.setStyle(this.overlayEl , 'align-items', 'center');
 
-            this.renderer.setStyle(hostElem, 'background-color', 'white')
+            if (!this.transparente) this.renderer.setStyle(hostElem, 'background-color', 'white')
 
             this.renderer.appendChild(document.body, this.overlayEl );
             this.renderer.appendChild(this.overlayEl , hostElem)

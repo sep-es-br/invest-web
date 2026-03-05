@@ -4,6 +4,7 @@ import { IEtapa } from "./etapa.interface";
 import { IStatus } from "./status.interface";
 
 export interface IObjetoFiltro {
+    audiencia? : boolean;
     nome? : string;
     unidades? : UnidadeOrcamentariaDTO[],
     planos? : PlanoOrcamentarioDTO[],

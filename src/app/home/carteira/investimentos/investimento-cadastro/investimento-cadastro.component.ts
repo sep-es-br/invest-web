@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ProgressModalComponent } from "../../../../utils/components/progress-modal/progress-modal.component";
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, MaxLengthValidator, NgForm, ReactiveFormsModule, RequiredValidator, Validators } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -28,7 +27,6 @@ import { IDoUnload } from '../../../../utils/guard/DoUnload.interface';
   selector: 'app-investimento-cadastro',
   imports: [
     CommonModule,
-    ProgressModalComponent,
     NgSelectModule,
     FaIconComponent,
     TiraListaComponent,

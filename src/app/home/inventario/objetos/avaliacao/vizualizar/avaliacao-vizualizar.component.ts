@@ -39,7 +39,6 @@ import { AcaoEvent } from "./parecer-modal/parecer-modal.component";
 import { IParecer, parecerPadrao } from "../../../../../utils/interfaces/parecer.interface";
 import { EtapaEnum } from "../../../../../utils/enum/etapa.enum";
 import { PermissaoService } from "../../../../../utils/services/permissao.service";
-import { ProgressModalComponent } from "../../../../../utils/components/progress-modal/progress-modal.component";
 import { IObjetoDetail } from "../../../../../utils/interfaces/objetoDetail.interface";
 import { ApontamentoService } from "../../../../../utils/services/apontamento.service";
 import { FonteOrcamentariaService } from "../../../../../utils/services/fonteOrcamentaria.service";
@@ -55,8 +54,7 @@ import { OverlayDirective } from "../../../../../utils/directive/overlay.directi
     imports: [
     CommonModule, FontAwesomeModule, AvaliacaoExercicioComponent,
     NgSelectComponent, ReactiveFormsModule, FormsModule,
-    ApontamentoModalComponent, VizualizarApontamentoModalComponent,
-    ProgressModalComponent
+    ApontamentoModalComponent, VizualizarApontamentoModalComponent
 ]
 })
 export class AvaliacaoVizualizarComponent implements AfterViewInit {
@@ -359,7 +357,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                 this.userId = user.id;
                 this.grupoService.findByUsuario(user.id).pipe(
                     tap(grupos => {
-                        this.executaAcao = grupos.map(g => g.id).includes(this.getEtapaAtual().etapa.grupoResponsavel.id)
+                        this.executaAcao = grupos.map(g => g.idGrupo).includes(this.getEtapaAtual().etapa.grupoResponsavel.id)
                                            || Boolean(user.role.find(funcao => funcao.nome === "GESTOR_MASTER"));
                     })
                 ).subscribe()
@@ -586,9 +584,9 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                         this.objetoService.getById(objetoId).pipe(
                             tap(objeto => {
                                 
-                                this.fluxoService.findWithEtapa(this.getEtapaAtual(objeto).etapa.etapaId).pipe(
+                                this.fluxoService.findWithEtapa(this.getEtapaAtual(objeto as IObjetoDetail).etapa.etapaId).pipe(
                                     tap(fluxo => this.setFluxo(fluxo)),
-                                    finalize(() => this.setObjeto(objeto))
+                                    finalize(() => this.setObjeto(objeto as IObjetoDetail))
                                 ).subscribe()
                                 
     

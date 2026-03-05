@@ -3,7 +3,6 @@ import { environment } from "../../../environments/environment";
 import { catchError, Observable } from "rxjs";
 import { IFluxo } from "../interfaces/fluxo.interface";
 import { HttpClient } from "@angular/common/http";
-import { ErrorHandlerService } from "./error-handler.service";
 
 @Injectable({
     providedIn: "root"
@@ -13,8 +12,7 @@ export class FluxosService {
     private readonly urlFluxo = `${environment.apiUrl}/fluxo`;
 
     constructor(
-        private http : HttpClient,
-        private errorHandler : ErrorHandlerService
+        private http : HttpClient
     ){}
 
 
@@ -22,8 +20,7 @@ export class FluxosService {
 
         return this.http.get<IFluxo>(`${this.urlFluxo}/withEtapa`, { params: {
             etapaId: etapaId
-        } })
-        .pipe(catchError(err => this.errorHandler.handleError(err)));
+        } });
 
     }
 
