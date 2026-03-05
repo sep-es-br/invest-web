@@ -5,6 +5,12 @@
     padding-bottom: 2rem;
     font-family: var(--fonte-open-sans);
     font-size: 15px;
+    flex-direction: column;
+    gap: 1rem;
+
+    div.revisor {
+        align-self: flex-start;
+    }
     
 
     div#content {

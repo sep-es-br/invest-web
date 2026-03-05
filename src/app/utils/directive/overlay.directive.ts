@@ -13,6 +13,8 @@ export class OverlayDirective implements AfterViewInit, OnDestroy {
     @Input() bottom : string;
 
     @Input({transform: booleanAttribute}) transparente : boolean = false;
+
+    @Input() followMouse : boolean = false;
     
     private overlayEl : HTMLElement;
 
