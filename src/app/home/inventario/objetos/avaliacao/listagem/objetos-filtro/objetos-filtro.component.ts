@@ -80,18 +80,12 @@ export class ObjetoFiltroComponent implements AfterViewInit {
             this.etapaService.findAll().pipe(
                 tap(etapasList => this.setEtapas(etapasList))
             ),
-            this.etapaService.getDoUsuario().pipe(
-                tap(_etapa => {
-                    etapa = _etapa
-                })
-            ),
             
         ).pipe(
             finalize(() => {
                 this.permissaoService.getPermissao('inventarioobjetos').pipe(
                     tap(_permissao => {
                         this.podeVerUnidades = _permissao.verTodasUnidades
-                        this.filtro.etapa = this.etapas.find(e => e.id === etapa?.id);
 
                         if(this.podeVerUnidades) {
                             this.unidadeService.getAllUnidadesOrcamentarias('fluxo').pipe(
