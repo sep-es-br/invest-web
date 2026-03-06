@@ -127,6 +127,13 @@ export class InvestimentoFiltroComponent implements AfterViewInit{
         this.filterChange.emit(this.filtro);
     }
 
+    updatePo() {
+        this.planoService.getAllPlanos((this.filtro.unidades?.length > 0) ? this.filtro?.unidades.map(u => u.codigo) : undefined)
+                .pipe(tap((planoList) => {
+                    this.planos = planoList;
+                })).subscribe()
+    }
+
     
 
 }
