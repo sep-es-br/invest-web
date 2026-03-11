@@ -581,7 +581,7 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
                     }
                     this.carregamento++;
                     concat(
-                        this.objetoService.getById(objetoId).pipe(
+                        this.objetoService.getById(objetoId, true).pipe(
                             tap(objeto => {
                                 
                                 this.fluxoService.findWithEtapa(this.getEtapaAtual(objeto as IObjetoDetail).etapa.etapaId).pipe(
