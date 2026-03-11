@@ -65,6 +65,14 @@ export class ObjetosVizualizarComponent implements AfterViewInit {
 
             this.dataUtil.setTitleInfo('objetoId', nome);
 
+            this.objeto.revisor = this.objeto.revisor.sort((a, b) => 
+                new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+            );
+
+            this.objeto.alterador = this.objeto.alterador.sort((a, b) => 
+                new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+            );
+
             const fonteMapRequest : Record<string, Observable<FonteOrcamentariaDTO>> = {};
 
             Object.values(obj.custos)
