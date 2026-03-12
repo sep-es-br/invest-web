@@ -23,7 +23,6 @@ import { IAreaTematica } from "../../../../utils/interfaces/IAreaTematica";
 import { ISelectOpcao } from "../../../../utils/interfaces/selectOption.interface";
 import { NgSelectComponent } from "@ng-select/ng-select";
 import { PermissaoService } from "../../../../utils/services/permissao.service";
-import { ProgressModalComponent } from "../../../../utils/components/progress-modal/progress-modal.component";
 import { PROPOSTA_ATIVA } from "../../../../utils/sessionLocalItems.const";
 import { IProposta } from "../../../../utils/interfaces/proposta.interface";
 import { IObjetoDetail } from "../../../../utils/interfaces/objetoDetail.interface";
@@ -39,7 +38,7 @@ import { StatusEnum } from "../../../../utils/enum/status.enum";
     templateUrl: "./objeto-cadastro.component.html",
     styleUrl: "./objeto-cadastro.component.scss",
     imports: [
-        CommonModule, ReactiveFormsModule, ProgressModalComponent, 
+        CommonModule, ReactiveFormsModule, 
         CadastroExercicioComponent, FontAwesomeModule, FormsModule, NgSelectComponent
     ]
 })
@@ -211,7 +210,7 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
                             switchMap(objetoId => {
                                 this.carregamento++;
                                 return this.objetoService.getById(objetoId).pipe(
-                                    tap(obj => this.setObjeto(obj)),
+                                    tap(obj => this.setObjeto(obj as IObjetoDetail)),
                                     finalize(() => this.carregamento--)
                                 );
                             })

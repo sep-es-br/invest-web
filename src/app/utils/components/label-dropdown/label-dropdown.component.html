@@ -1,0 +1,12 @@
+<div class="label-dropdown">
+  <div class="label-header" (click)="toggle()">
+    <span class="selected">{{ selectedLabel }}</span>
+    <span class="arrow" [class.open]="open">▼</span>
+  </div>
+
+  <ul class="options" *ngIf="open">
+    <li *ngFor="let item of items">
+      {{ item }}
+    </li>
+  </ul>
+</div>

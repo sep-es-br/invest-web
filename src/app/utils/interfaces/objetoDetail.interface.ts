@@ -1,6 +1,8 @@
+import { IAlterador } from "./alterador.interface";
 import { IEmEtapa } from "./emEtapa.interface";
 import { IEmStatus } from "./emStatus.interface";
 import { ITipoPlano } from "./ITipoPlano";
+import { IRevisor } from "./revisor.interface";
 
 export interface IObjetoDetail {
   new: boolean;
@@ -39,6 +41,8 @@ export interface IObjetoDetail {
    */
   custos: Record<number, Record<string, ICusto>>;
   timestamp: string;
+  revisor: IRevisor[];
+  alterador: IAlterador[];
 }
 
 export interface ICusto {

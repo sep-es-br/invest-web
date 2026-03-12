@@ -5,11 +5,9 @@ import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faFileDownload, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FormControl, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { catchError, concat, finalize, merge, Observable, tap } from "rxjs";
-import { ProgressModalComponent } from "../../../utils/components/progress-modal/progress-modal.component";
 import { InvestimentoFiltroComponent } from "./investimento-filtro/investimento-filtro.component";
 import { IFiltroInvestimento, IFiltroInvestimentoComPag } from "./investimento-filtro/IFiltroInvestimento";
 import { ContaService } from "../../../utils/services/conta.service";
-import { ErrorHandlerService } from "../../../utils/services/error-handler.service";
 import { IDadoDetalhado } from "../../../utils/interfaces/dado-detalhado.interface";
 import { TiraDadoDetalhadoComponent } from "./tira-rel-detalhado/tira-dado-detalhado.component";
 import { NgSelectModule } from "@ng-select/ng-select";
@@ -22,7 +20,7 @@ import { RelatorioService } from "../../../utils/services/relatorio.service";
     styleUrl: "./relatorio-detalhado.component.scss",
     imports: [
         CommonModule, BarraPaginacaoComponent, FontAwesomeModule,
-        ReactiveFormsModule, ProgressModalComponent, InvestimentoFiltroComponent,
+        ReactiveFormsModule, InvestimentoFiltroComponent,
         TiraDadoDetalhadoComponent, FontAwesomeModule, NgSelectModule
     ]
 })
@@ -56,7 +54,6 @@ export class RelatorioDetalhadoComponent implements AfterViewInit {
 
     constructor(
         private contaService : ContaService,
-        private errorHandler : ErrorHandlerService,
         private relatorioService : RelatorioService
     ){}
 
@@ -70,7 +67,6 @@ export class RelatorioDetalhadoComponent implements AfterViewInit {
         this.showProgress = true;
 
         acao.pipe(
-            catchError(err => this.errorHandler.handleError(err)),
             finalize(() => this.showProgress = false)
         ).subscribe()
     }
@@ -115,9 +111,7 @@ export class RelatorioDetalhadoComponent implements AfterViewInit {
     }
 
     gerarRelatorio() {
-        this.executar(this.relatorioService.gerarRelatorio(this.filtroCompleto).pipe(
-            catchError(err => this.errorHandler.handleError(err))
-        ));
+        this.executar(this.relatorioService.gerarRelatorio(this.filtroCompleto))
     }
     
     recarregarLista(novaPagina : number) {

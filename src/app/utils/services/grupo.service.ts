@@ -3,13 +3,13 @@ import { environment } from "../../../environments/environment";
 import { HttpClient, HttpParams, HttpStatusCode } from "@angular/common/http";
 import { BehaviorSubject, catchError, EMPTY, Observable, throwError } from "rxjs";
 import { GrupoDTO } from "../models/GrupoDTO";
-import { ErrorHandlerService } from "./error-handler.service";
 import { IHttpError } from "../interfaces/http-error.interface";
 import { Router } from "@angular/router";
 import { ICadastroMembroForm } from "../../home/administracao/grupos/vizualizacao/membros/grupo-membro-cadastro/CadastroMembroForm";
 import { ToastrService } from "ngx-toastr";
 import { IMembroGrupo } from "../interfaces/membro-grupo.interface";
 import { IDataList } from "../interfaces/dataList.interface";
+import { IGrupoDoUsuarioList } from "../interfaces/grupoDoUsuarioList.interface";
 
 @Injectable({providedIn: "root"})
 export class GrupoService {
@@ -20,7 +20,6 @@ export class GrupoService {
     
     constructor(
         private http : HttpClient,
-        private errorHandler : ErrorHandlerService,
         private router : Router,
         private toastr : ToastrService
     ){}
@@ -35,9 +34,7 @@ export class GrupoService {
         params = params.set("pagAtual", pagAtual)
                     .set("tamPag", tamPag)
 
-        return this.http.get<GrupoDTO[]>(`${this.grupoUrl}/byFilter`, {params: params}).pipe(
-            catchError(err => this.errorHandler.handleError(err))
-        )
+        return this.http.get<GrupoDTO[]>(`${this.grupoUrl}/byFilter`, {params: params})
 
     }
 
@@ -48,8 +45,7 @@ export class GrupoService {
         if(nome)
             params = params.set("nome", nome)
 
-        return this.http.get<GrupoDTO[]>(`${this.grupoUrl}`, { params: params })
-        .pipe(catchError(err => this.errorHandler.handleError(err)));
+        return this.http.get<GrupoDTO[]>(`${this.grupoUrl}`, { params: params });
     }
 
     public findById(idGrupo : number) {
@@ -65,17 +61,15 @@ export class GrupoService {
 
                 return throwError(() => err)
 
-            }), catchError(err => this.errorHandler.handleError(err)))
+            }))
     }
 
-    public findByUsuario(idUsuario : number) : Observable<GrupoDTO[]> {
-        return this.http.get<GrupoDTO[]>(`${this.grupoUrl}/byUsuario`, {params: {usuarioId: idUsuario}})
-            .pipe(catchError(err => this.errorHandler.handleError(err)))
+    public findByUsuario(idUsuario : number) : Observable<IGrupoDoUsuarioList[]> {
+        return this.http.get<IGrupoDoUsuarioList[]>(`${this.grupoUrl}/byUsuario`, {params: {usuarioId: idUsuario}})
     }
 
     public save(grupo : GrupoDTO): Observable<GrupoDTO> {
         return this.http.put<GrupoDTO>(`${this.grupoUrl}/save`, grupo).pipe(
-            catchError(err => this.errorHandler.handleError(err))
         )
     }
 
@@ -87,31 +81,28 @@ export class GrupoService {
         }
 
         return this.http.get<IDataList<IMembroGrupo>>(`${this.grupoUrl}/membros`, {params})
-        .pipe(catchError(err => this.errorHandler.handleError(err)))
     }
 
     public addMembro(membroForm : ICadastroMembroForm) : Observable<GrupoDTO> {
-        return this.http.put<never>(`${this.grupoUrl}/addMembro`, membroForm).pipe(
-            catchError(err => this.errorHandler.handleError(err))
-        )
+        return this.http.put<never>(`${this.grupoUrl}/addMembro`, membroForm)
     }
 
     public remover(idGrupo : number) : Observable<GrupoDTO> {
         return this.http.delete<GrupoDTO>(`${this.grupoUrl}/`, {params: {
             idGrupo: idGrupo
-        }}).pipe(catchError(err => this.errorHandler.handleError(err)));
+        }})
     }
 
     public quantidadeMembros(idGrupo : number) : Observable<number> {
         return this.http.get<number>(`${this.grupoUrl}/quantidadeMembros`, {params: {
             grupoId: idGrupo
-        }}).pipe(catchError(err => this.errorHandler.handleError(err)));
+        }})
     }
 
     public removerMembro(idGrupo : number, idMembro : number) : Observable<GrupoDTO> {
         return this.http.delete<GrupoDTO>(`${this.grupoUrl}/membro`, {params: {
             idGrupo: idGrupo, idMembro: idMembro
-        }}).pipe(catchError(err => this.errorHandler.handleError(err)));
+        }})
     }
 
 }

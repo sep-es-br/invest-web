@@ -1,4 +1,3 @@
-<spo-progress-modal [visivel]="carregando"></spo-progress-modal>
 <div id="content">
     <section>
         <header>
@@ -127,3 +126,16 @@
         </tbody>
     </table>
 </div>
+<footer>
+
+    <div class="alterado">
+        <p>Ultima Alteração:</p>
+        <p>Feita por: {{objeto?.alterador[0]?.nomeAlterador}}</p>
+        <p>Em: {{objeto?.alterador[0]?.timestamp | date : 'dd/MM/yyyy hh:mm a'}}</p>
+    </div>
+    <div class="revisor">
+        <p>Ultima revisão:</p>
+        <p>Feita por: {{objeto?.revisor[0]?.nomeRevisor}}</p>
+        <p>Em: {{objeto?.revisor[0]?.timestamp | date : 'dd/MM/yyyy hh:mm a'}}</p>
+    </div>
+</footer>

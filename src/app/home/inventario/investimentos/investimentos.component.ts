@@ -12,7 +12,6 @@ import { InfosService } from "../../../utils/services/infos.service";
 import { IFiltroInvestimento } from "./investimento-filtro/IFiltroInvestimento";
 import { InvestimentoTiraDTO } from "../../../utils/models/InvestimentoTiraDTO";
 import { ProgressSpinnerModule } from "primeng/progressspinner";
-import { ProgressModalComponent } from "../../../utils/components/progress-modal/progress-modal.component";
 import { InvestimentoOrdenacaoComponent } from "./investimento-ordenacao/investimento-ordenacao.component";
 import { IOrdemItem } from "../../../utils/interfaces/ordem-item.interface";
 import { CampoPesquisaComponent } from "../../../utils/components/campo-pesquisa/campo-pesquisa.component";
@@ -27,7 +26,6 @@ import { DEFAULT_OPENCLOSE_ACTION, TiraListaCol, TiraRecord } from "../../../uti
     CommonModule, ProgressSpinnerModule,
     ReactiveFormsModule, InvestimentoFiltroComponent, TiraListaComponent,
     FontAwesomeModule, ValorCardComponent, BarraPaginacaoComponent,
-    ProgressModalComponent,
     InvestimentoOrdenacaoComponent,
     CampoPesquisaComponent
 ]

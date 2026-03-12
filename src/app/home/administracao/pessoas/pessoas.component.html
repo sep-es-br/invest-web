@@ -1,4 +1,3 @@
-<spo-progress-modal [visivel]="showProgress"></spo-progress-modal>
 <header>
   <p>Pessoas ({{qtPessoas}})</p>
   <spo-campo-pesquisa [(ngModel)]="termo" [ngModelOptions]="{standalone: true}" (ngModelChange)="searchObs$.next({term: $event, pg: 1})"></spo-campo-pesquisa>

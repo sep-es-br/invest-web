@@ -14,7 +14,6 @@ import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faPencil } from "@fortawesome/free-solid-svg-icons";
 import { PermissaoService } from "../../../../utils/services/permissao.service";
 import { IPodeDTO } from "../../../../utils/models/PodeDto";
-import { ProgressModalComponent } from "../../../../utils/components/progress-modal/progress-modal.component";
 import { ICusto, IObjetoDetail } from "../../../../utils/interfaces/objetoDetail.interface";
 import { cleanApoc } from "../../../../utils/funcoes-util";
 import { FonteOrcamentariaService } from "../../../../utils/services/fonteOrcamentaria.service";
@@ -24,8 +23,7 @@ import { FonteOrcamentariaService } from "../../../../utils/services/fonteOrcame
     styleUrl: "./objetos-vizualizar.component.scss",
     imports: [
     CommonModule, CustomCurrencyPipe, NumeroResumidoPipe,
-    FontAwesomeModule,
-    ProgressModalComponent
+    FontAwesomeModule
 ]
 })
 export class ObjetosVizualizarComponent implements AfterViewInit {
@@ -60,12 +58,20 @@ export class ObjetosVizualizarComponent implements AfterViewInit {
         this.route.params.pipe(
             skipWhile((paramMap) => !('objetoId' in paramMap) ),
             mergeMap(({objetoId}) => this.objetoService.getById(objetoId).pipe(finalize(() => this.carregando = false))),
-        ).subscribe(obj => {
+        ).subscribe((obj : IObjetoDetail) => {
             this.objeto = obj
 
             let nome = `${obj.siglaUnidade} - Objeto - ${obj.id}`;
 
             this.dataUtil.setTitleInfo('objetoId', nome);
+
+            this.objeto.revisor = this.objeto.revisor.sort((a, b) => 
+                new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+            );
+
+            this.objeto.alterador = this.objeto.alterador.sort((a, b) => 
+                new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+            );
 
             const fonteMapRequest : Record<string, Observable<FonteOrcamentariaDTO>> = {};
 

@@ -10,7 +10,6 @@ import { faFloppyDisk, faWrench } from "@fortawesome/free-solid-svg-icons";
 import { Router, RouterModule } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { IPapelDTO } from "../../../../utils/models/PapelDto";
-import { ErrorHandlerService } from "../../../../utils/services/error-handler.service";
 
 @Component({
     selector: 'spo-meuperfil-perfil-editar',

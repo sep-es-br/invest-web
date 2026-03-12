@@ -4,6 +4,10 @@ import { NgModule } from "@angular/core";
 import { MeuPerfilComponent } from "./meu-perfil/meu-perfil.component";
 import { InicioComponent } from "./inicio/inicio.component";
 import { UserResolver } from "../utils/resolver/user.resolver";
+import { HomeComponent } from "./home.component";
+import { MenuResolver } from "../utils/resolver/menu.resolver";
+import { objetosNoFluxoResolver } from "../utils/resolver/objetos-no-fluxo.resolver";
+import { TemAcessoResolver } from "../utils/resolver/tem-acesso.resolver";
 
 const routes : Route[] = [
      {
