@@ -8,12 +8,12 @@
         <p id="breadcrumb"><spo-breadcrumb></spo-breadcrumb></p>
     </div>
     <div id="acoes">
-        <div id="objetos" class="botaoAcao" role="button" title="Listagem de Avaliação" (click)="redirectTo('home/inventario/objetos/avaliacao')"> 
-                <img src="assets/img/hammer.svg" width="20px">
-                <div *ngIf="qtObjetos > 0">{{qtObjetos}}</div>
-            </div>
-        </div>
-    <div id="userInfo" (click)="showMenuUser = !showMenuUser">
+        <button id="objetos" class="botaoAcao" title="Listagem de Avaliação" (click)="redirectTo('home/inventario/objetos/avaliacao')"> 
+            <img src="assets/img/hammer.svg" width="20px">
+            <div *ngIf="qtObjetos > 0">{{qtObjetos}}</div>
+        </button>
+    </div>
+    <button id="userInfo" (click)="showMenuUser = !showMenuUser">
         <div #userImg id="userImg">
             <img [src]="userImage" *ngIf="userImage; else iniciaisElem" />
             <ng-template #iniciaisElem>{{iniciais}}</ng-template> 
@@ -22,10 +22,10 @@
             <p>{{userSignal()?.name}}</p>
         </div>
         <div #menuUser class="menuUser" *ngIf="showMenuUser" @openClose>
-            <div (click)="redirectTo('home/meuperfil')">Meu Perfil</div>
-            <div *ngIf="permissaoAdm" (click)="redirectTo('home/administracao')">Administração</div>
-            <div (click)="logout()">Sair</div>
+            <button (click)="redirectTo('home/meuperfil')">Meu Perfil</button>
+            <button *ngIf="permissaoAdm" (click)="redirectTo('home/administracao')">Administração</button>
+            <button (click)="logout()">Sair</button>
         </div>
-    </div>
+    </button>
     
 </div>
