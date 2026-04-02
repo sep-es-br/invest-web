@@ -126,8 +126,33 @@
         </tbody>
     </table>
 </div>
-<div class="revisor">
-    <p>Ultima revisão:</p>
-    <p>Feita por: {{objeto?.revisor?.nomeRevisor}}</p>
-    <p>Em: {{objeto?.revisor?.timestamp | date : 'dd/MM/yyyy hh:mm a'}}</p>
-</div>
+<footer>
+    <app-label-dropdown [items]="objeto?.alterador" *ngIf="objeto?.alterador && objeto.alterador.length > 0" >
+        <ng-template #item let-item>
+            <p>Ultima Alteração:</p>
+            <p>Feita por: {{item?.nomeAlterador}}</p>
+            <p>Em: {{item?.timestamp | date : 'dd/MM/yyyy hh:mm a'}}</p>
+        </ng-template>
+
+        <ng-template #itemList let-item>
+            <p>Feita por: {{item?.nomeAlterador}}</p>
+            <p>Em: {{item?.timestamp | date : 'dd/MM/yyyy hh:mm a'}}</p>
+        </ng-template>
+
+    </app-label-dropdown>
+    
+
+    <app-label-dropdown [items]="objeto?.revisor" *ngIf="objeto?.revisor && objeto.revisor.length > 0 " >
+        <ng-template #item let-item>
+            <p>Ultima revisão:</p>
+            <p>Feita por: {{item?.nomeRevisor}}</p>
+            <p>Em: {{item?.timestamp | date : 'dd/MM/yyyy hh:mm a'}}</p>
+        </ng-template>
+
+        <ng-template #itemList let-item>
+            <p>Feita por: {{item?.nomeRevisor}}</p>
+            <p>Em: {{item?.timestamp | date : 'dd/MM/yyyy hh:mm a'}}</p>
+        </ng-template>
+
+    </app-label-dropdown>
+</footer>

@@ -1,0 +1,18 @@
+<div class="label-dropdown">
+  <button class="label-header" (click)="toggle()">
+    <div class="selected">
+      <ng-container *ngTemplateOutlet="item, context: {$implicit: items?.[0]}" ></ng-container>
+    </div>
+
+    <span class="arrow" [class.open]="open">▼</span>
+  </button>
+
+  <div class="options-outer" *ngIf="open" @openClose>
+    <ul class="options">
+      <li *ngFor="let i of outros">
+        <ng-container *ngTemplateOutlet="itemList, context: {$implicit: i}" ></ng-container>
+      </li>
+    </ul>  
+  </div>
+  
+</div>

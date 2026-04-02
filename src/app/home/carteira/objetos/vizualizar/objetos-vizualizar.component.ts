@@ -17,13 +17,15 @@ import { IPodeDTO } from "../../../../utils/models/PodeDto";
 import { ICusto, IObjetoDetail } from "../../../../utils/interfaces/objetoDetail.interface";
 import { cleanApoc } from "../../../../utils/funcoes-util";
 import { FonteOrcamentariaService } from "../../../../utils/services/fonteOrcamentaria.service";
+import { LabelDropdownComponent } from "../../../../utils/components/label-dropdown/label-dropdown.component";
 
 @Component({
     templateUrl: "./objetos-vizualizar.component.html",
     styleUrl: "./objetos-vizualizar.component.scss",
     imports: [
     CommonModule, CustomCurrencyPipe, NumeroResumidoPipe,
-    FontAwesomeModule
+    FontAwesomeModule,
+    LabelDropdownComponent
 ]
 })
 export class ObjetosVizualizarComponent implements AfterViewInit {
@@ -64,6 +66,16 @@ export class ObjetosVizualizarComponent implements AfterViewInit {
             let nome = `${obj.siglaUnidade} - Objeto - ${obj.id}`;
 
             this.dataUtil.setTitleInfo('objetoId', nome);
+
+            this.objeto.revisor = this.objeto.revisor.sort((a, b) => 
+                new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+            );
+
+            this.objeto.alterador = this.objeto.alterador.sort((a, b) => 
+                new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+            );
+
+            this.objeto.alterador.push(...this.objeto.alterador)
 
             const fonteMapRequest : Record<string, Observable<FonteOrcamentariaDTO>> = {};
 

@@ -67,8 +67,13 @@ export class ObjetosService {
         return this.http.post(`${this.objetoUrl}`, objeto)
     }
 
-    public getById(id : number) : Observable<unknown> {
-        return this.http.get<IObjetoDetail>(`${this.objetoUrl}/byId`, { params: { id: id } })
+    public getById(id : number, updateStatus?: boolean) : Observable<unknown> {
+
+        let params : {[index:string]: any} = { id } 
+        if(updateStatus)
+            params = {...params, updateStatus}
+
+        return this.http.get<IObjetoDetail>(`${this.objetoUrl}/byId`, { params: params })
         .pipe(catchError((err) => {
                 let mensagemErro : IHttpError = err.error    
 
