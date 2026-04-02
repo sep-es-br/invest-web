@@ -84,6 +84,7 @@ export class OverlayDirective implements AfterViewInit, OnDestroy {
             this.renderer.setStyle(this.overlayEl , 'display', 'flex');
             this.renderer.setStyle(this.overlayEl , 'justify-content', 'center');
             this.renderer.setStyle(this.overlayEl , 'align-items', 'center');
+            this.renderer.setStyle(this.overlayEl , 'z-index', '999');
 
             if (!this.transparente) this.renderer.setStyle(hostElem, 'background-color', 'white')
 

@@ -614,13 +614,16 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
 
 
         let exercValidos = true;
-
-        this.cadastroExercicios.forEach(
+ 
+        if(this.objeto.possuiOrcamento !== 'não'){
+            this.cadastroExercicios.forEach(
             exercicio => {
                 if(!exercicio.validar())
                      exercValidos = false
             }
         )
+        }   
+        
 
         if(acao.positivo && (!exercValidos || !this.validarForm())) {
             this.toastr.error("Favor preeencher os campos obrigatórios");
@@ -715,10 +718,10 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
             planos: this.objeto.tiposPlano,
             possuiOrcamento: this.objeto.possuiOrcamento,
             unidadeOrcamentaria: this.unidadeOrcamentaria,
-            recursos: this.recursosFinanceiros.map(
+            recursos: this.recursosFinanceiros.filter(custo => custo.indicadaPor.some(ip => ip.fonteOrcamentaria)).map(
                 custo => ({
                     ano: custo.anoExercicio,
-                    valoresFontes: custo.indicadaPor.map(
+                    valoresFontes: custo.indicadaPor.filter(ip => ip.fonteOrcamentaria).map(
                         indiPor => ({
                             fonte: indiPor.fonteOrcamentaria,
                             contratado: indiPor.contratado,

@@ -399,20 +399,23 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
 
         let exercValidos = true;
 
-        this.cadastroExercicios.forEach(
-            exercicio => {
-                if(!exercicio.validar())
-                     exercValidos = false
-            }
-        )
+        if(this.objeto.possuiOrcamento !== 'não'){
+            this.cadastroExercicios.forEach(
+                exercicio => {
+                    if(!exercicio.validar())
+                        exercValidos = false
+                }
+            )
+        }
+        
 
         if(!exercValidos || this.cadastroObjeto.invalid) {
             this.toastr.error("Favor preeencher os campos obrigatórios");
         } else if(this.cadastroInvestimentoService.objAtivo != undefined){
             this.objeto.microrregiaoId = this.microrregiao.id;
-            this.objeto.custos = this.recursosFinanceiros.reduce(
+            this.objeto.custos = this.recursosFinanceiros.filter(custo => custo.indicadaPor.some(fonte => fonte.fonteOrcamentaria)).reduce(
                 (acc, custo) => {
-                    acc[custo.anoExercicio] = custo.indicadaPor
+                    acc[custo.anoExercicio] = custo.indicadaPor.filter(fonte => fonte.fonteOrcamentaria)
                                                 .reduce(
                                                     (acc, fonteExercicio) => {
                                                         acc[fonteExercicio.fonteOrcamentaria.codigo] = {
@@ -448,10 +451,10 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
                 planos: this.objeto.tiposPlano,
                 possuiOrcamento: this.objeto.possuiOrcamento,
                 unidadeOrcamentaria: this.unidadeOrcamentaria,
-                recursos: this.recursosFinanceiros.map(
+                recursos: this.recursosFinanceiros.filter(custo => custo.indicadaPor.some(fonte => fonte.fonteOrcamentaria)).map(
                     custo => ({
                         ano: custo.anoExercicio,
-                        valoresFontes: custo.indicadaPor.map(
+                        valoresFontes: custo.indicadaPor.filter(fonte => fonte.fonteOrcamentaria).map(
                             indiPor => ({
                                 fonte: indiPor.fonteOrcamentaria,
                                 contratado: indiPor.contratado,

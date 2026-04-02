@@ -48,8 +48,10 @@
             margin-right: 2rem;
             margin-left: auto;
 
-            div.botaoAcao {
+            .botaoAcao {
                 border: 0.1rem solid #4d84bc;
+                font: inherit;
+                text-align: inherit;
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -89,8 +91,12 @@
         }
     }
 
-    div#userInfo {
+    #userInfo {
         display: flex;
+        font: inherit;
+        text-align: inherit;
+        border: none;
+        background: none;
         flex-direction: row;
         align-items: center;
         position: relative;
@@ -140,13 +146,18 @@
             font-family: 'Open Sans', sans-serif;
             
     
-            > div {
+            > button {
                 display: flex;
+                font: inherit;
+                text-align: inherit;
+                border: none;
+                background: unset;
                 padding: 1rem;
                 width: 100%;
+                cursor: pointer;
             }
             
-            > div:hover {
+            > button:hover {
                 background-color: var(--cor-primaria);
                 color: white;
             }
