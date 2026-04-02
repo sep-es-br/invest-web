@@ -399,12 +399,15 @@ export class ObjetoCadastroComponent implements OnInit, AfterViewInit, OnDestroy
 
         let exercValidos = true;
 
-        this.cadastroExercicios.forEach(
-            exercicio => {
-                if(!exercicio.validar())
-                     exercValidos = false
-            }
-        )
+        if(this.objeto.possuiOrcamento !== 'não'){
+            this.cadastroExercicios.forEach(
+                exercicio => {
+                    if(!exercicio.validar())
+                        exercValidos = false
+                }
+            )
+        }
+        
 
         if(!exercValidos || this.cadastroObjeto.invalid) {
             this.toastr.error("Favor preeencher os campos obrigatórios");
