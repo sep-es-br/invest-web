@@ -26,7 +26,7 @@
         }
 
         div#titleMain p {
-    
+
             font-weight: bold;
         }
 
@@ -72,7 +72,7 @@
                 background-color: #4d84bc;
             }
 
-            div#objetos div {
+            button#objetos div {
                 position: absolute;
                 z-index: 5;
                 top: 5%;
@@ -101,7 +101,7 @@
         align-items: center;
         position: relative;
         cursor: pointer;
-        
+
         div#userData {
             text-align: right;
             padding-left: 1rem;
@@ -126,9 +126,9 @@
             img {
                 width: 50px;
             }
-        
+
         }
-        
+
         .menuUser {
             display: flex;
             min-width: 10rem;
@@ -144,8 +144,8 @@
             right: 0;
             top: calc(100% + 1rem);
             font-family: 'Open Sans', sans-serif;
-            
-    
+
+
             > button {
                 display: flex;
                 font: inherit;
@@ -156,15 +156,15 @@
                 width: 100%;
                 cursor: pointer;
             }
-            
+
             > button:hover {
                 background-color: var(--cor-primaria);
                 color: white;
             }
-    
+
         }
-        
+
     }
-    
+
 }
 
