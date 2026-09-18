@@ -196,10 +196,12 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
         if(this.acaoDebounce) return;
 
         this.acaoDebounce = true;
-        
+
+        const apontamentosRecebidos = novosApontamentos ?? [];
+
         if(!this.checarEtapaEnum(EtapaEnum.SOLICITACAO_CADASTRO)) {
             // if((this.checarEtapaEnum(EtapaEnum.APROVACAO_SUBEO) && !this.validarParecer())
-               if((!this.checarEtapaEnum(EtapaEnum.APROVACAO_SUBEO) &&  !this.validarApontamentos())){
+               if((!this.checarEtapaEnum(EtapaEnum.APROVACAO_SUBEO) &&  !this.validarApontamentos(apontamentosRecebidos))){
                     this.acaoDebounce = false;
                     return;
                }
@@ -211,7 +213,9 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
      
         executarAcaoDto = {
             acao: this.acaoDoModal,
-            apontamentos: novosApontamentos,
+            apontamentos: apontamentosRecebidos.filter(apontamento =>
+                Boolean(apontamento?.campo && apontamento.texto?.trim())
+            ),
             objeto: objetoFinal
         }
         
@@ -260,14 +264,19 @@ export class AvaliacaoVizualizarComponent implements AfterViewInit {
         });
     }
 
-    validarApontamentos() : boolean {
+    validarApontamentos(apontamentos: IApontamento[] = this.apontamentos) : boolean {
 
         let valido = true;
 
-        this.apontamentos.forEach(apontamento => {
+        if(!apontamentos?.length) {
+            this.toastr.error("Favor preencher todos os apontamentos ou remover os que não for utilizar");
+            return false;
+        }
+
+        apontamentos.forEach(apontamento => {
             let preenchido = apontamento.campo
                           && apontamento.texto 
-                          && apontamento.texto !== '';
+                          && apontamento.texto.trim() !== '';
 
             if(!preenchido) {
                 this.toastr.error("Favor preencher todos os apontamentos ou remover os que não for utilizar");

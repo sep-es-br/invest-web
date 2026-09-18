@@ -127,7 +127,7 @@
         </div>
         <div class="acoes">
             <button (click)="salvar()" class="btn positivo" >
-                <span *ngIf="!objeto.emEtapa && objeto.emStatus, else enviar"><fa-icon [icon]="salvarIcon"></fa-icon> SALVAR</span>
+                <span *ngIf="cadastrado; else enviar"><fa-icon [icon]="salvarIcon"></fa-icon> SALVAR</span>
                 <ng-template #enviar><fa-icon [icon]="enviarIcon"></fa-icon> ENVIAR</ng-template> 
             </button>
         </div>
