@@ -4,12 +4,17 @@
         <h1>Apontamentos</h1>
     </header>
     <main>
-        <div *ngFor="let apontamento of apontamentos" >
-            <p>Campo: {{apontamento.campo?.nome}}</p>
-            <p>Quem Apontou: {{apontamento.usuario?.nomeCompleto}} ({{apontamento.grupo?.sigla}})</p>
-            <p>Apontamento:</p>
-            <p>{{apontamento.texto}}</p>
-            <p>Quando: {{apontamento.timestamp | date : "dd/MM/yyyy 'às' hh:mm a"}}</p>
-        </div>
+        <ng-container *ngIf="apontamentosVisiveis.length > 0; else nenhumApontamento">
+            <div *ngFor="let apontamento of apontamentosVisiveis" >
+                <p>Campo: {{apontamento.campo?.nome}}</p>
+                <p>Quem Apontou: {{apontamento.usuario?.nomeCompleto}} ({{apontamento.grupo?.sigla}})</p>
+                <p>Apontamento:</p>
+                <p class="texto-apontamento">{{apontamento.texto}}</p>
+                <p>Quando: {{apontamento.timestamp | date : "dd/MM/yyyy 'às' hh:mm a"}}</p>
+            </div>
+        </ng-container>
+        <ng-template #nenhumApontamento>
+            <p>Nenhum apontamento registrado.</p>
+        </ng-template>
     </main>
 </main>

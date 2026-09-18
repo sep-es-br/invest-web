@@ -20,6 +20,10 @@ export class VizualizarApontamentoModalComponent {
 
     @Input() apontamentos : IApontamento[];
 
+    get apontamentosVisiveis(): IApontamento[] {
+        return (this.apontamentos ?? []).filter(apontamento => apontamento.active);
+    }
+
     @HostListener('click', ['$event'])
     clickFora(evt : MouseEvent) {
         if(!this.principalRef.nativeElement.contains(evt.target)){
